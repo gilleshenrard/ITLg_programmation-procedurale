@@ -10,6 +10,7 @@ char filename[] = "test.dat";
 
 char menu(int, char[][32]);
 int searchList(FILE*, e_criteria, int);
+int searchIndex(FILE*, int);
 
 int main(int argc, char *argv[])
 {
@@ -51,6 +52,17 @@ int main(int argc, char *argv[])
                 break;
 
             case '2':   //Research a record by its index in the file
+                //Open the file
+                file = fopen(filename, "rb");
+                if(file){
+                    //Retrieve the number of records in the file
+                    fseek(file, 0, SEEK_END);
+                    filesize = ftell(file)/sizeof(t_tuple);
+                    fseek(file, 0, SEEK_SET);
+                    //Call the research function
+                    searchIndex(file, filesize);
+                    fclose(file);
+                }
                 break;
 
             default:
@@ -109,7 +121,7 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
     //Sequentially read of the full file and add its content in a buffer array
     for(int i=0 ; i<nbrecords ; i++)
         if(fread(&tab[i], sizeof(t_tuple), 1, file) < 1){
-            fprintf(stderr, "\nErreur pendant la lecture du fichier");
+            fprintf(stderr, "\nsearchList : Erreur pendant la lecture du fichier");
             return -1;
         }
 
@@ -137,7 +149,7 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
     strcpy(tmp.lastname, name);
     search = binarySearchFirst((void*)tab, nbrecords, sizeof(t_tuple), &compareFilterLastName, (void*)&tmp);
     if(!search){
-        fprintf(stderr, "\nNom '%s' non-trouve...", name);
+        fprintf(stderr, "\nsearchList : Nom '%s' non-trouve...", name);
 
         //Wait for a user input
         fflush(stdin);
@@ -171,4 +183,55 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
     getch();
 
     return 1;
+}
+
+/************************************************************/
+/*  I : File to manipulate                                  */
+/*      Number of records in the file                       */
+/*  P : Searches in the file according to its index         */
+/*          in the file                                     */
+/*  O : 0 -> OK                                             */
+/*     -1 -> Error                                          */
+/************************************************************/
+int searchIndex(FILE* file, int nbrecords){
+    int index = 0;
+    t_tuple record;
+
+    if(nbrecords <= 0){
+        fprintf(stderr, "\nsearchIndex : Fichier vide...");
+
+        //Wait for a user input
+        fflush(stdin);
+        getch();
+        return -1;
+    }
+
+    //Request for the index of the record to find
+    printf("\n-------------------------------------");
+    printf("\nSaisissez l'index de l'enregistrement : ");
+    fflush(stdin);
+    scanf("%d", &index);
+
+    if(index >= nbrecords){
+        fprintf(stderr, "\nsearchIndex : Index out of range...");
+
+        //Wait for a user input
+        fflush(stdin);
+        getch();
+        return -1;
+    }
+
+    //jump to the index specified and read the record
+    fseek(file, index, sizeof(t_tuple));
+    if(fread(&record, sizeof(t_tuple), 1, file) < 1){
+            fprintf(stderr, "\nsearchIndex : Erreur pendant la lecture du fichier");
+            return -1;
+        }
+
+    //display the record
+    printf("\n%d\t\t%s\t\t%s\t\t%s", record.id, record.lastname, record.firstname, record.city);
+    fflush(stdin);
+    getch();
+
+    return 0;
 }
