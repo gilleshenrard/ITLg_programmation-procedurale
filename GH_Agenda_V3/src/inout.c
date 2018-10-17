@@ -1,6 +1,6 @@
 #include "../lib/inout.h"
 
-int appendTuple(FILE* file, t_tuple* tuple){
+int appendFile(FILE* file, t_tuple* tuple){
     int ret;
 
     fseek(file, 0, SEEK_END);
