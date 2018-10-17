@@ -11,7 +11,7 @@ char filename[] = "test.dat";
 char menu(int, char[][32]);
 int searchList(FILE*, e_criteria, int);
 int searchIndex(FILE*, int);
-int listFile(FILE*);
+int listFile(FILE*, int);
 
 int main(int argc, char *argv[])
 {
@@ -72,8 +72,10 @@ int main(int argc, char *argv[])
                 file = fopen(filename, "rb");
                 if(file){
                     //Retrieve the number of records in the file
+                    fseek(file, 0, SEEK_END);
+                    filesize = ftell(file)/sizeof(t_tuple);
                     fseek(file, 0, SEEK_SET);
-                    listFile(file);
+                    listFile(file, filesize);
                     fclose(file);
                 }
                 break;
@@ -251,9 +253,23 @@ int searchIndex(FILE* file, int nbrecords){
 
 /************************************************************/
 /*  I : File to manipulate                                  */
+/*      Number of records in the file                       */
 /*  P : Lists all the records of a file                     */
 /*  O : /                                                   */
 /************************************************************/
-int listFile(FILE* file){
+int listFile(FILE* file, int nbrecords){
+    t_tuple record;
+
+    printf("\n-------------------------------------");
+    for (int i=0 ; i<nbrecords ; i++){
+        fread(&record, sizeof(t_tuple), 1, file);
+        displayTuple(&record);
+    }
+
+    //display the record
+    displayTuple(&record);
+    fflush(stdin);
+    getch();
+
     return 0;
 }
