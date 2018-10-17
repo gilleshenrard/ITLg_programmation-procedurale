@@ -39,7 +39,6 @@ int binarySearch(void* tab, int tabsize, int elementsize, int (*compare)(void*, 
     int i=0, j=tabsize-1, m=0;
     void *tmp = tab;
 
-    //continue searching until the very first occurence in the array
     while(i<=j){
         m = (i+j)/2;
         if((*compare)(tmp+(elementsize*m), toSearch) < 0)
