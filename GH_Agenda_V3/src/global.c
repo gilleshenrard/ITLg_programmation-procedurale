@@ -6,7 +6,7 @@
 /*  O : /                                                   */
 /************************************************************/
 void displayTuple(t_tuple* toDisplay){
-    printf("\n%d\t\t%s\t\t%s\t\t%s\t\t%s", toDisplay->id, toDisplay->lastname, toDisplay->firstname, toDisplay->city, toDisplay->metier);
+    printf("\n%6d\t\t%28s\t\t%32s\t\t%32s\t\t%28s", toDisplay->id, toDisplay->lastname, toDisplay->firstname, toDisplay->city, toDisplay->metier);
 }
 
 /************************************************************/
