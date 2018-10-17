@@ -6,6 +6,8 @@
 #include "lib/structure.h"
 #include "lib/algo.h"
 
+#define P_SEP printf("\n---------------------------------------------------------------------------------------------------------------\n");
+
 char filename[] = "test.dat";
 
 char menu(int, char[][32]);
@@ -19,15 +21,16 @@ int main(int argc, char *argv[])
     int filesize = 0;
     char choice=0;
     t_tuple current;
-    char princ_menu[6][32]={"Main menu",
+    char princ_menu[7][32]={"Main menu",
                             "Creer des enregistrements",
                             "Chercher un nom",
                             "Chercher un numero de sequence",
                             "Lister tous les enregistrements",
+                            "Changer d'agenda",
                             "Quitter"};
 
     do{
-        choice = menu(6, princ_menu);
+        choice = menu(sizeof(princ_menu)/32, princ_menu);
         switch(choice){
             case '0':   //Record creation and addition at the end of the file
                 memset(&current, 0, sizeof(t_tuple));
@@ -100,9 +103,9 @@ char menu(int i, char sections[i][32]){
 
     system("cls");
 
-    printf("***********************************\n");
-    printf("%s\n", sections[0]);
-    printf("***********************************\n");
+    printf("****************************************\n");
+    printf("\t\t%s\n", sections[0]);
+    printf("****************************************\n");
     printf("Current file : %s\n\n", filename);
     for(j=1; j<i-1; j++)
         printf("%d) %s\n", j-1, sections[j]);
@@ -155,7 +158,7 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
     }
 
     //Request for the string to find in the records
-    printf("\n-------------------------------------");
+    P_SEP
     printf("\nSaisissez le nom de famille a chercher : ");
     fflush(stdin);
     scanf("%s", name);
@@ -222,7 +225,7 @@ int searchIndex(FILE* file, int nbrecords){
     }
 
     //Request for the index of the record to find
-    printf("\n-------------------------------------");
+    P_SEP
     printf("\nSaisissez l'index de l'enregistrement : ");
     fflush(stdin);
     scanf("%d", &index);
@@ -260,7 +263,7 @@ int searchIndex(FILE* file, int nbrecords){
 int listFile(FILE* file, int nbrecords){
     t_tuple record;
 
-    printf("\n-------------------------------------");
+    P_SEP
     for (int i=0 ; i<nbrecords ; i++){
         fread(&record, sizeof(t_tuple), 1, file);
         displayTuple(&record);
