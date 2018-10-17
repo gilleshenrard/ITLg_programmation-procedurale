@@ -11,6 +11,7 @@ char filename[] = "test.dat";
 char menu(int, char[][32]);
 int searchList(FILE*, e_criteria, int);
 int searchIndex(FILE*, int);
+int listFile(FILE*);
 
 int main(int argc, char *argv[])
 {
@@ -18,14 +19,15 @@ int main(int argc, char *argv[])
     int filesize = 0;
     char choice=0;
     t_tuple current;
-    char princ_menu[5][32]={"Main menu",
+    char princ_menu[6][32]={"Main menu",
                             "Creer des enregistrements",
                             "Chercher un nom",
                             "Chercher un numero de sequence",
+                            "Lister tous les enregistrements",
                             "Quitter"};
 
     do{
-        choice = menu(5, princ_menu);
+        choice = menu(6, princ_menu);
         switch(choice){
             case '0':   //Record creation and addition at the end of the file
                 memset(&current, 0, sizeof(t_tuple));
@@ -61,6 +63,17 @@ int main(int argc, char *argv[])
                     fseek(file, 0, SEEK_SET);
                     //Call the research function
                     searchIndex(file, filesize);
+                    fclose(file);
+                }
+                break;
+
+            case '3':   //List all the records of a file
+                //Open the file
+                file = fopen(filename, "rb");
+                if(file){
+                    //Retrieve the number of records in the file
+                    fseek(file, 0, SEEK_SET);
+                    listFile(file);
                     fclose(file);
                 }
                 break;
@@ -233,5 +246,14 @@ int searchIndex(FILE* file, int nbrecords){
     fflush(stdin);
     getch();
 
+    return 0;
+}
+
+/************************************************************/
+/*  I : File to manipulate                                  */
+/*  P : Lists all the records of a file                     */
+/*  O : /                                                   */
+/************************************************************/
+int listFile(FILE* file){
     return 0;
 }
