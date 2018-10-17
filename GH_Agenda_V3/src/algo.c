@@ -32,8 +32,8 @@ int bubbleSort(void* tab, int tabsize, int elementsize, int (*compare)(void*, vo
 /*      Comparison procedure (function pointer)             */
 /*      Element to search                                   */
 /*  P : Searches the key using the Binary search algorithm  */
-/*  O : = 0 -> Not found                                    */
-/*     != 0 -> Index of the first occurence in the array    */
+/*  O : -1  -> Not found                                    */
+/*     >= 0 -> Index of the first occurence in the array    */
 /************************************************************/
 int binarySearch(void* tab, int tabsize, int elementsize, int (*compare)(void*, void*), void* toSearch){
     int i=0, j=tabsize-1, m=0;
@@ -50,7 +50,7 @@ int binarySearch(void* tab, int tabsize, int elementsize, int (*compare)(void*, 
                 return m;
     }
 
-    return 0;
+    return -1;
 }
 
 /************************************************************/
@@ -61,8 +61,8 @@ int binarySearch(void* tab, int tabsize, int elementsize, int (*compare)(void*, 
 /*      Element to search                                   */
 /*  P : Finds the first occurence of the key using          */
 /*          the Binary search algorithm                     */
-/*  O : = 0 -> Not found                                    */
-/*     != 0 -> Index of the first occurence in the array    */
+/*  O : -1  -> Not found                                    */
+/*      >=0 -> Index of the first occurence in the array    */
 /************************************************************/
 int binarySearchFirst(void* tab, int tabsize, int elementsize, int (*compare)(void*, void*), void* toSearch){
     void* tmp = tab;
@@ -70,8 +70,8 @@ int binarySearchFirst(void* tab, int tabsize, int elementsize, int (*compare)(vo
     //use the binary search to find an occurence of the element
     int i = binarySearch(tab, tabsize, elementsize, compare, toSearch);
 
-    if(!i)
-        return 0;
+    if(i<0)
+        return -1;
 
     //walk through all the occurences of the key until the first one
     while(i>=0 && (*compare)(tmp+(elementsize*i), toSearch) >= 0){

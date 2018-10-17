@@ -83,6 +83,13 @@ int main(int argc, char *argv[])
                 }
                 break;
 
+            case '4':
+                P_SEP
+                printf("\nSaisissez le nom du fichier : ");
+                fflush(stdin);
+                scanf("%s", filename);
+                break;
+
             default:
                 break;
         }
@@ -166,7 +173,7 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
     //Bufferise the string in a tuple and binary search
     strcpy(tmp.lastname, name);
     search = binarySearchFirst((void*)tab, nbrecords, sizeof(t_tuple), &compareFilterLastName, (void*)&tmp);
-    if(!search){
+    if(search <0){
         fprintf(stderr, "\nsearchList : Nom '%s' non-trouve...", name);
 
         //Wait for a user input
