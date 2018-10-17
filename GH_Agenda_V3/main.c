@@ -135,13 +135,11 @@ char menu(int i, char sections[i][32]){
 /*     -1 -> Error                                          */
 /************************************************************/
 int searchList(FILE* file, e_criteria criteria, int nbrecords){
-    t_tuple* first=NULL;
-    t_tuple* last=NULL;
+    t_tuple *first=NULL, *last=NULL, *cur=NULL, *prev=NULL, tmp;
     t_tuple tab[nbrecords];
-    t_tuple tmp;
-    t_tuple *cur=NULL, *prev=NULL;
     char name[28]="0";
     int search = 0;
+    t_algo_meta meta = {NULL, nbrecords, sizeof(t_tuple), NULL, &swapTuples};
 
     //Sequentially read of the full file and add its content in a buffer array
     for(int i=0 ; i<nbrecords ; i++)
@@ -150,14 +148,20 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
             return -1;
         }
 
+    meta.tab = (void*)&tab;
+
     //Sort the array according to the provided criteria
     switch(criteria){
         case LASTNAME:
-            bubbleSort((void*)tab, nbrecords, sizeof(t_tuple), &compareLastName, &swapTuples);
+            //bubbleSort((void*)tab, nbrecords, sizeof(t_tuple), &compareLastName, &swapTuples);
+            meta.compare = &compareLastName;
+            bubbleSort(&meta);
             break;
 
         case ID:
-            bubbleSort((void*)tab, nbrecords, sizeof(t_tuple), &compareID, &swapTuples);
+            //bubbleSort((void*)tab, nbrecords, sizeof(t_tuple), &compareID, &swapTuples);
+            meta.compare = &compareID;
+            bubbleSort(&meta);
             break;
 
         default:
@@ -172,7 +176,8 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
 
     //Bufferise the string in a tuple and binary search
     strcpy(tmp.lastname, name);
-    search = binarySearchFirst((void*)tab, nbrecords, sizeof(t_tuple), &compareFilterLastName, (void*)&tmp);
+    meta.compare = compareFilterLastName;
+    search = binarySearchFirst(&meta, (void*)&tmp);
     if(search <0){
         fprintf(stderr, "\nsearchList : Nom '%s' non-trouve...", name);
 

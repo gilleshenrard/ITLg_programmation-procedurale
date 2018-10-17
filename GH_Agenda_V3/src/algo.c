@@ -1,24 +1,20 @@
 #include "../lib/algo.h"
 
 /************************************************************/
-/*  I : Array to sort                                       */
-/*      Number of records in the array                      */
-/*      Size of a record in memory                          */
-/*      Comparison procedure (function pointer)             */
-/*      Swapping procedure  (function pointer)              */
+/*  I : Array of meta data necessary to the algorithm       */
 /*  P : Sorts the provided array using the Bubble Sort algo */
 /*  O : 0 -> OK                                             */
 /*     -1 -> Error                                          */
 /************************************************************/
-int bubbleSort(void* tab, int tabsize, int elementsize, int (*compare)(void*, void*), int (*swapping)(void*, void*)){
-    void *tmp = tab;
+int bubbleSort(t_algo_meta *meta){
+    void *tmp = meta->tab;
 
-    for(int i=0 ; i<tabsize-1 ; i++){
-        for(int j=0 ; j<tabsize-i-1 ; j++){
+    for(int i=0 ; i<meta->tabsize-1 ; i++){
+        for(int j=0 ; j<meta->tabsize-i-1 ; j++){
             //compare tab[i] and tab[i+1]
-            if((*compare)(tmp+(elementsize*j), tmp+(elementsize*(j+1))) > 0)
+            if((*meta->compare)(tmp+(meta->elementsize*j), tmp+(meta->elementsize*(j+1))) > 0)
                 //swap tab[i] and tab[i+1]
-                (*swapping)(tmp+(elementsize*j), tmp+(elementsize*(j+1)));
+                (*meta->swapping)(tmp+(meta->elementsize*j), tmp+(meta->elementsize*(j+1)));
         }
     }
 
@@ -26,25 +22,22 @@ int bubbleSort(void* tab, int tabsize, int elementsize, int (*compare)(void*, vo
 }
 
 /************************************************************/
-/*  I : Array to search in                                  */
-/*      Number of records in the array                      */
-/*      Size of a record in memory                          */
-/*      Comparison procedure (function pointer)             */
+/*  I : Meta data necessary to the algorithm                */
 /*      Element to search                                   */
 /*  P : Searches the key using the Binary search algorithm  */
 /*  O : -1  -> Not found                                    */
 /*     >= 0 -> Index of the first occurence in the array    */
 /************************************************************/
-int binarySearch(void* tab, int tabsize, int elementsize, int (*compare)(void*, void*), void* toSearch){
-    int i=0, j=tabsize-1, m=0;
-    void *tmp = tab;
+int binarySearch(t_algo_meta *meta, void* toSearch){
+    int i=0, j=meta->tabsize-1, m=0;
+    void *tmp = meta->tab;
 
     while(i<=j){
         m = (i+j)/2;
-        if((*compare)(tmp+(elementsize*m), toSearch) < 0)
+        if((*meta->compare)(tmp+(meta->elementsize*m), toSearch) < 0)
             i = m+1;
         else
-            if((*compare)(tmp+(elementsize*m), toSearch) > 0)
+            if((*meta->compare)(tmp+(meta->elementsize*m), toSearch) > 0)
                 j = m-1;
             else
                 return m;
@@ -54,27 +47,24 @@ int binarySearch(void* tab, int tabsize, int elementsize, int (*compare)(void*, 
 }
 
 /************************************************************/
-/*  I : Array to search in                                  */
-/*      Number of records in the array                      */
-/*      Size of a record in memory                          */
-/*      Comparison procedure (function pointer)             */
+/*  I : Metadata necessary to the algorithm                 */
 /*      Element to search                                   */
 /*  P : Finds the first occurence of the key using          */
 /*          the Binary search algorithm                     */
 /*  O : -1  -> Not found                                    */
 /*      >=0 -> Index of the first occurence in the array    */
 /************************************************************/
-int binarySearchFirst(void* tab, int tabsize, int elementsize, int (*compare)(void*, void*), void* toSearch){
-    void* tmp = tab;
+int binarySearchFirst(t_algo_meta *meta, void* toSearch){
+    void* tmp = meta->tab;
 
     //use the binary search to find an occurence of the element
-    int i = binarySearch(tab, tabsize, elementsize, compare, toSearch);
+    int i = binarySearch(meta, toSearch);
 
     if(i<0)
         return -1;
 
     //walk through all the occurences of the key until the first one
-    while(i>=0 && (*compare)(tmp+(elementsize*i), toSearch) >= 0){
+    while(i>=0 && (*meta->compare)(tmp+(meta->elementsize*i), toSearch) >= 0){
         i--;
     }
     return i+1;
