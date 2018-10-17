@@ -1,6 +1,15 @@
 #include "../lib/global.h"
 
 /************************************************************/
+/*  I : /                                                   */
+/*  P : Displays a tuple (inline)                           */
+/*  O : /                                                   */
+/************************************************************/
+void displayTuple(t_tuple* toDisplay){
+    printf("\n%d\t\t%s\t\t%s\t\t%s\t\t%s", toDisplay->id, toDisplay->lastname, toDisplay->firstname, toDisplay->city, toDisplay->metier);
+}
+
+/************************************************************/
 /*  I : Tuple to encode                                     */
 /*  P : Allows the user to enter a tuple fields values      */
 /*  O : 0 -> OK                                             */
@@ -25,7 +34,9 @@ int encodeTuple(t_tuple *encodeTuple){
     fflush(stdin);
     scanf("%s", encodeTuple->city);
 
-    strcpy(encodeTuple->filler, "");
+    printf("Saisissez le metier : ");
+    fflush(stdin);
+    scanf("%s", encodeTuple->metier);
 
     return 0;
 }

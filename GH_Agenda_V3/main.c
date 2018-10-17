@@ -166,7 +166,7 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
     //Display all the records found
     cur = first;
     do{
-        printf("\n%d\t\t%s\t\t%s\t\t%s", cur->id, cur->lastname, cur->firstname, cur->city);
+        displayTuple(cur);
         cur = cur->next;
     }while(cur);
 
@@ -222,14 +222,14 @@ int searchIndex(FILE* file, int nbrecords){
     }
 
     //jump to the index specified and read the record
-    fseek(file, index, sizeof(t_tuple));
+    fseek(file, index*sizeof(t_tuple), SEEK_SET);
     if(fread(&record, sizeof(t_tuple), 1, file) < 1){
             fprintf(stderr, "\nsearchIndex : Erreur pendant la lecture du fichier");
             return -1;
         }
 
     //display the record
-    printf("\n%d\t\t%s\t\t%s\t\t%s", record.id, record.lastname, record.firstname, record.city);
+    displayTuple(&record);
     fflush(stdin);
     getch();
 
