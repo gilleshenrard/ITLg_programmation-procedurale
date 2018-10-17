@@ -7,21 +7,21 @@
 /*     -1 -> Error                                          */
 /************************************************************/
 int encodeTuple(t_tuple *encodeTuple){
-    printf("\n-------------------------------------");
+    printf("\n\n-------------------------------------\n");
 
-    printf("\nSaisissez l'id : ");
+    printf("Saisissez l'id : ");
     fflush(stdin);
     scanf("%d", &encodeTuple->id);
 
-    printf("\nSaisissez le nom de famille : ");
+    printf("Saisissez le nom de famille : ");
     fflush(stdin);
     scanf("%s", encodeTuple->lastname);
 
-    printf("\nSaisissez le prenom : ");
+    printf("Saisissez le prenom : ");
     fflush(stdin);
     scanf("%s", encodeTuple->firstname);
 
-    printf("\nSaisissez la ville : ");
+    printf("Saisissez la ville : ");
     fflush(stdin);
     scanf("%s", encodeTuple->city);
 
