@@ -9,7 +9,7 @@
 char filename[] = "test.dat";
 
 char menu(int, char[][32]);
-int searchList(FILE*, e_critera, int);
+int searchList(FILE*, e_criteria, int);
 
 int main(int argc, char *argv[])
 {
@@ -25,27 +25,31 @@ int main(int argc, char *argv[])
     do{
         choice = menu(4, princ_menu);
         switch(choice){
-            case '0':
+            case '0':   //Record creation and addition at the end of the file
                 memset(&current, 0, sizeof(t_tuple));
-                newTuple(&current);
+                encodeTuple(&current);
+                //Opening or creation of the file
                 if((file = fopen(filename, "r+b")) == NULL)
                     file = fopen(filename, "w+b");
                 appendFile(file, &current);
                 fclose(file);
                 break;
 
-            case '1':
+            case '1':   //Research for a last name (possibly incomplete)
+                //Open the file
                 file = fopen(filename, "rb");
                 if(file){
+                    //Retrieve the number of records in the file
                     fseek(file, 0, SEEK_END);
                     filesize = ftell(file)/sizeof(t_tuple);
                     fseek(file, 0, SEEK_SET);
+                    //Call the research function
                     searchList(file, LASTNAME, filesize);
                     fclose(file);
                 }
                 break;
 
-            case '2':
+            case '2':   //Research a record by its index in the file
                 break;
 
             default:
@@ -57,7 +61,8 @@ int main(int argc, char *argv[])
 }
 
 /************************************************************/
-/*  I : Sections of the menu to display                     */
+/*  I : Number of possible sections in the menu             */
+/*      Sections of the menu to display                     */
 /*  P : Displays the menu and returns the user's choice     */
 /*  O : Choice                                              */
 /************************************************************/
@@ -78,61 +83,83 @@ char menu(int i, char sections[i][32]){
     return choice;
 }
 
-int searchList(FILE* file, e_critera critera, int filesize){
+/************************************************************/
+/*  I : File to manipulate                                  */
+/*      Criteria of the research (e.g. field to research)   */
+/*      Number of records in the file                       */
+/*  P : Searches in the file for the given value            */
+/*  O : 1 -> Records found                                  */
+/*      0 -> None found                                     */
+/*     -1 -> Error                                          */
+/************************************************************/
+int searchList(FILE* file, e_criteria criteria, int nbrecords){
     t_tuple* first=NULL;
     t_tuple* last=NULL;
-    t_tuple tab[filesize];
+    t_tuple tab[nbrecords];
     t_tuple tmp;
     t_tuple *cur=NULL, *prev=NULL;
     char name[28]="0";
     int search = 0;
 
-    for(int i=0 ; i<filesize ; i++)
-        if(fread(&tab[i], sizeof(t_tuple), 1, file) < 1)
+    //Sequentially read of the full file and add its content in a buffer array
+    for(int i=0 ; i<nbrecords ; i++)
+        if(fread(&tab[i], sizeof(t_tuple), 1, file) < 1){
+            fprintf(stderr, "\nErreur pendant la lecture du fichier");
             return -1;
+        }
 
-    switch(critera){
+    //Sort the array according to the provided criteria
+    switch(criteria){
         case LASTNAME:
-            bubbleSort((void*)tab, filesize, sizeof(t_tuple), &compareLastName, &swapTuples);
+            bubbleSort((void*)tab, nbrecords, sizeof(t_tuple), &compareLastName, &swapTuples);
             break;
 
         case ID:
-            bubbleSort((void*)tab, filesize, sizeof(t_tuple), &compareID, &swapTuples);
+            bubbleSort((void*)tab, nbrecords, sizeof(t_tuple), &compareID, &swapTuples);
             break;
 
         default:
             break;
     }
 
+    //Request for the string to find in the records
     printf("\n-------------------------------------");
     printf("\nSaisissez le nom de famille a chercher : ");
     fflush(stdin);
     scanf("%s", name);
 
+    //Bufferise the string in a tuple and binary search
     strcpy(tmp.lastname, name);
-    search = binarySearch((void*)tab, filesize, sizeof(t_tuple), &compareFilterLastName, (void*)&tmp);
-    if(search < 0)
-        printf("\nnon-trouve");
-    else{
-        while(compareFilterLastName((void*)&tab[search], (void*)&tmp) <= 0 && search < filesize){
-            appendList(&first, &last, &tab[search]);
-            search++;
-        }
-        cur = first;
-        do{
-            printf("\n%s", cur->lastname);
-            cur = cur->next;
-        }while(cur);
-
-        cur = first;
-        do{
-            prev = cur;
-            cur = cur->next;
-            free(prev);
-        }while(cur);
+    search = binarySearch((void*)tab, nbrecords, sizeof(t_tuple), &compareFilterLastName, (void*)&tmp);
+    if(!search){
+        fprintf(stderr, "\nNom '%s' non-trouve...", name);
+        return 0;
     }
+
+    //Append all the strings compatible with the criteria in a chained list
+    while(compareFilterLastName((void*)&tab[search], (void*)&tmp) <= 0 && search < nbrecords){
+        appendList(&first, &last, &tab[search]);
+        search++;
+    }
+
+    //Display all the records found
+    cur = first;
+    do{
+        printf("\n%s", cur->lastname);
+        cur = cur->next;
+    }while(cur);
+
+    //Memory deallocation of the list
+    cur = first;
+    do{
+        prev = cur;
+        cur = cur->next;
+        free(prev);
+    }while(cur);
+
+    //Wait for a user input
     fflush(stdin);
     getch();
 
-    return 0;
+    return 1;
 }

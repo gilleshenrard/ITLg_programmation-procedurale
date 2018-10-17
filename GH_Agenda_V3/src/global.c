@@ -1,50 +1,96 @@
 #include "../lib/global.h"
 
-int newTuple(t_tuple *newtuple){
+/************************************************************/
+/*  I : Tuple to encode                                     */
+/*  P : Allows the user to enter a tuple fields values      */
+/*  O : 0 -> OK                                             */
+/*     -1 -> Error                                          */
+/************************************************************/
+int encodeTuple(t_tuple *encodeTuple){
     printf("\n-------------------------------------");
+
     printf("\nSaisissez l'id : ");
     fflush(stdin);
-    scanf("%d", &newtuple->id);
+    scanf("%d", &encodeTuple->id);
+
     printf("\nSaisissez le nom de famille : ");
     fflush(stdin);
-    scanf("%s", newtuple->lastname);
+    scanf("%s", encodeTuple->lastname);
+
     printf("\nSaisissez le prenom : ");
     fflush(stdin);
-    scanf("%s", newtuple->firstname);
+    scanf("%s", encodeTuple->firstname);
+
     printf("\nSaisissez la ville : ");
     fflush(stdin);
-    scanf("%s", newtuple->city);
-    strcpy(newtuple->filler, "");
+    scanf("%s", encodeTuple->city);
+
+    strcpy(encodeTuple->filler, "");
 
     return 0;
 }
 
+/************************************************************/
+/*  I : First last name to compare                          */
+/*      Second last name to compare                         */
+/*  P : Compares (strictly, case insensitive) two last names*/
+/*  O : 1 -> First > Second                                 */
+/*      0 -> First = Second                                 */
+/*     -1 -> First < Second                                 */
+/************************************************************/
 int compareLastName(void* first, void* second){
+    //convert from void* to t_tuple
     t_tuple *first_tuple = (t_tuple*) first;
     t_tuple *second_tuple = (t_tuple*) second;
 
     return stricmp(first_tuple->lastname, second_tuple->lastname);
 }
 
+/************************************************************/
+/*  I : First last name to compare                          */
+/*      Second last name to compare                         */
+/*  P : Compares (loosely, case insensitive) two last names */
+/*  O : 1 -> First > Second                                 */
+/*      0 -> First = Second                                 */
+/*     -1 -> First < Second                                 */
+/************************************************************/
 int compareFilterLastName(void* first, void* second){
+    //convert from void* to t_tuple
     t_tuple *first_tuple = (t_tuple*) first;
     t_tuple *second_tuple = (t_tuple*) second;
     char tmp[28] = "0";
 
+    //crop the last name to compare to size, and comparison
     memcpy(tmp, first_tuple->lastname, strlen(second_tuple->lastname));
+    //append \0
     tmp[strlen(second_tuple->lastname)]='\0';
 
     return stricmp(tmp, second_tuple->lastname);
 }
 
+/************************************************************/
+/*  I : First ID to compare                                 */
+/*      Second ID to compare                                */
+/*  P : Compares (strictly) two IDs                         */
+/*  O : 1 -> First > Second                                 */
+/*      0 -> First = Second                                 */
+/*     -1 -> First < Second                                 */
+/************************************************************/
 int compareID(void* first, void* second){
+    //convert from void* to t_tuple
     t_tuple *first_tuple = (t_tuple*) first;
     t_tuple *second_tuple = (t_tuple*) second;
 
     return first_tuple->id - second_tuple->id;
 }
 
+/************************************************************/
+/*  I : Tuple to swap                                       */
+/*  P : Swaps two tuples                                    */
+/*  O : /                                                   */
+/************************************************************/
 int swapTuples(void* first, void* second){
+    //convert from void* to t_tuple
     t_tuple *first_tuple = (t_tuple*)first;
     t_tuple *second_tuple = (t_tuple*)second;
     t_tuple tmp;

@@ -14,9 +14,9 @@ struct t_tuple{
     t_tuple *next;
 };
 
-typedef enum {ID, LASTNAME, FIRSTNAME, CITY} e_critera;
+typedef enum {ID, LASTNAME, FIRSTNAME, CITY} e_criteria;
 
-int newTuple(t_tuple*);
+int encodeTuple(t_tuple*);
 int compareLastName(void*, void*);
 int compareFilterLastName(void*, void*);
 int compareID(void*, void*);
