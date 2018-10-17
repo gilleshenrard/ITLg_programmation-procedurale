@@ -17,13 +17,14 @@ int main(int argc, char *argv[])
     int filesize = 0;
     char choice=0;
     t_tuple current;
-    char princ_menu[4][32]={"Creer des enregistrements",
+    char princ_menu[5][32]={"Main menu",
+                            "Creer des enregistrements",
                             "Chercher un nom",
                             "Chercher un numero de sequence",
                             "Quitter"};
 
     do{
-        choice = menu(4, princ_menu);
+        choice = menu(5, princ_menu);
         switch(choice){
             case '0':   //Record creation and addition at the end of the file
                 memset(&current, 0, sizeof(t_tuple));
@@ -72,11 +73,15 @@ char menu(int i, char sections[i][32]){
 
     system("cls");
 
-    for(j=0; j<i-1; j++)
-        printf("%d) %s\n", j, sections[j]);
+    printf("***********************************\n");
+    printf("%s\n", sections[0]);
+    printf("***********************************\n");
+    printf("Current file : %s\n\n", filename);
+    for(j=1; j<i-1; j++)
+        printf("%d) %s\n", j-1, sections[j]);
     printf("ESC) %s\n", sections[j]);
 
-    printf("Effectuez votre choix");
+    printf("\nEffectuez votre choix : ");
     fflush(stdin);
     choice = getch();
 
@@ -133,6 +138,10 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
     search = binarySearch((void*)tab, nbrecords, sizeof(t_tuple), &compareFilterLastName, (void*)&tmp);
     if(!search){
         fprintf(stderr, "\nNom '%s' non-trouve...", name);
+
+        //Wait for a user input
+        fflush(stdin);
+        getch();
         return 0;
     }
 
