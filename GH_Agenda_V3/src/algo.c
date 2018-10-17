@@ -31,10 +31,7 @@ int bubbleSort(void* tab, int tabsize, int elementsize, int (*compare)(void*, vo
 /*      Size of a record in memory                          */
 /*      Comparison procedure (function pointer)             */
 /*      Element to search                                   */
-/*  P : Searches in the array for the provided element      */
-/*      WARNING : algorithm tweaked to search for the first */
-/*          occurence in a sorted array (not applicable to  */
-/*                                       every test case)   */
+/*  P : Searches the key using the Binary search algorithm  */
 /*  O : = 0 -> Not found                                    */
 /*     != 0 -> Index of the first occurence in the array    */
 /************************************************************/
@@ -48,12 +45,38 @@ int binarySearch(void* tab, int tabsize, int elementsize, int (*compare)(void*, 
         if((*compare)(tmp+(elementsize*m), toSearch) < 0)
             i = m+1;
         else
-            j = m-1;
+            if((*compare)(tmp+(elementsize*m), toSearch) > 0)
+                j = m-1;
+            else
+                return m;
     }
 
-    //check if found, and return result
-    if((*compare)(tmp+(elementsize*m), toSearch) != 0)
+    return 0;
+}
+
+/************************************************************/
+/*  I : Array to search in                                  */
+/*      Number of records in the array                      */
+/*      Size of a record in memory                          */
+/*      Comparison procedure (function pointer)             */
+/*      Element to search                                   */
+/*  P : Finds the first occurence of the key using          */
+/*          the Binary search algorithm                     */
+/*  O : = 0 -> Not found                                    */
+/*     != 0 -> Index of the first occurence in the array    */
+/************************************************************/
+int binarySearchFirst(void* tab, int tabsize, int elementsize, int (*compare)(void*, void*), void* toSearch){
+    void* tmp = tab;
+
+    //use the binary search to find an occurence of the element
+    int i = binarySearch(tab, tabsize, elementsize, compare, toSearch);
+
+    if(!i)
         return 0;
-    else
-        return i;
+
+    //walk through all the occurences of the key until the first one
+    while(i>=0 && (*compare)(tmp+(elementsize*i), toSearch) >= 0){
+        i--;
+    }
+    return i+1;
 }

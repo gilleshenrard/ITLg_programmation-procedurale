@@ -135,7 +135,7 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
 
     //Bufferise the string in a tuple and binary search
     strcpy(tmp.lastname, name);
-    search = binarySearch((void*)tab, nbrecords, sizeof(t_tuple), &compareFilterLastName, (void*)&tmp);
+    search = binarySearchFirst((void*)tab, nbrecords, sizeof(t_tuple), &compareFilterLastName, (void*)&tmp);
     if(!search){
         fprintf(stderr, "\nNom '%s' non-trouve...", name);
 

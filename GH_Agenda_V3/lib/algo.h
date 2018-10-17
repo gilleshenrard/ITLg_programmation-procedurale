@@ -7,5 +7,6 @@ int bubbleSort(void* tab, int tabsize, int elementsize, int (*compare)(void*, vo
 
 //Research algorithms
 int binarySearch(void* tab, int tabsize, int elementsize, int (*compare)(void*, void*), void* toSearch);
+int binarySearchFirst(void* tab, int tabsize, int elementsize, int (*compare)(void*, void*), void* toSearch);
 
 #endif // ALGO_H_INCLUDED
