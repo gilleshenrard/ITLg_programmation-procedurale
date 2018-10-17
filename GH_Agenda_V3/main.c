@@ -154,7 +154,7 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
     //Display all the records found
     cur = first;
     do{
-        printf("\n%s", cur->lastname);
+        printf("\n%d\t\t%s\t\t%s\t\t%s", cur->id, cur->lastname, cur->firstname, cur->city);
         cur = cur->next;
     }while(cur);
 
