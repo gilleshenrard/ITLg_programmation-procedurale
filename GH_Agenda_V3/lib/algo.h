@@ -6,8 +6,8 @@ typedef struct {
     void* tab;
     int tabsize;
     int elementsize;
-    int (*compare)(void*, void*);
-    int (*swapping)(void*, void*);
+    int (*doCompare)(void*, void*);
+    int (*doSwap)(void*, void*);
 } t_algo_meta;
 
 //Sorting algorithms

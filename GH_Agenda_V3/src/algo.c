@@ -7,14 +7,16 @@
 /*     -1 -> Error                                          */
 /************************************************************/
 int bubbleSort(t_algo_meta *meta){
-    void *tmp = meta->tab;
+    void *current=NULL, *next=NULL;
 
     for(int i=0 ; i<meta->tabsize-1 ; i++){
         for(int j=0 ; j<meta->tabsize-i-1 ; j++){
-            //compare tab[i] and tab[i+1]
-            if((*meta->compare)(tmp+(meta->elementsize*j), tmp+(meta->elementsize*(j+1))) > 0)
-                //swap tab[i] and tab[i+1]
-                (*meta->swapping)(tmp+(meta->elementsize*j), tmp+(meta->elementsize*(j+1)));
+            //properly place the cursors
+            current = meta->tab+(meta->elementsize*j);
+            next = meta->tab+(meta->elementsize*(j+1));
+
+            if((*meta->doCompare)(current, next) > 0)
+                (*meta->doSwap)(current, next);
         }
     }
 
@@ -30,14 +32,17 @@ int bubbleSort(t_algo_meta *meta){
 /************************************************************/
 int binarySearch(t_algo_meta *meta, void* toSearch){
     int i=0, j=meta->tabsize-1, m=0;
-    void *tmp = meta->tab;
+    void *current = NULL;
 
     while(i<=j){
         m = (i+j)/2;
-        if((*meta->compare)(tmp+(meta->elementsize*m), toSearch) < 0)
+        //position the cursor
+        current = meta->tab+(meta->elementsize*m);
+
+        if((*meta->doCompare)(current, toSearch) < 0)
             i = m+1;
         else
-            if((*meta->compare)(tmp+(meta->elementsize*m), toSearch) > 0)
+            if((*meta->doCompare)(current, toSearch) > 0)
                 j = m-1;
             else
                 return m;
@@ -55,7 +60,7 @@ int binarySearch(t_algo_meta *meta, void* toSearch){
 /*      >=0 -> Index of the first occurence in the array    */
 /************************************************************/
 int binarySearchFirst(t_algo_meta *meta, void* toSearch){
-    void* tmp = meta->tab;
+    void* current = NULL;
 
     //use the binary search to find an occurence of the element
     int i = binarySearch(meta, toSearch);
@@ -64,8 +69,10 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
         return -1;
 
     //walk through all the occurences of the key until the first one
-    while(i>=0 && (*meta->compare)(tmp+(meta->elementsize*i), toSearch) >= 0){
+    do{
         i--;
-    }
+        current = meta->tab+(meta->elementsize*i);
+    }while(i>=0 && (*meta->doCompare)(current, toSearch) >= 0);
+
     return i+1;
 }

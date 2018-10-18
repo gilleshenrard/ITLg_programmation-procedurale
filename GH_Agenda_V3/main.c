@@ -154,13 +154,13 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
     switch(criteria){
         case LASTNAME:
             //bubbleSort((void*)tab, nbrecords, sizeof(t_tuple), &compareLastName, &swapTuples);
-            meta.compare = &compareLastName;
+            meta.doCompare = &compareLastName;
             bubbleSort(&meta);
             break;
 
         case ID:
             //bubbleSort((void*)tab, nbrecords, sizeof(t_tuple), &compareID, &swapTuples);
-            meta.compare = &compareID;
+            meta.doCompare = &compareID;
             bubbleSort(&meta);
             break;
 
@@ -176,7 +176,7 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
 
     //Bufferise the string in a tuple and binary search
     strcpy(tmp.lastname, name);
-    meta.compare = compareFilterLastName;
+    meta.doCompare = compareFilterLastName;
     search = binarySearchFirst(&meta, (void*)&tmp);
     if(search <0){
         fprintf(stderr, "\nsearchList : Nom '%s' non-trouve...", name);
