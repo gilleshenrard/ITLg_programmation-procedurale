@@ -24,6 +24,55 @@ int bubbleSort(t_algo_meta *meta){
 }
 
 /************************************************************/
+/*  I : Array of meta data necessary to the algorithm       */
+/*      Lowest element of the partition                     */
+/*      Highest element of the partition                    */
+/*  P : Sorts the partitions provided by the Quick Sort     */
+/*  O : New pivot                                           */
+/************************************************************/
+/*  WARNING : is solely to be used by the quick sort func. !*/
+/************************************************************/
+int quickSortPartitioning(t_algo_meta* meta, int low, int high){
+    void* pivot = meta->tab+(meta->elementsize*high), *elemi=NULL, *elemj=NULL;
+    int i = low-1;
+
+    //swap the elements until the pivot is at the right place
+    //      with lower elements before, and higher ones after
+    for(int j=low ; j<=high-1 ; j++){
+        elemj = meta->tab+(meta->elementsize*j);
+        if((*meta->doCompare)(elemj, pivot) <= 0){
+            i++;
+            elemi = meta->tab+(meta->elementsize*i);
+            (*meta->doSwap)(elemi, elemj);
+        }
+    }
+
+    //pivot is at the right place and partition sorted
+    (*meta->doSwap)(meta->tab+(meta->elementsize*(i+1)), meta->tab+(meta->elementsize*high));
+    return(i+1);
+}
+
+/************************************************************/
+/*  I : Array of meta data necessary to the algorithm       */
+/*      Lowest index in the array (most likely 0)           */
+/*      Highest index in the array (last element)           */
+/*  P : Sorts the provided array using the Quick Sort algo  */
+/*  O : /                                                   */
+/************************************************************/
+int quickSort(t_algo_meta* meta, int low, int high){
+    int pivot=0;
+
+    if(low < high){
+        pivot = quickSortPartitioning(meta, low, high);
+
+        quickSort(meta, low, pivot-1);
+        quickSort(meta, pivot+1, high);
+    }
+
+    return 0;
+}
+
+/************************************************************/
 /*  I : Meta data necessary to the algorithm                */
 /*      Element to search                                   */
 /*  P : Searches the key using the Binary search algorithm  */

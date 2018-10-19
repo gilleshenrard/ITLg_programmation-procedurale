@@ -12,6 +12,8 @@ typedef struct {
 
 //Sorting algorithms
 int bubbleSort(t_algo_meta*);
+int quickSortPartitioning(t_algo_meta*, int, int);
+int quickSort(t_algo_meta*, int, int);
 
 //Research algorithms
 int binarySearch(t_algo_meta*, void* toSearch);
