@@ -179,7 +179,7 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
             return -1;
             break;
     }
-    bubbleSort(&meta);
+    quickSort(&meta, 0, nbrecords-1);
 
     //Request for the string to find in the records
     P_SEP
