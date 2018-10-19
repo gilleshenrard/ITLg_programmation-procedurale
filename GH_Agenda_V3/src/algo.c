@@ -113,7 +113,6 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
 
     //use the binary search to find an occurence of the element
     int i = binarySearch(meta, toSearch);
-
     if(i<0)
         return -1;
 
