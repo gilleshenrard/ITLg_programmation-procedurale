@@ -1,16 +1,8 @@
-#include <stdlib.h>
-#include <conio.h>
-#include <stdio.h>
 #include "lib/global.h"
 #include "lib/inout.h"
 #include "lib/algo.h"
 #include "lib/tuple.h"
 
-#define P_SEP printf("\n---------------------------------------------------------------------------------------------------------------\n");
-
-char filename[] = "test.dat";
-
-char menu(int, char[][32]);
 int menuAppendFile();
 int searchList(e_criteria);
 int sortTab(FILE*, t_list_meta*, e_criteria, t_tuple**);
@@ -60,33 +52,6 @@ int main(int argc, char *argv[])
     }while(choice!=27);
 
     return EXIT_SUCCESS;
-}
-
-/************************************************************/
-/*  I : Number of possible sections in the menu             */
-/*      Sections of the menu to display                     */
-/*  P : Displays the menu and returns the user's choice     */
-/*  O : Choice                                              */
-/************************************************************/
-char menu(int i, char sections[i][32]){
-    int j;
-    char choice = 0;
-
-    system("cls");
-
-    printf("****************************************\n");
-    printf("\t\t%s\n", sections[0]);
-    printf("****************************************\n");
-    printf("Current file : %s\n\n", filename);
-    for(j=1; j<i-1; j++)
-        printf("%d) %s\n", j-1, sections[j]);
-    printf("ESC) %s\n", sections[j]);
-
-    printf("\nEffectuez votre choix : ");
-    fflush(stdin);
-    choice = getch();
-
-    return choice;
 }
 
 /************************************************************/
@@ -226,7 +191,7 @@ int sortTab(FILE* file, t_list_meta *metalist, e_criteria criteria, t_tuple **fi
 
     //Append all the strings compatible with the criteria in a chained list
     while((*metalist->meta.doCompare)((void*)&tab[search], (void*)&tmp) <= 0 && search < nbrecords){
-        appendUnsortedList(metalist, (void**)&first, (void**)&last, (void*)&tab[search]);
+        appendUnsortedList(metalist, (void**)first, (void**)&last, (void*)&tab[search]);
         search++;
     }
 
@@ -317,9 +282,6 @@ int listFile(){
         fread(&record, sizeof(t_tuple), 1, file);
         displayTuple((void*)&record, NULL);
     }
-
-    //display the record
-    displayTuple((void*)&record, NULL);
     fflush(stdin);
     getch();
 
