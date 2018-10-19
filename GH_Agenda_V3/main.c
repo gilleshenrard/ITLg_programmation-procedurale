@@ -4,6 +4,7 @@
 #include "lib/global.h"
 #include "lib/inout.h"
 #include "lib/algo.h"
+#include "lib/tuple.h"
 
 #define P_SEP printf("\n---------------------------------------------------------------------------------------------------------------\n");
 
