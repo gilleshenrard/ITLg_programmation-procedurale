@@ -164,3 +164,25 @@ int appendUnsortedList(t_list_meta* listmeta, void **first, void **last, void *t
 
     return 0;
 }
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      Head (first element) of the list                    */
+/*      Parameter for the action to perform                 */
+/*      Action to perform                                   */
+/*  P : Performs an action on every element of the list     */
+/*  O : /                                                   */
+/************************************************************/
+int foreachList(t_list_meta* meta, void **first, void* parameter, int (*doAction)(void*, void*)){
+    void *cur = *first, *prev=NULL;
+    void** nextelem=NULL;
+
+    do{
+        prev = cur;
+        nextelem = (*meta->next)(cur);
+        cur = *nextelem;
+        (*doAction)(prev, parameter);
+    }while(cur);
+
+    return 0;
+}

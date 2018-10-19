@@ -5,8 +5,12 @@
 /*  P : Displays a tuple (inline)                           */
 /*  O : /                                                   */
 /************************************************************/
-void displayTuple(t_tuple* toDisplay){
-    printf("\n%6d\t\t%28s\t\t%32s\t\t%32s\t\t%28s", toDisplay->id, toDisplay->lastname, toDisplay->firstname, toDisplay->city, toDisplay->job);
+int displayTuple(void* toDisplay, void* parameter){
+    t_tuple* display = (t_tuple*)toDisplay;
+
+    printf("\n%6d\t\t%28s\t\t%32s\t\t%32s\t\t%28s", display->id, display->lastname, display->firstname, display->city, display->job);
+
+    return 0;
 }
 
 /************************************************************/
@@ -173,6 +177,16 @@ int assignTuples(void* oldelem, void* newelem){
 
     *oldTuple = *newTuple;
 
+    return 0;
+}
+
+/************************************************************/
+/*  I : Tuple to deallocate                                 */
+/*  P : Deallocates the memory for the tuple                */
+/*  O : /                                                   */
+/************************************************************/
+int freeTuple(void* elem, void* parameter){
+    free(elem);
     return 0;
 }
 

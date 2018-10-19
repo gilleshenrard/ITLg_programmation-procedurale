@@ -1,5 +1,6 @@
 #ifndef TUPLE_H_INCLUDED
 #define TUPLE_H_INCLUDED
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -16,7 +17,7 @@ struct t_tuple{
 
 typedef enum {ID, LASTNAME, FIRSTNAME, CITY, JOB} e_criteria;
 
-void displayTuple(t_tuple*);
+int displayTuple(void*, void*);
 int encodeTuple(t_tuple*);
 int compareLastName(void*, void*);
 int compareFilterLastName(void*, void*);
@@ -26,6 +27,7 @@ int compareJob(void*, void*);
 int compareID(void*, void*);
 int swapTuples(void*, void*);
 int assignTuples(void*, void*);
+int freeTuple(void*, void*);
 void** nextTuple(void*);
 
 #endif // TUPLE_H_INCLUDED

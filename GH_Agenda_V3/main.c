@@ -135,7 +135,7 @@ char menu(int i, char sections[i][32]){
 /*     -1 -> Error                                          */
 /************************************************************/
 int searchList(FILE* file, e_criteria criteria, int nbrecords){
-    t_tuple *first=NULL, *last=NULL, *cur=NULL, *prev=NULL, tmp;
+    t_tuple *first=NULL, *last=NULL, tmp;
     t_tuple tab[nbrecords];
     char name[28]="0";
     int search = 0;
@@ -207,20 +207,9 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
         search++;
     }
 
-    //Display all the records found
-    cur = first;
-    do{
-        displayTuple(cur);
-        cur = cur->next;
-    }while(cur);
-
-    //Memory deallocation of the list
-    cur = first;
-    do{
-        prev = cur;
-        cur = cur->next;
-        free(prev);
-    }while(cur);
+    //Display all the records found, then deallocate the list
+    foreachList(&metalist, (void**)&first, NULL, &displayTuple);
+    foreachList(&metalist, (void**)&first, NULL, &freeTuple);
 
     //Wait for a user input
     fflush(stdin);
@@ -273,7 +262,7 @@ int searchIndex(FILE* file, int nbrecords){
         }
 
     //display the record
-    displayTuple(&record);
+    displayTuple((void*)&record, NULL);
     fflush(stdin);
     getch();
 
@@ -292,11 +281,11 @@ int listFile(FILE* file, int nbrecords){
     P_SEP
     for (int i=0 ; i<nbrecords ; i++){
         fread(&record, sizeof(t_tuple), 1, file);
-        displayTuple(&record);
+        displayTuple((void*)&record, NULL);
     }
 
     //display the record
-    displayTuple(&record);
+    displayTuple((void*)&record, NULL);
     fflush(stdin);
     getch();
 

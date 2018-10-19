@@ -27,5 +27,6 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch);
 
 //Dynamic lists
 int appendUnsortedList(t_list_meta* meta, void **first, void **last, void *toAdd);
+int foreachList(t_list_meta* meta, void **first, void* parameter, int (*doAction)(void*, void*));
 
 #endif // ALGO_H_INCLUDED
