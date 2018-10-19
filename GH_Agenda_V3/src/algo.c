@@ -124,3 +124,43 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
 
     return i+1;
 }
+
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      Head (first element) of the list                    */
+/*      Queue (last element) of the list                    */
+/*      Element to append in the list                       */
+/*      Function to get the next element of an element      */
+/*  P : Append the element to the unsorted list             */
+/*  O : 0 -> Element added                                  */
+/*     -1 -> Error                                          */
+/************************************************************/
+int appendUnsortedList(t_algo_meta* meta, void **first, void **last, void *toAdd,  void** (*next)(void*)){
+    void *newElement = NULL, *tmp = NULL;
+    void** nextelem = NULL;
+
+        //Allocate memory for the new element
+    newElement = malloc(meta->elementsize);
+    if(!newElement)
+        return -1;
+
+    //Copy the values of the element to add in the new element
+    (*meta->doAssign)(newElement, toAdd);
+
+    tmp = *first;
+    if(!tmp){
+        //list is empty -> create
+        *first = newElement;
+        *last = newElement;
+    }
+    else{
+        //append at the end
+        tmp = *last;
+        nextelem = (*next)(tmp);
+        *nextelem = newElement;
+        *last = newElement;
+    }
+
+    return 0;
+}

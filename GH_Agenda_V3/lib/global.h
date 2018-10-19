@@ -25,5 +25,7 @@ int compareCity(void*, void*);
 int compareJob(void*, void*);
 int compareID(void*, void*);
 int swapTuples(void*, void*);
+int assignTuples(void*, void*);
+void** nextTuple(void*);
 
 #endif // GLOBAL_H_INCLUDED

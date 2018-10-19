@@ -160,3 +160,29 @@ int swapTuples(void* first, void* second){
 
     return 0;
 }
+
+/************************************************************/
+/*  I : Tuple to assign values to                           */
+/*      Tuple to assign values from                         */
+/*  P : Assigns the values from the new tuple to the old one*/
+/*  O : /                                                   */
+/************************************************************/
+int assignTuples(void* oldelem, void* newelem){
+    t_tuple* oldTuple = (t_tuple*)oldelem;
+    t_tuple* newTuple = newelem;
+
+    *oldTuple = *newTuple;
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Gets the next element to the current one            */
+/*  O : Address of the next elemnt                          */
+/************************************************************/
+void** nextTuple(void* current){
+    t_tuple* currentTuple = (t_tuple*)current;
+
+    return (void**)&currentTuple->next;
+}
