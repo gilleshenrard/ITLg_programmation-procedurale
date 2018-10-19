@@ -139,7 +139,8 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
     t_tuple tab[nbrecords];
     char name[28]="0";
     int search = 0;
-    t_algo_meta meta = {NULL, nbrecords, sizeof(t_tuple), NULL, &swapTuples, &assignTuples};
+    t_algo_meta meta = {NULL, nbrecords, sizeof(t_tuple), NULL, &swapTuples};
+    t_list_meta metalist = {meta, &assignTuples, &nextTuple};
 
     //Sequentially read of the full file and add its content in a buffer array
     for(int i=0 ; i<nbrecords ; i++)
@@ -202,7 +203,7 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
 
     //Append all the strings compatible with the criteria in a chained list
     while(compareFilterLastName((void*)&tab[search], (void*)&tmp) <= 0 && search < nbrecords){
-        appendUnsortedList(&meta, (void**)&first, (void**)&last, (void*)&tab[search], &nextTuple);
+        appendUnsortedList(&metalist, (void**)&first, (void**)&last, (void*)&tab[search]);
         search++;
     }
 

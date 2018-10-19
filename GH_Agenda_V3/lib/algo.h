@@ -8,8 +8,13 @@ typedef struct {
     int elementsize;
     int (*doCompare)(void*, void*);
     int (*doSwap)(void*, void*);
-    int (*doAssign)(void*, void*);
 } t_algo_meta;
+
+typedef struct {
+    t_algo_meta meta;
+    int (*doAssign)(void*, void*);
+    void** (*next)(void*);
+} t_list_meta;
 
 //Sorting algorithms
 int bubbleSort(t_algo_meta*);
@@ -21,6 +26,6 @@ int binarySearch(t_algo_meta*, void* toSearch);
 int binarySearchFirst(t_algo_meta *meta, void* toSearch);
 
 //Dynamic lists
-int appendUnsortedList(t_algo_meta* meta, void **first, void **last, void *toAdd,  void** (*next)(void*));
+int appendUnsortedList(t_list_meta* meta, void **first, void **last, void *toAdd);
 
 #endif // ALGO_H_INCLUDED

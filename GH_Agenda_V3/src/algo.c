@@ -30,7 +30,7 @@ int bubbleSort(t_algo_meta *meta){
 /*  P : Sorts the partitions provided by the Quick Sort     */
 /*  O : New pivot                                           */
 /************************************************************/
-/*  WARNING : is solely to be used by the quick sort func. !*/
+/*  WARNING : is solely to be used by the quick sort func.! */
 /************************************************************/
 int quickSortPartitioning(t_algo_meta* meta, int low, int high){
     void* pivot = meta->tab+(meta->elementsize*high), *elemi=NULL, *elemj=NULL;
@@ -136,17 +136,17 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
 /*  O : 0 -> Element added                                  */
 /*     -1 -> Error                                          */
 /************************************************************/
-int appendUnsortedList(t_algo_meta* meta, void **first, void **last, void *toAdd,  void** (*next)(void*)){
+int appendUnsortedList(t_list_meta* listmeta, void **first, void **last, void *toAdd){
     void *newElement = NULL, *tmp = NULL;
     void** nextelem = NULL;
 
         //Allocate memory for the new element
-    newElement = malloc(meta->elementsize);
+    newElement = malloc(listmeta->meta.elementsize);
     if(!newElement)
         return -1;
 
     //Copy the values of the element to add in the new element
-    (*meta->doAssign)(newElement, toAdd);
+    (*listmeta->doAssign)(newElement, toAdd);
 
     tmp = *first;
     if(!tmp){
@@ -157,7 +157,7 @@ int appendUnsortedList(t_algo_meta* meta, void **first, void **last, void *toAdd
     else{
         //append at the end
         tmp = *last;
-        nextelem = (*next)(tmp);
+        nextelem = (*listmeta->next)(tmp);
         *nextelem = newElement;
         *last = newElement;
     }
