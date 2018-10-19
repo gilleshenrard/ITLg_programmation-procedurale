@@ -6,7 +6,7 @@
 /*  O : /                                                   */
 /************************************************************/
 void displayTuple(t_tuple* toDisplay){
-    printf("\n%6d\t\t%28s\t\t%32s\t\t%32s\t\t%28s", toDisplay->id, toDisplay->lastname, toDisplay->firstname, toDisplay->city, toDisplay->metier);
+    printf("\n%6d\t\t%28s\t\t%32s\t\t%32s\t\t%28s", toDisplay->id, toDisplay->lastname, toDisplay->firstname, toDisplay->city, toDisplay->job);
 }
 
 /************************************************************/
@@ -36,7 +36,7 @@ int encodeTuple(t_tuple *encodeTuple){
 
     printf("Saisissez le metier : ");
     fflush(stdin);
-    scanf("%s", encodeTuple->metier);
+    scanf("%s", encodeTuple->job);
 
     return 0;
 }
@@ -55,6 +55,54 @@ int compareLastName(void* first, void* second){
     t_tuple *second_tuple = (t_tuple*) second;
 
     return stricmp(first_tuple->lastname, second_tuple->lastname);
+}
+
+/************************************************************/
+/*  I : First first name to compare                         */
+/*      Second first name to compare                        */
+/*  P : Compares (strictly, case insensitive) two 1st names */
+/*  O : 1 -> First > Second                                 */
+/*      0 -> First = Second                                 */
+/*     -1 -> First < Second                                 */
+/************************************************************/
+int compareFirstName(void* first, void* second){
+    //convert from void* to t_tuple
+    t_tuple *first_tuple = (t_tuple*) first;
+    t_tuple *second_tuple = (t_tuple*) second;
+
+    return stricmp(first_tuple->firstname, second_tuple->firstname);
+}
+
+/************************************************************/
+/*  I : First city name to compare                          */
+/*      Second city name to compare                         */
+/*  P : Compares (strictly, case insensitive) two cities    */
+/*  O : 1 -> First > Second                                 */
+/*      0 -> First = Second                                 */
+/*     -1 -> First < Second                                 */
+/************************************************************/
+int compareCity(void* first, void* second){
+    //convert from void* to t_tuple
+    t_tuple *first_tuple = (t_tuple*) first;
+    t_tuple *second_tuple = (t_tuple*) second;
+
+    return stricmp(first_tuple->city, second_tuple->city);
+}
+
+/************************************************************/
+/*  I : First job to compare                                */
+/*      Second job to compare                               */
+/*  P : Compares (strictly, case insensitive) two jobs      */
+/*  O : 1 -> First > Second                                 */
+/*      0 -> First = Second                                 */
+/*     -1 -> First < Second                                 */
+/************************************************************/
+int compareJob(void* first, void* second){
+    //convert from void* to t_tuple
+    t_tuple *first_tuple = (t_tuple*) first;
+    t_tuple *second_tuple = (t_tuple*) second;
+
+    return stricmp(first_tuple->job, second_tuple->job);
 }
 
 /************************************************************/

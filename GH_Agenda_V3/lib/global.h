@@ -10,7 +10,7 @@ struct t_tuple{
     char lastname[28];
     char firstname[32];
     char city[32];
-    char metier[28];
+    char job[28];
     t_tuple *next;
 };
 
@@ -20,6 +20,9 @@ void displayTuple(t_tuple*);
 int encodeTuple(t_tuple*);
 int compareLastName(void*, void*);
 int compareFilterLastName(void*, void*);
+int compareFirstName(void*, void*);
+int compareCity(void*, void*);
+int compareJob(void*, void*);
 int compareID(void*, void*);
 int swapTuples(void*, void*);
 

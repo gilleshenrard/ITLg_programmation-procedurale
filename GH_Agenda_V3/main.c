@@ -162,7 +162,21 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
             meta.doCompare = &compareID;
             break;
 
+        case FIRSTNAME:
+            meta.doCompare = &compareFirstName;
+            break;
+
+        case CITY:
+            meta.doCompare = &compareCity;
+            break;
+
+        case JOB:
+            meta.doCompare = &compareJob;
+            break;
+
         default:
+            fprintf(stderr, "\nsearchList : Mauvais critere envoye");
+            return -1;
             break;
     }
     bubbleSort(&meta);
