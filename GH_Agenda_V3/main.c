@@ -155,18 +155,17 @@ int searchList(FILE* file, e_criteria criteria, int nbrecords){
         case LASTNAME:
             //bubbleSort((void*)tab, nbrecords, sizeof(t_tuple), &compareLastName, &swapTuples);
             meta.doCompare = &compareLastName;
-            bubbleSort(&meta);
             break;
 
         case ID:
             //bubbleSort((void*)tab, nbrecords, sizeof(t_tuple), &compareID, &swapTuples);
             meta.doCompare = &compareID;
-            bubbleSort(&meta);
             break;
 
         default:
             break;
     }
+    bubbleSort(&meta);
 
     //Request for the string to find in the records
     P_SEP
