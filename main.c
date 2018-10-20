@@ -4,10 +4,10 @@
 #include "lib/tuple.h"
 
 int menuAppendFile();
-int searchList(e_criteria);
+int menuSearchList(e_criteria);
 int sortTab(FILE*, t_list_meta*, e_criteria, t_tuple**);
-int searchIndex();
-int listFile();
+int menuSearchIndex();
+int menuListFile();
 
 int main(int argc, char *argv[])
 {
@@ -28,15 +28,15 @@ int main(int argc, char *argv[])
                 break;
 
             case '1':   //Research for a last name (possibly incomplete)
-                searchList(LASTNAME);
+                menuSearchList(LASTNAME);
                 break;
 
             case '2':   //Research a record by its index in the file
-                searchIndex();
+                menuSearchIndex();
                 break;
 
             case '3':   //List all the records of a file
-                listFile();
+                menuListFile();
                 break;
 
             case '4':
@@ -83,7 +83,7 @@ int menuAppendFile(){
 /*      0 -> None found                                     */
 /*     -1 -> Error                                          */
 /************************************************************/
-int searchList(e_criteria criteria){
+int menuSearchList(e_criteria criteria){
     FILE* file=NULL;
     int nbrecords;
     t_tuple *first=NULL;
@@ -205,7 +205,7 @@ int sortTab(FILE* file, t_list_meta *metalist, e_criteria criteria, t_tuple **fi
 /*  O : 0 -> OK                                             */
 /*     -1 -> Error                                          */
 /************************************************************/
-int searchIndex(){
+int menuSearchIndex(){
     FILE* file=NULL;
     int index = 0, nbrecords=0;;
     t_tuple record;
@@ -264,7 +264,7 @@ int searchIndex(){
 /*  P : Lists all the records of a file                     */
 /*  O : /                                                   */
 /************************************************************/
-int listFile(){
+int menuListFile(){
     FILE* file=NULL;
     int nbrecords=0;
     t_tuple record;
