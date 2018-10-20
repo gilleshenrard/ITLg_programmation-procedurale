@@ -3,10 +3,9 @@
 /************************************************************/
 /*  I : Array of meta data necessary to the algorithm       */
 /*  P : Sorts the provided array using the Bubble Sort algo */
-/*  O : 0 -> OK                                             */
-/*     -1 -> Error                                          */
+/*  O : /                                                   */
 /************************************************************/
-int bubbleSort(t_algo_meta *meta){
+void bubbleSort(t_algo_meta *meta){
     void *current=NULL, *next=NULL;
 
     for(int i=0 ; i<meta->tabsize-1 ; i++){
@@ -19,8 +18,6 @@ int bubbleSort(t_algo_meta *meta){
                 (*meta->doSwap)(current, next);
         }
     }
-
-    return 0;
 }
 
 /************************************************************/
@@ -33,22 +30,26 @@ int bubbleSort(t_algo_meta *meta){
 /*  WARNING : is solely to be used by the quick sort func.! */
 /************************************************************/
 int quickSortPartitioning(t_algo_meta* meta, int low, int high){
-    void* pivot = meta->tab+(meta->elementsize*high), *elemi=NULL, *elemj=NULL;
+    void* pivot = meta->tab+(meta->elementsize*high), *elem_i=NULL, *elem_j=NULL;
     int i = low-1;
 
     //swap the elements until the pivot is at the right place
     //      with lower elements before, and higher ones after
     for(int j=low ; j<=high-1 ; j++){
-        elemj = meta->tab+(meta->elementsize*j);
-        if((*meta->doCompare)(elemj, pivot) <= 0){
+        elem_j = meta->tab+(meta->elementsize*j);
+        if((*meta->doCompare)(elem_j, pivot) <= 0){
             i++;
-            elemi = meta->tab+(meta->elementsize*i);
-            (*meta->doSwap)(elemi, elemj);
+            elem_i = meta->tab+(meta->elementsize*i);
+            (*meta->doSwap)(elem_i, elem_j);
         }
     }
 
-    //pivot is at the right place and partition sorted
-    (*meta->doSwap)(meta->tab+(meta->elementsize*(i+1)), meta->tab+(meta->elementsize*high));
+    //place the pivot at the right place by swapping i+1 and high
+    //      (uses elem_i and elem_j for the sake of not creating new pointers)
+    elem_i = meta->tab+(meta->elementsize*(i+1));
+    elem_j = meta->tab+(meta->elementsize*high);
+    (*meta->doSwap)(elem_i, elem_j);
+
     return(i+1);
 }
 
@@ -59,7 +60,7 @@ int quickSortPartitioning(t_algo_meta* meta, int low, int high){
 /*  P : Sorts the provided array using the Quick Sort algo  */
 /*  O : /                                                   */
 /************************************************************/
-int quickSort(t_algo_meta* meta, int low, int high){
+void quickSort(t_algo_meta* meta, int low, int high){
     int pivot=0;
 
     if(low < high){
@@ -68,8 +69,6 @@ int quickSort(t_algo_meta* meta, int low, int high){
         quickSort(meta, low, pivot-1);
         quickSort(meta, pivot+1, high);
     }
-
-    return 0;
 }
 
 /************************************************************/
@@ -173,7 +172,7 @@ int appendUnsortedList(t_list_meta* listmeta, void **first, void **last, void *t
 /*  P : Performs an action on every element of the list     */
 /*  O : /                                                   */
 /************************************************************/
-int foreachList(t_list_meta* meta, void **first, void* parameter, int (*doAction)(void*, void*)){
+void foreachList(t_list_meta* meta, void **first, void* parameter, int (*doAction)(void*, void*)){
     void *cur = *first, *prev=NULL;
     void** nextelem=NULL;
 
@@ -183,6 +182,4 @@ int foreachList(t_list_meta* meta, void **first, void* parameter, int (*doAction
         cur = *nextelem;
         (*doAction)(prev, parameter);
     }while(cur);
-
-    return 0;
 }
