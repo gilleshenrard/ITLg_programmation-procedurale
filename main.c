@@ -66,9 +66,9 @@ int menuAppendFile(){
     memset(&current, 0, sizeof(t_tuple));
     encodeTuple(&current);
     //Opening or creation of the file
-    if((file = fopen(filename, "r+b")) == NULL)
-        file = fopen(filename, "w+b");
-    appendFile(file, &current);
+    if(openFile(&file, "r+") < 0)
+        openFile(&file, "w+");
+    appendFile(file, (void*)&current, sizeof(t_tuple));
     fclose(file);
 
     return 0;
@@ -91,7 +91,7 @@ int menuSearchList(e_criteria criteria){
     t_list_meta metalist = {meta, &assignTuples, &nextTuple};
 
     //Open the file
-    file = fopen(filename, "rb");
+    openFile(&file, "r");
     if(file){
         //Retrieve the number of records in the file
         fseek(file, 0, SEEK_END);
@@ -210,7 +210,7 @@ int menuSearchIndex(){
     int index = 0, nbrecords=0;;
     t_tuple record;
 
-    file = fopen(filename, "rb");
+    openFile(&file, "r");
     if(file){
         //Retrieve the number of records in the file
         fseek(file, 0, SEEK_END);
@@ -269,7 +269,7 @@ int menuListFile(){
     int nbrecords=0;
     t_tuple record;
 
-    file = fopen(filename, "rb");
+    openFile(&file, "r");
     if(file){
         //Retrieve the number of records in the file
         fseek(file, 0, SEEK_END);
