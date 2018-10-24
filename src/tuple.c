@@ -8,7 +8,7 @@
 int displayTuple(void* toDisplay, void* parameter){
     t_tuple* display = (t_tuple*)toDisplay;
 
-    printf("\n%6d\t\t%28s\t\t%32s\t\t%32s\t\t%28s", display->id, display->lastname, display->firstname, display->city, display->job);
+    printf("\n%6d\t\t%28s\t\t%32s\t\t%32s", display->id, display->lastname, display->firstname, display->city);
 
     return 0;
 }
@@ -37,10 +37,6 @@ int encodeTuple(t_tuple *encodeTuple){
     printf("Saisissez la ville : ");
     fflush(stdin);
     scanf("%s", encodeTuple->city);
-
-    printf("Saisissez le metier : ");
-    fflush(stdin);
-    scanf("%s", encodeTuple->job);
 
     return 0;
 }
@@ -91,22 +87,6 @@ int compareCity(void* first, void* second){
     t_tuple *second_tuple = (t_tuple*) second;
 
     return stricmp(first_tuple->city, second_tuple->city);
-}
-
-/************************************************************/
-/*  I : First job to compare                                */
-/*      Second job to compare                               */
-/*  P : Compares (strictly, case insensitive) two jobs      */
-/*  O : 1 -> First > Second                                 */
-/*      0 -> First = Second                                 */
-/*     -1 -> First < Second                                 */
-/************************************************************/
-int compareJob(void* first, void* second){
-    //convert from void* to t_tuple
-    t_tuple *first_tuple = (t_tuple*) first;
-    t_tuple *second_tuple = (t_tuple*) second;
-
-    return stricmp(first_tuple->job, second_tuple->job);
 }
 
 /************************************************************/
@@ -199,4 +179,34 @@ void** nextTuple(void* current){
     t_tuple* currentTuple = (t_tuple*)current;
 
     return (void**)&currentTuple->next;
+}
+
+/************************************************************/
+/*  I : Data file in which read the line                    */
+/*      Tuple in which copy the read data                   */
+/*  P : Reads one line of a data file into a tuple          */
+/*  O :  0 -> OK                                            */
+/*      -1 -> Error                                         */
+/************************************************************/
+int readDataLine(FILE* file, void* tuple){
+    if(fread(tuple, sizeof(t_tuple), 1, file) < 1)
+        return -1;
+    else
+        return 0;
+}
+
+/************************************************************/
+/*  I : Text file in which read the line                    */
+/*      Tuple in which copy the read data                   */
+/*  P : Reads one line of a text file into a tuple          */
+/*  O :  0 -> OK                                            */
+/*      -1 -> Error                                         */
+/************************************************************/
+int readTextLine(FILE* file, void* elem){
+    t_tuple* tmp = (t_tuple*)elem;
+
+    if(fscanf(file, "%d %s %s %s\n", &tmp->id, tmp->lastname, tmp->firstname, tmp->city) < 4)
+        return -1;
+    else
+        return 0;
 }

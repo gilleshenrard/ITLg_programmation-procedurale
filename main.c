@@ -190,10 +190,6 @@ int sortTab(FILE* file, t_list_meta *metalist, e_criteria criteria, t_tuple **fi
             metalist->meta.doCompare = &compareCity;
             break;
 
-        case JOB:
-            metalist->meta.doCompare = &compareJob;
-            break;
-
         default:
             fprintf(stderr, "\nsearchList : Mauvais critere envoye");
             return -1;
