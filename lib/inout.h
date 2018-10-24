@@ -2,7 +2,8 @@
 #define INOUT_H_INCLUDED
 #include <stdio.h>
 #include <string.h>
-#include "global.h"
+
+extern char filename[32];
 
 int isTextFile(void);
 int openFile(FILE**, char*);

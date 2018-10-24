@@ -1,5 +1,7 @@
 #include "../lib/inout.h"
 
+char filename[32] = "test.dat";
+
 /************************************************************/
 /*  I : /                                                   */
 /*  P : Tells if the file should be opened as a text file   */
