@@ -1,6 +1,22 @@
 #include "../lib/inout.h"
 
 /************************************************************/
+/*  I : /                                                   */
+/*  P : Tells if the file should be opened as a text file   */
+/*  O : 0 -> Binary file                                    */
+/*      1 -> Text file                                      */
+/************************************************************/
+int isTextFile(void){
+    char name[32]="0", opt[4]="0";
+
+    sscanf(filename, "%32[^.].%s", name, opt);
+    if(!strcmp(opt, "dat"))
+        return 0;
+    else
+        return 1;
+}
+
+/************************************************************/
 /*  I : File to open                                        */
 /*      Option to open the file (without bin specification) */
 /*  P : Opens the file depending of the extension and option*/
@@ -8,11 +24,9 @@
 /*      -1 -> Error                                         */
 /************************************************************/
 int openFile(FILE** file, char* option){
-    char name[32]="0", opt[4]="0";
+    char opt[4]="0";
 
-    sscanf(filename, "%32[^.].%s", name, opt);
-
-    if(!strcmp(opt, "dat"))
+    if(!isTextFile())
         sprintf(opt, "%sb", option);
 
     *file = fopen(filename, opt);

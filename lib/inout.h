@@ -4,6 +4,7 @@
 #include <string.h>
 #include "global.h"
 
+int isTextFile(void);
 int openFile(FILE**, char*);
 int appendFile(FILE*, void*, int);
 
