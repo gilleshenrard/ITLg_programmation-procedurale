@@ -60,9 +60,33 @@ int encodeTuple(t_tuple *encodeTuple){
     fflush(stdin);
     scanf("%s", encodeTuple->firstname);
 
+    printf("Saisissez la date de naissance : ");
+    fflush(stdin);
+    scanf("%s", encodeTuple->birthdate);
+
+    printf("Saisissez le numero de telephone : ");
+    fflush(stdin);
+    scanf("%s", encodeTuple->phone);
+
+    printf("Saisissez le numero de portable : ");
+    fflush(stdin);
+    scanf("%s", encodeTuple->mobile);
+
+    printf("Saisissez l'adresse email : ");
+    fflush(stdin);
+    scanf("%s", encodeTuple->email);
+
+    printf("Saisissez le code postal : ");
+    fflush(stdin);
+    scanf("%s", encodeTuple->postcode);
+
     printf("Saisissez la ville : ");
     fflush(stdin);
     scanf("%s", encodeTuple->city);
+
+    printf("Saisissez la date de mise a jour : ");
+    fflush(stdin);
+    scanf("%s", encodeTuple->update);
 
     return 0;
 }
@@ -214,7 +238,7 @@ void** nextTuple(void* current){
 /*  O :  0 -> OK                                            */
 /*      -1 -> Error                                         */
 /************************************************************/
-int readDataLine(FILE* file, void* tuple){
+int readTupleData(FILE* file, void* tuple){
     if(fread(tuple, sizeof(t_tuple), 1, file) < 1)
         return -1;
     else
@@ -228,11 +252,41 @@ int readDataLine(FILE* file, void* tuple){
 /*  O :  0 -> OK                                            */
 /*      -1 -> Error                                         */
 /************************************************************/
-int readTextLine(FILE* file, void* elem){
+int readTupleText(FILE* file, void* elem){
     t_tuple* tmp = (t_tuple*)elem;
 
     memset(tmp, 0, sizeof(t_tuple));
     if(fscanf(file, "%d %s %s %s %s %s %s %s %s %s\n", &tmp->id, tmp->firstname, tmp->lastname, tmp->birthdate, tmp->phone, tmp->mobile, tmp->email, tmp->postcode, tmp->city, tmp->update) < 10)
+        return -1;
+    else
+        return 0;
+}
+
+/************************************************************/
+/*  I : Data file in which write the line                   */
+/*      Tuple to write                                      */
+/*  P : Writes a tuple in a file                            */
+/*  O :  0 -> OK                                            */
+/*      -1 -> Error                                         */
+/************************************************************/
+int writeTupleData(FILE* file, void* tuple){
+    if(fwrite(tuple, sizeof(t_tuple), 1, file) < 1)
+        return -1;
+    else
+        return 0;
+}
+
+/************************************************************/
+/*  I : Text file in which write the line                   */
+/*      Tuple to write                                      */
+/*  P : Writes a tuple in a file                            */
+/*  O :  0 -> OK                                            */
+/*      -1 -> Error                                         */
+/************************************************************/
+int writeTupleText(FILE* file, void* elem){
+    t_tuple* tmp = (t_tuple*)elem;
+
+    if(fprintf(file, "%d %s %s %s %s %s %s %s %s %s\n", tmp->id, tmp->firstname, tmp->lastname, tmp->birthdate, tmp->phone, tmp->mobile, tmp->email, tmp->postcode, tmp->city, tmp->update) < 10)
         return -1;
     else
         return 0;

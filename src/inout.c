@@ -32,26 +32,7 @@ int openFile(FILE** file, char* option){
         sprintf(opt, "%sb", option);
 
     *file = fopen(filename, option);
-    if(!*file)
-        return -1;
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : File in which append the tuple                      */
-/*      Tuple to append                                     */
-/*      Size of a tuple                                     */
-/*  P : Writes a tuple at the end of a file                 */
-/*  O :  0 -> OK                                            */
-/*      -1 -> Error                                         */
-/************************************************************/
-int appendFile(FILE* file, void* tuple, int tuplesize){
-    int ret;
-
-    fseek(file, 0, SEEK_END);
-    ret = fwrite(tuple, tuplesize, 1, file);
-    if(ret!=1)
+    if(!file)
         return -1;
 
     return 0;

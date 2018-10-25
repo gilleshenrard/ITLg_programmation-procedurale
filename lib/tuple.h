@@ -35,7 +35,9 @@ int swapTuples(void*, void*);
 int assignTuples(void*, void*);
 int freeTuple(void*, void*);
 void** nextTuple(void*);
-int readDataLine(FILE*, void*);
-int readTextLine(FILE*, void*);
+int readTupleData(FILE*, void*);
+int readTupleText(FILE*, void*);
+int writeTupleData(FILE*, void*);
+int writeTupleText(FILE*, void*);
 
 #endif // TUPLE_H_INCLUDED

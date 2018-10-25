@@ -7,6 +7,5 @@ extern char filename[32];
 
 int isTextFile(void);
 int openFile(FILE**, char*);
-int appendFile(FILE*, void*, int);
 
 #endif // INOUT_H_INCLUDED

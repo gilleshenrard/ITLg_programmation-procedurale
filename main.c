@@ -5,11 +5,11 @@
 
 char menu(int, char[][32]);
 int menuAppendFile();
-int menuSearchList(e_criteria);
+/*int menuSearchList(e_criteria);
 int sortTab(FILE*, t_algo_meta*, e_criteria, t_tuple**);
 int menuSearchIndex();
 int menuListFile();
-
+*/
 int main(int argc, char *argv[])
 {
     char choice=0;
@@ -29,15 +29,15 @@ int main(int argc, char *argv[])
                 break;
 
             case '1':   //Research for a last name (possibly incomplete)
-                menuSearchList(LASTNAME);
+                //menuSearchList(LASTNAME);
                 break;
 
             case '2':   //Research a record by its index in the file
-                menuSearchIndex();
+                //menuSearchIndex();
                 break;
 
             case '3':   //List all the records of a file
-                menuListFile();
+                //menuListFile();
                 break;
 
             case '4':
@@ -85,21 +85,32 @@ char menu(int i, char sections[i][32]){
 /************************************************************/
 /*  I : /                                                   */
 /*  P : Subroutine to append a new tuple to the file        */
-/*  O : Choice                                              */
+/*  O :  0 -> File appended                                 */
+/*      -1 -> Error                                         */
 /************************************************************/
 int menuAppendFile(){
-    t_tuple current;
+    t_tuple record;
     FILE *file=NULL;
+    int ret = 0;
+    int (*doWrite)(FILE*, void*);
 
-    memset(&current, 0, sizeof(t_tuple));
-    encodeTuple(&current);
+    memset(&record, 0, sizeof(t_tuple));
+    encodeTuple(&record);
     //Opening or creation of the file
-    if(openFile(&file, "r+") < 0)
+    if(openFile(&file, "a+") < 0)
         openFile(&file, "w+");
-    appendFile(file, (void*)&current, sizeof(t_tuple));
-    fclose(file);
 
-    return 0;
+    if(file != NULL){
+        doWrite = (isTextFile() ? &writeTupleText : &writeTupleData);
+        if((*doWrite)(file, (void*)&record) < 0)
+            ret = -1;
+
+        fclose(file);
+    }
+    else
+        ret = -1;
+
+    return ret;
 }
 
 /************************************************************/
@@ -110,7 +121,7 @@ int menuAppendFile(){
 /*  O : 1 -> Records found                                  */
 /*      0 -> None found                                     */
 /*     -1 -> Error                                          */
-/************************************************************/
+/************************************************************//*
 int menuSearchList(e_criteria criteria){
     FILE* file=NULL;
     int nbrecords;
@@ -140,7 +151,7 @@ int menuSearchList(e_criteria criteria){
 
     return 1;
 }
-
+*/
 /************************************************************/
 /*  I : File to manipulate                                  */
 /*      Metadata necessary to the algorithms                */
@@ -153,7 +164,7 @@ int menuSearchList(e_criteria criteria){
 /************************************************************/
 /*  THIS FUNCTION HAS BEEN CREATED FOR THE SOLE PURPOSE OF  */
 /*  AVOIDING KEEPING THE TAB IN MEMORY FOR TOO LONG         */
-/************************************************************/
+/************************************************************//*
 int sortTab(FILE* file, t_algo_meta *meta, e_criteria criteria, t_tuple **first){
     int search = 0, nbrecords = meta->nbelements;
     t_tuple tab[nbrecords], tmp;
@@ -208,14 +219,14 @@ int sortTab(FILE* file, t_algo_meta *meta, e_criteria criteria, t_tuple **first)
 
     return 0;
 }
-
+*/
 /************************************************************/
 /*  I : /                                                   */
 /*  P : Searches in the file according to its index         */
 /*          in the file                                     */
 /*  O : 0 -> OK                                             */
 /*     -1 -> Error                                          */
-/************************************************************/
+/************************************************************//*
 int menuSearchIndex(){
     FILE* file=NULL;
     int index = 0, nbrecords=0;;
@@ -268,14 +279,14 @@ int menuSearchIndex(){
     fclose(file);
     return 0;
 }
-
+*/
 /************************************************************/
 /*  I : File to manipulate                                  */
 /*      Number of records in the file                       */
 /*  P : Lists all the records of a file                     */
 /*  O :  0 -> OK                                            */
 /*      -1 -> Error                                         */
-/************************************************************/
+/************************************************************//*
 int menuListFile(){
     FILE* file=NULL;
     t_tuple record;
@@ -297,3 +308,4 @@ int menuListFile(){
     else
         return -1;
 }
+*/
