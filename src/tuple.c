@@ -205,7 +205,8 @@ int readDataLine(FILE* file, void* tuple){
 int readTextLine(FILE* file, void* elem){
     t_tuple* tmp = (t_tuple*)elem;
 
-    if(fscanf(file, "%d %s %s %s\n", &tmp->id, tmp->lastname, tmp->firstname, tmp->city) < 4)
+    memset(tmp, 0, sizeof(t_tuple));
+    if(fscanf(file, "%d %s %s %s %s %s %s %s %s %s\n", &tmp->id, tmp->firstname, tmp->lastname, tmp->birthdate, tmp->phone, tmp->mobile, tmp->email, tmp->postcode, tmp->city, tmp->update) < 10)
         return -1;
     else
         return 0;
