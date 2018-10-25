@@ -23,7 +23,8 @@ struct t_tuple{
 
 typedef enum {ID, LASTNAME, FIRSTNAME, BIRTHDATE, PHONE, MOBILE, EMAIL, POSTCODE, CITY, UPDATE} e_criteria;
 
-int displayTuple(void*, void*);
+int displayTupleInline(void*, void*);
+int displayTupleBlock(void*, void*);
 int encodeTuple(t_tuple*);
 int compareLastName(void*, void*);
 int compareFilterLastName(void*, void*);

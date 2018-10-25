@@ -1,14 +1,40 @@
 #include "../lib/tuple.h"
 
 /************************************************************/
-/*  I : /                                                   */
+/*  I : Element to display                                  */
+/*      Eventual parameter                                  */
 /*  P : Displays a tuple (inline)                           */
 /*  O : /                                                   */
 /************************************************************/
-int displayTuple(void* toDisplay, void* parameter){
+int displayTupleInline(void* toDisplay, void* parameter){
     t_tuple* display = (t_tuple*)toDisplay;
 
-    printf("\n%6d\t\t%28s\t\t%32s\t\t%32s", display->id, display->lastname, display->firstname, display->city);
+    printf("\n%28s\t\t%32s\t\t%64s", display->lastname, display->firstname, display->email);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Element to display                                  */
+/*      Eventual parameter                                  */
+/*  P : Displays a tuple (block)                            */
+/*  O : /                                                   */
+/************************************************************/
+int displayTupleBlock(void* toDisplay, void* parameter){
+    t_tuple* display = (t_tuple*)toDisplay;
+
+    printf("\n################################################################");
+    printf("\n#%64d#", display->id);
+    printf("\n#%64s#", display->firstname);
+    printf("\n#%64s#", display->lastname);
+    printf("\n#%64s#", display->birthdate);
+    printf("\n#%64s#", display->phone);
+    printf("\n#%64s#", display->mobile);
+    printf("\n#%64s#", display->email);
+    printf("\n#%64s#", display->postcode);
+    printf("\n#%64s#", display->city);
+    printf("\n#%64s#", display->update);
+    printf("\n################################################################");
 
     return 0;
 }
