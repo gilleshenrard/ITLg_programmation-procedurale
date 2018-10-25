@@ -286,29 +286,27 @@ int menuSearchIndex(){
 /*  I : File to manipulate                                  */
 /*      Number of records in the file                       */
 /*  P : Lists all the records of a file                     */
-/*  O : /                                                   */
+/*  O :  0 -> OK                                            */
+/*      -1 -> Error                                         */
 /************************************************************/
 int menuListFile(){
     FILE* file=NULL;
-    int nbrecords=0;
     t_tuple record;
+    int (*doRead)(FILE*, void*);
 
     openFile(&file, "r");
     if(file){
-        //Retrieve the number of records in the file
-        fseek(file, 0, SEEK_END);
-        nbrecords = ftell(file)/sizeof(t_tuple);
-        fseek(file, 0, SEEK_SET);
-    }
+        doRead = (isTextFile() ? &readTextLine : &readDataLine);
 
-    P_SEP
-    for (int i=0 ; i<nbrecords ; i++){
-        fread(&record, sizeof(t_tuple), 1, file);
-        displayTuple((void*)&record, NULL);
-    }
-    fflush(stdin);
-    getch();
+        while(!(*doRead)(file, (void*)&record))
+            displayTuple((void*)&record, NULL);
 
-    fclose(file);
-    return 0;
+        fflush(stdin);
+        getch();
+
+        fclose(file);
+        return 0;
+    }
+    else
+        return -1;
 }
