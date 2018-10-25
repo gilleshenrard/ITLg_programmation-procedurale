@@ -188,7 +188,7 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
 
     //non-existing list or element is supposed to become the first element
     if(!*first || (*meta->doCompare)(*first, toAdd) > 0)
-        return insertListTop(meta, *first, toAdd);
+        return insertListTop(meta, toAdd);
 
     //allocation and filling of the new element
     newElement = malloc(meta->elementsize);
