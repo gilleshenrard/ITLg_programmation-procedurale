@@ -28,7 +28,7 @@ void bubbleSort(t_algo_meta *meta){
 /*  O : /                                                   */
 /************************************************************/
 void bubbleSortList(t_algo_meta* meta, void** first){
-    void *current=NULL, *next=NULL, *right_ptr=NULL;
+    void *current=NULL, **next=NULL, *right_ptr=NULL;
     int swapped;
 
     if(!*first)
@@ -39,12 +39,12 @@ void bubbleSortList(t_algo_meta* meta, void** first){
         current = *first;
         next = (*meta->next)(current);
 
-        while(next != right_ptr){
-            if((*meta->doCompare)(current, next) > 0){
-                (*meta->doSwap)(current, next);
+        while(*next != right_ptr){
+            if((*meta->doCompare)(current, *next) > 0){
+                (*meta->doSwap)(current, *next);
                 swapped = 1;
             }
-            current = next;
+            current = *next;
             next = (*meta->next)(current);
         }
         right_ptr = current;
@@ -189,9 +189,9 @@ int insertListTop(t_algo_meta* meta, void **first, void *toAdd){
 int insertListSorted(t_algo_meta *meta,  void** first, void* toAdd){
     void *newElement = NULL, *previous=NULL, *current=*first, **next = NULL;
 
-    //non-existing list (use push function)
-    if(!*first)
-        return insertListTop(meta, first, toAdd);
+    //non-existing list or element is supposed to become the first element
+    if(!*first || (*meta->doCompare)(*first, toAdd) > 0)
+        return insertListTop(meta, *first, toAdd);
 
     //allocation and filling of the new element
     newElement = malloc(meta->elementsize);
@@ -200,25 +200,18 @@ int insertListSorted(t_algo_meta *meta,  void** first, void* toAdd){
     else
         return -1;
 
-    //new element is to go at the beginning of the list
-    if((*meta->doCompare)(newElement, current) <= 0 ){
-        next = (*meta->next)(newElement);
-        *next = *first;
-        *first = newElement;
+    //walk through the list until the right place is found
+    while(current!=NULL && (*meta->doCompare)(newElement,current)>0){
+        previous = current;
+        next = (*meta->next)(current);
+        current = *next;
     }
-    else{
-        //walk through the list until the right place is found
-        while(current!=NULL && (*meta->doCompare)(newElement,current)>0){
-            previous = current;
-            next = (*meta->next)(current);
-            current = *next;
-        }
-        //properly link the elements
-        next = (*meta->next)(previous);
-        *next = newElement;
-        next = (*meta->next)(newElement);
-        *next = current;
-    }
+    //properly link the elements
+    next = (*meta->next)(previous);
+    *next = newElement;
+    next = (*meta->next)(newElement);
+    *next = current;
+
     return 0;
 }
 
@@ -234,10 +227,10 @@ void foreachList(t_algo_meta* meta, void **first, void* parameter, int (*doActio
     void *cur = *first, *prev=NULL;
     void** nextelem=NULL;
 
-    do{
+    while(cur){
         prev = cur;
         nextelem = (*meta->next)(cur);
         cur = *nextelem;
         (*doAction)(prev, parameter);
-    }while(cur);
+    }
 }
