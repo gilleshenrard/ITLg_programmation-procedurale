@@ -157,7 +157,7 @@ int menuSearchList(e_criteria criteria){
 /************************************************************/
 int sortTab(FILE* file, t_list_meta *metalist, e_criteria criteria, t_tuple **first){
     int search = 0, nbrecords = metalist->meta.tabsize;
-    t_tuple tab[nbrecords], tmp, *last=NULL;
+    t_tuple tab[nbrecords], tmp;
     char name[28]="0";
 
     //Sequentially read the full file and add its content in a buffer array
@@ -215,7 +215,7 @@ int sortTab(FILE* file, t_list_meta *metalist, e_criteria criteria, t_tuple **fi
 
     //Append all the strings compatible with the criteria in a chained list
     while((*metalist->meta.doCompare)((void*)&tab[search], (void*)&tmp) <= 0 && search < nbrecords){
-        appendUnsortedList(metalist, (void**)first, (void**)&last, (void*)&tab[search]);
+        insertListTop(metalist, (void**)first, (void*)&tab[search]);
         search++;
     }
 

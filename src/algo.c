@@ -22,6 +22,37 @@ void bubbleSort(t_algo_meta *meta){
 
 /************************************************************/
 /*  I : Array of meta data necessary to the algorithm       */
+/*      First element of the list (head)                    */
+/*  P : Sorts the provided linked list using                */
+/*          the Bubble Sort algorithm                       */
+/*  O : /                                                   */
+/************************************************************/
+void bubbleSortList(t_list_meta* listmeta, void** first){
+    int swapped;
+    void *current=NULL, *next=NULL, *right_ptr=NULL;
+
+    if(!*first)
+        return;
+
+    do{
+        swapped = 0;
+        current = *first;
+        next = (*listmeta->next)(current);
+
+        while(next != right_ptr){
+            if((*listmeta->meta.doCompare)(current, next) > 0){
+                (*listmeta->meta.doSwap)(current, next);
+                swapped = 1;
+            }
+            current = next;
+            next = (*listmeta->next)(current);
+        }
+        right_ptr = current;
+    }while(swapped);
+}
+
+/************************************************************/
+/*  I : Array of meta data necessary to the algorithm       */
 /*      Lowest element of the partition                     */
 /*      Highest element of the partition                    */
 /*  P : Sorts the partitions provided by the Quick Sort     */
@@ -124,43 +155,70 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
     return i+1;
 }
 
-
 /************************************************************/
 /*  I : Metadata necessary to the algorithm                 */
 /*      Head (first element) of the list                    */
-/*      Queue (last element) of the list                    */
 /*      Element to append in the list                       */
-/*      Function to get the next element of an element      */
-/*  P : Append the element to the unsorted list             */
+/*  P : Inserts an element at the top of a linked list      */
 /*  O : 0 -> Element added                                  */
 /*     -1 -> Error                                          */
 /************************************************************/
-int appendUnsortedList(t_list_meta* listmeta, void **first, void **last, void *toAdd){
-    void *newElement = NULL, *tmp = NULL;
-    void** nextelem = NULL;
+int insertListTop(t_list_meta* listmeta, void **first, void *toAdd){
+    void *newElement = NULL, ** nextelem = NULL;
 
-        //Allocate memory for the new element
     newElement = malloc(listmeta->meta.elementsize);
     if(!newElement)
         return -1;
 
-    //Copy the values of the element to add in the new element
-    (*listmeta->doAssign)(newElement, toAdd);
+    (*listmeta->doCopy)(newElement, toAdd);
+    nextelem = (*listmeta->next)(newElement);
+    *nextelem = *first;
+    *first = newElement;
 
-    tmp = *first;
-    if(!tmp){
-        //list is empty -> create
+    return 0;
+}
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      Head (first element) of the list                    */
+/*      Element to insert in the list                       */
+/*  P : Inserts an element at the right place in a sorted   */
+/*          linked list                                     */
+/*  O : 0 -> Element added                                  */
+/*     -1 -> Error                                          */
+/************************************************************/
+int insertListSorted(t_list_meta *listmeta,  void** first, void* toAdd){
+    void *newElement = NULL, *previous=NULL, *current=*first, **next = NULL;
+
+    //non-existing list (use push function)
+    if(!*first)
+        return insertListTop(listmeta, first, toAdd);
+
+    //allocation and filling of the new element
+    newElement = malloc(listmeta->meta.elementsize);
+    if(newElement)
+        (*listmeta->doCopy)(newElement, toAdd);
+    else
+        return -1;
+
+    //new element is to go at the beginning of the list
+    if((listmeta->meta.doCompare)(newElement, current) <= 0 ){
+        next = (*listmeta->next)(newElement);
+        *next = *first;
         *first = newElement;
-        *last = newElement;
     }
     else{
-        //append at the end
-        tmp = *last;
-        nextelem = (*listmeta->next)(tmp);
-        *nextelem = newElement;
-        *last = newElement;
+        //walk through the list until the right place is found
+        while(current!=NULL && (listmeta->meta.doCompare)(newElement,current)>0){
+            previous = current;
+            next = (listmeta->next)(current);
+            current = *next;
+        }
+        //properly link the elements
+        next = (listmeta->next)(previous);
+        *next = newElement;
+        next = (listmeta->next)(newElement);
+        *next = current;
     }
-
     return 0;
 }
 
