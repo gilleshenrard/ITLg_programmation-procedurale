@@ -6,7 +6,7 @@
 char menu(int, char[][32]);
 int menuAppendFile();
 int menuSearchList(e_criteria);
-int sortTab(FILE*, t_list_meta*, e_criteria, t_tuple**);
+int sortTab(FILE*, t_algo_meta*, e_criteria, t_tuple**);
 int menuSearchIndex();
 int menuListFile();
 
@@ -115,8 +115,7 @@ int menuSearchList(e_criteria criteria){
     FILE* file=NULL;
     int nbrecords;
     t_tuple *first=NULL;
-    t_algo_meta meta = {NULL, 0, sizeof(t_tuple), NULL, &swapTuples};
-    t_list_meta metalist = {meta, &assignTuples, &nextTuple};
+    t_algo_meta meta = {NULL, 0, sizeof(t_tuple), NULL, &swapTuples, &assignTuples, &nextTuple};
 
     //Open the file
     openFile(&file, "r");
@@ -127,13 +126,13 @@ int menuSearchList(e_criteria criteria){
     }
 
     //copy the matching search elements from the file to a list via a tab
-    metalist.meta.tabsize = nbrecords;
-    sortTab(file, &metalist, criteria, &first);
+    meta.nbelements = nbrecords;
+    sortTab(file, &meta, criteria, &first);
     fclose(file);
 
     //Display all the records found, then deallocate the list
-    foreachList(&metalist, (void**)&first, NULL, &displayTupleInline);
-    foreachList(&metalist, (void**)&first, NULL, &freeTuple);
+    foreachList(&meta, (void**)&first, NULL, &displayTupleInline);
+    foreachList(&meta, (void**)&first, NULL, &freeTuple);
 
     //Wait for a user input
     fflush(stdin);
@@ -155,8 +154,8 @@ int menuSearchList(e_criteria criteria){
 /*  THIS FUNCTION HAS BEEN CREATED FOR THE SOLE PURPOSE OF  */
 /*  AVOIDING KEEPING THE TAB IN MEMORY FOR TOO LONG         */
 /************************************************************/
-int sortTab(FILE* file, t_list_meta *metalist, e_criteria criteria, t_tuple **first){
-    int search = 0, nbrecords = metalist->meta.tabsize;
+int sortTab(FILE* file, t_algo_meta *meta, e_criteria criteria, t_tuple **first){
+    int search = 0, nbrecords = meta->nbelements;
     t_tuple tab[nbrecords], tmp;
     char name[28]="0";
 
@@ -170,24 +169,12 @@ int sortTab(FILE* file, t_list_meta *metalist, e_criteria criteria, t_tuple **fi
             return 0;
         }
 
-    metalist->meta.tab = (void*)&tab;
+    meta->structure = (void*)&tab;
 
     //Sort the array according to the provided criteria
     switch(criteria){
         case LASTNAME:
-            metalist->meta.doCompare = &compareFilterLastName;
-            break;
-
-        case ID:
-            metalist->meta.doCompare = &compareID;
-            break;
-
-        case FIRSTNAME:
-            metalist->meta.doCompare = &compareFirstName;
-            break;
-
-        case CITY:
-            metalist->meta.doCompare = &compareCity;
+            meta->doCompare = &compareFilterLastName;
             break;
 
         default:
@@ -195,7 +182,7 @@ int sortTab(FILE* file, t_list_meta *metalist, e_criteria criteria, t_tuple **fi
             return -1;
             break;
     }
-    quickSort(&metalist->meta, 0, nbrecords-1);
+    quickSort(meta, 0, nbrecords-1);
 
     //Request for the string to find in the records
     P_SEP
@@ -205,7 +192,7 @@ int sortTab(FILE* file, t_list_meta *metalist, e_criteria criteria, t_tuple **fi
 
     //Bufferise the string in a tuple and binary search
     strcpy(tmp.lastname, name);
-    search = binarySearchFirst(&metalist->meta, (void*)&tmp);
+    search = binarySearchFirst(meta, (void*)&tmp);
     if(search <0){
         fprintf(stderr, "\nsearchList : Nom '%s' non-trouve...", name);
         fflush(stdin);
@@ -214,8 +201,8 @@ int sortTab(FILE* file, t_list_meta *metalist, e_criteria criteria, t_tuple **fi
     }
 
     //Append all the strings compatible with the criteria in a chained list
-    while((*metalist->meta.doCompare)((void*)&tab[search], (void*)&tmp) <= 0 && search < nbrecords){
-        insertListTop(metalist, (void**)first, (void*)&tab[search]);
+    while((*meta->doCompare)((void*)&tab[search], (void*)&tmp) <= 0 && search < nbrecords){
+        insertListTop(meta, (void**)first, (void*)&tab[search]);
         search++;
     }
 

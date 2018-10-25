@@ -8,11 +8,11 @@
 void bubbleSort(t_algo_meta *meta){
     void *current=NULL, *next=NULL;
 
-    for(int i=0 ; i<meta->tabsize-1 ; i++){
-        for(int j=0 ; j<meta->tabsize-i-1 ; j++){
+    for(int i=0 ; i<meta->nbelements-1 ; i++){
+        for(int j=0 ; j<meta->nbelements-i-1 ; j++){
             //properly place the cursors
-            current = meta->tab+(meta->elementsize*j);
-            next = meta->tab+(meta->elementsize*(j+1));
+            current = meta->structure+(meta->elementsize*j);
+            next = meta->structure+(meta->elementsize*(j+1));
 
             if((*meta->doCompare)(current, next) > 0)
                 (*meta->doSwap)(current, next);
@@ -27,9 +27,9 @@ void bubbleSort(t_algo_meta *meta){
 /*          the Bubble Sort algorithm                       */
 /*  O : /                                                   */
 /************************************************************/
-void bubbleSortList(t_list_meta* listmeta, void** first){
-    int swapped;
+void bubbleSortList(t_algo_meta* meta, void** first){
     void *current=NULL, *next=NULL, *right_ptr=NULL;
+    int swapped;
 
     if(!*first)
         return;
@@ -37,15 +37,15 @@ void bubbleSortList(t_list_meta* listmeta, void** first){
     do{
         swapped = 0;
         current = *first;
-        next = (*listmeta->next)(current);
+        next = (*meta->next)(current);
 
         while(next != right_ptr){
-            if((*listmeta->meta.doCompare)(current, next) > 0){
-                (*listmeta->meta.doSwap)(current, next);
+            if((*meta->doCompare)(current, next) > 0){
+                (*meta->doSwap)(current, next);
                 swapped = 1;
             }
             current = next;
-            next = (*listmeta->next)(current);
+            next = (*meta->next)(current);
         }
         right_ptr = current;
     }while(swapped);
@@ -61,24 +61,24 @@ void bubbleSortList(t_list_meta* listmeta, void** first){
 /*  WARNING : is solely to be used by the quick sort func.! */
 /************************************************************/
 int quickSortPartitioning(t_algo_meta* meta, int low, int high){
-    void* pivot = meta->tab+(meta->elementsize*high), *elem_i=NULL, *elem_j=NULL;
+    void* pivot = meta->structure+(meta->elementsize*high), *elem_i=NULL, *elem_j=NULL;
     int i = low-1;
 
     //swap the elements until the pivot is at the right place
     //      with lower elements before, and higher ones after
     for(int j=low ; j<=high-1 ; j++){
-        elem_j = meta->tab+(meta->elementsize*j);
+        elem_j = meta->structure+(meta->elementsize*j);
         if((*meta->doCompare)(elem_j, pivot) <= 0){
             i++;
-            elem_i = meta->tab+(meta->elementsize*i);
+            elem_i = meta->structure+(meta->elementsize*i);
             (*meta->doSwap)(elem_i, elem_j);
         }
     }
 
     //place the pivot at the right place by swapping i+1 and high
     //      (uses elem_i and elem_j for the sake of not creating new pointers)
-    elem_i = meta->tab+(meta->elementsize*(i+1));
-    elem_j = meta->tab+(meta->elementsize*high);
+    elem_i = meta->structure+(meta->elementsize*(i+1));
+    elem_j = meta->structure+(meta->elementsize*high);
     (*meta->doSwap)(elem_i, elem_j);
 
     return(i+1);
@@ -110,13 +110,13 @@ void quickSort(t_algo_meta* meta, int low, int high){
 /*     >= 0 -> Index of the first occurence in the array    */
 /************************************************************/
 int binarySearch(t_algo_meta *meta, void* toSearch){
-    int i=0, j=meta->tabsize-1, m=0;
+    int i=0, j=meta->nbelements-1, m=0;
     void *current = NULL;
 
     while(i<=j){
         m = (i+j)/2;
         //position the cursor
-        current = meta->tab+(meta->elementsize*m);
+        current = meta->structure+(meta->elementsize*m);
 
         if((*meta->doCompare)(current, toSearch) < 0)
             i = m+1;
@@ -149,7 +149,7 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
     //walk through all the occurences of the key until the first one
     do{
         i--;
-        current = meta->tab+(meta->elementsize*i);
+        current = meta->structure+(meta->elementsize*i);
     }while(i>=0 && (*meta->doCompare)(current, toSearch) >= 0);
 
     return i+1;
@@ -163,15 +163,15 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
 /*  O : 0 -> Element added                                  */
 /*     -1 -> Error                                          */
 /************************************************************/
-int insertListTop(t_list_meta* listmeta, void **first, void *toAdd){
+int insertListTop(t_algo_meta* meta, void **first, void *toAdd){
     void *newElement = NULL, ** nextelem = NULL;
 
-    newElement = malloc(listmeta->meta.elementsize);
+    newElement = malloc(meta->elementsize);
     if(!newElement)
         return -1;
 
-    (*listmeta->doCopy)(newElement, toAdd);
-    nextelem = (*listmeta->next)(newElement);
+    (*meta->doCopy)(newElement, toAdd);
+    nextelem = (*meta->next)(newElement);
     *nextelem = *first;
     *first = newElement;
 
@@ -186,37 +186,37 @@ int insertListTop(t_list_meta* listmeta, void **first, void *toAdd){
 /*  O : 0 -> Element added                                  */
 /*     -1 -> Error                                          */
 /************************************************************/
-int insertListSorted(t_list_meta *listmeta,  void** first, void* toAdd){
+int insertListSorted(t_algo_meta *meta,  void** first, void* toAdd){
     void *newElement = NULL, *previous=NULL, *current=*first, **next = NULL;
 
     //non-existing list (use push function)
     if(!*first)
-        return insertListTop(listmeta, first, toAdd);
+        return insertListTop(meta, first, toAdd);
 
     //allocation and filling of the new element
-    newElement = malloc(listmeta->meta.elementsize);
+    newElement = malloc(meta->elementsize);
     if(newElement)
-        (*listmeta->doCopy)(newElement, toAdd);
+        (*meta->doCopy)(newElement, toAdd);
     else
         return -1;
 
     //new element is to go at the beginning of the list
-    if((listmeta->meta.doCompare)(newElement, current) <= 0 ){
-        next = (*listmeta->next)(newElement);
+    if((*meta->doCompare)(newElement, current) <= 0 ){
+        next = (*meta->next)(newElement);
         *next = *first;
         *first = newElement;
     }
     else{
         //walk through the list until the right place is found
-        while(current!=NULL && (listmeta->meta.doCompare)(newElement,current)>0){
+        while(current!=NULL && (*meta->doCompare)(newElement,current)>0){
             previous = current;
-            next = (listmeta->next)(current);
+            next = (*meta->next)(current);
             current = *next;
         }
         //properly link the elements
-        next = (listmeta->next)(previous);
+        next = (*meta->next)(previous);
         *next = newElement;
-        next = (listmeta->next)(newElement);
+        next = (*meta->next)(newElement);
         *next = current;
     }
     return 0;
@@ -230,7 +230,7 @@ int insertListSorted(t_list_meta *listmeta,  void** first, void* toAdd){
 /*  P : Performs an action on every element of the list     */
 /*  O : /                                                   */
 /************************************************************/
-void foreachList(t_list_meta* meta, void **first, void* parameter, int (*doAction)(void*, void*)){
+void foreachList(t_algo_meta* meta, void **first, void* parameter, int (*doAction)(void*, void*)){
     void *cur = *first, *prev=NULL;
     void** nextelem=NULL;
 
