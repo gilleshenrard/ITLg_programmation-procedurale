@@ -31,7 +31,7 @@ int openFile(FILE** file, char* option){
     if(!isTextFile())
         sprintf(opt, "%sb", option);
 
-    *file = fopen(filename, opt);
+    *file = fopen(filename, option);
     if(!*file)
         return -1;
 
