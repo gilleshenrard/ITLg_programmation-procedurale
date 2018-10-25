@@ -22,13 +22,12 @@ void bubbleSort(t_algo_meta *meta){
 
 /************************************************************/
 /*  I : Array of meta data necessary to the algorithm       */
-/*      First element of the list (head)                    */
 /*  P : Sorts the provided linked list using                */
 /*          the Bubble Sort algorithm                       */
 /*  O : /                                                   */
 /************************************************************/
-void bubbleSortList(t_algo_meta* meta, void** first){
-    void *current=NULL, **next=NULL, *right_ptr=NULL;
+void bubbleSortList(t_algo_meta* meta){
+    void **first=&meta->structure, *current=NULL, **next=NULL, *right_ptr=NULL;
     int swapped;
 
     if(!*first)
@@ -157,14 +156,13 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
 
 /************************************************************/
 /*  I : Metadata necessary to the algorithm                 */
-/*      Head (first element) of the list                    */
 /*      Element to append in the list                       */
 /*  P : Inserts an element at the top of a linked list      */
 /*  O : 0 -> Element added                                  */
 /*     -1 -> Error                                          */
 /************************************************************/
-int insertListTop(t_algo_meta* meta, void **first, void *toAdd){
-    void *newElement = NULL, ** nextelem = NULL;
+int insertListTop(t_algo_meta* meta, void *toAdd){
+    void **first=&meta->structure, *newElement = NULL, ** nextelem = NULL;
 
     newElement = malloc(meta->elementsize);
     if(!newElement)
@@ -179,15 +177,14 @@ int insertListTop(t_algo_meta* meta, void **first, void *toAdd){
 }
 /************************************************************/
 /*  I : Metadata necessary to the algorithm                 */
-/*      Head (first element) of the list                    */
 /*      Element to insert in the list                       */
 /*  P : Inserts an element at the right place in a sorted   */
 /*          linked list                                     */
 /*  O : 0 -> Element added                                  */
 /*     -1 -> Error                                          */
 /************************************************************/
-int insertListSorted(t_algo_meta *meta,  void** first, void* toAdd){
-    void *newElement = NULL, *previous=NULL, *current=*first, **next = NULL;
+int insertListSorted(t_algo_meta *meta, void* toAdd){
+    void **first=&meta->structure, *newElement = NULL, *previous=NULL, *current=*first, **next = NULL;
 
     //non-existing list or element is supposed to become the first element
     if(!*first || (*meta->doCompare)(*first, toAdd) > 0)
@@ -217,15 +214,13 @@ int insertListSorted(t_algo_meta *meta,  void** first, void* toAdd){
 
 /************************************************************/
 /*  I : Metadata necessary to the algorithm                 */
-/*      Head (first element) of the list                    */
 /*      Parameter for the action to perform                 */
 /*      Action to perform                                   */
 /*  P : Performs an action on every element of the list     */
 /*  O : /                                                   */
 /************************************************************/
-void foreachList(t_algo_meta* meta, void **first, void* parameter, int (*doAction)(void*, void*)){
-    void *cur = *first, *prev=NULL;
-    void** nextelem=NULL;
+void foreachList(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void*)){
+    void **first=&meta->structure, *cur = *first, *prev=NULL, **nextelem=NULL;
 
     while(cur){
         prev = cur;

@@ -14,7 +14,7 @@ typedef struct {
 
 //Sorting algorithms
 void bubbleSort(t_algo_meta*);
-void bubbleSortList(t_algo_meta*, void**);
+void bubbleSortList(t_algo_meta*);
 int quickSortPartitioning(t_algo_meta*, int, int);
 void quickSort(t_algo_meta*, int, int);
 
@@ -23,8 +23,8 @@ int binarySearch(t_algo_meta*, void*);
 int binarySearchFirst(t_algo_meta*, void*);
 
 //Dynamic lists
-int insertListTop(t_algo_meta*, void**, void*);
-int insertListSorted(t_algo_meta*,  void**, void*);
-void foreachList(t_algo_meta*, void**, void*, int (*doAction)(void*, void*));
+int insertListTop(t_algo_meta*, void*);
+int insertListSorted(t_algo_meta*,  void*);
+void foreachList(t_algo_meta*, void*, int (*doAction)(void*, void*));
 
 #endif // ALGO_H_INCLUDED
