@@ -132,7 +132,7 @@ int menuSearchList(e_criteria criteria){
     fclose(file);
 
     //Display all the records found, then deallocate the list
-    foreachList(&metalist, (void**)&first, NULL, &displayTuple);
+    foreachList(&metalist, (void**)&first, NULL, &displayTupleInline);
     foreachList(&metalist, (void**)&first, NULL, &freeTuple);
 
     //Wait for a user input
@@ -274,7 +274,7 @@ int menuSearchIndex(){
         }
 
     //display the record
-    displayTuple((void*)&record, NULL);
+    displayTupleBlock((void*)&record, NULL);
     fflush(stdin);
     getch();
 
@@ -299,7 +299,7 @@ int menuListFile(){
         doRead = (isTextFile() ? &readTextLine : &readDataLine);
 
         while(!(*doRead)(file, (void*)&record))
-            displayTuple((void*)&record, NULL);
+            displayTupleInline((void*)&record, NULL);
 
         fflush(stdin);
         getch();
