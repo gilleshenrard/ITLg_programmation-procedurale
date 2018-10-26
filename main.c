@@ -127,6 +127,7 @@ int menuSearchList(e_criteria criteria){
     int (*doRead)(FILE*, void*);
     t_algo_meta meta = {(void*)first, 0, sizeof(t_tuple), NULL, &swapTuples, &assignTuples, &nextTuple};
 
+    //switch for the right compare function
     switch(criteria){
         case LASTNAME:
             meta.doCompare = &compareFilterLastName;
@@ -155,11 +156,12 @@ int menuSearchList(e_criteria criteria){
         memcpy(tmp.lastname, name, sizeof(tmp.lastname));
 
         //read the file line by line, and add relevant elements to a list
-        while((*doRead)(file, (void*)&record) > -1){
+        while(!(*doRead)(file, (void*)&record)){
             if((meta.doCompare)((void*)&record, &tmp) == 0)
-                insertListSorted(&meta,  &record);
+                insertListTop(&meta,  &record);
         }
 
+        //if counter = 0, file empty
         if(!meta.nbelements){
             fclose(file);
             return 0;
