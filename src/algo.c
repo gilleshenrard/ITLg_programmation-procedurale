@@ -173,6 +173,8 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
     *nextelem = *first;
     *first = newElement;
 
+    meta->nbelements++;
+
     return 0;
 }
 /************************************************************/
@@ -208,6 +210,8 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
     *next = newElement;
     next = (*meta->next)(newElement);
     *next = current;
+
+    meta->nbelements++;
 
     return 0;
 }
