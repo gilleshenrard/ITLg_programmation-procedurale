@@ -152,7 +152,7 @@ int menuSearchList(){
             }
         }
 
-        //if counter = 0, file empty
+        printf("\n%d elements trouves.", meta.nbelements);
         if(!meta.nbelements){
             fclose(file);
             return 0;
