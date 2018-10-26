@@ -186,11 +186,17 @@ int swapTuples(void* first, void* second){
     //convert from void* to t_tuple
     t_tuple *first_tuple = (t_tuple*)first;
     t_tuple *second_tuple = (t_tuple*)second;
+    t_tuple *saveNext = second_tuple->next;
     t_tuple tmp;
 
+    //swap tuples data
     tmp = *first_tuple;
     *first_tuple = *second_tuple;
     *second_tuple = tmp;
+
+    //properly restore Next pointers
+    first_tuple->next = tmp.next;
+    second_tuple->next = saveNext;
 
     return 0;
 }
