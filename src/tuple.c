@@ -218,6 +218,8 @@ int assignTuples(void* oldelem, void* newelem){
 
 /************************************************************/
 /*  I : Tuple to deallocate                                 */
+/*      Optional parameter (useless, but necessary to be    */
+/*          compatible with the signature of forEach)       */
 /*  P : Deallocates the memory for the tuple                */
 /*  O : /                                                   */
 /************************************************************/
