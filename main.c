@@ -5,8 +5,7 @@
 
 char menu(int, char[][32]);
 int menuAppendFile();
-/*int menuSearchList(e_criteria);
-int sortTab(FILE*, t_algo_meta*, e_criteria, t_tuple**);
+int menuSearchList(e_criteria);/*
 int menuSearchIndex();
 int menuListFile();
 */
@@ -29,7 +28,7 @@ int main(int argc, char *argv[])
                 break;
 
             case '1':   //Research for a last name (possibly incomplete)
-                //menuSearchList(LASTNAME);
+                menuSearchList(LASTNAME);
                 break;
 
             case '2':   //Research a record by its index in the file
@@ -114,112 +113,58 @@ int menuAppendFile(){
 }
 
 /************************************************************/
-/*  I : File to manipulate                                  */
-/*      Criteria of the research (e.g. field to research)   */
-/*      Number of records in the file                       */
-/*  P : Searches in the file for the given value            */
+/*  I : Criteria of the research (e.g. field to research)   */
+/*  P : Requests a value to the user, reads the file        */
+/*          sequentially and display all the results        */
 /*  O : 1 -> Records found                                  */
 /*      0 -> None found                                     */
 /*     -1 -> Error                                          */
-/************************************************************//*
+/************************************************************/
 int menuSearchList(e_criteria criteria){
     FILE* file=NULL;
-    int nbrecords;
-    t_tuple *first=NULL;
-    t_algo_meta meta = {NULL, 0, sizeof(t_tuple), NULL, &swapTuples, &assignTuples, &nextTuple};
+    char name[28]="0";
+    t_tuple *first=NULL, record, tmp;
+    int (*doRead)(FILE*, void*);
+    t_algo_meta meta = {(void*)first, 0, sizeof(t_tuple), &compareFilterLastName, &swapTuples, &assignTuples, &nextTuple};
 
     //Open the file
     openFile(&file, "r");
     if(file){
-        //Retrieve the number of records in the file
-        fseek(file, 0, SEEK_END);
-        nbrecords = ftell(file)/sizeof(t_tuple);
-    }
+        doRead = (isTextFile() ? &readTupleText : &readTupleData);
 
-    //copy the matching search elements from the file to a list via a tab
-    meta.nbelements = nbrecords;
-    sortTab(file, &meta, criteria, &first);
-    fclose(file);
+        //Request for the string to find in the records
+        P_SEP
+        printf("\nSaisissez le nom de famille a chercher : ");
+        fflush(stdin);
+        scanf("%s", name);
+        memcpy(tmp.lastname, name, sizeof(tmp.lastname));
 
-    //Display all the records found, then deallocate the list
-    foreachList(&meta, (void**)&first, NULL, &displayTupleInline);
-    foreachList(&meta, (void**)&first, NULL, &freeTuple);
+        //read the file line by line, and add relevant elements to a list
+        while((*doRead)(file, (void*)&record) > -1){
+            if((meta.doCompare)((void*)&record, &tmp) == 0)
+                insertListSorted(&meta,  &record);
+        }
 
-    //Wait for a user input
-    fflush(stdin);
-    getch();
-
-    return 1;
-}
-*/
-/************************************************************/
-/*  I : File to manipulate                                  */
-/*      Metadata necessary to the algorithms                */
-/*      Criteria of the research (e.g. field to research)   */
-/*      First element of the list                           */
-/*  P : Extracts all the elements from the file, copies it  */
-/*          in a tab and sorts it, then copies all matching */
-/*          elements in a dynamic list                      */
-/*  O : /                                                   */
-/************************************************************/
-/*  THIS FUNCTION HAS BEEN CREATED FOR THE SOLE PURPOSE OF  */
-/*  AVOIDING KEEPING THE TAB IN MEMORY FOR TOO LONG         */
-/************************************************************//*
-int sortTab(FILE* file, t_algo_meta *meta, e_criteria criteria, t_tuple **first){
-    int search = 0, nbrecords = meta->nbelements;
-    t_tuple tab[nbrecords], tmp;
-    char name[28]="0";
-
-    //Sequentially read the full file and add its content in a buffer array
-    fseek(file, 0, SEEK_SET);
-    for(int i=0 ; i<nbrecords ; i++)
-        if(fread(&tab[i], sizeof(t_tuple), 1, file) < 1){
-            fprintf(stderr, "\nsearchList : Erreur pendant la lecture du fichier");
-            fflush(stdin);
-            getch();
+        if(!meta.nbelements){
+            fclose(file);
             return 0;
         }
 
-    meta->structure = (void*)&tab;
+        //display and free the whole list
+        foreachList(&meta, NULL, &displayTupleInline);
+        foreachList(&meta, NULL, &freeTuple);
 
-    //Sort the array according to the provided criteria
-    switch(criteria){
-        case LASTNAME:
-            meta->doCompare = &compareFilterLastName;
-            break;
-
-        default:
-            fprintf(stderr, "\nsearchList : Mauvais critere envoye");
-            return -1;
-            break;
-    }
-    quickSort(meta, 0, nbrecords-1);
-
-    //Request for the string to find in the records
-    P_SEP
-    printf("\nSaisissez le nom de famille a chercher : ");
-    fflush(stdin);
-    scanf("%s", name);
-
-    //Bufferise the string in a tuple and binary search
-    strcpy(tmp.lastname, name);
-    search = binarySearchFirst(meta, (void*)&tmp);
-    if(search <0){
-        fprintf(stderr, "\nsearchList : Nom '%s' non-trouve...", name);
+        //Wait for a user input
         fflush(stdin);
         getch();
-        return 0;
+
+        fclose(file);
+        return 1;
     }
 
-    //Append all the strings compatible with the criteria in a chained list
-    while((*meta->doCompare)((void*)&tab[search], (void*)&tmp) <= 0 && search < nbrecords){
-        insertListTop(meta, (void**)first, (void*)&tab[search]);
-        search++;
-    }
-
-    return 0;
+    return -1;
 }
-*/
+
 /************************************************************/
 /*  I : /                                                   */
 /*  P : Searches in the file according to its index         */
