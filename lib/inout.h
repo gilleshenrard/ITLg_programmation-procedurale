@@ -5,7 +5,7 @@
 
 extern char filename[32];
 
-int isTextFile(void);
-int openFile(FILE**, char*);
+int isTextFile(char*);
+int openFile(FILE**, char*, char*);
 
 #endif // INOUT_H_INCLUDED
