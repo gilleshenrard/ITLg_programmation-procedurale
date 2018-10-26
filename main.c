@@ -137,10 +137,13 @@ int menuSearchList(){
         fflush(stdin);
         scanf("%s", tmp.lastname);
 
-        //read the file line by line, and add relevant elements to a list
+        //read the file line by line, and add relevant elements to a list (sorted with full last name)
         while(!(*doRead)(file, (void*)&record)){
-            if((meta.doCompare)((void*)&record, &tmp) == 0)
-                insertListTop(&meta,  &record);
+            if((meta.doCompare)((void*)&record, &tmp) == 0){
+                meta.doCompare = &compareLastName;
+                insertListSorted(&meta,  &record);
+                meta.doCompare = &compareFilterLastName;
+            }
         }
 
         //if counter = 0, file empty
