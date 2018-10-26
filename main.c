@@ -5,7 +5,7 @@
 
 char menu(int, char[][32]);
 int menuAppendFile();
-int menuSearchList(e_criteria);
+int menuSearchList();
 //int menuSearchIndex();
 int menuListFile();
 
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
                 break;
 
             case '1':   //Research for a last name (possibly incomplete)
-                menuSearchList(LASTNAME);
+                menuSearchList();
                 break;
 
             case '2':   //Research a record by its index in the file
@@ -120,27 +120,11 @@ int menuAppendFile(){
 /*      0 -> None found                                     */
 /*     -1 -> Error                                          */
 /************************************************************/
-int menuSearchList(e_criteria criteria){
+int menuSearchList(){
     FILE* file=NULL;
-    t_tuple *first=NULL, record, tmp;
+    t_tuple record, tmp;
     int (*doRead)(FILE*, void*);
-    t_algo_meta meta = {(void*)first, 0, sizeof(t_tuple), NULL, &swapTuples, &assignTuples, &nextTuple};
-
-    //switch for the right compare function
-    switch(criteria){
-        case LASTNAME:
-            meta.doCompare = &compareFilterLastName;
-            break;
-        case FIRSTNAME:
-            meta.doCompare = &compareFirstName;
-            break;
-        case ID:
-            meta.doCompare = &compareID;
-            break;
-        default:
-            return -1;
-            break;
-    }
+    t_algo_meta meta = {NULL, 0, sizeof(t_tuple), &compareFilterLastName, &swapTuples, &assignTuples, &nextTuple};
 
     //Open the file
     openFile(&file, "r");
