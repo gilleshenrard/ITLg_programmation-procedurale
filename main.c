@@ -125,7 +125,22 @@ int menuSearchList(e_criteria criteria){
     char name[28]="0";
     t_tuple *first=NULL, record, tmp;
     int (*doRead)(FILE*, void*);
-    t_algo_meta meta = {(void*)first, 0, sizeof(t_tuple), &compareFilterLastName, &swapTuples, &assignTuples, &nextTuple};
+    t_algo_meta meta = {(void*)first, 0, sizeof(t_tuple), NULL, &swapTuples, &assignTuples, &nextTuple};
+
+    switch(criteria){
+        case LASTNAME:
+            meta.doCompare = &compareFilterLastName;
+            break;
+        case FIRSTNAME:
+            meta.doCompare = &compareFirstName;
+            break;
+        case ID:
+            meta.doCompare = &compareID;
+            break;
+        default:
+            return -1;
+            break;
+    }
 
     //Open the file
     openFile(&file, "r");
