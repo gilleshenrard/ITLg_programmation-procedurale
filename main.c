@@ -122,7 +122,6 @@ int menuAppendFile(){
 /************************************************************/
 int menuSearchList(e_criteria criteria){
     FILE* file=NULL;
-    char name[28]="0";
     t_tuple *first=NULL, record, tmp;
     int (*doRead)(FILE*, void*);
     t_algo_meta meta = {(void*)first, 0, sizeof(t_tuple), NULL, &swapTuples, &assignTuples, &nextTuple};
@@ -152,8 +151,7 @@ int menuSearchList(e_criteria criteria){
         P_SEP
         printf("\nSaisissez le nom de famille a chercher : ");
         fflush(stdin);
-        scanf("%s", name);
-        memcpy(tmp.lastname, name, sizeof(tmp.lastname));
+        scanf("%s", tmp.lastname);
 
         //read the file line by line, and add relevant elements to a list
         while(!(*doRead)(file, (void*)&record)){
