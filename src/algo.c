@@ -27,15 +27,15 @@ void bubbleSort(t_algo_meta *meta){
 /*  O : /                                                   */
 /************************************************************/
 void bubbleSortList(t_algo_meta* meta){
-    void **first=&meta->structure, *current=NULL, **next=NULL, *right_ptr=NULL;
+    void *current=NULL, **next=NULL, *right_ptr=NULL;
     int swapped;
 
-    if(!*first)
+    if(!meta->structure)
         return;
 
     do{
         swapped = 0;
-        current = *first;
+        current = meta->structure;
         next = (*meta->next)(current);
 
         while(*next != right_ptr){
@@ -162,7 +162,7 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
 /*     -1 -> Error                                          */
 /************************************************************/
 int insertListTop(t_algo_meta* meta, void *toAdd){
-    void **first=&meta->structure, *newElement = NULL, **nextelem = NULL;
+    void *newElement = NULL, **nextelem = NULL;
 
     newElement = malloc(meta->elementsize);
     if(!newElement)
@@ -170,8 +170,8 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
 
     (*meta->doCopy)(newElement, toAdd);
     nextelem = (*meta->next)(newElement);
-    *nextelem = *first;
-    *first = newElement;
+    *nextelem = meta->structure;
+    meta->structure = newElement;
 
     meta->nbelements++;
 
@@ -186,10 +186,10 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
 /*     -1 -> Error                                          */
 /************************************************************/
 int insertListSorted(t_algo_meta *meta, void* toAdd){
-    void **first=&meta->structure, *newElement = NULL, *previous=NULL, *current=*first, **next = NULL;
+    void *newElement = NULL, *previous=NULL, *current=meta->structure, **next = NULL;
 
     //non-existing list or element is supposed to become the first element
-    if(!*first || (*meta->doCompare)(*first, toAdd) > 0)
+    if(!meta->structure || (*meta->doCompare)(meta->structure, toAdd) > 0)
         return insertListTop(meta, toAdd);
 
     //allocation and filling of the new element
@@ -224,7 +224,7 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
 /*  O : /                                                   */
 /************************************************************/
 void foreachList(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void*)){
-    void **first=&meta->structure, *cur = *first, *prev=NULL, **nextelem=NULL;
+    void *cur = meta->structure, *prev=NULL, **nextelem=NULL;
 
     while(cur){
         prev = cur;
