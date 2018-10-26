@@ -5,10 +5,10 @@
 
 char menu(int, char[][32]);
 int menuAppendFile();
-int menuSearchList(e_criteria);/*
-int menuSearchIndex();
+int menuSearchList(e_criteria);
+//int menuSearchIndex();
 int menuListFile();
-*/
+
 int main(int argc, char *argv[])
 {
     char choice=0;
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
                 break;
 
             case '3':   //List all the records of a file
-                //menuListFile();
+                menuListFile();
                 break;
 
             case '4':
@@ -240,13 +240,14 @@ int menuSearchIndex(){
     return 0;
 }
 */
+
 /************************************************************/
 /*  I : File to manipulate                                  */
 /*      Number of records in the file                       */
 /*  P : Lists all the records of a file                     */
 /*  O :  0 -> OK                                            */
 /*      -1 -> Error                                         */
-/************************************************************//*
+/************************************************************/
 int menuListFile(){
     FILE* file=NULL;
     t_tuple record;
@@ -254,7 +255,7 @@ int menuListFile(){
 
     openFile(&file, "r");
     if(file){
-        doRead = (isTextFile() ? &readTextLine : &readDataLine);
+        doRead = (isTextFile() ? &readTupleText : &readTupleData);
 
         while(!(*doRead)(file, (void*)&record))
             displayTupleInline((void*)&record, NULL);
@@ -268,4 +269,4 @@ int menuListFile(){
     else
         return -1;
 }
-*/
+
