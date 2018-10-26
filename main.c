@@ -8,16 +8,18 @@ int menuAppendFile();
 int menuSearchList();
 //int menuSearchIndex();
 int menuListFile();
+int menuImportFile();
 
 int main(int argc, char *argv[])
 {
     char choice=0;
-    char princ_menu[7][32]={"Main menu",
+    char princ_menu[8][32]={"Main menu",
                             "Creer des enregistrements",
                             "Chercher un nom",
                             "Chercher un numero de sequence",
                             "Lister tous les enregistrements",
                             "Changer d'agenda",
+                            "Importer depuis un fichier",
                             "Quitter"};
 
     do{
@@ -44,6 +46,10 @@ int main(int argc, char *argv[])
                 printf("\nSaisissez le nom du fichier : ");
                 fflush(stdin);
                 scanf("%s", filename);
+                break;
+
+            case '5':
+                menuImportFile();
                 break;
 
             default:
@@ -96,11 +102,11 @@ int menuAppendFile(){
     memset(&record, 0, sizeof(t_tuple));
     encodeTuple(&record);
     //Opening or creation of the file
-    if(openFile(&file, "a+") < 0)
-        openFile(&file, "w+");
+    if(openFile(&file, NULL, "a+") < 0)
+        openFile(&file, NULL, "w+");
 
     if(file != NULL){
-        doWrite = (isTextFile() ? &writeTupleText : &writeTupleData);
+        doWrite = (isTextFile(NULL) ? &writeTupleText : &writeTupleData);
         if((*doWrite)(file, (void*)&record) < 0)
             ret = -1;
 
@@ -127,9 +133,9 @@ int menuSearchList(){
     t_algo_meta meta = {NULL, 0, sizeof(t_tuple), &compareFilterLastName, &swapTuples, &assignTuples, &nextTuple};
 
     //Open the file
-    openFile(&file, "r");
+    openFile(&file, NULL, "r");
     if(file){
-        doRead = (isTextFile() ? &readTupleText : &readTupleData);
+        doRead = (isTextFile(NULL) ? &readTupleText : &readTupleData);
 
         //Request for the string to find in the records
         P_SEP
@@ -240,9 +246,9 @@ int menuListFile(){
     t_tuple record;
     int (*doRead)(FILE*, void*);
 
-    openFile(&file, "r");
+    openFile(&file, NULL, "r");
     if(file){
-        doRead = (isTextFile() ? &readTupleText : &readTupleData);
+        doRead = (isTextFile(NULL) ? &readTupleText : &readTupleData);
 
         while(!(*doRead)(file, (void*)&record))
             displayTupleInline((void*)&record, NULL);
@@ -257,3 +263,44 @@ int menuListFile(){
         return -1;
 }
 
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Asks for a file name to import data from, then      */
+/*          appends it at the end of the general file       */
+/*  O :  0 -> OK                                            */
+/*      -1 -> Error                                         */
+/************************************************************/
+int menuImportFile(){
+    FILE *general=NULL, *toImport=NULL;
+    char importFile[64]="0";
+    t_tuple record;
+    int (*doRead)(FILE*, void*);
+    int (*doWrite)(FILE*, void*);
+
+    P_SEP
+    printf("\nSaisissez le nom du fichier a importer : ");
+    fflush(stdin);
+    scanf("%s", importFile);
+
+    openFile(&general, NULL, "a+");
+    if(general){
+        openFile(&toImport, importFile, "r");
+        if(toImport){
+            doRead = (isTextFile(importFile) ? &readTupleText : &readTupleData);
+            doWrite = (isTextFile(NULL) ? &writeTupleText : &writeTupleData);
+
+            //read the file line by line, and add relevant elements to a list (sorted with full last name)
+            while(!(*doRead)(toImport, (void*)&record)){
+                if((*doWrite)(general, (void*)&record) < 0){
+                    fclose(toImport);
+                    fclose(general);
+                    return -1;
+                }
+            }
+
+            fclose(toImport);
+        }
+        fclose(general);
+    }
+    return 0;
+}
