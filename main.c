@@ -105,7 +105,9 @@ int menuAppendFile(){
     if(openFile(&file, NULL, "a+") < 0)
         openFile(&file, NULL, "w+");
 
+    //verify if the file is opened
     if(file != NULL){
+        //write the record at the end
         doWrite = (isTextFile(NULL) ? &writeTupleText : &writeTupleData);
         if((*doWrite)(file, (void*)&record) < 0)
             ret = -1;
@@ -152,6 +154,7 @@ int menuSearchList(){
             }
         }
 
+        //verify if any elements found
         printf("\n%d elements trouves.", meta.nbelements);
         if(!meta.nbelements){
             fclose(file);
@@ -246,13 +249,16 @@ int menuListFile(){
     t_tuple record;
     int (*doRead)(FILE*, void*);
 
+    //open the file
     openFile(&file, NULL, "r");
     if(file){
         doRead = (isTextFile(NULL) ? &readTupleText : &readTupleData);
 
+        //read the file line per line and display each record read
         while(!(*doRead)(file, (void*)&record))
             displayTupleInline((void*)&record, NULL);
 
+        //wait for user input
         fflush(stdin);
         getch();
 
@@ -271,36 +277,45 @@ int menuListFile(){
 /*      -1 -> Error                                         */
 /************************************************************/
 int menuImportFile(){
-    FILE *general=NULL, *toImport=NULL;
-    char importFile[64]="0";
+    FILE *exportfile=NULL, *importfile=NULL;
+    char importname[64]="0";
     t_tuple record;
+    int ret=0;
     int (*doRead)(FILE*, void*);
     int (*doWrite)(FILE*, void*);
 
+    //request for the name of the file to import
     P_SEP
     printf("\nSaisissez le nom du fichier a importer : ");
     fflush(stdin);
-    scanf("%s", importFile);
+    scanf("%s", importname);
 
-    openFile(&general, NULL, "a+");
-    if(general){
-        openFile(&toImport, importFile, "r");
-        if(toImport){
-            doRead = (isTextFile(importFile) ? &readTupleText : &readTupleData);
+    //open the file to export to (file name NULL -> take the global file)
+    openFile(&exportfile, NULL, "a+");
+    if(exportfile){
+        //open the file to import
+        openFile(&importfile, importname, "r");
+        if(importfile){
+            doRead = (isTextFile(importname) ? &readTupleText : &readTupleData);
             doWrite = (isTextFile(NULL) ? &writeTupleText : &writeTupleData);
 
-            //read the file line by line, and add relevant elements to a list (sorted with full last name)
-            while(!(*doRead)(toImport, (void*)&record)){
-                if((*doWrite)(general, (void*)&record) < 0){
-                    fclose(toImport);
-                    fclose(general);
+            //read the import file line by line, and append each record to the end of the export file
+            while(!(*doRead)(importfile, (void*)&record)){
+                if((*doWrite)(exportfile, (void*)&record) < 0){
+                    fclose(importfile);
+                    fclose(exportfile);
                     return -1;
                 }
             }
-
-            fclose(toImport);
+            fclose(importfile);
         }
-        fclose(general);
+        else
+            ret = -1;
+
+        fclose(exportfile);
     }
-    return 0;
+    else
+        ret = -1;
+
+    return ret;
 }
