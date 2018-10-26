@@ -141,7 +141,7 @@ int menuSearchList(){
         while(!(*doRead)(file, (void*)&record)){
             if((meta.doCompare)((void*)&record, &tmp) == 0){
                 meta.doCompare = &compareLastName;
-                insertListSorted(&meta,  &record);
+                insertListSorted(&meta, &record);
                 meta.doCompare = &compareFilterLastName;
             }
         }
