@@ -162,7 +162,7 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
 /*     -1 -> Error                                          */
 /************************************************************/
 int insertListTop(t_algo_meta* meta, void *toAdd){
-    void **first=&meta->structure, *newElement = NULL, ** nextelem = NULL;
+    void **first=&meta->structure, *newElement = NULL, **nextelem = NULL;
 
     newElement = malloc(meta->elementsize);
     if(!newElement)
