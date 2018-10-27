@@ -26,11 +26,15 @@ int main(int argc, char *argv[])
         choice = menu(sizeof(princ_menu)/32, princ_menu);
         switch(choice){
             case '0':   //Record creation and addition at the end of the file
-                menuAppendFile();
+                if(menuAppendFile() < 0)
+                    fprintf(stderr, "\nMain menu : could not append a new element in the file");
+                else
+                    printf("\nElement appended to the file")
                 break;
 
             case '1':   //Research for a last name (possibly incomplete)
-                menuSearchList();
+                if(menuSearchList() < 0)
+                    fprintf(stderr, "\nMain menu : could not research elements");
                 break;
 
             case '2':   //Research a record by its index in the file
@@ -38,7 +42,8 @@ int main(int argc, char *argv[])
                 break;
 
             case '3':   //List all the records of a file
-                menuListFile();
+                if(menuListFile() < 0)
+                    fprintf(stderr, "\nMain menu : could not list all elements");
                 break;
 
             case '4':
@@ -49,12 +54,15 @@ int main(int argc, char *argv[])
                 break;
 
             case '5':
-                menuImportFile();
+                if(menuImportFile() < 0)
+                    fprintf(stderr, "\nMain menu : could not import the file");
                 break;
 
             default:
                 break;
         }
+        fflush(stdin);
+        getch();
     }while(choice!=27);
 
     return EXIT_SUCCESS;
@@ -109,13 +117,17 @@ int menuAppendFile(){
     if(file != NULL){
         //write the record at the end
         doWrite = (isTextFile(NULL) ? &writeTupleText : &writeTupleData);
-        if((*doWrite)(file, (void*)&record) < 0)
+        if((*doWrite)(file, (void*)&record) < 0){
+            fprintf(stderr, "\nmenAppendFile : Error while trying to write in the file");
             ret = -1;
+        }
 
         fclose(file);
     }
-    else
+    else{
+        fprintf(stderr, "\nmenAppendFile : Error while trying to open the file");
         ret = -1;
+    }
 
     return ret;
 }
@@ -149,7 +161,11 @@ int menuSearchList(){
         while(!(*doRead)(file, (void*)&record)){
             if((meta.doCompare)((void*)&record, &tmp) == 0){
                 meta.doCompare = &compareLastName;
-                insertListSorted(&meta, &record);
+                if(insertListSorted(&meta, &record) < 0){
+                    fprintf(stderr, "\nmenuSearchList : Error while inserting element to the list");
+                    fclose(file);
+                    return -1;
+                }
                 meta.doCompare = &compareFilterLastName;
             }
         }
@@ -162,17 +178,22 @@ int menuSearchList(){
         }
 
         //display and free the whole list
-        foreachList(&meta, NULL, &displayTupleInline);
-        foreachList(&meta, NULL, &freeTuple);
-
-        //Wait for a user input
-        fflush(stdin);
-        getch();
+        if(foreachList(&meta, NULL, &displayTupleInline) < 0){
+            fprintf(stderr, "\nmenuSearchList : Error while displaying the elements");
+            fclose(file);
+            return -1;
+        }
+        if(foreachList(&meta, NULL, &freeTuple)){
+            fprintf(stderr, "\nmenuSearchList : Error while freeing the memory");
+            fclose(file);
+            return -1;
+        }
 
         fclose(file);
         return 1;
     }
 
+    fprintf(stderr, "\nmenuSearchList : Error while trying to open the file");
     return -1;
 }
 
@@ -255,18 +276,21 @@ int menuListFile(){
         doRead = (isTextFile(NULL) ? &readTupleText : &readTupleData);
 
         //read the file line per line and display each record read
-        while(!(*doRead)(file, (void*)&record))
-            displayTupleInline((void*)&record, NULL);
-
-        //wait for user input
-        fflush(stdin);
-        getch();
+        while(!(*doRead)(file, (void*)&record)){
+            if(displayTupleInline((void*)&record, NULL) < 0){
+                fprintf(stderr, "\nmenuListFile : Error while displaying an element");
+                fclose(file);
+                return -1;
+            }
+        }
 
         fclose(file);
         return 0;
     }
-    else
+    else{
+        fprintf(stderr, "\nmenuListFile : Error while trying to open the file");
         return -1;
+    }
 }
 
 /************************************************************/
@@ -300,22 +324,25 @@ int menuImportFile(){
             doWrite = (isTextFile(NULL) ? &writeTupleText : &writeTupleData);
 
             //read the import file line by line, and append each record to the end of the export file
-            while(!(*doRead)(importfile, (void*)&record)){
+            while(!(*doRead)(importfile, (void*)&record) && ret > -1){
                 if((*doWrite)(exportfile, (void*)&record) < 0){
-                    fclose(importfile);
-                    fclose(exportfile);
-                    return -1;
+                    fprintf(stderr, "\nmenuImportFile : Error while trying to write a record in the export file");
+                    ret = -1;
                 }
             }
             fclose(importfile);
         }
-        else
+        else{
+            fprintf(stderr, "\nmenuImportFile : Error while trying to open the export file");
             ret = -1;
+        }
 
         fclose(exportfile);
     }
-    else
+    else{
+        fprintf(stderr, "\nmenuImportFile : Error while trying to open the import file");
         ret = -1;
+    }
 
     return ret;
 }
