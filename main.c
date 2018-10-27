@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
                 if(menuAppendFile() < 0)
                     fprintf(stderr, "\nMain menu : could not append a new element in the file");
                 else
-                    printf("\nElement appended to the file")
+                    printf("\nElement appended to the file");
                 break;
 
             case '1':   //Research for a last name (possibly incomplete)
@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
             default:
                 break;
         }
+        printf("\nAppuyez sur une touche pour continuer ");
         fflush(stdin);
         getch();
     }while(choice!=27);
