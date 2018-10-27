@@ -4,13 +4,16 @@
 /*  I : Element to display                                  */
 /*      Eventual parameter                                  */
 /*  P : Displays a tuple (inline)                           */
-/*  O : /                                                   */
+/*  O : 0 -> Element displayed                              */
+/*     -1 -> Error                                          */
 /************************************************************/
 int displayTupleInline(void* toDisplay, void* parameter){
     t_tuple* display = (t_tuple*)toDisplay;
 
-    printf("\n%28s\t\t%32s\t\t%64s", display->lastname, display->firstname, display->email);
+    if(!toDisplay)
+        return -1;
 
+    printf("\n%28s\t\t%32s\t\t%64s", display->lastname, display->firstname, display->email);
     return 0;
 }
 
@@ -18,10 +21,14 @@ int displayTupleInline(void* toDisplay, void* parameter){
 /*  I : Element to display                                  */
 /*      Eventual parameter                                  */
 /*  P : Displays a tuple (block)                            */
-/*  O : /                                                   */
+/*  O : 0 -> Element displayed                              */
+/*     -1 -> Error                                          */
 /************************************************************/
 int displayTupleBlock(void* toDisplay, void* parameter){
     t_tuple* display = (t_tuple*)toDisplay;
+
+    if(!toDisplay)
+        return -1;
 
     printf("\n################################################################");
     printf("\n#%64d#", display->id);
@@ -46,6 +53,10 @@ int displayTupleBlock(void* toDisplay, void* parameter){
 /*     -1 -> Error                                          */
 /************************************************************/
 int encodeTuple(t_tuple *encodeTuple){
+
+    if(!encodeTuple)
+        return -1;
+
     printf("\n\n-------------------------------------\n");
 
     printf("Saisissez l'id : ");
@@ -165,9 +176,9 @@ int compareFilterLastName(void* first, void* second){
 /*  I : First ID to compare                                 */
 /*      Second ID to compare                                */
 /*  P : Compares (strictly) two IDs                         */
-/*  O : 1 -> First > Second                                 */
-/*      0 -> First = Second                                 */
-/*     -1 -> First < Second                                 */
+/*  O : >0 -> First > Second                                 */
+/*       0 -> First = Second                                 */
+/*      <0 -> First < Second                                 */
 /************************************************************/
 int compareID(void* first, void* second){
     //convert from void* to t_tuple
@@ -180,7 +191,8 @@ int compareID(void* first, void* second){
 /************************************************************/
 /*  I : Tuple to swap                                       */
 /*  P : Swaps two tuples                                    */
-/*  O : /                                                   */
+/*  O : 0 -> Swapped                                        */
+/*     -1 -> Error                                          */
 /************************************************************/
 int swapTuples(void* first, void* second){
     //convert from void* to t_tuple
@@ -188,6 +200,9 @@ int swapTuples(void* first, void* second){
     t_tuple *second_tuple = (t_tuple*)second;
     t_tuple *saveNext = second_tuple->next;
     t_tuple tmp;
+
+    if(!first || !second)
+        return -1;
 
     //swap tuples data
     tmp = *first_tuple;
@@ -211,6 +226,9 @@ int assignTuples(void* oldelem, void* newelem){
     t_tuple* oldTuple = (t_tuple*)oldelem;
     t_tuple* newTuple = newelem;
 
+    if(!oldelem || !newelem)
+        return -1;
+
     *oldTuple = *newTuple;
 
     return 0;
@@ -225,6 +243,7 @@ int assignTuples(void* oldelem, void* newelem){
 /************************************************************/
 int freeTuple(void* elem, void* parameter){
     free(elem);
+    elem = NULL;
     return 0;
 }
 
@@ -232,9 +251,13 @@ int freeTuple(void* elem, void* parameter){
 /*  I : /                                                   */
 /*  P : Gets the next element to the current one            */
 /*  O : Address of the next elemnt                          */
+/*          (NULL if current is null)                       */
 /************************************************************/
 void** nextTuple(void* current){
     t_tuple* currentTuple = (t_tuple*)current;
+
+    if(!current)
+        return NULL;
 
     return (void**)&currentTuple->next;
 }
