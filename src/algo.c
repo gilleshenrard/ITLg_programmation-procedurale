@@ -3,10 +3,19 @@
 /************************************************************/
 /*  I : Array of meta data necessary to the algorithm       */
 /*  P : Sorts the provided array using the Bubble Sort algo */
-/*  O : /                                                   */
+/*  O :  0 -> Sorted                                        */
+/*      -1 -> Error                                         */
 /************************************************************/
-void bubbleSort(t_algo_meta *meta){
+int bubbleSort(t_algo_meta *meta){
     void *current=NULL, *next=NULL;
+
+    //no meta data available
+    if(!meta || !meta->doCompare || !meta->doSwap)
+        return -1;
+
+    //array is empty
+    if(!meta->structure)
+        return 0;
 
     for(int i=0 ; i<meta->nbelements-1 ; i++){
         for(int j=0 ; j<meta->nbelements-i-1 ; j++){
@@ -15,23 +24,32 @@ void bubbleSort(t_algo_meta *meta){
             next = meta->structure+(meta->elementsize*(j+1));
 
             if((*meta->doCompare)(current, next) > 0)
-                (*meta->doSwap)(current, next);
+                if((*meta->doSwap)(current, next) < 0)
+                    return -1;
         }
     }
+
+    return 0;
 }
 
 /************************************************************/
 /*  I : Array of meta data necessary to the algorithm       */
 /*  P : Sorts the provided linked list using                */
 /*          the Bubble Sort algorithm                       */
-/*  O : /                                                   */
+/*  O :  0 -> Sorted                                        */
+/*      -1 -> Error                                         */
 /************************************************************/
-void bubbleSortList(t_algo_meta* meta){
+int bubbleSortList(t_algo_meta* meta){
     void *current=NULL, **next=NULL, *right_ptr=NULL;
     int swapped;
 
+    //no meta data available
+    if(!meta || !meta->doCompare || !meta->doSwap)
+        return -1;
+
+    //list is empty
     if(!meta->structure)
-        return;
+        return 0;
 
     do{
         swapped = 0;
@@ -40,7 +58,8 @@ void bubbleSortList(t_algo_meta* meta){
 
         while(*next != right_ptr){
             if((*meta->doCompare)(current, *next) > 0){
-                (*meta->doSwap)(current, *next);
+                if((*meta->doSwap)(current, *next) < 0)
+                    return -1;
                 swapped = 1;
             }
             current = *next;
@@ -48,6 +67,8 @@ void bubbleSortList(t_algo_meta* meta){
         }
         right_ptr = current;
     }while(swapped);
+
+    return 0;
 }
 
 /************************************************************/
@@ -88,17 +109,30 @@ int quickSortPartitioning(t_algo_meta* meta, int low, int high){
 /*      Lowest index in the array (most likely 0)           */
 /*      Highest index in the array (last element)           */
 /*  P : Sorts the provided array using the Quick Sort algo  */
-/*  O : /                                                   */
+/*  O :  0 -> Sorted                                        */
+/*      -1 -> Error                                         */
 /************************************************************/
-void quickSort(t_algo_meta* meta, int low, int high){
+int quickSort(t_algo_meta* meta, int low, int high){
     int pivot=0;
+
+    //no meta data available
+    if(!meta || !meta->doCompare || !meta->doSwap)
+        return -1;
+
+    //list is empty
+    if(!meta->structure)
+        return 0;
 
     if(low < high){
         pivot = quickSortPartitioning(meta, low, high);
 
-        quickSort(meta, low, pivot-1);
-        quickSort(meta, pivot+1, high);
+        if(quickSort(meta, low, pivot-1) < 0)
+            return -1;
+        if(quickSort(meta, pivot+1, high) <0)
+            return -1;
     }
+
+    return 0;
 }
 
 /************************************************************/
@@ -164,15 +198,22 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
 int insertListTop(t_algo_meta* meta, void *toAdd){
     void *newElement = NULL, **nextelem = NULL;
 
+    //check if meta data available
+    if(!meta || !meta->doCopy || !meta->next || !toAdd)
+        return -1;
+
+    //memory allocation for the new element
     newElement = malloc(meta->elementsize);
     if(!newElement)
         return -1;
 
+    //copy new element data and organise pointers
     (*meta->doCopy)(newElement, toAdd);
     nextelem = (*meta->next)(newElement);
     *nextelem = meta->structure;
     meta->structure = newElement;
 
+    //increment the elements counter
     meta->nbelements++;
 
     return 0;
@@ -221,15 +262,22 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
 /*      Parameter for the action to perform                 */
 /*      Action to perform                                   */
 /*  P : Performs an action on every element of the list     */
-/*  O : /                                                   */
+/*  O : 0 -> Element added                                  */
+/*     -1 -> Error                                          */
 /************************************************************/
-void foreachList(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void*)){
+int foreachList(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void*)){
     void *cur = meta->structure, *prev=NULL, **nextelem=NULL;
+
+    if(!meta || !meta->next || !doAction)
+        return -1;
 
     while(cur){
         prev = cur;
         nextelem = (*meta->next)(cur);
         cur = *nextelem;
-        (*doAction)(prev, parameter);
+        if((*doAction)(prev, parameter) < 0)
+            return -1;
     }
+
+    return 0;
 }
