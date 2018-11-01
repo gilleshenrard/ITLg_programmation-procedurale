@@ -32,11 +32,13 @@ int isTextFile(char* toTest){
 int openFile(FILE** file, char* name, char* option){
     char opt[4]="0";
 
+    strcpy(opt, option);
+
     if(!isTextFile(name))
         sprintf(opt, "%sb", option);
 
-    *file = fopen((name ? name : filename), option);
-    if(!file)
+    *file = fopen((name ? name : filename), opt);
+    if(!*file)
         return -1;
 
     return 0;
