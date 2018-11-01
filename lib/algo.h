@@ -24,6 +24,7 @@ int binarySearchFirst(t_algo_meta*, void*);
 
 //Dynamic lists
 int insertListTop(t_algo_meta*, void*);
+int popListTop(t_algo_meta*);
 int insertListSorted(t_algo_meta*,  void*);
 int foreachList(t_algo_meta*, void*, int (*doAction)(void*, void*));
 

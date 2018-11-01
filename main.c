@@ -184,10 +184,9 @@ int menuSearchList(){
             fclose(file);
             return -1;
         }
-        if(foreachList(&meta, NULL, &freeTuple)){
-            fprintf(stderr, "\nmenuSearchList : Error while freeing the memory");
-            fclose(file);
-            return -1;
+
+        while(meta.structure){
+            popListTop(&meta);
         }
 
         fclose(file);

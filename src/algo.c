@@ -40,7 +40,7 @@ int bubbleSort(t_algo_meta *meta){
 /*      -1 -> Error                                         */
 /************************************************************/
 int bubbleSortList(t_algo_meta* meta){
-    void *current=NULL, **next=NULL, *right_ptr=NULL;
+    void *current=NULL, *next=NULL, *right_ptr=NULL;
     int swapped;
 
     //no meta data available
@@ -54,16 +54,16 @@ int bubbleSortList(t_algo_meta* meta){
     do{
         swapped = 0;
         current = meta->structure;
-        next = (*meta->next)(current);
+        next = *(*meta->next)(current);
 
-        while(*next != right_ptr){
-            if((*meta->doCompare)(current, *next) > 0){
-                if((*meta->doSwap)(current, *next) < 0)
+        while(next != right_ptr){
+            if((*meta->doCompare)(current, next) > 0){
+                if((*meta->doSwap)(current, next) < 0)
                     return -1;
                 swapped = 1;
             }
-            current = *next;
-            next = (*meta->next)(current);
+            current = next;
+            next = *(*meta->next)(current);
         }
         right_ptr = current;
     }while(swapped);
@@ -218,6 +218,38 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
 
     return 0;
 }
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*  P : Removes the first element of the list               */
+/*  O : 0 -> Element popped                                 */
+/*     -1 -> Error                                          */
+/************************************************************/
+int popListTop(t_algo_meta* meta){
+    void *head = NULL, *second=NULL;
+
+    //check if meta data available
+    if(!meta || !meta->next)
+        return -1;
+
+    //Structure is empty
+    if(!meta->structure)
+        return 0;
+
+    //save list head and retrieve next element
+    head = meta->structure;
+    second = *(*meta->next)(head);
+
+    //free and rechain
+    free(head);
+    meta->structure = second;
+
+    //update the number of elements
+    meta->nbelements -= 1;
+
+    return 0;
+}
+
 /************************************************************/
 /*  I : Metadata necessary to the algorithm                 */
 /*      Element to insert in the list                       */
@@ -266,15 +298,15 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
 /*     -1 -> Error                                          */
 /************************************************************/
 int foreachList(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void*)){
-    void *cur = meta->structure, *prev=NULL, **nextelem=NULL;
+    void *cur = meta->structure, *prev=NULL, *nextelem=NULL;
 
     if(!meta || !meta->next || !doAction)
         return -1;
 
     while(cur){
         prev = cur;
-        nextelem = (*meta->next)(cur);
-        cur = *nextelem;
+        nextelem = *(*meta->next)(cur);
+        cur = nextelem;
         if((*doAction)(prev, parameter) < 0)
             return -1;
     }
