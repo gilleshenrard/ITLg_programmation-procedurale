@@ -275,8 +275,7 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
     //walk through the list until the right place is found
     while(current!=NULL && (*meta->doCompare)(newElement,current)>0){
         previous = current;
-        next = (*meta->next)(current);
-        current = *next;
+        current = *(*meta->next)(current);
     }
     //properly link the elements
     next = (*meta->next)(previous);
@@ -298,16 +297,17 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
 /*     -1 -> Error                                          */
 /************************************************************/
 int foreachList(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void*)){
-    void *cur = meta->structure, *prev=NULL, *nextelem=NULL;
+    void *next = NULL, *current=NULL;
 
     if(!meta || !meta->next || !doAction)
         return -1;
 
-    while(cur){
-        prev = cur;
-        nextelem = *(*meta->next)(cur);
-        cur = nextelem;
-        if((*doAction)(prev, parameter) < 0)
+    next = meta->structure;
+
+    while(next){
+        current = next;
+        next = *(*meta->next)(next);
+        if((*doAction)(current, parameter) < 0)
             return -1;
     }
 
