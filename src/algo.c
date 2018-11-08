@@ -241,6 +241,7 @@ int popListTop(t_algo_meta* meta){
     second = *(*meta->next)(head);
 
     //free and rechain
+    //  note : free() takes a void pointer anyway, so no need to cast
     free(head);
     meta->structure = second;
 

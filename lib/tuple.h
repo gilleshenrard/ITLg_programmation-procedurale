@@ -33,7 +33,6 @@ int compareCity(void*, void*);
 int compareID(void*, void*);
 int swapTuples(void*, void*);
 int assignTuples(void*, void*);
-int freeTuple(void*, void*);
 void** nextTuple(void*);
 int readTupleData(FILE*, void*);
 int readTupleText(FILE*, void*);
