@@ -145,7 +145,7 @@ int menuSearchList(){
     FILE* file=NULL;
     t_tuple record, tmp;
     int (*doRead)(FILE*, void*);
-    t_algo_meta meta = {NULL, 0, sizeof(t_tuple), &compareFilterLastName, &swapTuples, &assignTuples, &nextTuple};
+    t_algo_meta meta = {NULL, 0, sizeof(t_tuple), &compareFilterLastName, &swapTuples, &assignTuples, &nextTuple, &previousTuple};
 
     //Open the file
     openFile(&file, NULL, "r");

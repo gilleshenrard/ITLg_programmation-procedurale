@@ -195,23 +195,16 @@ int compareID(void* first, void* second){
 /*     -1 -> Error                                          */
 /************************************************************/
 int swapTuples(void* first, void* second){
-    //convert from void* to t_tuple
-    t_tuple *first_tuple = (t_tuple*)first;
-    t_tuple *second_tuple = (t_tuple*)second;
-    t_tuple *saveNext = second_tuple->next;
     t_tuple tmp;
 
     if(!first || !second)
         return -1;
 
-    //swap tuples data
-    tmp = *first_tuple;
-    *first_tuple = *second_tuple;
-    *second_tuple = tmp;
+    memset(&tmp, 0, sizeof(t_tuple));
 
-    //properly restore Next pointers
-    first_tuple->next = tmp.next;
-    second_tuple->next = saveNext;
+    assignTuples((void*)&tmp, first);
+    assignTuples(first, second);
+    assignTuples(second, (void*)&tmp);
 
     return 0;
 }
@@ -220,16 +213,27 @@ int swapTuples(void* first, void* second){
 /*  I : Tuple to assign values to                           */
 /*      Tuple to assign values from                         */
 /*  P : Assigns the values from the new tuple to the old one*/
+/*          note : keeps the pointers untouched             */
 /*  O : /                                                   */
 /************************************************************/
 int assignTuples(void* oldelem, void* newelem){
     t_tuple* oldTuple = (t_tuple*)oldelem;
-    t_tuple* newTuple = newelem;
+    t_tuple* newTuple = (t_tuple*)newelem;
+    t_tuple *saveNext = NULL, *savePrevious=NULL;
 
     if(!oldelem || !newelem)
         return -1;
 
+    //save the pointer values of the old tuple
+    saveNext = oldTuple->next;
+    savePrevious = oldTuple->previous;
+
+    //copy the data from the new tuple to the old one
     *oldTuple = *newTuple;
+
+    //restore the pointer values
+    oldTuple->next = saveNext;
+    oldTuple->previous = savePrevious;
 
     return 0;
 }
@@ -247,6 +251,21 @@ void** nextTuple(void* current){
         return NULL;
 
     return (void**)&currentTuple->next;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Gets the previous element of the current one        */
+/*  O : Address of the previous elemnt                      */
+/*          (NULL if current is null)                       */
+/************************************************************/
+void** previousTuple(void* current){
+    t_tuple* currentTuple = (t_tuple*)current;
+
+    if(!current)
+        return NULL;
+
+    return (void**)&currentTuple->previous;
 }
 
 /************************************************************/

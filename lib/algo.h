@@ -10,6 +10,7 @@ typedef struct {
     int (*doSwap)(void*, void*);
     int (*doCopy)(void*, void*);
     void** (*next)(void*);
+    void** (*previous)(void*);
 } t_algo_meta;
 
 //Sorting algorithms

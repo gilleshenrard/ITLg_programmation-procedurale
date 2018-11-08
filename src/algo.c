@@ -44,7 +44,7 @@ int bubbleSortList(t_algo_meta* meta){
     int swapped;
 
     //no meta data available
-    if(!meta || !meta->doCompare || !meta->doSwap)
+    if(!meta || !meta->doCompare || !meta->doSwap || !meta->next)
         return -1;
 
     //list is empty
@@ -196,10 +196,10 @@ int binarySearchFirst(t_algo_meta *meta, void* toSearch){
 /*     -1 -> Error                                          */
 /************************************************************/
 int insertListTop(t_algo_meta* meta, void *toAdd){
-    void *newElement = NULL, **nextelem = NULL;
+    void *newElement = NULL, **nextelem = NULL, **previousElem = NULL;
 
     //check if meta data available
-    if(!meta || !meta->doCopy || !meta->next || !toAdd)
+    if(!meta || !meta->doCopy || !meta->next || !meta->previous || !toAdd)
         return -1;
 
     //memory allocation for the new element
@@ -207,10 +207,14 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
     if(!newElement)
         return -1;
 
-    //copy new element data and organise pointers
+    //copy new element data and get pointers address
     (*meta->doCopy)(newElement, toAdd);
     nextelem = (*meta->next)(newElement);
+    previousElem = (*meta->previous)(meta->structure);
+
+    //reorganise pointers to chain up
     *nextelem = meta->structure;
+    *previousElem = newElement;
     meta->structure = newElement;
 
     //increment the elements counter
@@ -226,7 +230,7 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
 /*     -1 -> Error                                          */
 /************************************************************/
 int popListTop(t_algo_meta* meta){
-    void *head = NULL, *second=NULL;
+    void *head = NULL, *second=NULL, **previous = NULL;
 
     //check if meta data available
     if(!meta || !meta->next)
@@ -239,14 +243,16 @@ int popListTop(t_algo_meta* meta){
     //save list head and retrieve next element
     head = meta->structure;
     second = *(*meta->next)(head);
+    previous = (*meta->next)(second);
 
     //free and rechain
     //  note : free() takes a void pointer anyway, so no need to cast
     free(head);
+    *previous = NULL;
     meta->structure = second;
 
     //update the number of elements
-    meta->nbelements -= 1;
+    meta->nbelements--;
 
     return 0;
 }
@@ -260,7 +266,7 @@ int popListTop(t_algo_meta* meta){
 /*     -1 -> Error                                          */
 /************************************************************/
 int insertListSorted(t_algo_meta *meta, void* toAdd){
-    void *newElement = NULL, *previous=NULL, *current=meta->structure, **next = NULL;
+    void *newElement = NULL, *previous=NULL, *next=meta->structure, **tmp = NULL;
 
     //non-existing list or element is supposed to become the first element
     if(!meta->structure || (*meta->doCompare)(meta->structure, toAdd) > 0)
@@ -274,15 +280,20 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
         return -1;
 
     //walk through the list until the right place is found
-    while(current!=NULL && (*meta->doCompare)(newElement,current)>0){
-        previous = current;
-        current = *(*meta->next)(current);
+    while(next!=NULL && (*meta->doCompare)(newElement,next)>0){
+        previous = next;
+        next = *(*meta->next)(next);
     }
-    //properly link the elements
-    next = (*meta->next)(previous);
-    *next = newElement;
-    next = (*meta->next)(newElement);
-    *next = current;
+    //properly link the previous with the new element
+    tmp = (*meta->next)(previous);
+    *tmp = newElement;
+    tmp = (*meta->previous)(newElement);
+    *tmp = previous;
+    //properly link the next with the new element
+    tmp = (*meta->next)(newElement);
+    *tmp = next;
+    tmp = (*meta->previous)(next);
+    *tmp = newElement;
 
     meta->nbelements++;
 

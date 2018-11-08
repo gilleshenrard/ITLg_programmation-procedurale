@@ -17,8 +17,9 @@ struct t_tuple{
     char postcode[5];
     char city[32];
     char update[11];
-    char filler[38];
+    char filler[34];
     t_tuple *next;
+    t_tuple *previous;
 };
 
 typedef enum {ID, LASTNAME, FIRSTNAME, BIRTHDATE, PHONE, MOBILE, EMAIL, POSTCODE, CITY, UPDATE} e_criteria;
@@ -34,6 +35,7 @@ int compareID(void*, void*);
 int swapTuples(void*, void*);
 int assignTuples(void*, void*);
 void** nextTuple(void*);
+void** previousTuple(void*);
 int readTupleData(FILE*, void*);
 int readTupleText(FILE*, void*);
 int writeTupleData(FILE*, void*);
