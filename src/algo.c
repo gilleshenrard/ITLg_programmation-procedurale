@@ -207,14 +207,22 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
     if(!newElement)
         return -1;
 
-    //copy new element data and get pointers address
+    //copy new element data
     (*meta->doCopy)(newElement, toAdd);
+    //chain new element's next pointer to list
     nextelem = (*meta->next)(newElement);
-    previousElem = (*meta->previous)(meta->structure);
-
-    //reorganise pointers to chain up
     *nextelem = meta->structure;
-    *previousElem = newElement;
+    //chain new element's previous pointer to list, if existing
+    if(meta->structure){
+        previousElem = (*meta->previous)(meta->structure);
+        *previousElem = newElement;
+    }
+    else{
+        previousElem = (*meta->previous)(newElement);
+        *previousElem = NULL;
+    }
+
+    //make the new element head of the list
     meta->structure = newElement;
 
     //increment the elements counter
@@ -243,12 +251,13 @@ int popListTop(t_algo_meta* meta){
     //save list head and retrieve next element
     head = meta->structure;
     second = *(*meta->next)(head);
-    previous = (*meta->next)(second);
+    previous = (*meta->previous)(second);
 
     //free and rechain
     //  note : free() takes a void pointer anyway, so no need to cast
     free(head);
-    *previous = NULL;
+    if(previous)
+        *previous = NULL;
     meta->structure = second;
 
     //update the number of elements
@@ -284,16 +293,20 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
         previous = next;
         next = *(*meta->next)(next);
     }
-    //properly link the previous with the new element
+    //previous->next = new
     tmp = (*meta->next)(previous);
     *tmp = newElement;
-    tmp = (*meta->previous)(newElement);
-    *tmp = previous;
-    //properly link the next with the new element
+    //new->next = next
     tmp = (*meta->next)(newElement);
     *tmp = next;
-    tmp = (*meta->previous)(next);
-    *tmp = newElement;
+    //new->previous = previous
+    tmp = (*meta->previous)(newElement);
+    *tmp = previous;
+    //next->previous = new
+    if(*(*meta->next)(newElement) != NULL){
+        tmp = (*meta->previous)(next);
+        *tmp = newElement;
+    }
 
     meta->nbelements++;
 
