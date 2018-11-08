@@ -145,7 +145,7 @@ int menuSearchList(){
     FILE* file=NULL;
     t_tuple record, tmp;
     int (*doRead)(FILE*, void*);
-    t_algo_meta meta = {NULL, 0, sizeof(t_tuple), &compareFilterLastName, &swapTuples, &assignTuples, &nextTuple, &previousTuple};
+    t_algo_meta rList = {NULL, 0, sizeof(t_tuple), &compareFilterLastName, &swapTuples, &assignTuples, &nextTuple, &previousTuple};
 
     //Open the file
     openFile(&file, NULL, "r");
@@ -160,33 +160,33 @@ int menuSearchList(){
 
         //read the file line by line, and add relevant elements to a list (sorted with full last name)
         while(!(*doRead)(file, (void*)&record)){
-            if((meta.doCompare)((void*)&record, &tmp) == 0){
-                meta.doCompare = &compareLastName;
-                if(insertListSorted(&meta, &record) < 0){
+            if((rList.doCompare)((void*)&record, &tmp) == 0){
+                rList.doCompare = &compareLastName;
+                if(insertListSorted(&rList, &record) < 0){
                     fprintf(stderr, "\nmenuSearchList : Error while inserting element to the list");
                     fclose(file);
                     return -1;
                 }
-                meta.doCompare = &compareFilterLastName;
+                rList.doCompare = &compareFilterLastName;
             }
         }
 
         //verify if any elements found
-        printf("\n%d elements trouves.", meta.nbelements);
-        if(!meta.nbelements){
+        printf("\n%d elements trouves.", rList.nbelements);
+        if(!rList.nbelements){
             fclose(file);
             return 0;
         }
 
         //display and free the whole list
-        if(foreachList(&meta, NULL, &displayTupleInline) < 0){
+        if(foreachList(&rList, NULL, &displayTupleInline) < 0){
             fprintf(stderr, "\nmenuSearchList : Error while displaying the elements");
             fclose(file);
             return -1;
         }
 
-        while(meta.structure){
-            popListTop(&meta);
+        while(rList.structure){
+            popListTop(&rList);
         }
 
         fclose(file);
