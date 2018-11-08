@@ -1,6 +1,54 @@
 #include "../lib/algo.h"
 
 /************************************************************/
+/*  I : List to copy                                        */
+/*      Array to create                                     */
+/*      Action to perform on the list members (free or not) */
+/*  P : Allocates memory for the array and copies the list  */
+/*          into it                                         */
+/*  O :  0 -> Array created                                 */
+/*      -1 -> Error                                         */
+/************************************************************/
+int listToArray(t_algo_meta* dList, t_algo_meta* dArray, e_listtoarray action){
+    void *tmp_array = NULL, *tmp_list = NULL;
+
+    //check if the array doesn't exist
+    if(dArray->structure)
+        return -1;
+
+    //allocate the memory
+    dArray->structure = calloc(dList->nbelements, dList->elementsize);
+    if(!dArray)
+        return -1;
+
+    dArray->nbelements = dList->nbelements;
+
+    //copy elements one by one in the array
+    tmp_list = dList->structure;
+    for(int i=0 ; i<dArray->nbelements ; i++){
+        //position the pointer properly
+        tmp_array = dArray->structure+(dArray->elementsize*i);
+        if((*dList->doCopy)(tmp_array, tmp_list) <0)
+            return -1;
+
+        //if desired, free the freshly copied element
+        if(action == REPLACE){
+            if(popListTop(dList) <0){
+                return -1;
+            }
+            tmp_list = dList->structure;
+        }
+        else{
+            //increment the list pointer
+            tmp_list = *(*dList->next)(tmp_list);
+        }
+
+    }
+
+    return 0;
+}
+
+/************************************************************/
 /*  I : Array of meta data necessary to the algorithm       */
 /*  P : Sorts the provided array using the Bubble Sort algo */
 /*  O :  0 -> Sorted                                        */
@@ -202,24 +250,22 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
     if(!meta || !meta->doCopy || !meta->next || !meta->previous || !toAdd)
         return -1;
 
-    //memory allocation for the new element
-    newElement = malloc(meta->elementsize);
+    //memory allocation for the new element (calloc to initialize with all 0)
+    newElement = calloc(1, meta->elementsize);
     if(!newElement)
         return -1;
 
     //copy new element data
     (*meta->doCopy)(newElement, toAdd);
-    //chain new element's next pointer to list
-    nextelem = (*meta->next)(newElement);
-    *nextelem = meta->structure;
+
     //chain new element's previous pointer to list, if existing
     if(meta->structure){
+        //chain new element's next pointer to list
+        nextelem = (*meta->next)(newElement);
+        *nextelem = meta->structure;
+        //chain list's head previous pointer to new element
         previousElem = (*meta->previous)(meta->structure);
         *previousElem = newElement;
-    }
-    else{
-        previousElem = (*meta->previous)(newElement);
-        *previousElem = NULL;
     }
 
     //make the new element head of the list
@@ -278,7 +324,7 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
     void *newElement = NULL, *previous=NULL, *next=meta->structure, **tmp = NULL;
 
     //non-existing list or element is supposed to become the first element
-    if(!meta->structure || (*meta->doCompare)(meta->structure, toAdd) > 0)
+    if(!meta->structure || (*meta->doCompare)(toAdd, meta->structure) <= 0)
         return insertListTop(meta, toAdd);
 
     //allocation and filling of the new element
@@ -295,7 +341,8 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
     }
     //previous->next = new
     tmp = (*meta->next)(previous);
-    *tmp = newElement;
+    if(tmp)
+        *tmp = newElement;
     //new->next = next
     tmp = (*meta->next)(newElement);
     *tmp = next;
@@ -318,7 +365,7 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
 /*      Parameter for the action to perform                 */
 /*      Action to perform                                   */
 /*  P : Performs an action on every element of the list     */
-/*  O : 0 -> Element added                                  */
+/*  O : 0 -> OK                                             */
 /*     -1 -> Error                                          */
 /************************************************************/
 int foreachList(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void*)){
@@ -333,6 +380,28 @@ int foreachList(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void*
         current = next;
         next = *(*meta->next)(next);
         if((*doAction)(current, parameter) < 0)
+            return -1;
+    }
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      Parameter for the action to perform                 */
+/*      Action to perform                                   */
+/*  P : Performs an action on every element of the array    */
+/*  O : 0 -> OK                                             */
+/*     -1 -> Error                                          */
+/************************************************************/
+int foreachArray(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void*)){
+    void* tmp = NULL;
+
+    for(int i=0 ; i<meta->nbelements ; i++){
+        //position the pointer properly
+        tmp = meta->structure+(meta->elementsize*i);
+        //execute action
+        if((*doAction)(tmp, parameter) < 0)
             return -1;
     }
 

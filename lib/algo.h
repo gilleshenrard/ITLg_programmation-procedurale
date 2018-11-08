@@ -13,6 +13,11 @@ typedef struct {
     void** (*previous)(void*);
 } t_algo_meta;
 
+typedef enum {COPY, REPLACE} e_listtoarray;
+
+//miscellaneous
+int listToArray(t_algo_meta*, t_algo_meta*, e_listtoarray);
+
 //Sorting algorithms
 int bubbleSort(t_algo_meta*);
 int bubbleSortList(t_algo_meta*);
@@ -28,5 +33,8 @@ int insertListTop(t_algo_meta*, void*);
 int popListTop(t_algo_meta*);
 int insertListSorted(t_algo_meta*,  void*);
 int foreachList(t_algo_meta*, void*, int (*doAction)(void*, void*));
+
+//Arrays
+int foreachArray(t_algo_meta*, void*, int (*doAction)(void*, void*));
 
 #endif // ALGO_H_INCLUDED
