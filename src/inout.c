@@ -1,6 +1,6 @@
 #include "../lib/inout.h"
 
-char filename[32] = "test.dat";
+char filename[32] = "DB3_Agenda.txt";
 
 /************************************************************/
 /*  I : Optional file name to test                          */
