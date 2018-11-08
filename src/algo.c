@@ -2,7 +2,7 @@
 
 /************************************************************/
 /*  I : List to copy                                        */
-/*      Array to create                                     */
+/*      Array to create (MUST BE EMPTY)                     */
 /*      Action to perform on the list members (free or not) */
 /*  P : Allocates memory for the array and copies the list  */
 /*          into it                                         */
