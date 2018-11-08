@@ -161,12 +161,15 @@ int menuSearchList(){
         //read the file line by line, and add relevant elements to a list (sorted with full last name)
         while(!(*doRead)(file, (void*)&record)){
             if((rList.doCompare)((void*)&record, &tmp) == 0){
+                //switch comparison to full last name
                 rList.doCompare = &compareLastName;
+                //isert the relevant element to the list
                 if(insertListSorted(&rList, &record) < 0){
                     fprintf(stderr, "\nmenuSearchList : Error while inserting element to the list");
                     fclose(file);
                     return -1;
                 }
+                //switch comparison back to filtered last name
                 rList.doCompare = &compareFilterLastName;
             }
         }
