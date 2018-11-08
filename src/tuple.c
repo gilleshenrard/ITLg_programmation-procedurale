@@ -20,6 +20,23 @@ int displayTupleInline(void* toDisplay, void* parameter){
 /************************************************************/
 /*  I : Element to display                                  */
 /*      Eventual parameter                                  */
+/*  P : Displays a tuple with debug info                    */
+/*  O : 0 -> Element displayed                              */
+/*     -1 -> Error                                          */
+/************************************************************/
+int displayTupleDebug(void* toDisplay, void* parameter){
+    t_tuple* display = (t_tuple*)toDisplay;
+
+    if(!toDisplay)
+        return -1;
+
+    printf("\n%10p\t%10p\t%32s\t%10p", display->previous, display, display->lastname, display->next);
+    return 0;
+}
+
+/************************************************************/
+/*  I : Element to display                                  */
+/*      Eventual parameter                                  */
 /*  P : Displays a tuple (block)                            */
 /*  O : 0 -> Element displayed                              */
 /*     -1 -> Error                                          */
