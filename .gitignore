@@ -55,8 +55,7 @@ dkms.conf
 *.cbp
 *.depend
 *.layout
-*.dat
 *.txt
 *.gif
 *.pdf
-*.bmp
+Test/*
