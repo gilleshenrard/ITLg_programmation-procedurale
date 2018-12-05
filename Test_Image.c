@@ -262,7 +262,7 @@ void Tst_Embed_alpha(void)
 {
     image *  tst=NULL, *ship=NULL, *space_back=NULL;
 
-    printf("\n--- Test Embed Cropped -----------------------------------------------------\n\n");
+    printf("\n--- Test Embed Alpha -----------------------------------------------------\n\n");
     ship = Lire_Image("Test", "_Enterprise");
     space_back = Lire_Image("Test", "_Field");
 
