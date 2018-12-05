@@ -22,19 +22,25 @@ void Tst_System_01(void);
 void Tst_System_02(void);
 void Tst_System_03(void);
 void Tst_System_04(void);
+void Tst_Embed_complete(void);
+void Tst_Embed_cropped(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
 ****************************************************************************************/
 int main(void)
 {
-    Tst_System_01();
+    //Tst_System_01();
 
-    Tst_System_02();
+    //Tst_System_02();
 
-    Tst_System_03();
+    //Tst_System_03();
 
-    Tst_System_04();
+    //Tst_System_04();
+
+    //Tst_Embed_complete();
+
+    Tst_Embed_cropped();
 
     return 0;
 }
@@ -173,26 +179,73 @@ void Tst_System_04(void)
 }
 
 /****************************************************************************************
-* Test 4 : Embedding an image in another one (full image in the frame)
+* Test_Embed_complete : Embedding an image in another one (full image in the frame)
 *
-* Purpose : testing that a simple embedding case occurs properly
+* Purpose : testing that a simple embedding case occurs properly (at the right coord.)
 ****************************************************************************************/
 void Tst_Embed_complete(void)
 {
-//    image *  tst;
-//    char txt[20];
+    image *  tst=NULL, *ship=NULL, *space_back=NULL;
 
     printf("\n--- Test Embed Complete -----------------------------------------------------\n\n");
-//    tst = Creer_Image("Test",i,j,NOIR,NIVEAU_8);
-//    Damier(tst);
-//    sprintf(txt, "_CR_%d_%d",i,j);
-//    Ecrire_Image(tst,txt);
-//    Free_Image(tst);
-//
-//    tst = Lire_Image("Test", txt);
-//    sprintf(txt, "_CR_%d_%d_Copy",i,j);
-//    Ecrire_Image(tst,txt);
-//    Free_Image(tst);
+    ship = Lire_Image("Test", "_Enterprise");
+    space_back = Lire_Image("Test", "_Field");
+
+    tst = embed_image(ship, space_back, 0, 0, 1.0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_embed0");
+    Free_Image(tst);
+
+    tst = embed_image(ship, space_back, 100, 0, 1.0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_embed_horizontal");
+    Free_Image(tst);
+
+    tst = embed_image(ship, space_back, 0, 100, 1.0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_embed_vertical");
+    Free_Image(tst);
+
+    return;
+}
+
+/****************************************************************************************
+* Test_Embed_cropped : Embedding an image in another one (partially cropped)
+*
+* Purpose : testing that an embedding made out of the frame crops the image
+****************************************************************************************/
+void Tst_Embed_cropped(void)
+{
+    image *  tst=NULL, *ship=NULL, *space_back=NULL;
+
+    printf("\n--- Test Embed Cropped -----------------------------------------------------\n\n");
+    ship = Lire_Image("Test", "_Enterprise");
+    space_back = Lire_Image("Test", "_Field");
+
+    tst = embed_image(ship, space_back, -200, 0, 1.0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_x_neg");
+    Free_Image(tst);
+
+    tst = embed_image(ship, space_back, 600, 0, 1.0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_x_out");
+    Free_Image(tst);
+
+    tst = embed_image(ship, space_back, 0, -200, 1.0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_y_neg");
+    Free_Image(tst);
+
+    tst = embed_image(ship, space_back, 0, 250, 1.0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_y_out");
+    Free_Image(tst);
+
+    tst = embed_image(ship, space_back, 10000, 10000, 1.0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_fully_out");
+    Free_Image(tst);
 
     return;
 }

@@ -392,14 +392,14 @@ int is_white_pixel(uint x, uint y, image* frame){
 image* embed_image(image* overlay, image* background, uint x, uint y, float alpha){
     image* buffer = NULL;
 
-    buffer = Creer_Image("temporary", background->header.hauteur, background->header.largeur, NOIR, NIVEAU_8);
+    buffer = Creer_Image("", background->header.hauteur, background->header.largeur, NOIR, NIVEAU_8);
 
-    for(uint j=0 ; j<background->header.hauteur ; j++){
-        for(uint i=0 ; i<background->header.largeur ; i++){
-            if(is_in_frame(i-x, j-y, overlay) && !is_white_pixel(i-x, j-y, overlay)){
-                buffer->pic[i][j][0] = overlay->pic[i-x][j-y][0];
-                buffer->pic[i][j][1] = overlay->pic[i-x][j-y][1];
-                buffer->pic[i][j][2] = overlay->pic[i-x][j-y][2];
+    for(uint i=0 ; i<background->header.hauteur ; i++){
+        for(uint j=0 ; j<background->header.largeur ; j++){
+            if(is_in_frame(i-y, j-x, overlay) && !is_white_pixel(i-y, j-x, overlay)){
+                buffer->pic[i][j][0] = overlay->pic[i-y][j-x][0];
+                buffer->pic[i][j][1] = overlay->pic[i-y][j-x][1];
+                buffer->pic[i][j][2] = overlay->pic[i-y][j-x][2];
             }
             else{
                 buffer->pic[i][j][0] = background->pic[i][j][0];
