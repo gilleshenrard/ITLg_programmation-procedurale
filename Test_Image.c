@@ -171,3 +171,28 @@ void Tst_System_04(void)
 
     return;
 }
+
+/****************************************************************************************
+* Test 4 : Embedding an image in another one (full image in the frame)
+*
+* Purpose : testing that a simple embedding case occurs properly
+****************************************************************************************/
+void Tst_Embed_complete(void)
+{
+//    image *  tst;
+//    char txt[20];
+
+    printf("\n--- Test Embed Complete -----------------------------------------------------\n\n");
+//    tst = Creer_Image("Test",i,j,NOIR,NIVEAU_8);
+//    Damier(tst);
+//    sprintf(txt, "_CR_%d_%d",i,j);
+//    Ecrire_Image(tst,txt);
+//    Free_Image(tst);
+//
+//    tst = Lire_Image("Test", txt);
+//    sprintf(txt, "_CR_%d_%d_Copy",i,j);
+//    Ecrire_Image(tst,txt);
+//    Free_Image(tst);
+
+    return;
+}

@@ -85,4 +85,8 @@ uchar * Get_Color(int col, int niv);
 
 void Initialiser_Image(image * img, uchar * color);
 
+int is_in_frame(uint x, uint y, image* frame);
+int is_white_pixel(uint x, uint y, image* frame);
+image* embed_image(image* overlay, image* background, uint x, uint y, float alpha);
+
 #endif // IMAGE_H_INCLUDED
