@@ -24,6 +24,7 @@ void Tst_System_03(void);
 void Tst_System_04(void);
 void Tst_Embed_complete(void);
 void Tst_Embed_cropped(void);
+void Tst_Embed_alpha(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -40,7 +41,9 @@ int main(void)
 
     //Tst_Embed_complete();
 
-    Tst_Embed_cropped();
+    //Tst_Embed_cropped();
+
+    Tst_Embed_alpha();
 
     return 0;
 }
@@ -245,6 +248,42 @@ void Tst_Embed_cropped(void)
     tst = embed_image(ship, space_back, 10000, 10000, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"_fully_out");
+    Free_Image(tst);
+
+    return;
+}
+
+/****************************************************************************************
+* Test_Embed_alpha : Embedding an image in another one with various alpha values
+*
+* Purpose : testing that alpha value is taken into account when embedding
+****************************************************************************************/
+void Tst_Embed_alpha(void)
+{
+    image *  tst=NULL, *ship=NULL, *space_back=NULL;
+
+    printf("\n--- Test Embed Cropped -----------------------------------------------------\n\n");
+    ship = Lire_Image("Test", "_Enterprise");
+    space_back = Lire_Image("Test", "_Field");
+
+    tst = embed_image(ship, space_back, 10, 10, 1.0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_alpha_full");
+    Free_Image(tst);
+
+    tst = embed_image(ship, space_back, 10, 10, 0.7);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_alpha_07");
+    Free_Image(tst);
+
+    tst = embed_image(ship, space_back, 10, 10, 0.4);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_alpha_04");
+    Free_Image(tst);
+
+    tst = embed_image(ship, space_back, 10, 10, 0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"_alpha_transparent");
     Free_Image(tst);
 
     return;

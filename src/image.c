@@ -397,9 +397,9 @@ image* embed_image(image* overlay, image* background, uint x, uint y, float alph
     for(uint i=0 ; i<background->header.hauteur ; i++){
         for(uint j=0 ; j<background->header.largeur ; j++){
             if(is_in_frame(i-y, j-x, overlay) && !is_white_pixel(i-y, j-x, overlay)){
-                buffer->pic[i][j][0] = overlay->pic[i-y][j-x][0];
-                buffer->pic[i][j][1] = overlay->pic[i-y][j-x][1];
-                buffer->pic[i][j][2] = overlay->pic[i-y][j-x][2];
+                buffer->pic[i][j][0] = (overlay->pic[i-y][j-x][0] * alpha) + (background->pic[i][j][0] * (1.0-alpha));
+                buffer->pic[i][j][1] = (overlay->pic[i-y][j-x][1] * alpha) + (background->pic[i][j][1] * (1.0-alpha));
+                buffer->pic[i][j][2] = (overlay->pic[i-y][j-x][2] * alpha) + (background->pic[i][j][2] * (1.0-alpha));
             }
             else{
                 buffer->pic[i][j][0] = background->pic[i][j][0];
