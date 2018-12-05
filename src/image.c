@@ -291,18 +291,14 @@ void Afficher_Header(image *img)
 /****************************************************************************************
 * Composition du nom de fichier complet
 * Exemple : si le nom de base est Test et l'extension _V1 : .\Test\Test_V1.bmp
-*   nom     : nom compose
-*   nom_bas : nom de base de l'image
-*   nom_tag : suffixe du nom d'image
+*   PHOTO_DIR   : state variable (definition)
+*   nom         : final full file name
+*   nom_bas     : Base name (type. e.g. 'Ship')
+*   nom_tag     : Suffix (e.g. '_test2')
 ****************************************************************************************/
 void Nom_Image(char * nom, char * nom_base, char * nom_tag)
 {
-    strncpy(nom, PHOTO_DIR,     FIC_NM);   // Repertoire de base, harcode via define
-    strncat(nom, nom_base,      FIC_NM);   // Repertoire image = Nom de base
-    strncat(nom, "\\",          FIC_NM);
-	strncat(nom, nom_base,      FIC_NM);   // Nom de base de l'image
-	strncat(nom, nom_tag,       FIC_NM);   // Extension accrochee au nom de base
-	strncat(nom, ".bmp",        FIC_NM);   // Type de fichier
+	sprintf(nom, "%s%s\\%s_%s.bmp", PHOTO_DIR, nom_base, nom_base, nom_tag);
     printf("Fichier : %s\n\n", nom);
 
     return;

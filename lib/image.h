@@ -12,7 +12,7 @@
 
 #define FIC_NM 80
 
-#define PHOTO_DIR ".\\"
+#define PHOTO_DIR ".\\Films\\"
 
 enum couleur
 {

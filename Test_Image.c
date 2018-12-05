@@ -41,7 +41,7 @@ int main(void)
 
     //Tst_Embed_complete();
 
-    //Tst_Embed_cropped();
+    Tst_Embed_cropped();
 
     Tst_Embed_alpha();
 
@@ -64,7 +64,7 @@ void Tst_System_01(void)
     img = Creer_Image("Test",1200,1800,VERT, NIVEAU_8);
     Afficher_Header(img);
 
-    Ecrire_Image(img, "_01");
+    Ecrire_Image(img, "01");
 
     Free_Image(img);
 
@@ -74,16 +74,16 @@ void Tst_System_01(void)
 
     /* Traitement eventuel*/
 
-    Ecrire_Image(img, "_02");
+    Ecrire_Image(img, "02");
 
     Free_Image(img);
 
     // --- Relire / Ecrire / Liberer une des images precedement creee
 
-    img = Lire_Image("Test", "_02");
+    img = Lire_Image("Test", "02");
     Afficher_Header(img);
 
-    Ecrire_Image(img, "_copy_02");
+    Ecrire_Image(img, "copy_02");
 
     Free_Image(img);
 
@@ -106,11 +106,11 @@ void Tst_System_02(void)
 
     Afficher_Header(img);
 
-    Ecrire_Image(img, "_01");
+    Ecrire_Image(img, "01");
 
     Filtrer_Noir_Blanc(img);
 
-    Ecrire_Image(img, "_NB");
+    Ecrire_Image(img, "NB");
 
     Free_Image(img);
 
@@ -136,9 +136,9 @@ void Tst_System_03(void)
 
     for (i=0; i<5; i++)
     {
-        sprintf(txt, "_Ele_%d", i);
+        sprintf(txt, "Ele_%d", i);
         ori = Lire_Image("Test",txt);
-        sprintf(txt, "_Ele_%d_C", i);
+        sprintf(txt, "Ele_%d_C", i);
         Ecrire_Image(ori,txt);
     }
 
@@ -167,12 +167,12 @@ void Tst_System_04(void)
         {
             tst = Creer_Image("Test",i,j,NOIR,NIVEAU_8);
             Damier(tst);
-            sprintf(txt, "_CR_%d_%d",i,j);
+            sprintf(txt, "CR_%d_%d",i,j);
             Ecrire_Image(tst,txt);
             Free_Image(tst);
 
             tst = Lire_Image("Test", txt);
-            sprintf(txt, "_CR_%d_%d_Copy",i,j);
+            sprintf(txt, "CR_%d_%d_Copy",i,j);
             Ecrire_Image(tst,txt);
             Free_Image(tst);
         }
@@ -192,21 +192,21 @@ void Tst_Embed_complete(void)
 
     printf("\n--- Test Embed Complete -----------------------------------------------------\n\n");
     ship = Lire_Image("Test", "_Enterprise");
-    space_back = Lire_Image("Test", "_Field");
+    space_back = Lire_Image("Test", "Field");
 
     tst = embed_image(ship, space_back, 0, 0, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_embed0");
+    Ecrire_Image(tst,"embed0");
     Free_Image(tst);
 
     tst = embed_image(ship, space_back, 100, 0, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_embed_horizontal");
+    Ecrire_Image(tst,"embed_horizontal");
     Free_Image(tst);
 
     tst = embed_image(ship, space_back, 0, 100, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_embed_vertical");
+    Ecrire_Image(tst,"embed_vertical");
     Free_Image(tst);
 
     return;
@@ -222,32 +222,32 @@ void Tst_Embed_cropped(void)
     image *  tst=NULL, *ship=NULL, *space_back=NULL;
 
     printf("\n--- Test Embed Cropped -----------------------------------------------------\n\n");
-    ship = Lire_Image("Test", "_Enterprise");
-    space_back = Lire_Image("Test", "_Field");
+    ship = Lire_Image("Test", "Enterprise");
+    space_back = Lire_Image("Test", "Field");
 
     tst = embed_image(ship, space_back, -200, 0, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_x_neg");
+    Ecrire_Image(tst,"x_neg");
     Free_Image(tst);
 
     tst = embed_image(ship, space_back, 600, 0, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_x_out");
+    Ecrire_Image(tst,"x_out");
     Free_Image(tst);
 
     tst = embed_image(ship, space_back, 0, -200, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_y_neg");
+    Ecrire_Image(tst,"y_neg");
     Free_Image(tst);
 
     tst = embed_image(ship, space_back, 0, 250, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_y_out");
+    Ecrire_Image(tst,"y_out");
     Free_Image(tst);
 
     tst = embed_image(ship, space_back, 10000, 10000, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_fully_out");
+    Ecrire_Image(tst,"fully_out");
     Free_Image(tst);
 
     return;
@@ -263,27 +263,27 @@ void Tst_Embed_alpha(void)
     image *  tst=NULL, *ship=NULL, *space_back=NULL;
 
     printf("\n--- Test Embed Alpha -----------------------------------------------------\n\n");
-    ship = Lire_Image("Test", "_Enterprise");
-    space_back = Lire_Image("Test", "_Field");
+    ship = Lire_Image("Test", "Enterprise");
+    space_back = Lire_Image("Test", "Field");
 
     tst = embed_image(ship, space_back, 10, 10, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_alpha_full");
+    Ecrire_Image(tst,"alpha_full");
     Free_Image(tst);
 
     tst = embed_image(ship, space_back, 10, 10, 0.7);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_alpha_07");
+    Ecrire_Image(tst,"alpha_07");
     Free_Image(tst);
 
     tst = embed_image(ship, space_back, 10, 10, 0.4);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_alpha_04");
+    Ecrire_Image(tst,"alpha_04");
     Free_Image(tst);
 
     tst = embed_image(ship, space_back, 10, 10, 0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"_alpha_transparent");
+    Ecrire_Image(tst,"alpha_transparent");
     Free_Image(tst);
 
     return;
