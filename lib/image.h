@@ -87,9 +87,6 @@ void Initialiser_Image(image * img, uchar * color);
 
 int is_in_frame(uint x, uint y, image* frame);
 int is_white_pixel(uint x, uint y, image* frame);
-image* embed_image(image* overlay, image* background, uint x, uint y, float alpha);
 image* copy_image(image* original);
-int set_pixel(image* img, uint x, uint y, uchar* colour);
-image* draw_line_Bresenham(uint xa, uint ya, uint xb, uint yb, uchar* colour, image *original);
 
 #endif // IMAGE_H_INCLUDED
