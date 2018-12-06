@@ -37,7 +37,7 @@ int main(void)
     //Tst_System_03();
     //Tst_System_04();
     //Tst_Embed_complete();
-    Tst_Embed_cropped();
+    //Tst_Embed_cropped();
     //Tst_Embed_alpha();
     Tst_draw_line();
 
@@ -224,17 +224,22 @@ void Tst_Embed_cropped(void)
     ship = Lire_Image("Test", "Enterprise");
     space_back = Lire_Image("Test", "Field");
 
+    //cropped left
     tst = embed_image(ship, space_back, -200, 0, 1.0);
 
+    //cropped right
     tst2 = embed_image(ship, tst, 600, 0, 1.0);
     Free_Image(tst);
 
+    //cropped bottom
     tst = embed_image(ship, tst2, 0, -200, 1.0);
     Free_Image(tst2);
 
+    //cropped top
     tst2 = embed_image(ship, tst, 0, 250, 1.0);
     Free_Image(tst);
 
+    //fully out
     tst = embed_image(ship, tst2, 10000, 10000, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"embed_cropped");
@@ -293,23 +298,23 @@ void Tst_Embed_alpha(void)
 ****************************************************************************************/
 void Tst_draw_line(void)
 {
-    image * tst=NULL, *space_back=NULL;
-    line l1 = {20, 30, 200, 300, ROUGE, NIVEAU_8, 1.0};
+    image *tst=NULL, *tst2=NULL, *space_back=NULL;
+    line l1 = {20, 30, 200, 300, BLEU, NIVEAU_8, 1.0};
     line l2 = {20, 300, 200, 30, ROUGE, NIVEAU_8, 1.0};
 
     printf("\n--- Test Draw Line -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
 
+    //blue line in the octant 0
     tst = draw_line_Bresenham(space_back, &l1);
-    strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"line_ok_octant0");
-    Free_Image(tst);
 
-    tst = draw_line_Bresenham(space_back, &l2);
-    strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"line_ok_octant-1");
-    Free_Image(tst);
+    //red line in the octant 8
+    tst2 = draw_line_Bresenham(tst, &l2);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"line_bresenham");
 
+    Free_Image(tst);
+    Free_Image(tst2);
     Free_Image(space_back);
 
     return;
