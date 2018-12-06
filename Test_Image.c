@@ -25,6 +25,7 @@ void Tst_System_04(void);
 void Tst_Embed_complete(void);
 void Tst_Embed_cropped(void);
 void Tst_Embed_alpha(void);
+void Tst_draw_line(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -32,18 +33,13 @@ void Tst_Embed_alpha(void);
 int main(void)
 {
     //Tst_System_01();
-
     //Tst_System_02();
-
     //Tst_System_03();
-
     //Tst_System_04();
-
     //Tst_Embed_complete();
-
-    Tst_Embed_cropped();
-
-    Tst_Embed_alpha();
+    //Tst_Embed_cropped();
+    //Tst_Embed_alpha();
+    Tst_draw_line();
 
     return 0;
 }
@@ -191,7 +187,7 @@ void Tst_Embed_complete(void)
     image *  tst=NULL, *ship=NULL, *space_back=NULL;
 
     printf("\n--- Test Embed Complete -----------------------------------------------------\n\n");
-    ship = Lire_Image("Test", "_Enterprise");
+    ship = Lire_Image("Test", "Enterprise");
     space_back = Lire_Image("Test", "Field");
 
     tst = embed_image(ship, space_back, 0, 0, 1.0);
@@ -208,6 +204,9 @@ void Tst_Embed_complete(void)
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"embed_vertical");
     Free_Image(tst);
+
+    Free_Image(ship);
+    Free_Image(space_back);
 
     return;
 }
@@ -250,6 +249,9 @@ void Tst_Embed_cropped(void)
     Ecrire_Image(tst,"fully_out");
     Free_Image(tst);
 
+    Free_Image(ship);
+    Free_Image(space_back);
+
     return;
 }
 
@@ -285,6 +287,38 @@ void Tst_Embed_alpha(void)
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"alpha_transparent");
     Free_Image(tst);
+
+    Free_Image(ship);
+    Free_Image(space_back);
+
+    return;
+}
+
+/****************************************************************************************
+* Tst_draw_line : Drawing a line on an image
+*
+* Purpose : testing that lines are drawn properly
+****************************************************************************************/
+void Tst_draw_line(void)
+{
+    image *  tst=NULL, *space_back=NULL;
+    uchar *colour = NULL;
+
+    printf("\n--- Test Draw Line -----------------------------------------------------\n\n");
+    space_back = Lire_Image("Test", "Field");
+    colour = Get_Color(ROUGE, NIVEAU_8);
+
+    tst = draw_line_Bresenham(20, 30, 200, 300, colour, space_back);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"line_ok_octant0");
+    Free_Image(tst);
+
+    tst = draw_line_Bresenham(200, 300, 20, 30, colour, space_back);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"line_ok_octant-1");
+    Free_Image(tst);
+
+    Free_Image(space_back);
 
     return;
 }
