@@ -301,19 +301,19 @@ void Tst_Embed_alpha(void)
 ****************************************************************************************/
 void Tst_draw_line(void)
 {
-    image *  tst=NULL, *space_back=NULL;
-    uchar *colour = NULL;
+    image * tst=NULL, *space_back=NULL;
+    line l1 = {20, 30, 200, 300, ROUGE, NIVEAU_8, 1.0};
+    line l2 = {20, 300, 200, 30, ROUGE, NIVEAU_8, 1.0};
 
     printf("\n--- Test Draw Line -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
-    colour = Get_Color(ROUGE, NIVEAU_8);
 
-    tst = draw_line_Bresenham(20, 30, 200, 300, colour, space_back);
+    tst = draw_line_Bresenham(space_back, &l1);
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"line_ok_octant0");
     Free_Image(tst);
 
-    tst = draw_line_Bresenham(200, 300, 20, 30, colour, space_back);
+    tst = draw_line_Bresenham(space_back, &l2);
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"line_ok_octant-1");
     Free_Image(tst);

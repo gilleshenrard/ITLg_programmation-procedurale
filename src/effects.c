@@ -85,53 +85,55 @@ image* embed_image(image* overlay, image* background, uint x, uint y, float alph
 /*      x coordinate of the pixel                                                       */
 /*      y coordinate of the pixel                                                       */
 /*      colour to assign                                                                */
+/*      transparency factor                                                             */
 /*  P : sets a pixel at a particular colour in a picture without creating a copy        */
-/*  O :  0 if OK                                                                        */
+/*  O :  1 if OK                                                                        */
+/*       0 if ignored                                                                   */
 /*      -1 if error                                                                     */
 /****************************************************************************************/
 /*  WARNING : function much likely to be used in a loop, therefore uses the original    */
 /*              picture instead of creating a copy                                      */
 /****************************************************************************************/
-int set_pixel(image* img, uint x, uint y, uchar *colour){
+int set_pixel_rgba(image* img, uint x, uint y, int colour, int intensity, float alpha){
+    uchar* col = NULL;
+
     if(!is_in_frame(x, y, img))
-        return -1;
+        return 0;
+
+    col = Get_Color(colour, intensity);
 
     for(int i=0 ; i<3 ; i++)
-        img->pic[x][y][i] = colour[i];
+        img->pic[x][y][i] = (col[i]*alpha) + (img->pic[x][y][i] * (1.0-alpha));
 
-    return 0;
+    return 1;
 }
 
 /****************************************************************************************/
-/*  I : x coordinate of the point A                                                     */
-/*      y coordinate of the point A                                                     */
-/*      x coordinate of the point B                                                     */
-/*      x coordinate of the point B                                                     */
-/*      colour of the line                                                              */
-/*      original image in the copy of which draw a line                                 */
+/*  I : original image in the copy of which draw a line                                 */
+/*      metadata of the line to draw                                                    */
 /*  P : Creates a copy of the image and draws a line in it (using Bresenham's algo)     */
 /*  O : resulting image of the embedding                                                */
 /*      NULL if error                                                                   */
 /****************************************************************************************/
-image* draw_line_Bresenham(uint xa, uint ya, uint xb, uint yb, uchar *colour, image *original){
+image* draw_line_Bresenham(image* original, line* l){
     image *buffer = NULL;
-    uint deltaX = abs(xa - xb), deltaY = abs(ya - yb);
+    uint deltaX = abs(l->xa - l->xb), deltaY = abs(l->ya - l->yb);
     uint p = 2 * deltaY - deltaX;
     uint x, y, xEnd;
 
     buffer = copy_image(original);
 
-    if (xa > xb){
-        x = xb;
-        y = yb;
-        xEnd = xa;
+    if (l->xa > l->xb){
+        x = l->xb;
+        y = l->yb;
+        xEnd = l->xa;
     }else{
-        x = xa;
-        y = ya;
-        xEnd = xb;
+        x = l->xa;
+        y = l->ya;
+        xEnd = l->xb;
     }
 
-    set_pixel(buffer, x, y, colour);
+    set_pixel_rgba(buffer, x, y, l->colour, l->intensity, l->alpha);
 
     while(x < xEnd){
         x++;
@@ -141,7 +143,7 @@ image* draw_line_Bresenham(uint xa, uint ya, uint xb, uint yb, uchar *colour, im
             y++;
             p += 2 * (deltaY - deltaX);
         }
-        set_pixel(buffer, x, y, colour);
+        set_pixel_rgba(buffer, x, y, l->colour, l->intensity, l->alpha);
     }
 
     return buffer;
