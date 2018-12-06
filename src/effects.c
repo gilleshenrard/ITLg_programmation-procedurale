@@ -66,7 +66,7 @@ image* embed_image(image* overlay, image* background, uint x, uint y, float alph
     for(uint i=0 ; i<background->header.hauteur ; i++){
         for(uint j=0 ; j<background->header.largeur ; j++){
             //if the pixel is to be replaced by the overlay corresponding pixel
-            if(is_in_frame(i-y, j-x, overlay) && !is_white_pixel(i-y, j-x, overlay)){
+            if(is_in_frame(i-y, j-x, overlay) && !is_dummy_pixel(i-y, j-x, overlay)){
                 for(int k=0 ; k<3 ; k++)
                     buffer->pic[i][j][k] = (overlay->pic[i-y][j-x][k] * alpha) + (background->pic[i][j][k] * (1.0-alpha));
             }

@@ -371,8 +371,10 @@ int is_in_frame(uint x, uint y, image* frame){
 /*  O : 1 if the pixel is white                                                         */
 /*      0 otherwise                                                                     */
 /****************************************************************************************/
-int is_white_pixel(uint x, uint y, image* frame){
-    return frame->pic[x][y][0]==255 && frame->pic[x][y][1]==255 && frame->pic[x][y][2]==255;
+int is_dummy_pixel(uint x, uint y, image* frame){
+    uchar* colour = Get_Color(BLUE_SCREEN, NIVEAU_8);
+
+    return frame->pic[x][y][0]==colour[0] && frame->pic[x][y][1]==colour[1] && frame->pic[x][y][2]==colour[2];
 }
 
 /****************************************************************************************/

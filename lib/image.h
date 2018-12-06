@@ -12,6 +12,8 @@
 
 #define FIC_NM 80
 
+#define BLUE_SCREEN BLANC
+
 #define PHOTO_DIR ".\\Films\\"
 
 typedef enum
@@ -86,7 +88,7 @@ uchar * Get_Color(int col, int niv);
 void Initialiser_Image(image * img, uchar * color);
 
 int is_in_frame(uint x, uint y, image* frame);
-int is_white_pixel(uint x, uint y, image* frame);
+int is_dummy_pixel(uint x, uint y, image* frame);
 image* copy_image(image* original);
 
 #endif // IMAGE_H_INCLUDED
