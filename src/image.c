@@ -317,13 +317,20 @@ uchar * Get_Color(int col, int niv)
     static uchar c[3];
 
     uchar col_base[8][3]={
-    {0,0,0},{255,255,255},                 // Noir, Blanc
-    {255,0,0},{0,255,0},{0,0,255},         // Bleu, Vert, Rouge
-    {0,255,255},{255,255,0},{255,0,255}};  // Jaune, Cyan, Magenta
+        {0,0,0},            //noir
+        {255,255,255},      // Blanc
+        {255,0,0},          //bleu
+        {0,255,0},          //vert
+        {0,0,255},          //Rouge
+        {0,255,255},        //jaune
+        {255,255,0},        //cyan
+        {255,0,255}         //magenta
+    };
 
     uchar niveau[8]={224,192,160,128,96,64,32,0};
 
-    for (i=0;i<3;i++) c[i] = col_base[col][i] == 0 ? niveau[niv] : col_base[col][i];
+    for (i=0;i<3;i++)
+        c[i] = (col_base[col][i] == 0 ? niveau[niv] : col_base[col][i]);
 
     return c;
 }
