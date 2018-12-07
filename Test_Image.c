@@ -26,6 +26,7 @@ void Tst_Embed_complete(void);
 void Tst_Embed_cropped(void);
 void Tst_Embed_alpha(void);
 void Tst_draw_line(void);
+void Tst_draw_line_cropped(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -40,6 +41,7 @@ int main(void)
     //Tst_Embed_cropped();
     //Tst_Embed_alpha();
     Tst_draw_line();
+    //Tst_draw_line_cropped();
 
     return 0;
 }
@@ -299,19 +301,78 @@ void Tst_Embed_alpha(void)
 void Tst_draw_line(void)
 {
     image *tst=NULL, *tst2=NULL, *space_back=NULL;
-    line l1 = {20, 30, 200, 300, BLEU, NIVEAU_8, 1.0};
-    line l2 = {20, 300, 200, 30, ROUGE, NIVEAU_8, 1.0};
+    line l1 = {10, 10, 400, 490, BLEU, NIVEAU_8, 1.0};
+    line l2 = {10, 490, 400, 10, ROUGE, NIVEAU_8, 1.0};
+    line l3 = {790, 10, 400, 490, JAUNE, NIVEAU_8, 1.0};
+    line l4 = {790, 490, 400, 10, VERT, NIVEAU_8, 1.0};
 
     printf("\n--- Test Draw Line -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
 
-    //blue line in the octant 0
+    //blue line going to top right
     tst = draw_line_Bresenham(space_back, &l1);
 
-    //red line in the octant 8
+    //red line going to bottom right
     tst2 = draw_line_Bresenham(tst, &l2);
+    Free_Image(tst);
+
+    //yellow line going to top left
+    tst = draw_line_Bresenham(tst2, &l3);
+    Free_Image(tst2);
+
+    //green line going to bottom left
+    tst2 = draw_line_Bresenham(tst, &l4);
+
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"line_bresenham");
+
+    Free_Image(tst);
+    Free_Image(tst2);
+    Free_Image(space_back);
+
+    return;
+}
+
+/****************************************************************************************
+* Tst_draw_line_cropped : Drawing a line which gets out of the image
+*
+* Purpose : testing that parts out of the picture are well ignored
+****************************************************************************************/
+void Tst_draw_line_cropped(void)
+{
+    image *tst=NULL, *tst2=NULL, *space_back=NULL;
+    line l1 = {400, 250, 900, 250, BLEU, NIVEAU_8, 1.0};
+    line l2 = {10, 600, 900, 700, ROUGE, NIVEAU_8, 1.0};
+    line l3 = {-100, 200, 900, 300, JAUNE, NIVEAU_8, 1.0};
+    //line l4 = {400, -100, 500, 600, VERT, NIVEAU_8, 1.0};
+    //line l5 = {-100, -100, 900, -50, MAGENTA, NIVEAU_8, 1.0};
+
+    printf("\n--- Test Draw Line Cropped -----------------------------------------------------\n\n");
+    space_back = Lire_Image("Test", "Field");
+
+    //blue line getting off the image on the right side
+    tst = draw_line_Bresenham(space_back, &l1);
+
+    //red line completely off the image (coordinates >0)
+    tst2 = draw_line_Bresenham(tst, &l2);
+    Free_Image(tst);
+
+    printf("\nyellow line");
+    //yellow line crossing image on left and right side
+    tst = draw_line_Bresenham(tst2, &l3);
+    Free_Image(tst2);
+
+    printf("\ngreen line");
+    //green line crossing image on top and bottom side
+    //tst2 = draw_line_Bresenham(tst, &l4);
+    //Free_Image(tst);
+
+    printf("\nmagenta line");
+    //magenta line completely off the image (coordinates  <0)
+    //tst = draw_line_Bresenham(tst2, &l5);
+
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"line_bresenham_cropped");
 
     Free_Image(tst);
     Free_Image(tst2);

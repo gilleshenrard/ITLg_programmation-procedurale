@@ -103,7 +103,7 @@ int set_pixel_rgba(image* img, uint x, uint y, int colour, int intensity, float 
     col = Get_Color(colour, intensity);
 
     for(int i=0 ; i<3 ; i++)
-        img->pic[x][y][i] = (col[i]*alpha) + (img->pic[x][y][i] * (1.0-alpha));
+        img->pic[y][x][i] = (col[i]*alpha) + (img->pic[y][x][i] * (1.0-alpha));
 
     return 1;
 }
@@ -117,33 +117,79 @@ int set_pixel_rgba(image* img, uint x, uint y, int colour, int intensity, float 
 /****************************************************************************************/
 image* draw_line_Bresenham(image* original, line* l){
     image *buffer = NULL;
-    uint deltaX = abs(l->xa - l->xb), deltaY = abs(l->ya - l->yb);
-    uint p = 2 * deltaY - deltaX;
-    uint x, y, xEnd;
+    signed int primA, primB, secA, secB;
+    signed int deltaPrim, deltaSec;
+    signed int primI, d, primInc;
+    char Yprioritised = 0;
 
     buffer = copy_image(original);
 
-    if (l->xa > l->xb){
-        x = l->xb;
-        y = l->yb;
-        xEnd = l->xa;
-    }else{
-        x = l->xa;
-        y = l->ya;
-        xEnd = l->xb;
+    //sorting which coordinate (x or y) is the primary and which is the secondary
+    //      depending on the octant of the line
+    if(abs(l->yb - l->ya) < abs(l->xb - l->xa)){
+        if(l->xa > l->xb){
+            //plotLineLow(xb, yb, xa, ya)
+            primA = l->yb;
+            primB = l->ya;
+            secA = l->xb;
+            secB = l->xa;
+        }
+        else{
+            //plotLineLow(xa, ya, xb, yb)
+            primA = l->ya;
+            primB = l->yb;
+            secA = l->xa;
+            secB = l->xb;
+        }
+        Yprioritised = 1;
+    }
+    else{
+        if(l->ya > l->yb){
+            //plotLineHigh(xb, yb, xa, ya)
+            //bottom right + bottom right
+            primA = l->xb;
+            primB = l->xa;
+            secA = l->yb;
+            secB = l->ya;
+        }
+        else{
+            //plotLineHigh(xa, ya, xb, yb)
+            //top right + top left
+            primA = l->xa;
+            primB = l->xb;
+            secA = l->ya;
+            secB = l->yb;
+        }
     }
 
-    set_pixel_rgba(buffer, x, y, l->colour, l->intensity, l->alpha);
+    //defining deltas (equivalent of dx and dy, prioritised)
+    deltaPrim = primB - primA;
+    deltaSec = secB - secA;
 
-    while(x < xEnd){
-        x++;
-        if(p < 0)
-            p += 2 * deltaY;
-        else{
-            y++;
-            p += 2 * (deltaY - deltaX);
+    //defining slope increment
+    primI = 1;
+    if(deltaPrim < 0){
+        primI = -1;
+        deltaPrim = -deltaPrim;
+    }
+
+    //preparing resolution factor and increment variables
+    d = 2*deltaPrim - deltaSec;
+    primInc = primA;
+
+
+    for(uint secInc=secA ; secInc<secB ; secInc++){
+        //draw pixel depending on which coordinate has been set as primary
+        if(Yprioritised)
+            set_pixel_rgba(buffer, secInc, primInc, l->colour, l->intensity, l->alpha);
+        else
+            set_pixel_rgba(buffer, primInc, secInc, l->colour, l->intensity, l->alpha);
+
+        if(d > 0){
+            primInc += primI;
+            d = d - (2*deltaSec);
         }
-        set_pixel_rgba(buffer, x, y, l->colour, l->intensity, l->alpha);
+        d = d + (2*deltaPrim);
     }
 
     return buffer;
