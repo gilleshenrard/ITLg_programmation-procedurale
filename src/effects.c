@@ -194,3 +194,98 @@ image* draw_line_Bresenham(image* original, line* l){
 
     return buffer;
 }
+
+/****************************************************************************************/
+/*  I : original image in the copy of which draw a line                                 */
+/*      metadata of the line to draw                                                    */
+/*  P : Creates a copy of the image and draws a line in it (using Bresenham's algo)     */
+/*  O : resulting image of the embedding                                                */
+/*      NULL if error                                                                   */
+/****************************************************************************************/
+image* draw_line_Wu(image* original, line* l){
+    image* buffer = NULL;
+    int x0=l->xa, x1=l->xb, y0=l->ya, y1=l->yb;
+    int steep, tmp;
+    float dx = (float)x1 - (float)x0;
+    float dy = (float)y1 - (float)y0;
+    float gradient, intersectY, fracPartY;
+
+    //copy the image and draw the first pixel
+    buffer = copy_image(original);
+    set_pixel_rgba(buffer, l->xa, l->ya, l->colour, l->intensity, l->alpha);
+
+    //horizontal line
+    if(!dy){
+        while(dx){
+            x0 = (x0<x1 ? x0+1 : x0-1);
+            set_pixel_rgba(buffer, x0, y0, l->colour, l->intensity, l->alpha);
+            dx--;
+        }
+        return buffer;
+    }
+
+    //vertical line
+    if(!dx){
+        while(dy){
+            y0 = (y0<y1 ? y0+1 : y0-1);
+            set_pixel_rgba(buffer, x0, y0, l->colour, l->intensity, l->alpha);
+            dy--;
+        }
+        return buffer;
+    }
+
+    //diagonal line
+    if(dx == dy){
+        while(dx){
+             x0 = (x0<x1 ? x0+1 : x0-1);
+             y0 = (y0<y1 ? y0+1 : y0-1);
+             set_pixel_rgba(buffer, x0, y0, l->colour, l->intensity, l->alpha);
+             dx--;
+        }
+        return buffer;
+    }
+
+    // swap the co-ordinates if slope > 1
+    steep = abs(dy)>abs(dx);
+    if (steep){
+        tmp = x0; x0 = y0; y0 = tmp;
+        tmp = x1; x1 = y1; y1 = tmp;
+    }
+
+    // swap the co-ordinates if we draw backwards
+    if (x0 > x1){
+        tmp = x0; x0 = x1; x1 = tmp;
+        tmp = y1; y1 = y0; y0 = tmp;
+    }
+
+    //compute the slope
+    dx = (float)x1 - (float)x0;
+    dy = (float)y1 - (float)y0;
+    gradient = dy/dx;
+    if (dx == 0.0)
+        gradient = 1;
+    intersectY=y0;
+
+    // main loop
+    for (uint x = x0 ; x <= x1 ; x++)
+    {
+        fracPartY = (intersectY>0 ? intersectY-(int)intersectY : intersectY-((int)intersectY+1));
+
+        if (steep)
+        {
+            // pixel coverage is determined by fractional part of y co-ordinate
+            set_pixel_rgba(buffer, (int)intersectY, x, l->colour, l->intensity, (1.0-fracPartY)*l->alpha);
+            set_pixel_rgba(buffer, (int)intersectY, x+1, l->colour, l->intensity, fracPartY*l->alpha);
+
+        }
+        else
+        {
+            // pixel coverage is determined by fractional part of y co-ordinate
+            set_pixel_rgba(buffer, x, (int)intersectY, l->colour, l->intensity, (1-fracPartY)*l->alpha);
+            set_pixel_rgba(buffer, x, (int)intersectY+1, l->colour, l->intensity, fracPartY*l->alpha);
+        }
+        intersectY += gradient;
+    }
+
+    return buffer;
+}
