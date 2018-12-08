@@ -41,7 +41,7 @@ int main(void)
     //Tst_Embed_complete();
     //Tst_Embed_cropped();
     //Tst_Embed_alpha();
-    Tst_draw_line_Bresenham();
+    //Tst_draw_line_Bresenham();
     //Tst_draw_line_Bresenham_cropped();
     Tst_draw_line_Wu();
 
