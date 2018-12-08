@@ -10,6 +10,7 @@ typedef struct{
     int colour;
     int intensity;
     float alpha;
+    char antialiasing;
 } line;
 
 void Filtrer_Noir_Blanc(image * img);
@@ -17,7 +18,11 @@ void Damier(image * img);
 
 image* embed_image(image* overlay, image* background, uint x, uint y, float alpha);
 int set_pixel_rgba(image* img, uint x, uint y, int colour, int intensity, float alpha);
-image* draw_line_Bresenham(image *original, line* l);
-image* draw_line_Wu(image* original, line* l);
+int draw_line_vertical(image* img, line* l);
+int draw_line_horizontal(image* img, line* l);
+int draw_line_diagonal(image* img, line* l);
+int draw_line_Bresenham(image *img, line* l);
+int draw_line_Wu(image* img, line* l);
+int draw_line_generic(image* img, line* l);
 
 #endif // EFFECTS_H_INCLUDED

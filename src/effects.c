@@ -109,20 +109,85 @@ int set_pixel_rgba(image* img, uint x, uint y, int colour, int intensity, float 
 }
 
 /****************************************************************************************/
-/*  I : original image in the copy of which draw a line                                 */
+/*  I : Image in which to draw a line                                                   */
 /*      metadata of the line to draw                                                    */
-/*  P : Creates a copy of the image and draws a line in it (using Bresenham's algo)     */
-/*  O : resulting image of the embedding                                                */
-/*      NULL if error                                                                   */
+/*  P : Draws a vertical line in the image                                              */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
 /****************************************************************************************/
-image* draw_line_Bresenham(image* original, line* l){
-    image *buffer = NULL;
+int draw_line_vertical(image* img, line* l){
+    int dx = l->xb - l->xa;
+    int dy = l->yb - l->ya;
+    int y = l->ya;
+
+    if(!dx){
+        while(dy){
+            y = (y < l->yb ? y+1 : y-1);
+            set_pixel_rgba(img, l->xa, y, l->colour, l->intensity, l->alpha);
+            dy--;
+        }
+    }
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : Image in which to draw a line                                                   */
+/*      metadata of the line to draw                                                    */
+/*  P : Draws a horizontal line in the image                                            */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
+/****************************************************************************************/
+int draw_line_horizontal(image* img, line* l){
+    int dx = l->xb - l->xa;
+    int dy = l->yb - l->ya;
+    int x = l->xa;
+
+    if(!dy){
+        while(dx){
+            x = (x < l->xb ? x+1 : x-1);
+            set_pixel_rgba(img, x, l->ya, l->colour, l->intensity, l->alpha);
+            dx--;
+        }
+    }
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : Image in which to draw a line                                                   */
+/*      metadata of the line to draw                                                    */
+/*  P : Draws a diagonal line in the image                                              */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
+/****************************************************************************************/
+int draw_line_diagonal(image* img, line* l){
+    int dx = l->xb - l->xa;
+    int dy = l->yb - l->ya;
+    int x = l->xa;
+    int y = l->ya;
+
+    if(dx == dy){
+        while(dx){
+             x = (x < l->xb ? x+1 : x-1);
+             y = (y < l->yb ? y+1 : y-1);
+             set_pixel_rgba(img, x, y, l->colour, l->intensity, l->alpha);
+             dx--;
+        }
+    }
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : Image in which to draw a line                                                   */
+/*      metadata of the line to draw                                                    */
+/*  P : Draws a line in the image using Bresenham's algorithm (no antialiasing)         */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
+/****************************************************************************************/
+int draw_line_Bresenham(image* img, line* l){
     signed int primA, primB, secA, secB;
     signed int deltaPrim, deltaSec;
     signed int primI, d, primInc;
     char Yprioritised = 0;
-
-    buffer = copy_image(original);
 
     //sorting which coordinate (x or y) is the primary and which is the secondary
     //      depending on the octant of the line
@@ -181,9 +246,9 @@ image* draw_line_Bresenham(image* original, line* l){
     for(uint secInc=secA ; secInc<secB ; secInc++){
         //draw pixel depending on which coordinate has been set as primary
         if(Yprioritised)
-            set_pixel_rgba(buffer, secInc, primInc, l->colour, l->intensity, l->alpha);
+            set_pixel_rgba(img, secInc, primInc, l->colour, l->intensity, l->alpha);
         else
-            set_pixel_rgba(buffer, primInc, secInc, l->colour, l->intensity, l->alpha);
+            set_pixel_rgba(img, primInc, secInc, l->colour, l->intensity, l->alpha);
 
         if(d > 0){
             primInc += primI;
@@ -192,58 +257,22 @@ image* draw_line_Bresenham(image* original, line* l){
         d = d + (2*deltaPrim);
     }
 
-    return buffer;
+    return 0;
 }
 
 /****************************************************************************************/
-/*  I : original image in the copy of which draw a line                                 */
+/*  I : Image in which to draw a line                                                   */
 /*      metadata of the line to draw                                                    */
-/*  P : Creates a copy of the image and draws a line in it (using Bresenham's algo)     */
-/*  O : resulting image of the embedding                                                */
-/*      NULL if error                                                                   */
+/*  P : Draws a line in the image using Xiaolin Wu's algorithm (with antialiasing)      */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
 /****************************************************************************************/
-image* draw_line_Wu(image* original, line* l){
-    image* buffer = NULL;
+int draw_line_Wu(image* img, line* l){
     int x0=l->xa, x1=l->xb, y0=l->ya, y1=l->yb;
     int steep, tmp;
     float dx = (float)x1 - (float)x0;
     float dy = (float)y1 - (float)y0;
     float gradient, intersectY, fracPartY;
-
-    //copy the image and draw the first pixel
-    buffer = copy_image(original);
-    set_pixel_rgba(buffer, l->xa, l->ya, l->colour, l->intensity, l->alpha);
-
-    //horizontal line
-    if(!dy){
-        while(dx){
-            x0 = (x0<x1 ? x0+1 : x0-1);
-            set_pixel_rgba(buffer, x0, y0, l->colour, l->intensity, l->alpha);
-            dx--;
-        }
-        return buffer;
-    }
-
-    //vertical line
-    if(!dx){
-        while(dy){
-            y0 = (y0<y1 ? y0+1 : y0-1);
-            set_pixel_rgba(buffer, x0, y0, l->colour, l->intensity, l->alpha);
-            dy--;
-        }
-        return buffer;
-    }
-
-    //diagonal line
-    if(dx == dy){
-        while(dx){
-             x0 = (x0<x1 ? x0+1 : x0-1);
-             y0 = (y0<y1 ? y0+1 : y0-1);
-             set_pixel_rgba(buffer, x0, y0, l->colour, l->intensity, l->alpha);
-             dx--;
-        }
-        return buffer;
-    }
 
     // swap the co-ordinates if slope > 1
     steep = abs(dy)>abs(dx);
@@ -274,18 +303,50 @@ image* draw_line_Wu(image* original, line* l){
         if (steep)
         {
             // pixel coverage is determined by fractional part of y co-ordinate
-            set_pixel_rgba(buffer, (int)intersectY, x, l->colour, l->intensity, (1.0-fracPartY)*l->alpha);
-            set_pixel_rgba(buffer, (int)intersectY, x+1, l->colour, l->intensity, fracPartY*l->alpha);
+            set_pixel_rgba(img, (int)intersectY, x, l->colour, l->intensity, (1.0-fracPartY)*l->alpha);
+            set_pixel_rgba(img, (int)intersectY, x+1, l->colour, l->intensity, fracPartY*l->alpha);
 
         }
         else
         {
             // pixel coverage is determined by fractional part of y co-ordinate
-            set_pixel_rgba(buffer, x, (int)intersectY, l->colour, l->intensity, (1-fracPartY)*l->alpha);
-            set_pixel_rgba(buffer, x, (int)intersectY+1, l->colour, l->intensity, fracPartY*l->alpha);
+            set_pixel_rgba(img, x, (int)intersectY, l->colour, l->intensity, (1-fracPartY)*l->alpha);
+            set_pixel_rgba(img, x, (int)intersectY+1, l->colour, l->intensity, fracPartY*l->alpha);
         }
         intersectY += gradient;
     }
 
-    return buffer;
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : Image in which to draw a line                                                   */
+/*      metadata of the line to draw                                                    */
+/*  P : Sorts which algorithm use to draw a line                                        */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
+/****************************************************************************************/
+int draw_line_generic(image* img, line* l){
+    int dx = l->xb - l->xa;
+    int dy = l->yb - l->ya;
+
+    //draw the very first pixel (in case the length of the line is 1)
+    set_pixel_rgba(img, l->xa, l->ya, l->colour, l->intensity, l->alpha);
+
+    //diagonal line
+    if(dx == dy)
+        return draw_line_diagonal(img, l);
+
+    //horizontal line
+    if(!dy)
+        return draw_line_horizontal(img, l);
+
+    //vertical line
+    if(!dx)
+        return draw_line_vertical(img, l);
+
+    if(l->antialiasing)
+        return draw_line_Wu(img, l);
+    else
+        return draw_line_Bresenham(img, l);
 }

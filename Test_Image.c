@@ -302,7 +302,7 @@ void Tst_Embed_alpha(void)
 ****************************************************************************************/
 void Tst_draw_line_Bresenham(void)
 {
-    image *tst=NULL, *tst2=NULL, *space_back=NULL;
+    image *tst=NULL, *space_back=NULL;
     line l1 = {10, 10, 400, 490, BLEU, NIVEAU_8, 1.0};
     line l2 = {10, 490, 400, 10, ROUGE, NIVEAU_8, 1.0};
     line l3 = {790, 10, 400, 490, JAUNE, NIVEAU_8, 1.0};
@@ -310,26 +310,24 @@ void Tst_draw_line_Bresenham(void)
 
     printf("\n--- Test Draw Line with Bresenham -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
+    tst = copy_image(space_back);
 
     //blue line going to top right
-    tst = draw_line_Bresenham(space_back, &l1);
+    draw_line_Bresenham(tst, &l1);
 
     //red line going to bottom right
-    tst2 = draw_line_Bresenham(tst, &l2);
-    Free_Image(tst);
+    draw_line_Bresenham(tst, &l2);
 
     //yellow line going to top left
-    tst = draw_line_Bresenham(tst2, &l3);
-    Free_Image(tst2);
+    draw_line_Bresenham(tst, &l3);
 
     //green line going to bottom left
-    tst2 = draw_line_Bresenham(tst, &l4);
+    draw_line_Bresenham(tst, &l4);
 
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"line_bresenham");
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"line_bresenham");
 
     Free_Image(tst);
-    Free_Image(tst2);
     Free_Image(space_back);
 
     return;
@@ -342,7 +340,7 @@ void Tst_draw_line_Bresenham(void)
 ****************************************************************************************/
 void Tst_draw_line_Bresenham_cropped(void)
 {
-    image *tst=NULL, *tst2=NULL, *space_back=NULL;
+    image *tst=NULL, *space_back=NULL;
     line l1 = {400, 250, 900, 250, BLEU, NIVEAU_8, 1.0};
     line l2 = {10, 600, 900, 700, ROUGE, NIVEAU_8, 1.0};
     line l3 = {-100, 200, 900, 300, JAUNE, NIVEAU_8, 1.0};
@@ -351,33 +349,27 @@ void Tst_draw_line_Bresenham_cropped(void)
 
     printf("\n--- Test Draw Line Cropped with Bresenham -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
+    tst = copy_image(space_back);
 
     //blue line getting off the image on the right side
-    tst = draw_line_Bresenham(space_back, &l1);
+    draw_line_Bresenham(tst, &l1);
 
     //red line completely off the image (coordinates >0)
-    tst2 = draw_line_Bresenham(tst, &l2);
-    Free_Image(tst);
+    draw_line_Bresenham(tst, &l2);
 
-    printf("\nyellow line");
     //yellow line crossing image on left and right side
-    tst = draw_line_Bresenham(tst2, &l3);
-    Free_Image(tst2);
+    draw_line_Bresenham(tst, &l3);
 
-    printf("\ngreen line");
     //green line crossing image on top and bottom side
-    //tst2 = draw_line_Bresenham(tst, &l4);
-    //Free_Image(tst);
+    //draw_line_Bresenham(tst, &l4);
 
-    printf("\nmagenta line");
     //magenta line completely off the image (coordinates  <0)
-    //tst = draw_line_Bresenham(tst2, &l5);
+    //draw_line_Bresenham(tst, &l5);
 
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"line_bresenham_cropped");
 
     Free_Image(tst);
-    Free_Image(tst2);
     Free_Image(space_back);
 
     return;
@@ -390,7 +382,7 @@ void Tst_draw_line_Bresenham_cropped(void)
 ****************************************************************************************/
 void Tst_draw_line_Wu(void)
 {
-    image *tst=NULL, *tst2=NULL, *space_back=NULL;
+    image *tst=NULL, *space_back=NULL;
     line l1 = {10, 10, 400, 490, BLEU, NIVEAU_8, 1.0};
     line l2 = {10, 490, 400, 10, ROUGE, NIVEAU_8, 1.0};
     line l3 = {790, 10, 400, 490, JAUNE, NIVEAU_8, 1.0};
@@ -398,26 +390,24 @@ void Tst_draw_line_Wu(void)
 
     printf("\n--- Test Draw Line with Wu -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
+    tst = copy_image(space_back);
 
     //blue line going to top right
-    tst = draw_line_Wu(space_back, &l1);
+    draw_line_Wu(tst, &l1);
 
     //red line going to bottom right
-    tst2 = draw_line_Wu(tst, &l2);
-    Free_Image(tst);
+    draw_line_Wu(tst, &l2);
 
     //yellow line going to top left
-    tst = draw_line_Wu(tst2, &l3);
-    Free_Image(tst2);
+    draw_line_Wu(tst, &l3);
 
     //green line going to bottom left
-    tst2 = draw_line_Wu(tst, &l4);
+    draw_line_Wu(tst, &l4);
 
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"line_wu");
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"line_wu");
 
     Free_Image(tst);
-    Free_Image(tst2);
     Free_Image(space_back);
 
     return;
