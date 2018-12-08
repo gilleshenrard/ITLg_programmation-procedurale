@@ -25,8 +25,9 @@ void Tst_System_04(void);
 void Tst_Embed_complete(void);
 void Tst_Embed_cropped(void);
 void Tst_Embed_alpha(void);
-void Tst_draw_line(void);
-void Tst_draw_line_cropped(void);
+void Tst_draw_line_Bresenham(void);
+void Tst_draw_line_Bresenham_cropped(void);
+void Tst_draw_line_Wu(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -40,8 +41,9 @@ int main(void)
     //Tst_Embed_complete();
     //Tst_Embed_cropped();
     //Tst_Embed_alpha();
-    Tst_draw_line();
-    //Tst_draw_line_cropped();
+    Tst_draw_line_Bresenham();
+    //Tst_draw_line_Bresenham_cropped();
+    Tst_draw_line_Wu();
 
     return 0;
 }
@@ -294,11 +296,11 @@ void Tst_Embed_alpha(void)
 }
 
 /****************************************************************************************
-* Tst_draw_line : Drawing a line on an image
+* Tst_draw_line_Bresenham : Drawing a line on an image
 *
-* Purpose : testing that lines are drawn properly
+* Purpose : testing that lines are drawn properly with Bresenham's algo
 ****************************************************************************************/
-void Tst_draw_line(void)
+void Tst_draw_line_Bresenham(void)
 {
     image *tst=NULL, *tst2=NULL, *space_back=NULL;
     line l1 = {10, 10, 400, 490, BLEU, NIVEAU_8, 1.0};
@@ -306,7 +308,7 @@ void Tst_draw_line(void)
     line l3 = {790, 10, 400, 490, JAUNE, NIVEAU_8, 1.0};
     line l4 = {790, 490, 400, 10, VERT, NIVEAU_8, 1.0};
 
-    printf("\n--- Test Draw Line -----------------------------------------------------\n\n");
+    printf("\n--- Test Draw Line with Bresenham -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
 
     //blue line going to top right
@@ -334,11 +336,11 @@ void Tst_draw_line(void)
 }
 
 /****************************************************************************************
-* Tst_draw_line_cropped : Drawing a line which gets out of the image
+* Tst_draw_line_Bresenham_cropped : Drawing a line which gets out of the image
 *
 * Purpose : testing that parts out of the picture are well ignored
 ****************************************************************************************/
-void Tst_draw_line_cropped(void)
+void Tst_draw_line_Bresenham_cropped(void)
 {
     image *tst=NULL, *tst2=NULL, *space_back=NULL;
     line l1 = {400, 250, 900, 250, BLEU, NIVEAU_8, 1.0};
@@ -347,7 +349,7 @@ void Tst_draw_line_cropped(void)
     //line l4 = {400, -100, 500, 600, VERT, NIVEAU_8, 1.0};
     //line l5 = {-100, -100, 900, -50, MAGENTA, NIVEAU_8, 1.0};
 
-    printf("\n--- Test Draw Line Cropped -----------------------------------------------------\n\n");
+    printf("\n--- Test Draw Line Cropped with Bresenham -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
 
     //blue line getting off the image on the right side
@@ -373,6 +375,46 @@ void Tst_draw_line_cropped(void)
 
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"line_bresenham_cropped");
+
+    Free_Image(tst);
+    Free_Image(tst2);
+    Free_Image(space_back);
+
+    return;
+}
+
+/****************************************************************************************
+* Tst_draw_line_Wu : Drawing a line on an image
+*
+* Purpose : testing that lines are drawn properly with Xiaolin Wu's algo
+****************************************************************************************/
+void Tst_draw_line_Wu(void)
+{
+    image *tst=NULL, *tst2=NULL, *space_back=NULL;
+    line l1 = {10, 10, 400, 490, BLEU, NIVEAU_8, 1.0};
+    line l2 = {10, 490, 400, 10, ROUGE, NIVEAU_8, 1.0};
+    line l3 = {790, 10, 400, 490, JAUNE, NIVEAU_8, 1.0};
+    line l4 = {790, 490, 400, 10, VERT, NIVEAU_8, 1.0};
+
+    printf("\n--- Test Draw Line with Wu -----------------------------------------------------\n\n");
+    space_back = Lire_Image("Test", "Field");
+
+    //blue line going to top right
+    tst = draw_line_Wu(space_back, &l1);
+
+    //red line going to bottom right
+    tst2 = draw_line_Wu(tst, &l2);
+    Free_Image(tst);
+
+    //yellow line going to top left
+    tst = draw_line_Wu(tst2, &l3);
+    Free_Image(tst2);
+
+    //green line going to bottom left
+    tst2 = draw_line_Wu(tst, &l4);
+
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"line_wu");
 
     Free_Image(tst);
     Free_Image(tst2);
