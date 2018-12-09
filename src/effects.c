@@ -185,11 +185,11 @@ int draw_line_diagonal(image* img, line* l){
 /****************************************************************************************/
 int draw_line_Bresenham(image* img, line* l){
     int x0=l->xa, x1=l->xb, y0=l->ya, y1=l->yb, tmp, x;
-    int dx, dy;
+    int dx=l->xb - l->xa, dy=l->yb - l->ya;
     int steep, slope=1, d;
 
     // swap the co-ordinates if slope > 1
-    steep = abs(l->yb - l->ya) < abs(l->xb - l->xa);
+    steep = abs(dy) < abs(dx);
     if(steep){
         tmp = x0; x0 = y0; y0 = tmp;
         tmp = x1; x1 = y1; y1 = tmp;
