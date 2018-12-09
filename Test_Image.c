@@ -41,8 +41,8 @@ int main(void)
     //Tst_Embed_complete();
     //Tst_Embed_cropped();
     //Tst_Embed_alpha();
-    //Tst_draw_line_Bresenham();
-    //Tst_draw_line_Bresenham_cropped();
+    Tst_draw_line_Bresenham();
+    Tst_draw_line_Bresenham_cropped();
     Tst_draw_line_Wu();
 
     return 0;
@@ -344,8 +344,8 @@ void Tst_draw_line_Bresenham_cropped(void)
     line l1 = {400, 250, 900, 250, BLEU, NIVEAU_8, 1.0};
     line l2 = {10, 600, 900, 700, ROUGE, NIVEAU_8, 1.0};
     line l3 = {-100, 200, 900, 300, JAUNE, NIVEAU_8, 1.0};
-    //line l4 = {400, -100, 500, 600, VERT, NIVEAU_8, 1.0};
-    //line l5 = {-100, -100, 900, -50, MAGENTA, NIVEAU_8, 1.0};
+    line l4 = {400, -100, 500, 600, VERT, NIVEAU_8, 1.0};
+    line l5 = {-100, -100, 900, -50, MAGENTA, NIVEAU_8, 1.0};
 
     printf("\n--- Test Draw Line Cropped with Bresenham -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
@@ -361,10 +361,10 @@ void Tst_draw_line_Bresenham_cropped(void)
     draw_line_Bresenham(tst, &l3);
 
     //green line crossing image on top and bottom side
-    //draw_line_Bresenham(tst, &l4);
+    draw_line_Bresenham(tst, &l4);
 
     //magenta line completely off the image (coordinates  <0)
-    //draw_line_Bresenham(tst, &l5);
+    draw_line_Bresenham(tst, &l5);
 
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"line_bresenham_cropped");
