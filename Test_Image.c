@@ -28,6 +28,7 @@ void Tst_Embed_alpha(void);
 void Tst_draw_line_Bresenham(void);
 void Tst_draw_line_Bresenham_cropped(void);
 void Tst_draw_line_Wu(void);
+void Tst_draw_line_Wu_cropped(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -44,6 +45,7 @@ int main(void)
     Tst_draw_line_Bresenham();
     Tst_draw_line_Bresenham_cropped();
     Tst_draw_line_Wu();
+    Tst_draw_line_Wu_cropped();
 
     return 0;
 }
@@ -406,6 +408,48 @@ void Tst_draw_line_Wu(void)
 
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"line_wu");
+
+    Free_Image(tst);
+    Free_Image(space_back);
+
+    return;
+}
+
+/****************************************************************************************
+* Tst_draw_line_Wu_cropped : Drawing a line which gets out of the image
+*
+* Purpose : testing that parts out of the picture are well ignored
+****************************************************************************************/
+void Tst_draw_line_Wu_cropped(void)
+{
+    image *tst=NULL, *space_back=NULL;
+    line l1 = {400, 250, 900, 250, BLEU, NIVEAU_8, 1.0};
+    line l2 = {10, 600, 900, 700, ROUGE, NIVEAU_8, 1.0};
+    line l3 = {-100, 200, 900, 300, JAUNE, NIVEAU_8, 1.0};
+    line l4 = {400, -100, 500, 600, VERT, NIVEAU_8, 1.0};
+    line l5 = {-100, -100, 900, -50, MAGENTA, NIVEAU_8, 1.0};
+
+    printf("\n--- Test Draw Line Cropped with Wu -----------------------------------------------------\n\n");
+    space_back = Lire_Image("Test", "Field");
+    tst = copy_image(space_back);
+
+    //blue line getting off the image on the right side
+    draw_line_Wu(tst, &l1);
+
+    //red line completely off the image (coordinates >0)
+    draw_line_Wu(tst, &l2);
+
+    //yellow line crossing image on left and right side
+    draw_line_Wu(tst, &l3);
+
+    //green line crossing image on top and bottom side
+    draw_line_Wu(tst, &l4);
+
+    //magenta line completely off the image (coordinates  <0)
+    draw_line_Wu(tst, &l5);
+
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"line_wu_cropped");
 
     Free_Image(tst);
     Free_Image(space_back);
