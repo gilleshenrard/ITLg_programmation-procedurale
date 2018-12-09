@@ -275,7 +275,7 @@ int draw_line_Wu(image* img, line* l){
     float gradient, intersectY, fracPartY;
 
     // swap the co-ordinates if slope > 1
-    steep = abs(dy)>abs(dx);
+    steep = abs(dx)>abs(dy);
     if (steep){
         tmp = x0; x0 = y0; y0 = tmp;
         tmp = x1; x1 = y1; y1 = tmp;
