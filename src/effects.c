@@ -184,77 +184,45 @@ int draw_line_diagonal(image* img, line* l){
 /*      -1 if error                                                                     */
 /****************************************************************************************/
 int draw_line_Bresenham(image* img, line* l){
-    signed int primA, primB, secA, secB;
-    signed int deltaPrim, deltaSec;
-    signed int primI, d, primInc;
-    char Yprioritised = 0;
+    int x0=l->xa, x1=l->xb, y0=l->ya, y1=l->yb, tmp, x;
+    int dx, dy;
+    int steep, slope=1, d;
 
-    //sorting which coordinate (x or y) is the primary and which is the secondary
-    //      depending on the octant of the line
-    if(abs(l->yb - l->ya) < abs(l->xb - l->xa)){
-        if(l->xa > l->xb){
-            //plotLineLow(xb, yb, xa, ya)
-            primA = l->yb;
-            primB = l->ya;
-            secA = l->xb;
-            secB = l->xa;
-        }
-        else{
-            //plotLineLow(xa, ya, xb, yb)
-            primA = l->ya;
-            primB = l->yb;
-            secA = l->xa;
-            secB = l->xb;
-        }
-        Yprioritised = 1;
-    }
-    else{
-        if(l->ya > l->yb){
-            //plotLineHigh(xb, yb, xa, ya)
-            //bottom right + bottom right
-            primA = l->xb;
-            primB = l->xa;
-            secA = l->yb;
-            secB = l->ya;
-        }
-        else{
-            //plotLineHigh(xa, ya, xb, yb)
-            //top right + top left
-            primA = l->xa;
-            primB = l->xb;
-            secA = l->ya;
-            secB = l->yb;
-        }
+    // swap the co-ordinates if slope > 1
+    steep = abs(l->yb - l->ya) < abs(l->xb - l->xa);
+    if(steep){
+        tmp = x0; x0 = y0; y0 = tmp;
+        tmp = x1; x1 = y1; y1 = tmp;
     }
 
-    //defining deltas (equivalent of dx and dy, prioritised)
-    deltaPrim = primB - primA;
-    deltaSec = secB - secA;
-
-    //defining slope increment
-    primI = 1;
-    if(deltaPrim < 0){
-        primI = -1;
-        deltaPrim = -deltaPrim;
+    // swap the co-ordinates if we draw backwards
+    if (y0 > y1){
+        tmp = x0; x0 = x1; x1 = tmp;
+        tmp = y1; y1 = y0; y0 = tmp;
     }
 
-    //preparing resolution factor and increment variables
-    d = 2*deltaPrim - deltaSec;
-    primInc = primA;
+    dx = x1 - x0;
+    dy = y1 - y0;
 
+    if(dx < 0){
+        slope = -1;
+        dx = -dx;
+    }
 
-    for(uint secInc=secA ; secInc<secB ; secInc++){
-        //draw pixel depending on which coordinate has been set as primary
-        if(Yprioritised)
-            set_pixel_rgba(img, secInc, primInc, l->colour, l->intensity, l->alpha);
+    d = 2*dx - dy;
+    x = x0;
+
+    for(int y=y0 ; y<y1 ; y++){
+        if(steep)
+            set_pixel_rgba(img, y, x, l->colour, l->intensity, l->alpha);
         else
-            set_pixel_rgba(img, primInc, secInc, l->colour, l->intensity, l->alpha);
+            set_pixel_rgba(img, x, y, l->colour, l->intensity, l->alpha);
 
         if(d > 0){
-            primInc += primI;
-            d = d - (2*deltaSec);
+            x += slope;
+            d -= 2*dy;
         }
-        d = d + (2*deltaPrim);
+        d += 2*dx;
     }
 
     return 0;
