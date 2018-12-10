@@ -41,10 +41,10 @@ int main(void)
     //Tst_Embed_complete();
     //Tst_Embed_cropped();
     //Tst_Embed_alpha();
-    //Tst_draw_line("line_bresenham", 0);
-    //Tst_draw_line("line_wu", 1);
-    //Tst_draw_line_cropped("line_bresenham_cropped", 0);
-    //Tst_draw_line_cropped("line_wu_cropped", 1);
+    Tst_draw_line("line_bresenham", 0);
+    Tst_draw_line("line_wu", 1);
+    Tst_draw_line_cropped("line_bresenham_cropped", 0);
+    Tst_draw_line_cropped("line_wu_cropped", 1);
 
     return 0;
 }
@@ -308,7 +308,7 @@ void Tst_Embed_alpha(void)
 void Tst_draw_line(char* filename, char antialiasing)
 {
     image *tst=NULL, *space_back=NULL;
-    line lign = {400, 250, 0, 0, DEF_COL, NIVEAU_8, 1.0, antialiasing};
+    line lign = {400, 250, 0, 0, NULL, 1.0, antialiasing};
     int quarters[4]={BLEU, JAUNE, ROUGE, VERT};
     double angles[24]={0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165,
                        180, 195, 210, 225, 240, 255, 270, 285, 300, 315, 330, 345};
@@ -320,7 +320,7 @@ void Tst_draw_line(char* filename, char antialiasing)
     for(int i=0 ; i<24 ; i++){
         lign.xb = 400 + (int)(200 * cos((angles[i]*M_PI)/180));
         lign.yb = 250 + (int)(200 * sin((angles[i]*M_PI)/180));
-        lign.colour = quarters[i/6];
+        lign.colour = Get_Color(quarters[i/6], NIVEAU_8);
         draw_line_generic(tst, &lign);
     }
 
@@ -341,26 +341,34 @@ void Tst_draw_line(char* filename, char antialiasing)
 void Tst_draw_line_cropped(char* filename, char antialiasing)
 {
     image *tst=NULL, *space_back=NULL;
-    line l1 = {350, 200, 900, 200, BLEU, NIVEAU_8, 1.0, antialiasing};          //horizontal, out on the right
-    line l2 = {10, 600, 900, 700, ROUGE, NIVEAU_8, 1.0, antialiasing};          //completely off the image (>0)
-    line l3 = {-100, 200, 900, 300, JAUNE, NIVEAU_8, 1.0, antialiasing};        //crossing from left to right
-    line l4 = {400, -100, 500, 600, VERT, NIVEAU_8, 1.0, antialiasing};         //crossing from to to bottom
-    line l5 = {-100, -100, 900, -50, MAGENTA, NIVEAU_8, 1.0, antialiasing};     //completely off the image (<0)
-    line l6 = {450, 300, -100, 300, BLEU, NIVEAU_8, 1.0, antialiasing};         //horizontal, out on the left
-    line l7 = {400, 250, 400, 600, MAGENTA, NIVEAU_8, 1.0, antialiasing};       //vertical, out on the top
-    line l8 = {500, 350, 500, -100, MAGENTA, NIVEAU_8, 1.0, antialiasing};      //vertical, out on the bottom
+    line l1 = {350, 200, 900, 200, NULL, 1.0, antialiasing};          //horizontal, out on the right
+    line l2 = {10, 600, 900, 700, NULL, 1.0, antialiasing};          //completely off the image (>0)
+    line l3 = {-100, 200, 900, 300, NULL, 1.0, antialiasing};        //crossing from left to right
+    line l4 = {400, -100, 500, 600, NULL, 1.0, antialiasing};         //crossing from to to bottom
+    line l5 = {-100, -100, 900, -50, NULL, 1.0, antialiasing};     //completely off the image (<0)
+    line l6 = {450, 300, -100, 300, NULL, 1.0, antialiasing};         //horizontal, out on the left
+    line l7 = {400, 250, 400, 600, NULL, 1.0, antialiasing};       //vertical, out on the top
+    line l8 = {500, 350, 500, -100, NULL, 1.0, antialiasing};      //vertical, out on the bottom
 
-    printf("\n--- Test Draw Line Cropped with Bresenham -----------------------------------------------------\n\n");
+    printf("\n--- Test Draw Line Cropped-----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
     tst = copy_image(space_back);
 
+    l1.colour = Get_Color(BLEU, NIVEAU_8);
     draw_line_generic(tst, &l1);
+    l2.colour = Get_Color(ROUGE, NIVEAU_8);
     draw_line_generic(tst, &l2);
+    l3.colour = Get_Color(JAUNE, NIVEAU_8);
     draw_line_generic(tst, &l3);
+    l4.colour = Get_Color(VERT, NIVEAU_8);
     draw_line_generic(tst, &l4);
+    l5.colour = Get_Color(MAGENTA, NIVEAU_8);
     draw_line_generic(tst, &l5);
+    l6.colour = Get_Color(BLEU, NIVEAU_8);
     draw_line_generic(tst, &l6);
+    l7.colour = Get_Color(MAGENTA, NIVEAU_8);
     draw_line_generic(tst, &l7);
+    l8.colour = Get_Color(MAGENTA, NIVEAU_8);
     draw_line_generic(tst, &l8);
 
     strncpy(tst->nom_base, "Test", FIC_NM);

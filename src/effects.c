@@ -86,16 +86,12 @@ int embed_image(image* overlay, image* background, uint x, uint y, float alpha){
 /*  WARNING : function much likely to be used in a loop, therefore uses the original    */
 /*              picture instead of creating a copy                                      */
 /****************************************************************************************/
-int set_pixel_rgba(image* img, uint x, uint y, int colour, int intensity, float alpha){
-    uchar* col = NULL;
-
+int set_pixel_rgba(image* img, uint x, uint y, uchar* colour, float alpha){
     if(!is_in_frame(x, y, img))
         return 0;
 
-    col = Get_Color(colour, intensity);
-
     for(int i=0 ; i<3 ; i++)
-        img->pic[y][x][i] = (col[i]*alpha) + (img->pic[y][x][i] * (1.0-alpha));
+        img->pic[y][x][i] = (colour[i]*alpha) + (img->pic[y][x][i] * (1.0-alpha));
 
     return 1;
 }
@@ -118,7 +114,7 @@ int draw_line_vertical(image* img, line* l){
 
         while(dy){
             y = (y < l->yb ? y+1 : y-1);
-            set_pixel_rgba(img, l->xa, y, l->colour, l->intensity, l->alpha);
+            set_pixel_rgba(img, l->xa, y, l->colour, l->alpha);
             dy--;
         }
     }
@@ -143,7 +139,7 @@ int draw_line_horizontal(image* img, line* l){
 
         while(dx){
             x = (x < l->xb ? x+1 : x-1);
-            set_pixel_rgba(img, x, l->ya, l->colour, l->intensity, l->alpha);
+            set_pixel_rgba(img, x, l->ya, l->colour, l->alpha);
             dx--;
         }
     }
@@ -170,7 +166,7 @@ int draw_line_diagonal(image* img, line* l){
         while(dx){
              x = (x < l->xb ? x+1 : x-1);
              y = (y < l->yb ? y+1 : y-1);
-             set_pixel_rgba(img, x, y, l->colour, l->intensity, l->alpha);
+             set_pixel_rgba(img, x, y, l->colour, l->alpha);
              dx--;
         }
     }
@@ -215,9 +211,9 @@ int draw_line_Bresenham(image* img, line* l){
 
     for(int y=y0 ; y<y1 ; y++){
         if(steep)
-            set_pixel_rgba(img, y, x, l->colour, l->intensity, l->alpha);
+            set_pixel_rgba(img, y, x, l->colour, l->alpha);
         else
-            set_pixel_rgba(img, x, y, l->colour, l->intensity, l->alpha);
+            set_pixel_rgba(img, x, y, l->colour, l->alpha);
 
         if(d > 0){
             x += slope;
@@ -272,15 +268,15 @@ int draw_line_Wu(image* img, line* l){
         if (steep)
         {
             // pixel coverage is determined by fractional part of y co-ordinate
-            set_pixel_rgba(img, (int)intersectY, x, l->colour, l->intensity, (1.0-fracPartY)*l->alpha);
-            set_pixel_rgba(img, (int)intersectY+1, x, l->colour, l->intensity, fracPartY*l->alpha);
+            set_pixel_rgba(img, (int)intersectY, x, l->colour, (1.0-fracPartY)*l->alpha);
+            set_pixel_rgba(img, (int)intersectY+1, x, l->colour, fracPartY*l->alpha);
 
         }
         else
         {
             // pixel coverage is determined by fractional part of y co-ordinate
-            set_pixel_rgba(img, x, (int)intersectY, l->colour, l->intensity, (1-fracPartY)*l->alpha);
-            set_pixel_rgba(img, x, (int)intersectY+1, l->colour, l->intensity, fracPartY*l->alpha);
+            set_pixel_rgba(img, x, (int)intersectY, l->colour, (1-fracPartY)*l->alpha);
+            set_pixel_rgba(img, x, (int)intersectY+1, l->colour, fracPartY*l->alpha);
         }
         intersectY += gradient;
     }
@@ -300,7 +296,7 @@ int draw_line_generic(image* img, line* l){
     int dy = l->yb - l->ya;
 
     //draw the very first pixel (in case the length of the line is 1)
-    set_pixel_rgba(img, l->xa, l->ya, l->colour, l->intensity, l->alpha);
+    set_pixel_rgba(img, l->xa, l->ya, l->colour, l->alpha);
 
     //diagonal line
     if(abs(dx) == abs(dy))

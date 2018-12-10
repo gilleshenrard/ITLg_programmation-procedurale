@@ -7,8 +7,7 @@ typedef struct{
     int ya;
     int xb;
     int yb;
-    int colour;
-    int intensity;
+    uchar* colour;
     float alpha;
     char antialiasing;
 } line;
@@ -17,7 +16,7 @@ void Filtrer_Noir_Blanc(image * img);
 void Damier(image * img);
 
 int embed_image(image* overlay, image* background, uint x, uint y, float alpha);
-int set_pixel_rgba(image* img, uint x, uint y, int colour, int intensity, float alpha);
+int set_pixel_rgba(image* img, uint x, uint y, uchar* colour, float alpha);
 int draw_line_vertical(image* img, line* l);
 int draw_line_horizontal(image* img, line* l);
 int draw_line_diagonal(image* img, line* l);
