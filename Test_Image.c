@@ -17,6 +17,7 @@
 ****************************************************************************************/
 #include "lib/image.h"
 #include "lib/effects.h"
+#include <math.h>
 
 void Tst_System_01(void);
 void Tst_System_02(void);
@@ -43,9 +44,9 @@ int main(void)
     //Tst_Embed_cropped();
     //Tst_Embed_alpha();
     Tst_draw_line_Bresenham();
-    Tst_draw_line_Bresenham_cropped();
+    //Tst_draw_line_Bresenham_cropped();
     Tst_draw_line_Wu();
-    Tst_draw_line_Wu_cropped();
+    //Tst_draw_line_Wu_cropped();
 
     return 0;
 }
@@ -305,26 +306,21 @@ void Tst_Embed_alpha(void)
 void Tst_draw_line_Bresenham(void)
 {
     image *tst=NULL, *space_back=NULL;
-    line l1 = {10, 10, 400, 490, BLEU, NIVEAU_8, 1.0};
-    line l2 = {10, 490, 400, 10, ROUGE, NIVEAU_8, 1.0};
-    line l3 = {790, 10, 400, 490, JAUNE, NIVEAU_8, 1.0};
-    line l4 = {790, 490, 400, 10, VERT, NIVEAU_8, 1.0};
+    line lign = {400, 250, 0, 0, BLEU, NIVEAU_8, 1.0, 0};
+    int quarters[4]={BLEU, JAUNE, ROUGE, VERT};
+    double angles[24]={0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165,
+                       180, 195, 210, 225, 240, 255, 270, 285, 300, 315, 330, 345};
 
     printf("\n--- Test Draw Line with Bresenham -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
     tst = copy_image(space_back);
 
-    //blue line going to top right
-    draw_line_Bresenham(tst, &l1);
-
-    //red line going to bottom right
-    draw_line_Bresenham(tst, &l2);
-
-    //yellow line going to top left
-    draw_line_Bresenham(tst, &l3);
-
-    //green line going to bottom left
-    draw_line_Bresenham(tst, &l4);
+    for(int i=0 ; i<24 ; i++){
+        lign.xb = 400 + (int)(200 * cos((angles[i]*M_PI)/180));
+        lign.yb = 250 + (int)(200 * sin((angles[i]*M_PI)/180));
+        lign.colour = quarters[i/6];
+        draw_line_generic(tst, &lign);
+    }
 
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"line_bresenham");
@@ -385,26 +381,21 @@ void Tst_draw_line_Bresenham_cropped(void)
 void Tst_draw_line_Wu(void)
 {
     image *tst=NULL, *space_back=NULL;
-    line l1 = {10, 10, 400, 490, BLEU, NIVEAU_8, 1.0};
-    line l2 = {10, 490, 400, 10, ROUGE, NIVEAU_8, 1.0};
-    line l3 = {790, 10, 400, 490, JAUNE, NIVEAU_8, 1.0};
-    line l4 = {790, 490, 400, 10, VERT, NIVEAU_8, 1.0};
+    line lign = {400, 250, 0, 0, BLEU, NIVEAU_8, 1.0, 1};
+    int quarters[4]={BLEU, JAUNE, ROUGE, VERT};
+    double angles[24]={0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165,
+                       180, 195, 210, 225, 240, 255, 270, 285, 300, 315, 330, 345};
 
-    printf("\n--- Test Draw Line with Wu -----------------------------------------------------\n\n");
+    printf("\n--- Test Draw Line with Bresenham -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
     tst = copy_image(space_back);
 
-    //blue line going to top right
-    draw_line_Wu(tst, &l1);
-
-    //red line going to bottom right
-    draw_line_Wu(tst, &l2);
-
-    //yellow line going to top left
-    draw_line_Wu(tst, &l3);
-
-    //green line going to bottom left
-    draw_line_Wu(tst, &l4);
+    for(int i=0 ; i<24 ; i++){
+        lign.xb = 400 + (int)(200 * cos((angles[i]*M_PI)/180));
+        lign.yb = 250 + (int)(200 * sin((angles[i]*M_PI)/180));
+        lign.colour = quarters[i/6];
+        draw_line_generic(tst, &lign);
+    }
 
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"line_wu");
