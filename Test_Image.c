@@ -42,9 +42,9 @@ int main(void)
     //Tst_Embed_cropped();
     //Tst_Embed_alpha();
     //Tst_draw_line("line_bresenham", 0);
-    //Tst_draw_line("line_wu", 1);
-    Tst_draw_line_cropped("line_bresenham", 0);
-    Tst_draw_line_cropped("line_wu", 1);
+    Tst_draw_line("line_wu", 1);
+    //Tst_draw_line_cropped("line_bresenham", 0);
+    //Tst_draw_line_cropped("line_wu", 1);
 
     return 0;
 }
@@ -304,12 +304,12 @@ void Tst_Embed_alpha(void)
 void Tst_draw_line(char* filename, char antialiasing)
 {
     image *tst=NULL, *space_back=NULL;
-    line lign = {400, 250, 0, 0, BLEU, NIVEAU_8, 1.0, antialiasing};
+    line lign = {400, 250, 0, 0, DEF_COL, NIVEAU_8, 1.0, antialiasing};
     int quarters[4]={BLEU, JAUNE, ROUGE, VERT};
     double angles[24]={0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165,
                        180, 195, 210, 225, 240, 255, 270, 285, 300, 315, 330, 345};
 
-    printf("\n--- Test Draw Line with Bresenham -----------------------------------------------------\n\n");
+    printf("\n--- Test Draw Line -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
     tst = copy_image(space_back);
 
