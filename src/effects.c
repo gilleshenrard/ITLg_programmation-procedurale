@@ -252,7 +252,7 @@ int draw_line_Wu(image* img, line* l){
     float gradient, intersectY, fracPartY;
 
     // swap the co-ordinates if slope > 1
-    steep = abs(dx)>abs(dy);
+    steep = abs(dx)<abs(dy);
     if (steep){
         tmp = x0; x0 = y0; y0 = tmp;
         tmp = x1; x1 = y1; y1 = tmp;
@@ -273,7 +273,7 @@ int draw_line_Wu(image* img, line* l){
     intersectY=y0;
 
     // main loop
-    for (uint x = x0 ; x <= x1 ; x++)
+    for (int x = x0 ; x <= x1 ; x++)
     {
         fracPartY = (intersectY>0 ? intersectY-(int)intersectY : intersectY-((int)intersectY+1));
 
@@ -281,7 +281,7 @@ int draw_line_Wu(image* img, line* l){
         {
             // pixel coverage is determined by fractional part of y co-ordinate
             set_pixel_rgba(img, (int)intersectY, x, l->colour, l->intensity, (1.0-fracPartY)*l->alpha);
-            set_pixel_rgba(img, (int)intersectY, x+1, l->colour, l->intensity, fracPartY*l->alpha);
+            set_pixel_rgba(img, (int)intersectY+1, x, l->colour, l->intensity, fracPartY*l->alpha);
 
         }
         else
