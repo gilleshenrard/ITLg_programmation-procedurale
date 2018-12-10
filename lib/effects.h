@@ -16,7 +16,7 @@ typedef struct{
 void Filtrer_Noir_Blanc(image * img);
 void Damier(image * img);
 
-image* embed_image(image* overlay, image* background, uint x, uint y, float alpha);
+int embed_image(image* overlay, image* background, uint x, uint y, float alpha);
 int set_pixel_rgba(image* img, uint x, uint y, int colour, int intensity, float alpha);
 int draw_line_vertical(image* img, line* l);
 int draw_line_horizontal(image* img, line* l);

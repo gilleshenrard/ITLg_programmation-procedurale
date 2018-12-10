@@ -54,13 +54,10 @@ void Damier(image * img)
 /*      y coordinate of the overlay                                                     */
 /*      transparency factor                                                             */
 /*  P : Embeds an image in another one (with transparency)                              */
-/*  O : resulting image of the embedding                                                */
-/*      NULL if error                                                                   */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
 /****************************************************************************************/
-image* embed_image(image* overlay, image* background, uint x, uint y, float alpha){
-    image* buffer = NULL;
-
-    buffer = Creer_Image("", background->header.hauteur, background->header.largeur, NOIR, NIVEAU_8);
+int embed_image(image* overlay, image* background, uint x, uint y, float alpha){
 
     //for each pixel in the frame
     for(uint i=0 ; i<background->header.hauteur ; i++){
@@ -68,16 +65,11 @@ image* embed_image(image* overlay, image* background, uint x, uint y, float alph
             //if the pixel is to be replaced by the overlay corresponding pixel
             if(is_in_frame(i-y, j-x, overlay) && !is_dummy_pixel(i-y, j-x, overlay)){
                 for(int k=0 ; k<3 ; k++)
-                    buffer->pic[i][j][k] = (overlay->pic[i-y][j-x][k] * alpha) + (background->pic[i][j][k] * (1.0-alpha));
-            }
-            //otherwise
-            else{
-                for(int k=0 ; k<3 ; k++)
-                    buffer->pic[i][j][k] = background->pic[i][j][k];
+                    background->pic[i][j][k] = (overlay->pic[i-y][j-x][k] * alpha) + (background->pic[i][j][k] * (1.0-alpha));
             }
         }
     }
-    return buffer;
+    return 0;
 }
 
 /****************************************************************************************/
