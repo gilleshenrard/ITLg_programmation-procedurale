@@ -337,30 +337,27 @@ void Tst_draw_line(char* filename, char antialiasing)
 void Tst_draw_line_cropped(char* filename, char antialiasing)
 {
     image *tst=NULL, *space_back=NULL;
-    line l1 = {400, 250, 900, 250, BLEU, NIVEAU_8, 1.0, antialiasing};
-    line l2 = {10, 600, 900, 700, ROUGE, NIVEAU_8, 1.0, antialiasing};
-    line l3 = {-100, 200, 900, 300, JAUNE, NIVEAU_8, 1.0, antialiasing};
-    line l4 = {400, -100, 500, 600, VERT, NIVEAU_8, 1.0, antialiasing};
-    line l5 = {-100, -100, 900, -50, MAGENTA, NIVEAU_8, 1.0, antialiasing};
+    line l1 = {350, 200, 900, 200, BLEU, NIVEAU_8, 1.0, antialiasing};          //horizontal, out on the right
+    line l2 = {10, 600, 900, 700, ROUGE, NIVEAU_8, 1.0, antialiasing};          //completely off the image (>0)
+    line l3 = {-100, 200, 900, 300, JAUNE, NIVEAU_8, 1.0, antialiasing};        //crossing from left to right
+    line l4 = {400, -100, 500, 600, VERT, NIVEAU_8, 1.0, antialiasing};         //crossing from to to bottom
+    line l5 = {-100, -100, 900, -50, MAGENTA, NIVEAU_8, 1.0, antialiasing};     //completely off the image (<0)
+    line l6 = {450, 300, -100, 300, BLEU, NIVEAU_8, 1.0, antialiasing};         //horizontal, out on the left
+    line l7 = {400, 250, 400, 600, MAGENTA, NIVEAU_8, 1.0, antialiasing};       //vertical, out on the top
+    line l8 = {500, 350, 500, -100, MAGENTA, NIVEAU_8, 1.0, antialiasing};      //vertical, out on the bottom
 
     printf("\n--- Test Draw Line Cropped with Bresenham -----------------------------------------------------\n\n");
     space_back = Lire_Image("Test", "Field");
     tst = copy_image(space_back);
 
-    //blue line getting off the image on the right side
     draw_line_generic(tst, &l1);
-
-    //red line completely off the image (coordinates >0)
     draw_line_generic(tst, &l2);
-
-    //yellow line crossing image on left and right side
     draw_line_generic(tst, &l3);
-
-    //green line crossing image on top and bottom side
     draw_line_generic(tst, &l4);
-
-    //magenta line completely off the image (coordinates  <0)
     draw_line_generic(tst, &l5);
+    draw_line_generic(tst, &l6);
+    draw_line_generic(tst, &l7);
+    draw_line_generic(tst, &l8);
 
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst, filename);
