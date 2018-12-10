@@ -315,3 +315,34 @@ int draw_line_generic(image* img, line* l){
     else
         return draw_line_Bresenham(img, l);
 }
+
+/****************************************************************************************/
+/*  I : Image to rotate                                                                 */
+/*      Angle with which rotate                                                         */
+/*  P : Creates a rotated (and resized) copy of an image                                */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
+/****************************************************************************************/
+image* rotate_image(image* img, int angle, int offsetX, int offsetY){
+    image* buffer=NULL;
+    double sinVal = sin((double)(angle*M_PI)/180);
+    double cosVal = cos((double)(angle*M_PI)/180);
+    uint new_width, new_height;
+
+    //prepare a new image (adapt dimensions for the rotation)
+    new_width = (uint)(sinVal * img->header.hauteur + cosVal * img->header.largeur);
+    new_height = (uint)(sinVal * img->header.largeur + cosVal * img->header.hauteur);
+    buffer = Creer_Image(img->nom_base, new_height, new_width, BLANC, NIVEAU_8);
+
+    for(int y=0 ; y < img->header.hauteur ; y++){
+        for(int x=0 ; x < img->header.largeur ; x++){
+            //compute the new location for every pixel and assign it to the new image
+            int newX = (x * cosVal) + (y * sinVal);
+            int newY = (-x * sinVal) + (y * cosVal);
+            set_pixel_rgba(buffer, newX, newY, img->pic[y][x], 1.0);
+        }
+    }
+
+
+    return buffer;
+}

@@ -1,6 +1,7 @@
 #ifndef EFFECTS_H_INCLUDED
 #define EFFECTS_H_INCLUDED
 #include "image.h"
+#include <math.h>
 
 typedef struct{
     int xa;
@@ -23,5 +24,6 @@ int draw_line_diagonal(image* img, line* l);
 int draw_line_Bresenham(image *img, line* l);
 int draw_line_Wu(image* img, line* l);
 int draw_line_generic(image* img, line* l);
+image* rotate_image(image* img, int angle, int offsetX, int offsetY);
 
 #endif // EFFECTS_H_INCLUDED

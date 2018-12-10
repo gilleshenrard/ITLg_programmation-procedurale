@@ -17,7 +17,6 @@
 ****************************************************************************************/
 #include "lib/image.h"
 #include "lib/effects.h"
-#include <math.h>
 
 void Tst_System_01(void);
 void Tst_System_02(void);
@@ -28,6 +27,7 @@ void Tst_Embed_cropped(void);
 void Tst_Embed_alpha(void);
 void Tst_draw_line(char*, char);
 void Tst_draw_line_cropped(char*, char);
+void Tst_Rotate(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -41,10 +41,11 @@ int main(void)
     //Tst_Embed_complete();
     //Tst_Embed_cropped();
     //Tst_Embed_alpha();
-    Tst_draw_line("line_bresenham", 0);
-    Tst_draw_line("line_wu", 1);
-    Tst_draw_line_cropped("line_bresenham_cropped", 0);
-    Tst_draw_line_cropped("line_wu_cropped", 1);
+    //Tst_draw_line("line_bresenham", 0);
+    //Tst_draw_line("line_wu", 1);
+    //Tst_draw_line_cropped("line_bresenham_cropped", 0);
+    //Tst_draw_line_cropped("line_wu_cropped", 1);
+    Tst_Rotate();
 
     return 0;
 }
@@ -376,6 +377,31 @@ void Tst_draw_line_cropped(char* filename, char antialiasing)
 
     Free_Image(tst);
     Free_Image(space_back);
+
+    return;
+}
+
+/****************************************************************************************
+* Test_Rotate : Rotating an image
+*
+* Purpose : testing that pictures are properly rotated
+****************************************************************************************/
+void Tst_Rotate(void)
+{
+    image *tst=NULL, *tst2=NULL, *ship=NULL;
+
+    printf("\n--- Test Rotate -----------------------------------------------------\n\n");
+    ship = Lire_Image("Test", "Enterprise");
+    tst = copy_image(ship);
+
+    tst2 = rotate_image(tst, 30, 0, 0);
+
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"rotated");
+
+    Free_Image(tst);
+    Free_Image(tst2);
+    Free_Image(ship);
 
     return;
 }
