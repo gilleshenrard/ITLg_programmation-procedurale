@@ -121,6 +121,9 @@ int draw_line_vertical(image* img, line* l){
     int y = l->ya;
 
     if(!dx){
+        if (dy < 0)
+            dy = -dy;
+
         while(dy){
             y = (y < l->yb ? y+1 : y-1);
             set_pixel_rgba(img, l->xa, y, l->colour, l->intensity, l->alpha);
@@ -143,6 +146,9 @@ int draw_line_horizontal(image* img, line* l){
     int x = l->xa;
 
     if(!dy){
+        if(dx < 0)
+            dx = -dx;
+
         while(dx){
             x = (x < l->xb ? x+1 : x-1);
             set_pixel_rgba(img, x, l->ya, l->colour, l->intensity, l->alpha);
@@ -165,7 +171,10 @@ int draw_line_diagonal(image* img, line* l){
     int x = l->xa;
     int y = l->ya;
 
-    if(dx == dy){
+    if(abs(dx) == abs(dy)){
+        if(dx < 0)
+            dx = -dx;
+
         while(dx){
              x = (x < l->xb ? x+1 : x-1);
              y = (y < l->yb ? y+1 : y-1);
@@ -302,7 +311,7 @@ int draw_line_generic(image* img, line* l){
     set_pixel_rgba(img, l->xa, l->ya, l->colour, l->intensity, l->alpha);
 
     //diagonal line
-    if(dx == dy)
+    if(abs(dx) == abs(dy))
         return draw_line_diagonal(img, l);
 
     //horizontal line
