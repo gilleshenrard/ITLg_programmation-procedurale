@@ -339,7 +339,7 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
             //compute the new location for every pixel and assign it to the new image
             int newX = (x * cosVal) + (y * sinVal);
             int newY = (-x * sinVal) + (y * cosVal);
-            set_pixel_rgba(buffer, newX, newY, img->pic[y][x], 1.0);
+            set_pixel_rgba(buffer, newX+offsetX, newY+offsetY, img->pic[y][x], 1.0);
         }
     }
 
