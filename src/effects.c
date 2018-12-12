@@ -337,9 +337,10 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
     for(int y=0 ; y < img->header.hauteur ; y++){
         for(int x=0 ; x < img->header.largeur ; x++){
             //compute the new location for every pixel and assign it to the new image
-            int newX = (x * cosVal) + (y * sinVal);
-            int newY = (y * cosVal) - (x * sinVal);
-            set_pixel_rgba(buffer, newX+offsetX, newY+offsetY, img->pic[y][x], 1.0);
+            int srcX = (x * cosVal) + (y * sinVal);
+            int srcY = (y * cosVal) - (x * sinVal);
+            if(is_in_frame(srcX, srcY, img))
+                set_pixel_rgba(buffer, x+offsetX, y+offsetY, img->pic[srcY][srcX], 1.0);
         }
     }
 
