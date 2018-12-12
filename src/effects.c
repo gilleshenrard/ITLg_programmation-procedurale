@@ -319,6 +319,48 @@ int draw_line_generic(image* img, line* l){
 /****************************************************************************************/
 /*  I : Image to rotate                                                                 */
 /*      Angle with which rotate                                                         */
+/*  P : Creates a rotated (and resized) copy of an image if angle is a multiple of 90°  */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
+/****************************************************************************************/
+image* rotate_image_90(image* img, int angle, int offsetX, int offsetY){
+    image* buffer=NULL;
+    uint new_width, new_height;
+
+    if(angle%90 == 0){
+        //prepare a new image (adapt dimensions for the rotation)
+        new_width = (angle/90 == 2 ? img->header.largeur : img->header.hauteur);
+        new_height = (angle/90 == 2 ? img->header.hauteur : img->header.largeur);
+        buffer = Creer_Image(img->nom_base, new_height, new_width, BLANC, NIVEAU_8);
+
+        for(int y=0 ; y < img->header.hauteur ; y++){
+            for(int x=0 ; x < img->header.largeur ; x++){
+                switch(angle){
+                    case 90:
+                    case -270:
+                        set_pixel_rgba(buffer, img->header.largeur -y -1, x, img->pic[y][x], 1.0);
+                        break;
+
+                    case 270:
+                    case -90:
+                        set_pixel_rgba(buffer, y, img->header.hauteur -x -1, img->pic[y][x], 1.0);
+                        break;
+
+                    case 180:
+                    case -180:
+                        set_pixel_rgba(buffer, img->header.largeur -x -1, img->header.hauteur -y -1, img->pic[y][x], 1.0);
+                        break;
+                }
+            }
+        }
+    }
+
+    return buffer;
+}
+
+/****************************************************************************************/
+/*  I : Image to rotate                                                                 */
+/*      Angle with which rotate                                                         */
 /*  P : Creates a rotated (and resized) copy of an image                                */
 /*  O :  0 if OK                                                                        */
 /*      -1 if error                                                                     */
@@ -328,6 +370,9 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
     double sinVal = sin((double)(angle*M_PI)/180);
     double cosVal = cos((double)(angle*M_PI)/180);
     uint new_width, new_height, mid_srcX, mid_srcY;
+
+    if(angle%90 == 0)
+        return rotate_image_90(img, angle, offsetX, offsetY);
 
     //prepare a new image (adapt dimensions for the rotation)
     new_width = (uint)(sinVal * img->header.hauteur + cosVal * img->header.largeur);

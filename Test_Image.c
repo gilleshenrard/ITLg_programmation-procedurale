@@ -398,13 +398,26 @@ void Tst_Rotate(void)
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"rotated");
     Free_Image(tst2);
-/*
-    tst2 = rotate_image(tst, 30, 100, 100);
+
+    tst2 = rotate_image(tst, 90, 0, 0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"rotated_offset");
-*/
+    Ecrire_Image(tst2,"rotated_90");
+
+    tst2 = rotate_image(tst, -90, 0, 0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"rotated_-90");
+
+    tst2 = rotate_image(tst, 180, 0, 0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"rotated_180");
+
+    tst2 = rotate_image(tst, 270, 0, 0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"rotated_270");
+
+
     Free_Image(tst);
-//    Free_Image(tst2);
+    Free_Image(tst2);
     Free_Image(ship);
 
     return;
