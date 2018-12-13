@@ -368,7 +368,7 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
     image* buffer=NULL;
     double sinVal = sin((double)(angle*M_PI)/180);
     double cosVal = cos((double)(angle*M_PI)/180);
-    int mid_srcX, mid_srcY;
+    int center_x, center_y;
 
     if(angle%90 == 0)
         return rotate_image_90(img, angle, offsetX, offsetY);
@@ -377,16 +377,18 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
     buffer = Creer_Image(img->nom_base, img->header.hauteur, img->header.largeur, BLANC, NIVEAU_8);
 
     //compute the image center
-    mid_srcX = img->header.largeur/2;
-    mid_srcY = img->header.hauteur/2;
+    center_x = img->header.largeur/2;
+    center_y = img->header.hauteur/2;
 
     for(int y=0 ; y < img->header.hauteur ; y++){
         for(int x=0 ; x < img->header.largeur ; x++){
             //compute the new location for every pixel and assign it to the new image
-            //| cos    -sin |   | x - mid_srcX |   | mid_srcX |
-            //| sin     cos | * | y - mid_srcY | + | mid_srcY |
-            int srcX = mid_srcX + (int)((cosVal * (double)(x-mid_srcX)) - (sinVal * (double)(y-mid_srcY)));
-            int srcY = mid_srcY + (int)((sinVal * (double)(x-mid_srcX)) + (cosVal * (double)(y-mid_srcY)));
+            //| cos    -sin |   | x - center_x |   | center_x |
+            //| sin     cos | * | y - center_y | + | center_y |
+            double translate_x = (double)x - center_x;
+            double translate_y = (double)y - center_y;
+            int srcX = center_x + (int)((cosVal*translate_x) - (sinVal*translate_y));
+            int srcY = center_y + (int)((sinVal*translate_x) + (cosVal*translate_y));
             if(is_in_frame(srcX, srcY, img))
                 set_pixel_rgba(buffer, x, y, img->pic[srcY][srcX], 1.0);
         }
