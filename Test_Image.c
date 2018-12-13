@@ -396,7 +396,12 @@ void Tst_Rotate(void)
 
     tst2 = rotate_image(tst, 30, 0, 0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"rotated");
+    Ecrire_Image(tst2,"rotated_30");
+    Free_Image(tst2);
+
+    tst2 = rotate_image(tst, -30, 0, 0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"rotated_-30");
     Free_Image(tst2);
 
     tst2 = rotate_image(tst, 90, 0, 0);
