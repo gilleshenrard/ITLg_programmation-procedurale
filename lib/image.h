@@ -14,7 +14,7 @@
 
 #define BLUE_SCREEN BLANC
 
-#define PHOTO_DIR ".\\Films\\"
+#define PHOTO_DIR "..\\Films\\"
 
 typedef enum
 {
