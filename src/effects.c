@@ -319,8 +319,8 @@ int draw_line_generic(image* img, line* l){
 /*  I : Image to rotate                                                                 */
 /*      Angle with which rotate                                                         */
 /*  P : Creates a rotated (and resized) copy of an image if angle is a multiple of 90°  */
-/*  O :  0 if OK                                                                        */
-/*      -1 if error                                                                     */
+/*  O : image generated                                                                 */
+/*      NULL if error                                                                   */
 /****************************************************************************************/
 image* rotate_image_90(image* img, int angle, int offsetX, int offsetY){
     image* buffer=NULL;
@@ -440,4 +440,36 @@ int flip_image(image* img, int axis){
 
     free(tmp);
     return 0;
+}
+
+/****************************************************************************************/
+/*  I : Image to zoom                                                                   */
+/*      Zoom factor                                                                     */
+/*  P : Generates an increased or decreased image                                       */
+/*  O : image generated                                                                 */
+/*      NULL if error                                                                   */
+/****************************************************************************************/
+image* zoom_image(image* img, float factor){
+    image* buffer = NULL;
+
+    if(factor <= 0.0)
+        return NULL;
+
+    if(factor == 1){
+        //image simply copied
+        return copy_image(img);
+    }
+
+    buffer = Creer_Image(img->nom_base, img->header.hauteur*factor, img->header.largeur*factor, BLANC, NIVEAU_8);
+
+    for(int y=0 ; y<buffer->header.hauteur ; y++){
+        for(int x=0 ; x<buffer->header.largeur ; x++){
+            int srcX = (int)(float)(x/factor);
+            int srcY = (int)(float)(y/factor);
+
+            set_pixel_rgba(buffer, x, y, img->pic[srcY][srcX], 1.0);
+        }
+    }
+
+    return buffer;
 }

@@ -29,6 +29,7 @@ void Tst_draw_line(char*, char);
 void Tst_draw_line_cropped(char*, char);
 void Tst_Rotate(void);
 void Tst_Flip(void);
+void Tst_Zoom(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -47,7 +48,8 @@ int main(void)
     //Tst_draw_line_cropped("line_bresenham_cropped", 0);
     //Tst_draw_line_cropped("line_wu_cropped", 1);
     //Tst_Rotate();
-    Tst_Flip();
+    //Tst_Flip();
+    Tst_Zoom();
 
     return 0;
 }
@@ -461,6 +463,44 @@ void Tst_Flip(void){
     Ecrire_Image(tst,"flip_horizontal");
 
     Free_Image(tst);
+    Free_Image(ship);
+
+    return;
+}
+
+/****************************************************************************************
+* Test_Zoom : Zoom an image
+*
+* Purpose : testing that pictures are properly zoomed (increased and decreased)
+****************************************************************************************/
+void Tst_Zoom(void){
+    image *tst=NULL, *ship=NULL;
+
+    printf("\n--- Test Zoom -----------------------------------------------------\n\n");
+    ship = Lire_Image("Test", "Enterprise");
+    tst = copy_image(ship);
+
+    tst = zoom_image(ship, 1.5);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"zoom_15");
+    Free_Image(tst);
+
+    tst = zoom_image(ship, 3.0);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"zoom_3");
+    Free_Image(tst);
+
+    tst = zoom_image(ship, 0.5);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"zoom_05");
+    Free_Image(tst);
+
+    tst = zoom_image(ship, 1);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"zoom_1");
+    Free_Image(tst);
+
+
     Free_Image(ship);
 
     return;

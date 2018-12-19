@@ -29,5 +29,6 @@ int draw_line_Wu(image* img, line* l);
 int draw_line_generic(image* img, line* l);
 image* rotate_image(image* img, int angle, int offsetX, int offsetY);
 int flip_image(image* img, int axis);
+image* zoom_image(image* img, float factor);
 
 #endif // EFFECTS_H_INCLUDED
