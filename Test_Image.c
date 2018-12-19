@@ -455,11 +455,11 @@ void Tst_Flip(void){
     flip_image(tst, VERTICAL);
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"flip_vertical");
-/*
+
     flip_image(tst, HORIZONTAL);
     strncpy(tst->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst,"flip_horizontal");
-*/
+
     Free_Image(tst);
     Free_Image(ship);
 

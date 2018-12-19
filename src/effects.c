@@ -406,15 +406,19 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
 /*      -1 if error                                                                     */
 /****************************************************************************************/
 int flip_image(image* img, int axis){
-    uchar tmp;
+    uchar *tmp = NULL;
+
+    tmp = (uchar*)malloc(3*sizeof(uchar));
+    if(!tmp)
+        return -1;
 
     switch(axis){
         case VERTICAL:
             for(int y=0 ; y<img->header.hauteur ; y++){
                 for(int x=0 ; x<img->header.largeur/2 ; x++){
-                    assign_pixel(&tmp, img->pic[y][x]);
+                    assign_pixel(tmp, img->pic[y][x]);
                     assign_pixel(img->pic[y][x], img->pic[y][img->header.largeur - x - 1]);
-                    assign_pixel(img->pic[y][img->header.largeur - x - 1], &tmp);
+                    assign_pixel(img->pic[y][img->header.largeur - x - 1], tmp);
                 }
             }
             break;
@@ -422,16 +426,18 @@ int flip_image(image* img, int axis){
         case HORIZONTAL:
             for(int y=0 ; y<img->header.hauteur/2 ; y++){
                 for(int x=0 ; x<img->header.largeur ; x++){
-                    assign_pixel(&tmp, img->pic[y][x]);
+                    assign_pixel(tmp, img->pic[y][x]);
                     assign_pixel(img->pic[y][x], img->pic[img->header.hauteur - y - 1][x]);
-                    assign_pixel(img->pic[img->header.hauteur - y - 1][x], &tmp);
+                    assign_pixel(img->pic[img->header.hauteur - y - 1][x], tmp);
                 }
             }
             break;
 
         default:
+            free(tmp);
             return -1;
     }
 
+    free(tmp);
     return 0;
 }
