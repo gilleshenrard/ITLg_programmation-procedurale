@@ -90,5 +90,6 @@ void Initialiser_Image(image * img, uchar * color);
 int is_in_frame(uint x, uint y, image* frame);
 int is_dummy_pixel(uint x, uint y, image* frame);
 image* copy_image(image* original);
+int assign_pixel(uchar* a, uchar* b);
 
 #endif // IMAGE_H_INCLUDED

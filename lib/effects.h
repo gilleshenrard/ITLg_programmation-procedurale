@@ -3,6 +3,9 @@
 #include "image.h"
 #include <math.h>
 
+#define VERTICAL 0
+#define HORIZONTAL 1
+
 typedef struct{
     int xa;
     int ya;
@@ -25,5 +28,6 @@ int draw_line_Bresenham(image *img, line* l);
 int draw_line_Wu(image* img, line* l);
 int draw_line_generic(image* img, line* l);
 image* rotate_image(image* img, int angle, int offsetX, int offsetY);
+int flip_image(image* img, int axis);
 
 #endif // EFFECTS_H_INCLUDED

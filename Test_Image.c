@@ -28,6 +28,7 @@ void Tst_Embed_alpha(void);
 void Tst_draw_line(char*, char);
 void Tst_draw_line_cropped(char*, char);
 void Tst_Rotate(void);
+void Tst_Flip(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -45,7 +46,8 @@ int main(void)
     //Tst_draw_line("line_wu", 1);
     //Tst_draw_line_cropped("line_bresenham_cropped", 0);
     //Tst_draw_line_cropped("line_wu_cropped", 1);
-    Tst_Rotate();
+    //Tst_Rotate();
+    Tst_Flip();
 
     return 0;
 }
@@ -433,6 +435,32 @@ void Tst_Rotate(void)
 
     Free_Image(tst);
     Free_Image(tst2);
+    Free_Image(ship);
+
+    return;
+}
+
+/****************************************************************************************
+* Test_Flip : Flip an image
+*
+* Purpose : testing that pictures are properly flipped (vertically and horizontally)
+****************************************************************************************/
+void Tst_Flip(void){
+    image *tst=NULL, *ship=NULL;
+
+    printf("\n--- Test Flip -----------------------------------------------------\n\n");
+    ship = Lire_Image("Test", "Enterprise");
+    tst = copy_image(ship);
+
+    flip_image(tst, VERTICAL);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"flip_vertical");
+/*
+    flip_image(tst, HORIZONTAL);
+    strncpy(tst->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst,"flip_horizontal");
+*/
+    Free_Image(tst);
     Free_Image(ship);
 
     return;

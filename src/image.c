@@ -395,10 +395,22 @@ image* copy_image(image* original){
 
     buffer = Creer_Image("", original->header.hauteur, original->header.largeur, NOIR, NIVEAU_8);
     for(uint i=0 ; i<original->header.hauteur ; i++){
-        for(uint j=0 ; j<original->header.largeur ; j++){
-            for(int k=0 ; k<3 ; k++)
-                buffer->pic[i][j][k] = original->pic[i][j][k];
-        }
+        for(uint j=0 ; j<original->header.largeur ; j++)
+            assign_pixel(buffer->pic[i][j], original->pic[i][j]);
     }
     return buffer;
+}
+
+/****************************************************************************************/
+/*  I : pixel to copy to                                                                */
+/*      pixel to copy from                                                              */
+/*  P : copies the pixel b to the pixel a                                               */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
+/****************************************************************************************/
+int assign_pixel(uchar* a, uchar* b){
+    for(int i=0 ; i<3 ; i++)
+        a[i] = b[i];
+
+    return 0;
 }

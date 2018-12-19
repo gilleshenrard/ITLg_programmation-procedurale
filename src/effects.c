@@ -397,3 +397,41 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
 
     return buffer;
 }
+
+/****************************************************************************************/
+/*  I : Image to flip                                                                   */
+/*      Direction according to which flip the image (VERTICAL or HORIZONTAL)            */
+/*  P : Flips the image                                                                 */
+/*  O :  0 if OK                                                                        */
+/*      -1 if error                                                                     */
+/****************************************************************************************/
+int flip_image(image* img, int axis){
+    uchar tmp;
+
+    switch(axis){
+        case VERTICAL:
+            for(int y=0 ; y<img->header.hauteur ; y++){
+                for(int x=0 ; x<img->header.largeur/2 ; x++){
+                    assign_pixel(&tmp, img->pic[y][x]);
+                    assign_pixel(img->pic[y][x], img->pic[y][img->header.largeur - x - 1]);
+                    assign_pixel(img->pic[y][img->header.largeur - x - 1], &tmp);
+                }
+            }
+            break;
+
+        case HORIZONTAL:
+            for(int y=0 ; y<img->header.hauteur/2 ; y++){
+                for(int x=0 ; x<img->header.largeur ; x++){
+                    assign_pixel(&tmp, img->pic[y][x]);
+                    assign_pixel(img->pic[y][x], img->pic[img->header.hauteur - y - 1][x]);
+                    assign_pixel(img->pic[img->header.hauteur - y - 1][x], &tmp);
+                }
+            }
+            break;
+
+        default:
+            return -1;
+    }
+
+    return 0;
+}
