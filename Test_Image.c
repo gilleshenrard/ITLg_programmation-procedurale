@@ -30,6 +30,7 @@ void Tst_draw_line_cropped(char*, char);
 void Tst_Rotate(void);
 void Tst_Flip(void);
 void Tst_Zoom(void);
+void Tst_Zoom_Embed(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -49,7 +50,8 @@ int main(void)
     //Tst_draw_line_cropped("line_wu_cropped", 1);
     //Tst_Rotate();
     //Tst_Flip();
-    Tst_Zoom();
+    //Tst_Zoom();
+    Tst_Zoom_Embed();
 
     return 0;
 }
@@ -502,6 +504,56 @@ void Tst_Zoom(void){
 
 
     Free_Image(ship);
+
+    return;
+}
+
+/****************************************************************************************
+* Test_Zoom : Zoom an image and embed it in an image
+*
+* Purpose : testing that pictures are properly cut while zooming
+****************************************************************************************/
+void Tst_Zoom_Embed(void){
+    image *tst=NULL, *tst2=NULL, *ship=NULL, *background=NULL;
+
+    printf("\n--- Test Zoom -----------------------------------------------------\n\n");
+    ship = Lire_Image("Test", "Enterprise");
+    background = Lire_Image("Test", "Field");
+
+    tst = zoom_image(ship, 0.3);
+    tst2 = copy_image(background);
+    embed_image(tst, tst2, 100, 100, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"zoom_embed_03");
+    Free_Image(tst);
+    Free_Image(tst2);
+
+    tst = zoom_image(ship, 0.5);
+    tst2 = copy_image(background);
+    embed_image(tst, tst2, 100, 100, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"zoom_embed_05");
+    Free_Image(tst);
+    Free_Image(tst2);
+
+    tst = zoom_image(ship, 0.75);
+    tst2 = copy_image(background);
+    embed_image(tst, tst2, 100, 100, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"zoom_embed_075");
+    Free_Image(tst);
+    Free_Image(tst2);
+
+    tst = zoom_image(ship, 1.0);
+    tst2 = copy_image(background);
+    embed_image(tst, tst2, 100, 100, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"zoom_embed_1");
+    Free_Image(tst);
+    Free_Image(tst2);
+
+    Free_Image(ship);
+    Free_Image(background);
 
     return;
 }
