@@ -26,4 +26,22 @@ int draw_line_vertical(image* img, line* l);
 int draw_line_horizontal(image* img, line* l);
 int draw_line_diagonal(image* img, line* l);
 ```
+* Image rotation procedure :
+```C
+image* rotate_image(image* img, int angle, int offsetX, int offsetY);
+```
+* Image flipping procedure :
+```C
+int flip_image(image* img, int axis);
+```
+* Image zooming procedure :
+```C
+image* zoom_image(image* img, float factor);
+```
 * Unit tests for all existing procedures, in [Test_Image.c](https://github.com/gilleshenrard/ITLg_programmation-procedurale/blob/Dossier1/Test_Image.c)
+
+### 4. To do
+* Implement text display (and manipulation, such as zoom, ...)
+* Modify the naming procedure so that it corresponds to the expected directory tree
+* Create the 'film' structure and make it reflect a film metadata
+* Create basic scenes to test all the procedures in a realistic setup
