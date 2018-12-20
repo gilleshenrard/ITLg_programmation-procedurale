@@ -30,7 +30,6 @@ void Tst_draw_line_cropped(char*, char);
 void Tst_Rotate(void);
 void Tst_Flip(void);
 void Tst_Zoom(void);
-void Tst_Zoom_Embed(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -48,10 +47,9 @@ int main(void)
     //Tst_draw_line("line_wu", 1);
     //Tst_draw_line_cropped("line_bresenham_cropped", 0);
     //Tst_draw_line_cropped("line_wu_cropped", 1);
-    //Tst_Rotate();
-    //Tst_Flip();
-    //Tst_Zoom();
-    Tst_Zoom_Embed();
+    Tst_Rotate();
+    Tst_Flip();
+    Tst_Zoom();
 
     return 0;
 }
@@ -394,52 +392,80 @@ void Tst_draw_line_cropped(char* filename, char antialiasing)
 ****************************************************************************************/
 void Tst_Rotate(void)
 {
-    image *tst=NULL, *tst2=NULL, *ship=NULL;
+    image *tst=NULL, *tst2=NULL, *tst3=NULL, *ship=NULL, *background=NULL;
 
     printf("\n--- Test Rotate -----------------------------------------------------\n\n");
     ship = Lire_Image("Test", "Enterprise");
+    background = Lire_Image("Test", "Field");
     tst = copy_image(ship);
 
     tst2 = rotate_image(tst, 30, 0, 0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"rotated_30");
+    tst3 = copy_image(background);
+    embed_image(tst2, tst3, 100, 100, 1.0);
+    strncpy(tst3->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst3,"rotated_30");
     Free_Image(tst2);
+    Free_Image(tst3);
 
     tst2 = rotate_image(tst, -30, 0, 0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"rotated_-30");
+    tst3 = copy_image(background);
+    embed_image(tst2, tst3, 100, 100, 1.0);
+    strncpy(tst3->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst3,"rotated_-30");
     Free_Image(tst2);
+    Free_Image(tst3);
 
     tst2 = rotate_image(tst, 60, 0, 0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"rotated_60");
+    tst3 = copy_image(background);
+    embed_image(tst2, tst3, 100, 100, 1.0);
+    strncpy(tst3->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst3,"rotated_60");
     Free_Image(tst2);
+    Free_Image(tst3);
 
     tst2 = rotate_image(tst, -60, 0, 0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"rotated_-60");
+    tst3 = copy_image(background);
+    embed_image(tst2, tst3, 100, 100, 1.0);
+    strncpy(tst3->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst3,"rotated_-60");
     Free_Image(tst2);
+    Free_Image(tst3);
 
     tst2 = rotate_image(tst, 90, 0, 0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"rotated_90");
+    tst3 = copy_image(background);
+    embed_image(tst2, tst3, 100, 100, 1.0);
+    strncpy(tst3->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst3,"rotated_90");
+    Free_Image(tst2);
+    Free_Image(tst3);
 
     tst2 = rotate_image(tst, -90, 0, 0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"rotated_-90");
+    tst3 = copy_image(background);
+    embed_image(tst2, tst3, 100, 100, 1.0);
+    strncpy(tst3->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst3,"rotated_-90");
+    Free_Image(tst2);
+    Free_Image(tst3);
 
     tst2 = rotate_image(tst, 180, 0, 0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"rotated_180");
+    tst3 = copy_image(background);
+    embed_image(tst2, tst3, 100, 100, 1.0);
+    strncpy(tst3->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst3,"rotated_180");
+    Free_Image(tst2);
+    Free_Image(tst3);
 
     tst2 = rotate_image(tst, 270, 0, 0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"rotated_270");
-
+    tst3 = copy_image(background);
+    embed_image(tst2, tst3, 100, 100, 1.0);
+    strncpy(tst3->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst3,"rotated_270");
 
     Free_Image(tst);
     Free_Image(tst2);
+    Free_Image(tst3);
     Free_Image(ship);
+    Free_Image(background);
 
     return;
 }
@@ -450,60 +476,30 @@ void Tst_Rotate(void)
 * Purpose : testing that pictures are properly flipped (vertically and horizontally)
 ****************************************************************************************/
 void Tst_Flip(void){
-    image *tst=NULL, *ship=NULL;
+    image *tst=NULL, *tst2=NULL, *ship=NULL, *background=NULL;
 
     printf("\n--- Test Flip -----------------------------------------------------\n\n");
     ship = Lire_Image("Test", "Enterprise");
+    background = Lire_Image("Test", "Field");
     tst = copy_image(ship);
 
     flip_image(tst, VERTICAL);
-    strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"flip_vertical");
+    tst2 = copy_image(background);
+    embed_image(tst, tst2, 100, 100, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"flip_vertical");
+    Free_Image(tst2);
 
     flip_image(tst, HORIZONTAL);
-    strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"flip_horizontal");
+    tst2 = copy_image(background);
+    embed_image(tst, tst2, 100, 100, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"flip_horizontal");
 
     Free_Image(tst);
+    Free_Image(tst2);
     Free_Image(ship);
-
-    return;
-}
-
-/****************************************************************************************
-* Test_Zoom : Zoom an image
-*
-* Purpose : testing that pictures are properly zoomed (increased and decreased)
-****************************************************************************************/
-void Tst_Zoom(void){
-    image *tst=NULL, *ship=NULL;
-
-    printf("\n--- Test Zoom -----------------------------------------------------\n\n");
-    ship = Lire_Image("Test", "Enterprise");
-    tst = copy_image(ship);
-
-    tst = zoom_image(ship, 1.5);
-    strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"zoom_15");
-    Free_Image(tst);
-
-    tst = zoom_image(ship, 3.0);
-    strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"zoom_3");
-    Free_Image(tst);
-
-    tst = zoom_image(ship, 0.5);
-    strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"zoom_05");
-    Free_Image(tst);
-
-    tst = zoom_image(ship, 1);
-    strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,"zoom_1");
-    Free_Image(tst);
-
-
-    Free_Image(ship);
+    Free_Image(background);
 
     return;
 }
@@ -513,7 +509,7 @@ void Tst_Zoom(void){
 *
 * Purpose : testing that pictures are properly cut while zooming
 ****************************************************************************************/
-void Tst_Zoom_Embed(void){
+void Tst_Zoom(void){
     image *tst=NULL, *tst2=NULL, *ship=NULL, *background=NULL;
 
     printf("\n--- Test Zoom -----------------------------------------------------\n\n");
@@ -549,6 +545,22 @@ void Tst_Zoom_Embed(void){
     embed_image(tst, tst2, 100, 100, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"zoom_embed_1");
+    Free_Image(tst);
+    Free_Image(tst2);
+
+    tst = zoom_image(ship, 1.5);
+    tst2 = copy_image(background);
+    embed_image(tst, tst2, 10, -90, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"zoom_embed_15");
+    Free_Image(tst);
+    Free_Image(tst2);
+
+    tst = zoom_image(ship, 2.0);
+    tst2 = copy_image(background);
+    embed_image(tst, tst2, -100, -200, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"zoom_embed_3");
     Free_Image(tst);
     Free_Image(tst2);
 
