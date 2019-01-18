@@ -298,7 +298,11 @@ void Afficher_Header(image *img)
 ****************************************************************************************/
 void Nom_Image(char * nom, char * nom_base, char * num_scene, char * nom_tag)
 {
-	sprintf(nom, "%s%s\\%s_%s.bmp", PHOTO_DIR, nom_base, nom_base, nom_tag);
+    if(num_scene)
+        sprintf(nom, "%s%s\\%s_%s\\%s_%s.bmp", PHOTO_DIR, nom_base, nom_base, num_scene, nom_base, nom_tag);
+    else
+        sprintf(nom, "%s%s\\%s_%s.bmp", PHOTO_DIR, nom_base, nom_base, nom_tag);
+
     printf("Fichier : %s\n\n", nom);
 
     return;
