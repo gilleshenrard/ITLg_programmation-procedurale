@@ -73,10 +73,10 @@ typedef struct Image
 /****************************************************************************************
 * Prototypes Systeme : Gestion des image sur disque et allocation dynamique memoire
 ****************************************************************************************/
-image * Lire_Image(char * nom_bas, char * nom_tag);
+image * Lire_Image(char * nom_bas, char * num_scene, char * nom_tag);
 image * Creer_Image(char * nom_bas, uint hauteur, uint largeur, int col, int niv);
-void Ecrire_Image(image * img, char * nom_tag);
-void Nom_Image(char * nom, char * nom_base, char * nom_tag);
+void Ecrire_Image(image * img, char * num_scene, char * nom_tag);
+void Nom_Image(char * nom, char * nom_base, char * num_scene, char * nom_tag);
 
 uchar *** Malloc_Pic(uint hauteur, uint largeur);
 void Free_Pic(uchar *** t, uint hauteur, uint largeur);

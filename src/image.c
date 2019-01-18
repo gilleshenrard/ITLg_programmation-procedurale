@@ -6,7 +6,7 @@
 *   nom_tag : suffixe du nom d'image
 *   retourne le pointeur vers l'image allouee
 ****************************************************************************************/
-image * Lire_Image(char * nom_bas, char * nom_tag)
+image * Lire_Image(char * nom_bas, char * num_scene, char * nom_tag)
 {
 	int i=0, j=0, k=0, bufsize;
     char nom_fic[FIC_NM] = {0};    // Nom complet du fichier image
@@ -24,7 +24,7 @@ image * Lire_Image(char * nom_bas, char * nom_tag)
 	}
 
 	/* Ouverture fichier binaire en lecture */
-    Nom_Image(nom_fic, nom_bas, nom_tag);
+    Nom_Image(nom_fic, nom_bas, num_scene, nom_tag);
 	if ((fp = fopen(nom_fic, "rb")) == NULL)
 	{
 		printf("\nError opening source file %s\n", nom_fic);
@@ -136,7 +136,7 @@ image * Creer_Image(char * nom_bas, uint hauteur, uint largeur, int col, int niv
 *   img     : structure image
 *   nom_tag : suffixe du nom d'image
 ****************************************************************************************/
-void Ecrire_Image(image * img, char * nom_tag)
+void Ecrire_Image(image * img, char * num_scene, char * nom_tag)
 {
     int i=0, j=0, k=0, bufsize=0;
     char nom_fic[FIC_NM] = {0};
@@ -158,7 +158,7 @@ void Ecrire_Image(image * img, char * nom_tag)
     memset(buf_data,0,bufsize);
 
 	/* Ouverture fichier binaire en ecriture */
-    Nom_Image(nom_fic, img->nom_base,nom_tag);
+    Nom_Image(nom_fic, img->nom_base, num_scene, nom_tag);
 	if ((fp = fopen(nom_fic, "wb")) ==NULL)
 	{
 		printf("\nError opening source file\n");
@@ -296,7 +296,7 @@ void Afficher_Header(image *img)
 *   nom_bas     : Base name (type. e.g. 'Ship')
 *   nom_tag     : Suffix (e.g. '_test2')
 ****************************************************************************************/
-void Nom_Image(char * nom, char * nom_base, char * nom_tag)
+void Nom_Image(char * nom, char * nom_base, char * num_scene, char * nom_tag)
 {
 	sprintf(nom, "%s%s\\%s_%s.bmp", PHOTO_DIR, nom_base, nom_base, nom_tag);
     printf("Fichier : %s\n\n", nom);
