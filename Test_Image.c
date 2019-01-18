@@ -36,19 +36,19 @@ void Tst_Zoom(void);
 ****************************************************************************************/
 int main(void)
 {
-    //Tst_System_01();
-    //Tst_System_02();
-    //Tst_System_03();
-    //Tst_System_04();
-    //Tst_Embed_complete();
-    //Tst_Embed_cropped();
-    //Tst_Embed_alpha();
-    //Tst_draw_line("line_bresenham", 0);
-    //Tst_draw_line("line_wu", 1);
-    //Tst_draw_line_cropped("line_bresenham_cropped", 0);
-    //Tst_draw_line_cropped("line_wu_cropped", 1);
-    Tst_Rotate();
-    Tst_Flip();
+//    Tst_System_01();
+//    Tst_System_02();
+//    Tst_System_03();
+//    Tst_System_04();
+//    Tst_Embed_complete();
+//    Tst_Embed_cropped();
+//    Tst_Embed_alpha();
+//    Tst_draw_line("line_bresenham", 0);
+//    Tst_draw_line("line_wu", 1);
+//    Tst_draw_line_cropped("line_bresenham_cropped", 0);
+//    Tst_draw_line_cropped("line_wu_cropped", 1);
+//    Tst_Rotate();
+//    Tst_Flip();
     Tst_Zoom();
 
     return 0;
