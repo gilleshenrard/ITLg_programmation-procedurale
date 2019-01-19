@@ -16,6 +16,13 @@ typedef struct{
     char antialiasing;
 } line;
 
+typedef struct{
+    char name[32];      //ship's model (Romulan, Klingon, ...)
+    int weapons[2][3];  //coordinates of the weapons (3 max)
+    couleur w_colour;    //colour of the weapons (lasers)
+    image *img;         //image of the ship
+} ship_t;
+
 void Filtrer_Noir_Blanc(image * img);
 void Damier(image * img);
 
