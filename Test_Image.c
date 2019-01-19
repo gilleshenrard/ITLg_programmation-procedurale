@@ -33,6 +33,7 @@ void Tst_Rotate(void);
 void Tst_Flip(void);
 void Tst_Zoom(void);
 void Tst_Dir_Tree(void);
+void Tst_Weapon_Computation(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -53,7 +54,8 @@ int main(void)
 //    Tst_Rotate();
 //    Tst_Flip();
 //    Tst_Zoom();
-    Tst_Dir_Tree();
+//    Tst_Dir_Tree();
+    Tst_Weapon_Computation();
 
     return 0;
 }
@@ -608,5 +610,65 @@ void Tst_Dir_Tree(void){
         }
     }
 
+    return;
+}
+
+/****************************************************************************************
+* Tst_Weapon_Computation : Checks if weapons coordinates properly change with
+*                               ships manipulation
+*
+* Purpose : Making sure coordinates are properly computed
+****************************************************************************************/
+void Tst_Weapon_Computation(){
+    image *ship=NULL, *background=NULL, *tst2=NULL;
+    ship_t tst={"Enterprise", {249,249}, 1, {{247,200},{0,0},{0,0}}, VERT, NULL};
+    line l = {0, 0, 0, 0, Get_Color(tst.w_colour, NIVEAU_8), 1.0, 0};
+
+    printf("\n--- Test Weapon Computation -----------------------------------------------------\n\n");
+    ship = Lire_Image("Ship", NULL, "Enterprise");
+    background = Lire_Image("Star", NULL, "Field");
+    system(MKDIR(Test\\Test_Weapon_Computation));
+
+    tst.img = copy_image(ship);
+    tst2 = copy_image(background);
+    embed_image(tst.img, tst2, 0, 0, 1.0);
+    compute_weapons_coordinates(&tst, 0, 0, 0, 0, 0);
+    l.xa = tst.weapons[0][0];
+    l.ya = tst.weapons[0][1];
+    l.xb = tst.weapons[0][0] + 200;
+    l.yb = tst.weapons[0][1];
+    draw_line_generic(tst2, &l);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"Weapon_Computation", "no_modif");
+    Free_Image(tst2);
+
+    tst2 = copy_image(background);
+    embed_image(tst.img, tst2, 200, 200, 1.0);
+    compute_weapons_coordinates(&tst, 0, 200, 200, 0, 0);
+    l.xa = tst.weapons[0][0];
+    l.ya = tst.weapons[0][1];
+    l.xb = tst.weapons[0][0] + 200;
+    l.yb = tst.weapons[0][1];
+    draw_line_generic(tst2, &l);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"Weapon_Computation", "translated");
+    Free_Image(tst2);
+
+    tst2 = copy_image(background);
+    flip_image(tst.img, HORIZONTAL);
+    embed_image(tst.img, tst2, 200, 200, 1.0);
+    compute_weapons_coordinates(&tst, HORIZONTAL, 0, 0, 0, 0);
+    l.xa = tst.weapons[0][0];
+    l.ya = tst.weapons[0][1];
+    l.xb = tst.weapons[0][0] + 200;
+    l.yb = tst.weapons[0][1];
+    draw_line_generic(tst2, &l);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"Weapon_Computation", "flipped");
+
+    Free_Image(ship);
+    Free_Image(background);
+    Free_Image(tst.img);
+    Free_Image(tst2);
     return;
 }

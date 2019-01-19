@@ -487,18 +487,20 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
 
     for(int i=0 ; i<ship->nb_weapons ; i++){
         //compute ship translation
-        ship->weapons[i][0] += translation_y;
-        ship->weapons[i][1] += translation_x;
+        ship->weapons[i][0] += translation_x;
+        ship->weapons[i][1] += translation_y;
 
         //compute flipping
         if(flipped == VERTICAL)
-            ship->weapons[i][1] = ship->img->header.largeur - ship->weapons[i][1] - 1;
+            ship->weapons[i][0] = ship->img->header.largeur - ship->weapons[i][0] - 1;
         else if (flipped == HORIZONTAL)
-            ship->weapons[i][0] = ship->img->header.hauteur - ship->weapons[i][0] - 1;
+            ship->weapons[i][1] = ship->img->header.hauteur - ship->weapons[i][1] - 1;
 
         //compute zoom
-        ship->weapons[i][1] *= (int)(float)(ship->weapons[i][1]*zoom);
-        ship->weapons[i][0] *= (int)(float)(ship->weapons[i][0]*zoom);
+        if(zoom > 0){
+            ship->weapons[i][0] *= (int)(float)(ship->weapons[i][0]*zoom);
+            ship->weapons[i][1] *= (int)(float)(ship->weapons[i][1]*zoom);
+        }
     }
 
     return 0;
