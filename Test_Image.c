@@ -18,6 +18,8 @@
 #include "lib/image.h"
 #include "lib/effects.h"
 
+#define MKDIR(x) "if not exist ..\\Films\\" #x " mkdir ..\\Films\\" #x
+
 void Tst_System_01(void);
 void Tst_System_02(void);
 void Tst_System_03(void);
@@ -71,8 +73,9 @@ void Tst_System_01(void)
 
     img = Creer_Image("Test",1200,1800,VERT, NIVEAU_8);
     Afficher_Header(img);
+    system(MKDIR(Test\\Test_System_01));
 
-    Ecrire_Image(img, NULL, "01");
+    Ecrire_Image(img, "System_01", "01");
 
     Free_Image(img);
 
@@ -82,16 +85,16 @@ void Tst_System_01(void)
 
     /* Traitement eventuel*/
 
-    Ecrire_Image(img, NULL, "02");
+    Ecrire_Image(img, "System_01", "02");
 
     Free_Image(img);
 
     // --- Relire / Ecrire / Liberer une des images precedement creee
 
-    img = Lire_Image("Test", NULL, "02");
+    img = Lire_Image("Test", "System_01", "02");
     Afficher_Header(img);
 
-    Ecrire_Image(img, NULL, "copy_02");
+    Ecrire_Image(img, "System_01", "copy_02");
 
     Free_Image(img);
 
@@ -109,6 +112,7 @@ void Tst_System_02(void)
     image *img = NULL;
 
     printf("\n--- Test 2 -----------------------------------------------------\n\n");
+    system(MKDIR(USS_Ent));
 
     img = Lire_Image("USS_Ent", NULL, "");
 
@@ -141,13 +145,14 @@ void Tst_System_03(void)
     char txt[20];
 
     printf("\n--- Test 3 -----------------------------------------------------\n\n");
+    system(MKDIR(Test\\Test_System_03));
 
     for (i=0; i<5; i++)
     {
         sprintf(txt, "Ele_%d", i);
-        ori = Lire_Image("Test",NULL, txt);
+        ori = Lire_Image("Test","System_03", txt);
         sprintf(txt, "Ele_%d_C", i);
-        Ecrire_Image(ori, NULL, txt);
+        Ecrire_Image(ori, "System_03", txt);
     }
 
     Free_Image(ori);
@@ -169,6 +174,8 @@ void Tst_System_04(void)
 
     printf("\n--- Test 4 -----------------------------------------------------\n\n");
 
+    system(MKDIR(Test\\Test_System_04));
+
     for (i=4; i<=5; i++)
     {
         for (j=4; j<=8; j++)
@@ -176,12 +183,12 @@ void Tst_System_04(void)
             tst = Creer_Image("Test",i,j,NOIR,NIVEAU_8);
             Damier(tst);
             sprintf(txt, "CR_%d_%d",i,j);
-            Ecrire_Image(tst,NULL, txt);
+            Ecrire_Image(tst,"System_04", txt);
             Free_Image(tst);
 
-            tst = Lire_Image("Test", NULL, txt);
+            tst = Lire_Image("Test", "System_04", txt);
             sprintf(txt, "CR_%d_%d_Copy",i,j);
-            Ecrire_Image(tst,NULL, txt);
+            Ecrire_Image(tst,"System_04", txt);
             Free_Image(tst);
         }
     }
@@ -199,25 +206,26 @@ void Tst_Embed_complete(void)
     image *  tst=NULL, *ship=NULL, *space_back=NULL;
 
     printf("\n--- Test Embed Complete -----------------------------------------------------\n\n");
-    ship = Lire_Image("Test", NULL, "Enterprise");
-    space_back = Lire_Image("Test", NULL, "Field");
+    ship = Lire_Image("Ship", NULL, "Enterprise");
+    space_back = Lire_Image("Star", NULL, "Field");
+    system(MKDIR(Test\\Test_Embed));
 
     tst = copy_image(space_back);
     embed_image(ship, tst, 0, 0, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,NULL, "embed0");
+    Ecrire_Image(tst,"Embed", "embed0");
     Free_Image(tst);
 
     tst = copy_image(space_back);
     embed_image(ship, tst, 100, 0, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,NULL, "embed_horizontal");
+    Ecrire_Image(tst,"Embed", "embed_horizontal");
     Free_Image(tst);
 
     tst = copy_image(space_back);
     embed_image(ship, tst, 0, 100, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,NULL, "embed_vertical");
+    Ecrire_Image(tst,"Embed", "embed_vertical");
 
     Free_Image(tst);
     Free_Image(ship);
@@ -236,8 +244,9 @@ void Tst_Embed_cropped(void)
     image *  tst=NULL, *ship=NULL, *space_back=NULL;
 
     printf("\n--- Test Embed Cropped -----------------------------------------------------\n\n");
-    ship = Lire_Image("Test", NULL, "Enterprise");
-    space_back = Lire_Image("Test", NULL, "Field");
+    ship = Lire_Image("Ship", NULL, "Enterprise");
+    space_back = Lire_Image("Star", NULL, "Field");
+    system(MKDIR(Test\\Test_Embed));
 
     //cropped left
     tst = copy_image(space_back);
@@ -255,7 +264,7 @@ void Tst_Embed_cropped(void)
     //fully out
     embed_image(ship, tst, 10000, 10000, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,NULL, "embed_cropped");
+    Ecrire_Image(tst,"Embed", "embed_cropped");
 
     Free_Image(tst);
     Free_Image(ship);
@@ -274,31 +283,32 @@ void Tst_Embed_alpha(void)
     image *  tst=NULL, *ship=NULL, *space_back=NULL;
 
     printf("\n--- Test Embed Alpha -----------------------------------------------------\n\n");
-    ship = Lire_Image("Test", NULL, "Enterprise");
-    space_back = Lire_Image("Test", NULL, "Field");
+    ship = Lire_Image("Ship", NULL, "Enterprise");
+    space_back = Lire_Image("Star", NULL, "Field");
+    system(MKDIR(Test\\Test_Embed));
 
     tst = copy_image(space_back);
     embed_image(ship, tst, 10, 10, 1.0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,NULL, "alpha_full");
+    Ecrire_Image(tst,"Embed", "alpha_full");
     Free_Image(tst);
 
     tst = copy_image(space_back);
     embed_image(ship, tst, 10, 10, 0.7);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,NULL, "alpha_07");
+    Ecrire_Image(tst,"Embed", "alpha_07");
     Free_Image(tst);
 
     tst = copy_image(space_back);
     embed_image(ship, tst, 10, 10, 0.4);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,NULL, "alpha_04");
+    Ecrire_Image(tst,"Embed", "alpha_04");
     Free_Image(tst);
 
     tst = copy_image(space_back);
     embed_image(ship, tst, 10, 10, 0);
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,NULL, "alpha_transparent");
+    Ecrire_Image(tst,"Embed", "alpha_transparent");
 
     Free_Image(tst);
     Free_Image(ship);
@@ -321,8 +331,9 @@ void Tst_draw_line(char* filename, char antialiasing)
                        180, 195, 210, 225, 240, 255, 270, 285, 300, 315, 330, 345};
 
     printf("\n--- Test Draw Line -----------------------------------------------------\n\n");
-    space_back = Lire_Image("Test", NULL, "Field");
+    space_back = Lire_Image("Star", NULL, "Field");
     tst = copy_image(space_back);
+    system(MKDIR(Test\\Test_Line));
 
     for(int i=0 ; i<24 ; i++){
         lign.xb = 400 + (int)(200 * cos((angles[i]*M_PI)/180));
@@ -332,7 +343,7 @@ void Tst_draw_line(char* filename, char antialiasing)
     }
 
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst,NULL, filename);
+    Ecrire_Image(tst,"Line", filename);
 
     Free_Image(tst);
     Free_Image(space_back);
@@ -358,8 +369,9 @@ void Tst_draw_line_cropped(char* filename, char antialiasing)
     line l8 = {500, 350, 500, -100, NULL, 1.0, antialiasing};      //vertical, out on the bottom
 
     printf("\n--- Test Draw Line Cropped-----------------------------------------------------\n\n");
-    space_back = Lire_Image("Test", NULL, "Field");
+    space_back = Lire_Image("Star", NULL, "Field");
     tst = copy_image(space_back);
+    system(MKDIR(Test\\Test_Line));
 
     l1.colour = Get_Color(BLEU, NIVEAU_8);
     draw_line_generic(tst, &l1);
@@ -379,7 +391,7 @@ void Tst_draw_line_cropped(char* filename, char antialiasing)
     draw_line_generic(tst, &l8);
 
     strncpy(tst->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst, NULL, filename);
+    Ecrire_Image(tst, "Line", filename);
 
     Free_Image(tst);
     Free_Image(space_back);
@@ -397,15 +409,16 @@ void Tst_Rotate(void)
     image *tst=NULL, *tst2=NULL, *tst3=NULL, *ship=NULL, *background=NULL;
 
     printf("\n--- Test Rotate -----------------------------------------------------\n\n");
-    ship = Lire_Image("Test", NULL, "Enterprise");
-    background = Lire_Image("Test", NULL, "Field");
+    ship = Lire_Image("Ship", NULL, "Enterprise");
+    background = Lire_Image("Star", NULL, "Field");
     tst = copy_image(ship);
+    system(MKDIR(Test\\Test_Rotate));
 
     tst2 = rotate_image(tst, 30, 0, 0);
     tst3 = copy_image(background);
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,NULL, "rotated_30");
+    Ecrire_Image(tst3,"Rotate", "rotated_30");
     Free_Image(tst2);
     Free_Image(tst3);
 
@@ -413,7 +426,7 @@ void Tst_Rotate(void)
     tst3 = copy_image(background);
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,NULL, "rotated_-30");
+    Ecrire_Image(tst3,"Rotate", "rotated_-30");
     Free_Image(tst2);
     Free_Image(tst3);
 
@@ -421,7 +434,7 @@ void Tst_Rotate(void)
     tst3 = copy_image(background);
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,NULL, "rotated_60");
+    Ecrire_Image(tst3,"Rotate", "rotated_60");
     Free_Image(tst2);
     Free_Image(tst3);
 
@@ -429,7 +442,7 @@ void Tst_Rotate(void)
     tst3 = copy_image(background);
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,NULL, "rotated_-60");
+    Ecrire_Image(tst3,"Rotate", "rotated_-60");
     Free_Image(tst2);
     Free_Image(tst3);
 
@@ -437,7 +450,7 @@ void Tst_Rotate(void)
     tst3 = copy_image(background);
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,NULL, "rotated_90");
+    Ecrire_Image(tst3,"Rotate", "rotated_90");
     Free_Image(tst2);
     Free_Image(tst3);
 
@@ -445,7 +458,7 @@ void Tst_Rotate(void)
     tst3 = copy_image(background);
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,NULL, "rotated_-90");
+    Ecrire_Image(tst3,"Rotate", "rotated_-90");
     Free_Image(tst2);
     Free_Image(tst3);
 
@@ -453,7 +466,7 @@ void Tst_Rotate(void)
     tst3 = copy_image(background);
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,NULL, "rotated_180");
+    Ecrire_Image(tst3,"Rotate", "rotated_180");
     Free_Image(tst2);
     Free_Image(tst3);
 
@@ -461,7 +474,7 @@ void Tst_Rotate(void)
     tst3 = copy_image(background);
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,NULL, "rotated_270");
+    Ecrire_Image(tst3,"Rotate", "rotated_270");
 
     Free_Image(tst);
     Free_Image(tst2);
@@ -481,22 +494,23 @@ void Tst_Flip(void){
     image *tst=NULL, *tst2=NULL, *ship=NULL, *background=NULL;
 
     printf("\n--- Test Flip -----------------------------------------------------\n\n");
-    ship = Lire_Image("Test", NULL, "Enterprise");
-    background = Lire_Image("Test", NULL, "Field");
+    ship = Lire_Image("Ship", NULL, "Enterprise");
+    background = Lire_Image("Star", NULL, "Field");
     tst = copy_image(ship);
+    system(MKDIR(Test\\Test_Flip));
 
     flip_image(tst, VERTICAL);
     tst2 = copy_image(background);
     embed_image(tst, tst2, 100, 100, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,NULL, "flip_vertical");
+    Ecrire_Image(tst2,"Flip", "flip_vertical");
     Free_Image(tst2);
 
     flip_image(tst, HORIZONTAL);
     tst2 = copy_image(background);
     embed_image(tst, tst2, 100, 100, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,NULL, "flip_horizontal");
+    Ecrire_Image(tst2,"Flip", "flip_horizontal");
 
     Free_Image(tst);
     Free_Image(tst2);
@@ -515,14 +529,15 @@ void Tst_Zoom(void){
     image *tst=NULL, *tst2=NULL, *ship=NULL, *background=NULL;
 
     printf("\n--- Test Zoom -----------------------------------------------------\n\n");
-    ship = Lire_Image("Test", NULL, "Enterprise");
-    background = Lire_Image("Test", NULL, "Field");
+    ship = Lire_Image("Ship", NULL, "Enterprise");
+    background = Lire_Image("Star", NULL, "Field");
+    system(MKDIR(Test\\Test_Zoom));
 
     tst = zoom_image(ship, 0.3);
     tst2 = copy_image(background);
     embed_image(tst, tst2, 100, 100, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,NULL, "zoom_embed_03");
+    Ecrire_Image(tst2,"Zoom", "zoom_embed_03");
     Free_Image(tst);
     Free_Image(tst2);
 
@@ -530,7 +545,7 @@ void Tst_Zoom(void){
     tst2 = copy_image(background);
     embed_image(tst, tst2, 100, 100, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,NULL, "zoom_embed_05");
+    Ecrire_Image(tst2,"Zoom", "zoom_embed_05");
     Free_Image(tst);
     Free_Image(tst2);
 
@@ -538,7 +553,7 @@ void Tst_Zoom(void){
     tst2 = copy_image(background);
     embed_image(tst, tst2, 100, 100, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,NULL, "zoom_embed_075");
+    Ecrire_Image(tst2,"Zoom", "zoom_embed_075");
     Free_Image(tst);
     Free_Image(tst2);
 
@@ -546,7 +561,7 @@ void Tst_Zoom(void){
     tst2 = copy_image(background);
     embed_image(tst, tst2, 100, 100, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,NULL, "zoom_embed_1");
+    Ecrire_Image(tst2,"Zoom", "zoom_embed_1");
     Free_Image(tst);
     Free_Image(tst2);
 
@@ -554,7 +569,7 @@ void Tst_Zoom(void){
     tst2 = copy_image(background);
     embed_image(tst, tst2, 10, -90, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,NULL, "zoom_embed_15");
+    Ecrire_Image(tst2,"Zoom", "zoom_embed_15");
     Free_Image(tst);
     Free_Image(tst2);
 
@@ -562,7 +577,7 @@ void Tst_Zoom(void){
     tst2 = copy_image(background);
     embed_image(tst, tst2, -100, -200, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,NULL, "zoom_embed_3");
+    Ecrire_Image(tst2,"Zoom", "zoom_embed_3");
     Free_Image(tst);
     Free_Image(tst2);
 
