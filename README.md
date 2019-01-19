@@ -42,6 +42,5 @@ image* zoom_image(image* img, float factor);
 
 ### 4. To do
 * Implement text display (and manipulation, such as zoom, ...)
-* Modify the naming procedure so that it corresponds to the expected directory tree
 * Create the 'film' structure and make it reflect a film metadata
 * Create basic scenes to test all the procedures in a realistic setup
