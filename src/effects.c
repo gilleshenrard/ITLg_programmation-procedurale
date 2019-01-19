@@ -481,6 +481,17 @@ image* zoom_image(image* img, float factor){
 /*  O : -1 if error                                                                     */
 /*       0 otherwise                                                                    */
 /****************************************************************************************/
-int compute_weapons_coordinates(ship_t* ship){
+int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, int translation_y, int angle, float zoom){
+    if(!ship)
+        return -1;
+
+    for(int i=0 ; i<ship->nb_weapons ; i++){
+        //compute ship translation
+        ship->weapons[i][0] += translation_y;
+        ship->weapons[i][1] += translation_x;
+
+
+    }
+
     return 0;
 }
