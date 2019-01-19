@@ -17,10 +17,14 @@ typedef struct{
 } line;
 
 typedef struct{
-    char name[32];      //ship's model (Romulan, Klingon, ...)
-    int weapons[2][3];  //coordinates of the weapons (3 max)
-    couleur w_colour;    //colour of the weapons (lasers)
-    image *img;         //image of the ship
+    char    name[32];       //ship's model (Romulan, Klingon, ...)
+    int     weapons[2][3];  //coordinates of the weapons (3 max)
+    couleur w_colour;       //colour of the weapons (lasers)
+    image   *img;           //image of the ship
+    char    flipped;        //flag to determine if the ship has been flipped
+    int     coordinates[2]: //x and y coordinates of the image (translation)
+    int     angle;          //angle with which the ship has been rotated
+    float   zoom;           //zoom factor
 } ship_t;
 
 void Filtrer_Noir_Blanc(image * img);
@@ -37,5 +41,8 @@ int draw_line_generic(image* img, line* l);
 image* rotate_image(image* img, int angle, int offsetX, int offsetY);
 int flip_image(image* img, int axis);
 image* zoom_image(image* img, float factor);
+
+//ship specific
+int compute_weapons_coordinates(ship_t* ship);
 
 #endif // EFFECTS_H_INCLUDED

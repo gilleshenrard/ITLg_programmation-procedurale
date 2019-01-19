@@ -473,3 +473,14 @@ image* zoom_image(image* img, float factor){
 
     return buffer;
 }
+
+/****************************************************************************************/
+/*  I : Ship for which compute the weapons coordinates                                  */
+/*  P : Computes the coordinates of the weapon depending if the image has been flipped, */
+/*          translated, zoomed, ...                                                     */
+/*  O : -1 if error                                                                     */
+/*       0 otherwise                                                                    */
+/****************************************************************************************/
+int compute_weapons_coordinates(ship_t* ship){
+    return 0;
+}
