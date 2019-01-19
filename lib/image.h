@@ -70,13 +70,6 @@ typedef struct Image
 	uint nb_pix;            // nombre de pixels sur l'image
 } image;
 
-typedef struct{
-    char name[32];      //ship's model (Romulan, Klingon, ...)
-    int weapons[2][3];  //coordinates of the weapons (3 max)
-    couleur w_colour;    //colour of the weapons (lasers)
-    image *img;         //image of the ship
-} ship_t;
-
 /****************************************************************************************
 * Prototypes Systeme : Gestion des image sur disque et allocation dynamique memoire
 ****************************************************************************************/
