@@ -487,9 +487,11 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
     if(!ship)
         return -1;
 
+    //compute the new image center
     ship->center[0] += translation_x;
     ship->center[1] += translation_y;
 
+    //compute the image x0 and y0
     x0 = ship->center[0] - (ship->img->header.largeur/2);
     y0 = ship->center[1] - (ship->img->header.hauteur/2);
 
@@ -499,23 +501,23 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
         ship->weapons[i][1] += translation_y;
 
         //compute flipping
-        if(flipped == VERTICAL){
-            ship->weapons[i][0] -= x0;
-            ship->weapons[i][0] = ship->img->header.largeur - ship->weapons[i][0] - 1;
-            ship->weapons[i][0] += x0;
-        }
-        else if (flipped == HORIZONTAL){
-            ship->weapons[i][1] -= y0;
-            ship->weapons[i][1] = ship->img->header.hauteur - ship->weapons[i][1] - 1;
-            ship->weapons[i][1] += y0;
+        switch(flipped){
+            case VERTICAL:
+                ship->weapons[i][0] = x0 + ship->img->header.largeur - (ship->weapons[i][0]-x0) - 1;
+                break;
+            case HORIZONTAL:
+                ship->weapons[i][1] = y0 + ship->img->header.hauteur - (ship->weapons[i][1]-y0) - 1;
+                break;
+            default:
+                break;
         }
 
         //compute zoom
         if(zoom > 0){
-            ship->weapons[i][0] *= (int)(float)(ship->weapons[i][0]*zoom);
-            ship->weapons[i][1] *= (int)(float)(ship->weapons[i][1]*zoom);
-            ship->center[0] *= (int)(float)(ship->center[0]*zoom);
-            ship->center[1] *= (int)(float)(ship->center[1]*zoom);
+            ship->weapons[i][0] = x0 + (int)(float)((ship->weapons[i][0] - x0) * zoom);
+            ship->weapons[i][1] = y0 + (int)(float)((ship->weapons[i][1] - y0) * zoom);
+            ship->center[0] = (int)(float)(ship->center[0]*zoom);
+            ship->center[1] = (int)(float)(ship->center[1]*zoom);
         }
     }
 
