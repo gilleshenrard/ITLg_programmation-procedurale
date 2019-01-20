@@ -3,9 +3,9 @@
 #include "image.h"
 #include <math.h>
 
-#define NO_FLIP
-#define VERTICAL 1
-#define HORIZONTAL 2
+#define NO_FLIP     0
+#define VERTICAL    1
+#define HORIZONTAL  2
 
 typedef struct{
     int xa;
