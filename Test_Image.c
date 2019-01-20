@@ -621,7 +621,7 @@ void Tst_Dir_Tree(void){
 ****************************************************************************************/
 void Tst_Weapon_Computation(){
     image *ship=NULL, *background=NULL, *tst2=NULL;
-    ship_t tst={"Enterprise", {249,249}, 1, {{247,200},{0,0},{0,0}}, VERT, NULL};
+    ship_t tst={"Enterprise", {249,249}, 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
     line l = {0, 0, 0, 0, Get_Color(tst.w_colour, NIVEAU_8), 1.0, 0};
 
     printf("\n--- Test Weapon Computation -----------------------------------------------------\n\n");
@@ -633,36 +633,42 @@ void Tst_Weapon_Computation(){
     tst2 = copy_image(background);
     embed_image(tst.img, tst2, 0, 0, 1.0);
     compute_weapons_coordinates(&tst, 0, 0, 0, 0, 0);
-    l.xa = tst.weapons[0][0];
-    l.ya = tst.weapons[0][1];
-    l.xb = tst.weapons[0][0] + 200;
-    l.yb = tst.weapons[0][1];
-    draw_line_generic(tst2, &l);
+    for(int i=0 ; i < tst.nb_weapons ; i++){
+        l.xa = tst.weapons[i][0];
+        l.ya = tst.weapons[i][1];
+        l.xb = tst.weapons[i][0] + 200;
+        l.yb = tst.weapons[i][1];
+        draw_line_generic(tst2, &l);
+    }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "no_modif");
     Free_Image(tst2);
 
     tst2 = copy_image(background);
-    embed_image(tst.img, tst2, 200, 200, 1.0);
-    compute_weapons_coordinates(&tst, 0, 200, 200, 0, 0);
-    l.xa = tst.weapons[0][0];
-    l.ya = tst.weapons[0][1];
-    l.xb = tst.weapons[0][0] + 200;
-    l.yb = tst.weapons[0][1];
-    draw_line_generic(tst2, &l);
+    embed_image(tst.img, tst2, 100, 100, 1.0);
+    compute_weapons_coordinates(&tst, 0, 100, 100, 0, 0);
+    for(int i=0 ; i < tst.nb_weapons ; i++){
+        l.xa = tst.weapons[i][0];
+        l.ya = tst.weapons[i][1];
+        l.xb = tst.weapons[i][0] + 200;
+        l.yb = tst.weapons[i][1];
+        draw_line_generic(tst2, &l);
+    }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "translated");
     Free_Image(tst2);
 
     tst2 = copy_image(background);
     flip_image(tst.img, HORIZONTAL);
-    embed_image(tst.img, tst2, 200, 200, 1.0);
+    embed_image(tst.img, tst2, 100, 100, 1.0);
     compute_weapons_coordinates(&tst, HORIZONTAL, 0, 0, 0, 0);
-    l.xa = tst.weapons[0][0];
-    l.ya = tst.weapons[0][1];
-    l.xb = tst.weapons[0][0] + 200;
-    l.yb = tst.weapons[0][1];
-    draw_line_generic(tst2, &l);
+    for(int i=0 ; i < tst.nb_weapons ; i++){
+        l.xa = tst.weapons[i][0];
+        l.ya = tst.weapons[i][1];
+        l.xb = tst.weapons[i][0] + 200;
+        l.yb = tst.weapons[i][1];
+        draw_line_generic(tst2, &l);
+    }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "flipped");
 
