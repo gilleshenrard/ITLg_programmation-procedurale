@@ -620,7 +620,7 @@ void Tst_Dir_Tree(void){
 * Purpose : Making sure coordinates are properly computed
 ****************************************************************************************/
 void Tst_Weapon_Computation(){
-    image *ship=NULL, *background=NULL, *tst2=NULL;
+    image *ship=NULL, *background=NULL, *tst2=NULL, *tmp=NULL;
     ship_t tst={"Enterprise", {249,249}, 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
     line l = {0, 0, 0, 0, Get_Color(tst.w_colour, NIVEAU_8), 1.0, 0};
 
@@ -671,6 +671,23 @@ void Tst_Weapon_Computation(){
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "flipped");
+    Free_Image(tst2);
+
+    tst2 = copy_image(background);
+    tmp = zoom_image(tst.img, 0.75);
+    Free_Image(tst.img);
+    tst.img = tmp;
+    embed_image(tmp, tst2, 100, 100, 1.0);
+    compute_weapons_coordinates(&tst, HORIZONTAL, 0, 0, 0, 0);
+    for(int i=0 ; i < tst.nb_weapons ; i++){
+        l.xa = tst.weapons[i][0];
+        l.ya = tst.weapons[i][1];
+        l.xb = tst.weapons[i][0] + 200;
+        l.yb = tst.weapons[i][1];
+        draw_line_generic(tst2, &l);
+    }
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"Weapon_Computation", "unzoomed");
 
     Free_Image(ship);
     Free_Image(background);
