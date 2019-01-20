@@ -632,7 +632,7 @@ void Tst_Weapon_Computation(){
     tst.img = copy_image(ship);
     tst2 = copy_image(background);
     embed_image(tst.img, tst2, 0, 0, 1.0);
-    compute_weapons_coordinates(&tst, 0, 0, 0, 0, 0);
+    compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 0, 0);
     for(int i=0 ; i < tst.nb_weapons ; i++){
         l.xa = tst.weapons[i][0];
         l.ya = tst.weapons[i][1];
@@ -646,7 +646,7 @@ void Tst_Weapon_Computation(){
 
     tst2 = copy_image(background);
     embed_image(tst.img, tst2, 100, 100, 1.0);
-    compute_weapons_coordinates(&tst, 0, 100, 100, 0, 0);
+    compute_weapons_coordinates(&tst, NO_FLIP, 100, 100, 0, 0);
     for(int i=0 ; i < tst.nb_weapons ; i++){
         l.xa = tst.weapons[i][0];
         l.ya = tst.weapons[i][1];
@@ -678,7 +678,7 @@ void Tst_Weapon_Computation(){
     Free_Image(tst.img);
     tst.img = tmp;
     embed_image(tmp, tst2, 100, 100, 1.0);
-    compute_weapons_coordinates(&tst, HORIZONTAL, 0, 0, 0, 0);
+    compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 0, 0.75);
     for(int i=0 ; i < tst.nb_weapons ; i++){
         l.xa = tst.weapons[i][0];
         l.ya = tst.weapons[i][1];
