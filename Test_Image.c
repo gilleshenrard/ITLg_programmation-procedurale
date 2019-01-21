@@ -639,6 +639,7 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
+        set_pixel_rgba(tst2, tst.center[0], tst.center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "no_modif");
@@ -653,6 +654,7 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
+        set_pixel_rgba(tst2, tst.center[0], tst.center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "translated");
@@ -668,6 +670,7 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
+        set_pixel_rgba(tst2, tst.center[0], tst.center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "flipped");
@@ -685,6 +688,7 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
+        set_pixel_rgba(tst2, tst.center[0], tst.center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "unzoomed");
