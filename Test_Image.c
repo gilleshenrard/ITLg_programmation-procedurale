@@ -634,6 +634,7 @@ void Tst_Weapon_Computation(){
     image *ship=NULL, *background=NULL, *tst2=NULL, *tmp=NULL;
     ship_t tst={"Enterprise", 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
     line l = {0, 0, 0, 0, Get_Color(tst.w_colour, NIVEAU_8), 1.0, 0};
+    int dX=0, dY=0;
 
     printf("\n--- Test Weapon Computation -----------------------------------------------------\n\n");
     ship = Lire_Image("Ship", NULL, "Enterprise");
@@ -692,10 +693,12 @@ void Tst_Weapon_Computation(){
 
     tst2 = copy_image(background);
     tmp = zoom_image(tst.img, 0.75);
+    dX = tst.img->header.largeur/2 - tmp->header.largeur/2;
+    dY = tst.img->header.hauteur/2 - tmp->header.hauteur/2;
     Free_Image(tst.img);
     tst.img = tmp;
-    embed_image(tmp, tst2, 100, 100, 1.0);
-    compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 0, 0.75);
+    embed_image(tmp, tst2, 100+dX, 100+dY, 1.0);
+    compute_weapons_coordinates(&tst, NO_FLIP, dX, dY, 0, 0.75);
     for(int i=0 ; i < tst.nb_weapons ; i++){
         l.colour = Get_Color(tst.w_colour, NIVEAU_8);
         l.xa = tst.weapons[i][0];
