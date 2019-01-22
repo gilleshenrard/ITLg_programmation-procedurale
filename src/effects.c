@@ -59,6 +59,9 @@ void Damier(image * img)
 /****************************************************************************************/
 int embed_image(image* overlay, image* background, uint x, uint y, float alpha){
 
+    overlay->center[0] = x + (overlay->header.largeur/2);
+    overlay->center[1] = y + (overlay->header.hauteur/2);
+
     //for each pixel in the frame
     for(uint i=0 ; i<background->header.hauteur ; i++){
         for(uint j=0 ; j<background->header.largeur ; j++){
@@ -481,10 +484,6 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
 
     if(!ship)
         return -1;
-
-    //compute the new image center
-    ship->img->center[0] += translation_x;
-    ship->img->center[1] += translation_y;
 
     //compute the image x0 and y0
     x0 = ship->img->center[0] - (ship->img->header.largeur/2);
