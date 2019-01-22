@@ -68,6 +68,7 @@ typedef struct Image
     uchar ***pic;           // matrice image
     char nom_base[FIC_NM];  // nom de base de l'image sans extension
 	uint nb_pix;            // nombre de pixels sur l'image
+    int center[2];      //coordinates of the center of the ship
 } image;
 
 /****************************************************************************************

@@ -368,7 +368,6 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
     image* buffer=NULL;
     double sinVal = sin((double)(angle*M_PI)/180);
     double cosVal = cos((double)(angle*M_PI)/180);
-    int center_x, center_y;
 
     if(angle%90 == 0)
         return rotate_image_90(img, angle, offsetX, offsetY);
@@ -376,19 +375,15 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
     //prepare a new image
     buffer = Creer_Image(img->nom_base, img->header.hauteur, img->header.largeur, BLANC, NIVEAU_8);
 
-    //compute the image center
-    center_x = img->header.largeur/2;
-    center_y = img->header.hauteur/2;
-
     for(int y=0 ; y < img->header.hauteur ; y++){
         for(int x=0 ; x < img->header.largeur ; x++){
             //compute the new location for every pixel and assign it to the new image
             //| cos    -sin |   | x - center_x |   | center_x |
             //| sin     cos | * | y - center_y | + | center_y |
-            double translate_x = (double)x - center_x;
-            double translate_y = (double)y - center_y;
-            int srcX = center_x + (int)((cosVal*translate_x) - (sinVal*translate_y));
-            int srcY = center_y + (int)((sinVal*translate_x) + (cosVal*translate_y));
+            double translate_x = (double)x - buffer->center[0];
+            double translate_y = (double)y - buffer->center[1];
+            int srcX = buffer->center[0] + (int)((cosVal*translate_x) - (sinVal*translate_y));
+            int srcY = buffer->center[1] + (int)((sinVal*translate_x) + (cosVal*translate_y));
             if(is_in_frame(srcX, srcY, img))
                 set_pixel_rgba(buffer, x, y, img->pic[srcY][srcX], 1.0);
         }
@@ -488,12 +483,12 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
         return -1;
 
     //compute the new image center
-    ship->center[0] += translation_x;
-    ship->center[1] += translation_y;
+    ship->img->center[0] += translation_x;
+    ship->img->center[1] += translation_y;
 
     //compute the image x0 and y0
-    x0 = ship->center[0] - (ship->img->header.largeur/2);
-    y0 = ship->center[1] - (ship->img->header.hauteur/2);
+    x0 = ship->img->center[0] - (ship->img->header.largeur/2);
+    y0 = ship->img->center[1] - (ship->img->header.hauteur/2);
 
     for(int i=0 ; i<ship->nb_weapons ; i++){
         //compute ship translation
@@ -514,10 +509,10 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
 
         //compute zoom
         if(zoom > 0){
-            ship->center[0] = (int)(float)((ship->center[0])*zoom);
-            ship->center[1] = (int)(float)((ship->center[1])*zoom);
-            x0 = ship->center[0] - (ship->img->header.largeur/2);
-            y0 = ship->center[1] - (ship->img->header.hauteur/2);
+            ship->img->center[0] = (int)(float)((ship->img->center[0])*zoom);
+            ship->img->center[1] = (int)(float)((ship->img->center[1])*zoom);
+            x0 = ship->img->center[0] - (ship->img->header.largeur/2);
+            y0 = ship->img->center[1] - (ship->img->header.hauteur/2);
             ship->weapons[i][0] = x0 + (int)(float)((ship->weapons[i][0] - x0) * zoom);
             ship->weapons[i][1] = y0 + (int)(float)((ship->weapons[i][1] - y0) * zoom);
         }

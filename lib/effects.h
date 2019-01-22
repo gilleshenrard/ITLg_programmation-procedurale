@@ -19,7 +19,6 @@ typedef struct{
 
 typedef struct{
     char    name[32];       //ship's model (Romulan, Klingon, ...)
-    int     center[2];      //coordinates of the center of the ship
     char    nb_weapons;     //number of weapons on the ship
     int     weapons[3][2];  //coordinates of the weapons (3 max)
     couleur w_colour;       //colour of the weapons (lasers)

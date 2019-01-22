@@ -621,7 +621,7 @@ void Tst_Dir_Tree(void){
 ****************************************************************************************/
 void Tst_Weapon_Computation(){
     image *ship=NULL, *background=NULL, *tst2=NULL, *tmp=NULL;
-    ship_t tst={"Enterprise", {249,249}, 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
+    ship_t tst={"Enterprise", 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
     line l = {0, 0, 0, 0, Get_Color(tst.w_colour, NIVEAU_8), 1.0, 0};
 
     printf("\n--- Test Weapon Computation -----------------------------------------------------\n\n");
@@ -639,7 +639,7 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
-        set_pixel_rgba(tst2, tst.center[0], tst.center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
+        set_pixel_rgba(tst2, tst.img->center[0], tst.img->center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "no_modif");
@@ -654,7 +654,7 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
-        set_pixel_rgba(tst2, tst.center[0], tst.center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
+        set_pixel_rgba(tst2, tst.img->center[0], tst.img->center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "translated");
@@ -670,7 +670,7 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
-        set_pixel_rgba(tst2, tst.center[0], tst.center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
+        set_pixel_rgba(tst2, tst.img->center[0], tst.img->center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "flipped");
@@ -688,7 +688,7 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
-        set_pixel_rgba(tst2, tst.center[0], tst.center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
+        set_pixel_rgba(tst2, tst.img->center[0], tst.img->center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "unzoomed");
