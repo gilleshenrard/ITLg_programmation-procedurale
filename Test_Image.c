@@ -53,7 +53,7 @@ int main(void)
 //    Tst_draw_line_cropped("line_wu_cropped", 1);
 //    Tst_Rotate();
 //    Tst_Flip();
-//    Tst_Zoom();
+    Tst_Zoom();
 //    Tst_Dir_Tree();
     Tst_Weapon_Computation();
 
@@ -529,35 +529,12 @@ void Tst_Flip(void){
 ****************************************************************************************/
 void Tst_Zoom(void){
     image *tst=NULL, *tst2=NULL, *ship=NULL, *background=NULL;
+    int dX=0, dY=0;
 
     printf("\n--- Test Zoom -----------------------------------------------------\n\n");
     ship = Lire_Image("Ship", NULL, "Enterprise");
     background = Lire_Image("Star", NULL, "Field");
     system(MKDIR(Test\\Test_Zoom));
-
-    tst = zoom_image(ship, 0.3);
-    tst2 = copy_image(background);
-    embed_image(tst, tst2, 100, 100, 1.0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"Zoom", "zoom_embed_03");
-    Free_Image(tst);
-    Free_Image(tst2);
-
-    tst = zoom_image(ship, 0.5);
-    tst2 = copy_image(background);
-    embed_image(tst, tst2, 100, 100, 1.0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"Zoom", "zoom_embed_05");
-    Free_Image(tst);
-    Free_Image(tst2);
-
-    tst = zoom_image(ship, 0.75);
-    tst2 = copy_image(background);
-    embed_image(tst, tst2, 100, 100, 1.0);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"Zoom", "zoom_embed_075");
-    Free_Image(tst);
-    Free_Image(tst2);
 
     tst = zoom_image(ship, 1.0);
     tst2 = copy_image(background);
@@ -567,9 +544,41 @@ void Tst_Zoom(void){
     Free_Image(tst);
     Free_Image(tst2);
 
+    tst = zoom_image(ship, 0.3);
+    tst2 = copy_image(background);
+    dX = ship->header.largeur/2 - tst->header.largeur/2;
+    dY = ship->header.hauteur/2 - tst->header.hauteur/2;
+    embed_image(tst, tst2, 100+dX, 100+dY, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"Zoom", "zoom_embed_03");
+    Free_Image(tst);
+    Free_Image(tst2);
+
+    tst = zoom_image(ship, 0.5);
+    tst2 = copy_image(background);
+    dX = ship->header.largeur/2 - tst->header.largeur/2;
+    dY = ship->header.hauteur/2 - tst->header.hauteur/2;
+    embed_image(tst, tst2, 100+dX, 100+dY, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"Zoom", "zoom_embed_05");
+    Free_Image(tst);
+    Free_Image(tst2);
+
+    tst = zoom_image(ship, 0.75);
+    tst2 = copy_image(background);
+    dX = ship->header.largeur/2 - tst->header.largeur/2;
+    dY = ship->header.hauteur/2 - tst->header.hauteur/2;
+    embed_image(tst, tst2, 100+dX, 100+dY, 1.0);
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"Zoom", "zoom_embed_075");
+    Free_Image(tst);
+    Free_Image(tst2);
+
     tst = zoom_image(ship, 1.5);
     tst2 = copy_image(background);
-    embed_image(tst, tst2, 10, -90, 1.0);
+    dX = ship->header.largeur/2 - tst->header.largeur/2;
+    dY = ship->header.hauteur/2 - tst->header.hauteur/2;
+    embed_image(tst, tst2, 100+dX, 100+dY, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Zoom", "zoom_embed_15");
     Free_Image(tst);
@@ -577,9 +586,11 @@ void Tst_Zoom(void){
 
     tst = zoom_image(ship, 2.0);
     tst2 = copy_image(background);
-    embed_image(tst, tst2, -100, -200, 1.0);
+    dX = ship->header.largeur/2 - tst->header.largeur/2;
+    dY = ship->header.hauteur/2 - tst->header.hauteur/2;
+    embed_image(tst, tst2, 100+dX, 100+dY, 1.0);
     strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"Zoom", "zoom_embed_3");
+    Ecrire_Image(tst2,"Zoom", "zoom_embed_2");
     Free_Image(tst);
     Free_Image(tst2);
 
