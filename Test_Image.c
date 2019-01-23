@@ -53,7 +53,7 @@ int main(void)
 //    Tst_draw_line_cropped("line_wu_cropped", 1);
 //    Tst_Rotate();
 //    Tst_Flip();
-    Tst_Zoom();
+//    Tst_Zoom();
 //    Tst_Dir_Tree();
     Tst_Weapon_Computation();
 
@@ -710,6 +710,25 @@ void Tst_Weapon_Computation(){
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "unzoomed");
+    Free_Image(tst2);
+
+    tst2 = copy_image(background);
+    tmp = rotate_image(tst.img, 30, 0, 0);
+    Free_Image(tst.img);
+    tst.img = tmp;
+    embed_image(tmp, tst2, 100, 100, 1.0);
+    compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 30, 0);
+    for(int i=0 ; i < tst.nb_weapons ; i++){
+        l.colour = Get_Color(tst.w_colour, NIVEAU_8);
+        l.xa = tst.weapons[i][0];
+        l.ya = tst.weapons[i][1];
+        l.xb = tst.weapons[i][0] + 200;
+        l.yb = tst.weapons[i][1];
+        draw_line_generic(tst2, &l);
+        set_pixel_rgba(tst2, tst.img->center[0], tst.img->center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
+    }
+    strncpy(tst2->nom_base, "Test", FIC_NM);
+    Ecrire_Image(tst2,"Weapon_Computation", "rotated30");
 
     Free_Image(ship);
     Free_Image(background);
