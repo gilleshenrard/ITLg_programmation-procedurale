@@ -59,8 +59,8 @@ void Damier(image * img)
 /****************************************************************************************/
 int embed_image(image* overlay, image* background, uint x, uint y, float alpha){
 
-    overlay->center[0] = x + (overlay->header.largeur/2);
-    overlay->center[1] = y + (overlay->header.hauteur/2);
+    overlay->x0 = x;
+    overlay->y0 = y;
 
     //for each pixel in the frame
     for(uint i=0 ; i<background->header.hauteur ; i++){
@@ -371,6 +371,8 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
     image* buffer=NULL;
     double sinVal = sin((double)(angle*M_PI)/180);
     double cosVal = cos((double)(angle*M_PI)/180);
+    int centerX = img->x0 + img->header.largeur/2;
+    int centerY = img->y0 + img->header.hauteur/2;
 
     if(angle%90 == 0)
         return rotate_image_90(img, angle, offsetX, offsetY);
@@ -383,10 +385,10 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
             //compute the new location for every pixel and assign it to the new image
             //| cos    -sin |   | x - center_x |   | center_x |
             //| sin     cos | * | y - center_y | + | center_y |
-            double translate_x = (double)x - buffer->center[0];
-            double translate_y = (double)y - buffer->center[1];
-            int srcX = (int)((cosVal*translate_x) - (sinVal*translate_y)) + buffer->center[0];
-            int srcY = (int)((sinVal*translate_x) + (cosVal*translate_y)) + buffer->center[1];
+            double translate_x = (double)x - centerX;
+            double translate_y = (double)y - centerY;
+            int srcX = (int)((cosVal*translate_x) - (sinVal*translate_y)) + centerX;
+            int srcY = (int)((sinVal*translate_x) + (cosVal*translate_y)) + centerY;
             if(is_in_frame(srcX, srcY, img))
                 set_pixel_rgba(buffer, x, y, img->pic[srcY][srcX], 1.0);
         }
@@ -480,14 +482,11 @@ image* zoom_image(image* img, float factor){
 /*       0 otherwise                                                                    */
 /****************************************************************************************/
 int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, int translation_y, int angle, float zoom){
-    int x0=0, y0=0;
+    int centerX = ship->img->x0 + ship->img->header.largeur/2;
+    int centerY = ship->img->y0 + ship->img->header.hauteur/2;
 
     if(!ship)
         return -1;
-
-    //compute the image x0 and y0
-    x0 = ship->img->center[0] - (ship->img->header.largeur/2);
-    y0 = ship->img->center[1] - (ship->img->header.hauteur/2);
 
     for(int i=0 ; i<ship->nb_weapons ; i++){
         //compute ship translation
@@ -497,10 +496,10 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
         //compute flipping
         switch(flipped){
             case VERTICAL:
-                ship->weapons[i][0] = x0 + ship->img->header.largeur - (ship->weapons[i][0]-x0) - 1;
+                ship->weapons[i][0] = ship->img->x0 + ship->img->header.largeur - (ship->weapons[i][0]-ship->img->x0) - 1;
                 break;
             case HORIZONTAL:
-                ship->weapons[i][1] = y0 + ship->img->header.hauteur - (ship->weapons[i][1]-y0) - 1;
+                ship->weapons[i][1] = ship->img->y0 + ship->img->header.hauteur - (ship->weapons[i][1]-ship->img->y0) - 1;
                 break;
             default:
                 break;
@@ -508,19 +507,19 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
 
         //compute zoom
         if(zoom > 0){
-            ship->weapons[i][0] = x0 + (int)(float)((ship->weapons[i][0] - x0) * zoom);
-            ship->weapons[i][1] = y0 + (int)(float)((ship->weapons[i][1] - y0) * zoom);
+            ship->weapons[i][0] = ship->img->x0 + (int)(float)((ship->weapons[i][0] - ship->img->x0) * zoom);
+            ship->weapons[i][1] = ship->img->y0 + (int)(float)((ship->weapons[i][1] - ship->img->y0) * zoom);
         }
 
         if(angle % 360 != 0){
             double sinVal = sin((double)(angle*M_PI)/180);
             double cosVal = cos((double)(angle*M_PI)/180);
-            double translate_x = (double)ship->weapons[i][0] - (ship->img->center[0] + x0);
-            double translate_y = (double)ship->weapons[i][1] - (ship->img->center[1] + y0);
-            //| cos    -sin |   | x - center_x - x0 |   | center_x |   | x0 |
-            //| sin     cos | * | y - center_y - y0 | + | center_y | + | y0 |
-            ship->weapons[i][0] = (int)((cosVal*translate_x) - (sinVal*translate_y)) + (ship->img->center[0] + x0);
-            ship->weapons[i][1] = (int)((sinVal*translate_x) + (cosVal*translate_y)) + (ship->img->center[1] + y0);
+            double translate_x = (double)(ship->weapons[i][0] - centerX);
+            double translate_y = (double)(ship->weapons[i][1] - centerY);
+            //| cos    -sin |   | x - center_x |   | center_x |
+            //| sin     cos | * | y - center_y | + | center_y |
+            ship->weapons[i][0] = (int)((cosVal*translate_x) - (sinVal*translate_y)) + centerX;
+            ship->weapons[i][1] = (int)((sinVal*translate_x) + (cosVal*translate_y)) + centerY;
         }
     }
 

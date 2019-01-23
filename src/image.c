@@ -75,8 +75,8 @@ image * Lire_Image(char * nom_bas, char * num_scene, char * nom_tag)
 	img->header.lg_head = HEADER_SIZE - 14;
 	img->header.taille = img->header.offset + bufsize;
 
-    img->center[0] = img->header.largeur/2;
-    img->center[1] = img->header.hauteur/2;
+    img->x0 = 0;
+    img->y0 = 0;
 
     /* Desallocation du buffer et fermeture du fichier : l'image est dans la structure img */
 	free(buf_data);
@@ -131,8 +131,8 @@ image * Creer_Image(char * nom_bas, uint hauteur, uint largeur, int col, int niv
     img->pic = Malloc_Pic(img->header.hauteur, img->header.largeur);
     Initialiser_Image(img, Get_Color(col,niv) );
 
-    img->center[0] = img->header.largeur/2;
-    img->center[1] = img->header.hauteur/2;
+    img->x0 = 0;
+    img->y0 = 0;
 
     return img;
 }
