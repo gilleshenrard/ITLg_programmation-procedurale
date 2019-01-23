@@ -489,6 +489,9 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
         return -1;
 
     for(int i=0 ; i<ship->nb_weapons ; i++){
+        ship->weapons[i][0] -= ship->img->x0;
+        ship->weapons[i][1] -= ship->img->y0;
+
         //compute ship translation
         ship->weapons[i][0] += translation_x;
         ship->weapons[i][1] += translation_y;
@@ -496,10 +499,10 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
         //compute flipping
         switch(flipped){
             case VERTICAL:
-                ship->weapons[i][0] = ship->img->x0 + ship->img->header.largeur - (ship->weapons[i][0]-ship->img->x0) - 1;
+                ship->weapons[i][0] = ship->img->header.largeur - ship->weapons[i][0] - 1;
                 break;
             case HORIZONTAL:
-                ship->weapons[i][1] = ship->img->y0 + ship->img->header.hauteur - (ship->weapons[i][1]-ship->img->y0) - 1;
+                ship->weapons[i][1] = ship->img->header.hauteur - ship->weapons[i][1] - 1;
                 break;
             default:
                 break;
@@ -507,8 +510,8 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
 
         //compute zoom
         if(zoom > 0){
-            ship->weapons[i][0] = ship->img->x0 + (int)(float)((ship->weapons[i][0] - ship->img->x0) * zoom);
-            ship->weapons[i][1] = ship->img->y0 + (int)(float)((ship->weapons[i][1] - ship->img->y0) * zoom);
+            ship->weapons[i][0] = (int)(float)(ship->weapons[i][0] * zoom);
+            ship->weapons[i][1] = (int)(float)(ship->weapons[i][1] * zoom);
         }
 
         if(angle % 360 != 0){
@@ -521,6 +524,9 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
             ship->weapons[i][0] = (int)((cosVal*translate_x) - (sinVal*translate_y)) + centerX;
             ship->weapons[i][1] = (int)((sinVal*translate_x) + (cosVal*translate_y)) + centerY;
         }
+
+        ship->weapons[i][0] += ship->img->x0;
+        ship->weapons[i][1] += ship->img->y0;
     }
 
     return 0;
