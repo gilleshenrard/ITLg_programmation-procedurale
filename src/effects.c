@@ -371,14 +371,14 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
     image* buffer=NULL;
     double sinVal = sin((double)(angle*M_PI)/180);
     double cosVal = cos((double)(angle*M_PI)/180);
-    int centerX = img->x0 + img->header.largeur/2;
-    int centerY = img->y0 + img->header.hauteur/2;
+    int centerX = img->header.largeur/2;
+    int centerY = img->header.hauteur/2;
 
     if(angle%90 == 0)
         return rotate_image_90(img, angle, offsetX, offsetY);
 
     //prepare a new image
-    buffer = Creer_Image(img->nom_base, img->header.hauteur, img->header.largeur, BLANC, NIVEAU_8);
+    buffer = Creer_Image(img->nom_base, img->header.hauteur, img->header.largeur, BLUE_SCREEN, NIVEAU_8);
 
     for(int y=0 ; y < img->header.hauteur ; y++){
         for(int x=0 ; x < img->header.largeur ; x++){
