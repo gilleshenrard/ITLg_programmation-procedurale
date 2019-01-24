@@ -338,13 +338,13 @@ image* rotate_image_90(image* img, int angle, int offsetX, int offsetY){
         for(int y=0 ; y < img->header.hauteur ; y++){
             for(int x=0 ; x < img->header.largeur ; x++){
                 switch(angle){
-                    case -90:
-                    case 270:
+                    case 90:
+                    case -270:
                         set_pixel_rgba(buffer, img->header.largeur -y -1, x, img->pic[y][x], 1.0);
                         break;
 
-                    case -270:
-                    case 90:
+                    case 270:
+                    case -90:
                         set_pixel_rgba(buffer, y, img->header.hauteur -x -1, img->pic[y][x], 1.0);
                         break;
 
@@ -369,8 +369,8 @@ image* rotate_image_90(image* img, int angle, int offsetX, int offsetY){
 /****************************************************************************************/
 image* rotate_image(image* img, int angle, int offsetX, int offsetY){
     image* buffer=NULL;
-    double sinVal = sin((double)(angle*M_PI)/180.0);
-    double cosVal = cos((double)(angle*M_PI)/180.0);
+    double sinVal = sin((double)(-angle*M_PI)/180.0);
+    double cosVal = cos((double)(-angle*M_PI)/180.0);
     int centerX = img->header.largeur/2;
     int centerY = img->header.hauteur/2;
 
@@ -513,8 +513,8 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
 
         //compute rotation
         if(angle != 0.0){
-            double sinVal = sin((float)(-angle*M_PI)/180.0);
-            double cosVal = cos((float)(-angle*M_PI)/180.0);
+            double sinVal = sin((float)(angle*M_PI)/180.0);
+            double cosVal = cos((float)(angle*M_PI)/180.0);
             double translate_x = (double)(ship->weapons[i][0] - centerX + ship->img->x0);
             double translate_y = (double)(ship->weapons[i][1] - centerY + ship->img->y0);
             //| cos    -sin |   | x - center_x |   | center_x |
