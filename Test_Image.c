@@ -608,8 +608,14 @@ void Tst_Dir_Tree(void){
 ****************************************************************************************/
 void Tst_Weapon_Computation(){
     image *enterprise=NULL, *background=NULL, *target=NULL, *scene=NULL, *tmp=NULL;
-    ship_t ship={"Enterprise", 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
+    ship_t ship={"Enterprise", 2, {{0}}, VERT, NULL};
+    int weapons_default[3][2] = {{247,200},{295,286},{0,0}};
     int dX=0, dY=0;
+
+    for(int w=0 ; w<3 ; w++){
+        ship.weapons[w][0] = weapons_default[w][0];
+        ship.weapons[w][1] = weapons_default[w][1];
+    }
 
     printf("\n--- Test Weapon Computation -----------------------------------------------------\n\n");
     enterprise = Lire_Image("Ship", NULL, "Enterprise");
@@ -676,6 +682,12 @@ void Tst_Weapon_Computation(){
     Free_Image(ship.img);
     Free_Image(scene);
 
+
+    for(int w=0 ; w<3 ; w++){
+        ship.weapons[w][0] = weapons_default[w][0];
+        ship.weapons[w][1] = weapons_default[w][1];
+    }
+
     scene = copy_image(background);
     ship.img = copy_image(enterprise);
     point_center(ship.img, Get_Color(ROUGE, NIVEAU_8));
@@ -688,8 +700,8 @@ void Tst_Weapon_Computation(){
     dY = ship.img->header.hauteur/2 - tmp->header.hauteur/2;
     Free_Image(ship.img);
     ship.img = tmp;
-    embed_image(ship.img, scene, -150+dX, -150+dY, 1.0);
-    compute_weapons_coordinates(&ship, VERTICAL, -150+dX, -150+dY, 65, 1.5);
+    embed_image(ship.img, scene, -50+dX, -50+dY, 1.0);
+    compute_weapons_coordinates(&ship, VERTICAL, -50+dX, -50+dY, 65, 1.5);
     embed_image(target, scene, 400, 150, 1.0);
     shoot(&ship, target, scene);
     strncpy(scene->nom_base, "Test", FIC_NM);
