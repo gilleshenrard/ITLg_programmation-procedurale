@@ -656,17 +656,17 @@ void Tst_Dir_Tree(void){
 * Purpose : Making sure coordinates are properly computed
 ****************************************************************************************/
 void Tst_Weapon_Computation(){
-    image *ship=NULL, *background=NULL, *target=NULL, *scene=NULL, *tmp=NULL;
+    image *enterprise=NULL, *background=NULL, *target=NULL, *scene=NULL, *tmp=NULL;
     ship_t tst={"Enterprise", 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
     int dX=0, dY=0;
 
     printf("\n--- Test Weapon Computation -----------------------------------------------------\n\n");
-    ship = Lire_Image("Ship", NULL, "Enterprise");
+    enterprise = Lire_Image("Ship", NULL, "Enterprise");
     target = Lire_Image("Ship", NULL, "Borg_Cube");
     background = Lire_Image("Star", NULL, "Field");
     system(MKDIR(Test\\Test_Weapon_Computation));
 
-    tst.img = copy_image(ship);
+    tst.img = copy_image(enterprise);
     scene = copy_image(background);
     point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst.img, scene, -50, -50, 1.0);
@@ -715,7 +715,7 @@ void Tst_Weapon_Computation(){
     strncpy(scene->nom_base, "Test", FIC_NM);
     Ecrire_Image(scene,"Weapon_Computation", "4_unzoomed");
 
-    Free_Image(ship);
+    Free_Image(enterprise);
     Free_Image(background);
     Free_Image(target);
     Free_Image(tst.img);
