@@ -338,13 +338,13 @@ image* rotate_image_90(image* img, int angle, int offsetX, int offsetY){
         for(int y=0 ; y < img->header.hauteur ; y++){
             for(int x=0 ; x < img->header.largeur ; x++){
                 switch(angle){
-                    case 90:
-                    case -270:
+                    case -90:
+                    case 270:
                         set_pixel_rgba(buffer, img->header.largeur -y -1, x, img->pic[y][x], 1.0);
                         break;
 
-                    case 270:
-                    case -90:
+                    case -270:
+                    case 90:
                         set_pixel_rgba(buffer, y, img->header.hauteur -x -1, img->pic[y][x], 1.0);
                         break;
 
@@ -369,10 +369,13 @@ image* rotate_image_90(image* img, int angle, int offsetX, int offsetY){
 /****************************************************************************************/
 image* rotate_image(image* img, int angle, int offsetX, int offsetY){
     image* buffer=NULL;
-    double sinVal = sin((double)(angle*M_PI)/180);
-    double cosVal = cos((double)(angle*M_PI)/180);
+    double sinVal = sin((double)(angle*M_PI)/180.0);
+    double cosVal = cos((double)(angle*M_PI)/180.0);
     int centerX = img->header.largeur/2;
     int centerY = img->header.hauteur/2;
+
+    if(angle == 0 || angle % 360 == 0)
+        return copy_image(img);
 
     if(angle%90 == 0)
         return rotate_image_90(img, angle, offsetX, offsetY);
@@ -385,8 +388,8 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
             //compute the new location for every pixel and assign it to the new image
             //| cos    -sin |   | x - center_x |   | center_x |
             //| sin     cos | * | y - center_y | + | center_y |
-            double translate_x = (double)x - centerX;
-            double translate_y = (double)y - centerY;
+            double translate_x = (double)(x - centerX);
+            double translate_y = (double)(y - centerY);
             int srcX = (int)((cosVal*translate_x) - (sinVal*translate_y)) + centerX;
             int srcY = (int)((sinVal*translate_x) + (cosVal*translate_y)) + centerY;
             if(is_in_frame(srcX, srcY, img))
@@ -509,9 +512,9 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
         }
 
         //compute rotation
-        if(angle % 360 != 0){
-            double sinVal = sin((double)(angle*M_PI)/180);
-            double cosVal = cos((double)(angle*M_PI)/180);
+        if(angle != 0.0){
+            double sinVal = sin((float)(-angle*M_PI)/180.0);
+            double cosVal = cos((float)(-angle*M_PI)/180.0);
             double translate_x = (double)(ship->weapons[i][0] - centerX);
             double translate_y = (double)(ship->weapons[i][1] - centerY);
             //| cos    -sin |   | x - center_x |   | center_x |
