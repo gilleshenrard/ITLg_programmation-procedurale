@@ -52,7 +52,7 @@ int main(void)
 //    Tst_draw_line("line_wu", 1);
 //    Tst_draw_line_cropped("line_bresenham_cropped", 0);
 //    Tst_draw_line_cropped("line_wu_cropped", 1);
-    Tst_Rotate();
+//    Tst_Rotate();
 //    Tst_Flip();
 //    Tst_Zoom();
 //    Tst_Dir_Tree();
@@ -597,13 +597,34 @@ void Tst_Dir_Tree(void){
 void Tst_Weapon_Computation(){
     image *enterprise=NULL, *background=NULL, *target=NULL, *scene=NULL, *tmp=NULL;
     ship_t ship={"Enterprise", 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
+    ship_t ship_rotated={"Enterprise", 2, {{347,300},{395,386},{0,0}}, VERT, NULL};
     int dX=0, dY=0;
+    char name[16] = {0};
 
     printf("\n--- Test Weapon Computation -----------------------------------------------------\n\n");
     enterprise = Lire_Image("Ship", NULL, "Enterprise");
     target = Lire_Image("Ship", NULL, "Borg_Cube");
     background = Lire_Image("Star", NULL, "Field");
     system(MKDIR(Test\\Test_Weapon_Computation));
+    system(MKDIR(Test\\Test_Weapon_Rotation));
+
+    //
+    //test the rotation only
+    for(int i=5 ; i<365 ; i+=5){
+        ship_rotated.img = rotate_image(enterprise, i, 0, 0);
+        scene = copy_image(background);
+        point_center(ship_rotated.img, Get_Color(ROUGE, NIVEAU_8));
+        embed_image(ship_rotated.img, scene, 100, 100, 1.0);
+        embed_image(target, scene, 400, 150, 1.0);
+        compute_weapons_coordinates(&ship_rotated, NO_FLIP, 0, 0, 5, 0);
+        shoot(&ship_rotated, target, scene);
+        strncpy(scene->nom_base, "Test", FIC_NM);
+        memset(name, 0, sizeof(name));
+        sprintf(name, "rotated_%d", i);
+        Ecrire_Image(scene,"Weapon_Rotation", name);
+        Free_Image(ship_rotated.img);
+        Free_Image(scene);
+    }
 
     //
     //test the translation
@@ -647,21 +668,6 @@ void Tst_Weapon_Computation(){
     Free_Image(scene);
 
     //
-    //test the rotation
-    scene = copy_image(background);
-    tmp = rotate_image(ship.img, 30, 0, 0);
-    Free_Image(ship.img);
-    ship.img = tmp;
-    point_center(ship.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(ship.img, scene, -50, -50, 1.0);
-    compute_weapons_coordinates(&ship, NO_FLIP, 0, 0, 30, 0);
-    embed_image(target, scene, 400, 150, 1.0);
-    shoot(&ship, target, scene);
-    strncpy(scene->nom_base, "Test", FIC_NM);
-    Ecrire_Image(scene,"Weapon_Computation", "4_rotated60");
-    Free_Image(scene);
-
-    //
     //test the zoom
     scene = copy_image(background);
     tmp = zoom_image(ship.img, 0.75);
@@ -675,7 +681,7 @@ void Tst_Weapon_Computation(){
     embed_image(target, scene, 400, 150, 1.0);
     shoot(&ship, target, scene);
     strncpy(scene->nom_base, "Test", FIC_NM);
-    Ecrire_Image(scene,"Weapon_Computation", "5_unzoomed");
+    Ecrire_Image(scene,"Weapon_Computation", "4_unzoomed");
 
     //
     //free the memory
