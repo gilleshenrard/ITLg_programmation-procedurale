@@ -692,8 +692,8 @@ void Tst_Weapon_Computation(){
     tmp = rotate_image(tst.img, 30, 0, 0);
     Free_Image(tst.img);
     tst.img = tmp;
-    point_center(tmp, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tmp, scene, -50, -50, 1.0);
+    point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
+    embed_image(tst.img, scene, -50, -50, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 30, 0);
     embed_image(target, scene, 400, 150, 1.0);
     shoot(&tst, target, scene);
@@ -707,8 +707,8 @@ void Tst_Weapon_Computation(){
     dY = tst.img->header.hauteur/2 - tmp->header.hauteur/2;
     Free_Image(tst.img);
     tst.img = tmp;
-    point_center(tmp, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tmp, scene, -50+dX, -50+dY, 1.0);
+    point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
+    embed_image(tst.img, scene, -50+dX, -50+dY, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, dX, dY, 0, 0.75);
     embed_image(target, scene, 400, 150, 1.0);
     shoot(&tst, target, scene);
