@@ -544,7 +544,7 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
 int shoot(ship_t* origin, image* target, image* scene){
     int t_centerX = target->x0 + target->header.largeur/2;
     int t_centerY = target->y0 + target->header.hauteur/2;
-    line l = {0, 0, 0, 0, NULL, 1.0, 0};
+    line l = {0, 0, 0, 0, NULL, 1.0, 1};
 
     for(int i=0 ; i<origin->nb_weapons ; i++){
         l.colour = Get_Color(origin->w_colour, NIVEAU_8);

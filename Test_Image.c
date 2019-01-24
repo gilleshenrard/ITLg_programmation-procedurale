@@ -730,6 +730,5 @@ void Tst_Weapon_Computation(){
     Free_Image(target);
     Free_Image(tst.img);
     Free_Image(scene);
-    Free_Image(tmp);
     return;
 }
