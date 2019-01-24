@@ -20,6 +20,7 @@
 
 #define MKDIR(x) "if not exist ..\\Films\\" #x " mkdir ..\\Films\\" #x
 
+void point_center(image*, uchar* colour);
 void Tst_System_01(void);
 void Tst_System_02(void);
 void Tst_System_03(void);
@@ -58,6 +59,22 @@ int main(void)
     Tst_Weapon_Computation();
 
     return 0;
+}
+
+/*****************************************************************************************/
+/*  I : image for which draw the center                                                  */
+/*  P : Draws a point (3 pixels wide) at the center of an image                          */
+/*  O : /                                                                                */
+/*****************************************************************************************/
+void point_center(image* img, uchar* colour){
+    int centerX = img->header.largeur/2;
+    int centerY = img->header.hauteur/2;
+
+    for(int y=centerY-1 ; y<centerY+2 ; y++){
+        for(int x=centerX-1 ; x<centerX+2 ; x++){
+            set_pixel_rgba(img, x, y, colour, 1.0);
+        }
+    }
 }
 
 /****************************************************************************************
@@ -418,6 +435,7 @@ void Tst_Rotate(void)
 
     tst2 = rotate_image(tst, 30, 0, 0);
     tst3 = copy_image(background);
+    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst3,"Rotate", "rotated_30");
@@ -426,6 +444,7 @@ void Tst_Rotate(void)
 
     tst2 = rotate_image(tst, -30, 0, 0);
     tst3 = copy_image(background);
+    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst3,"Rotate", "rotated_-30");
@@ -434,6 +453,7 @@ void Tst_Rotate(void)
 
     tst2 = rotate_image(tst, 60, 0, 0);
     tst3 = copy_image(background);
+    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst3,"Rotate", "rotated_60");
@@ -442,6 +462,7 @@ void Tst_Rotate(void)
 
     tst2 = rotate_image(tst, -60, 0, 0);
     tst3 = copy_image(background);
+    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst3,"Rotate", "rotated_-60");
@@ -450,6 +471,7 @@ void Tst_Rotate(void)
 
     tst2 = rotate_image(tst, 90, 0, 0);
     tst3 = copy_image(background);
+    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst3,"Rotate", "rotated_90");
@@ -458,6 +480,7 @@ void Tst_Rotate(void)
 
     tst2 = rotate_image(tst, -90, 0, 0);
     tst3 = copy_image(background);
+    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst3,"Rotate", "rotated_-90");
@@ -466,6 +489,7 @@ void Tst_Rotate(void)
 
     tst2 = rotate_image(tst, 180, 0, 0);
     tst3 = copy_image(background);
+    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst3,"Rotate", "rotated_180");
@@ -474,6 +498,7 @@ void Tst_Rotate(void)
 
     tst2 = rotate_image(tst, 270, 0, 0);
     tst3 = copy_image(background);
+    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst2, tst3, 100, 100, 1.0);
     strncpy(tst3->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst3,"Rotate", "rotated_270");
@@ -643,6 +668,7 @@ void Tst_Weapon_Computation(){
 
     tst.img = copy_image(ship);
     tst2 = copy_image(background);
+    point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst.img, tst2, 0, 0, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 0, 0);
     for(int i=0 ; i < tst.nb_weapons ; i++){
@@ -652,13 +678,13 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
- //       set_pixel_rgba(tst2, tst.img->center[0], tst.img->center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "no_modif");
     Free_Image(tst2);
 
     tst2 = copy_image(background);
+    point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst.img, tst2, 100, 100, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, 100, 100, 0, 0);
     for(int i=0 ; i < tst.nb_weapons ; i++){
@@ -668,7 +694,6 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
- //       set_pixel_rgba(tst2, tst.img->center[0], tst.img->center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "translated");
@@ -676,6 +701,7 @@ void Tst_Weapon_Computation(){
 
     tst2 = copy_image(background);
     flip_image(tst.img, HORIZONTAL);
+    point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tst.img, tst2, 100, 100, 1.0);
     compute_weapons_coordinates(&tst, HORIZONTAL, 0, 0, 0, 0);
     for(int i=0 ; i < tst.nb_weapons ; i++){
@@ -685,7 +711,6 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
-//        set_pixel_rgba(tst2, tst.img->center[0], tst.img->center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "flipped");
@@ -697,6 +722,7 @@ void Tst_Weapon_Computation(){
     dY = tst.img->header.hauteur/2 - tmp->header.hauteur/2;
     Free_Image(tst.img);
     tst.img = tmp;
+    point_center(tmp, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tmp, tst2, 100+dX, 100+dY, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, dX, dY, 0, 0.75);
     for(int i=0 ; i < tst.nb_weapons ; i++){
@@ -706,7 +732,6 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
-//        set_pixel_rgba(tst2, tst.img->center[0], tst.img->center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "unzoomed");
@@ -716,6 +741,7 @@ void Tst_Weapon_Computation(){
     tmp = rotate_image(tst.img, 30, 0, 0);
     Free_Image(tst.img);
     tst.img = tmp;
+    point_center(tmp, Get_Color(ROUGE, NIVEAU_8));
     embed_image(tmp, tst2, 100, 100, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 30, 0);
     for(int i=0 ; i < tst.nb_weapons ; i++){
@@ -725,7 +751,6 @@ void Tst_Weapon_Computation(){
         l.xb = tst.weapons[i][0] + 200;
         l.yb = tst.weapons[i][1];
         draw_line_generic(tst2, &l);
- //       set_pixel_rgba(tst2, tst.img->center[0], tst.img->center[1], Get_Color(ROUGE, NIVEAU_8), 1.0);
     }
     strncpy(tst2->nom_base, "Test", FIC_NM);
     Ecrire_Image(tst2,"Weapon_Computation", "rotated30");
