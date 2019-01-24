@@ -513,8 +513,9 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
 
         //compute rotation
         if(angle != 0.0){
-            double sinVal = sin((float)(angle*M_PI)/180.0);
-            double cosVal = cos((float)(angle*M_PI)/180.0);
+            double angle_radiant = ((double)angle * (double)M_PI) / 180;
+            double sinVal = sin(angle_radiant);
+            double cosVal = cos(angle_radiant);
             double translate_x = (double)(ship->weapons[i][0] - centerX + ship->img->x0);
             double translate_y = (double)(ship->weapons[i][1] - centerY + ship->img->y0);
             //| cos    -sin |   | x - center_x |   | center_x |

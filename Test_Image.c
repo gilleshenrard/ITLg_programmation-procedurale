@@ -597,7 +597,8 @@ void Tst_Dir_Tree(void){
 void Tst_Weapon_Computation(){
     image *enterprise=NULL, *background=NULL, *target=NULL, *scene=NULL, *tmp=NULL;
     ship_t ship={"Enterprise", 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
-    ship_t ship_rotated={"Enterprise", 2, {{347,300},{395,386},{0,0}}, VERT, NULL};
+    ship_t ship_rotated={"Enterprise", 2, {{0}}, VERT, NULL};
+    int weapons_default[3][2] = {{347,300},{395,386},{0,0}};
     int dX=0, dY=0;
     char name[16] = {0};
 
@@ -611,6 +612,10 @@ void Tst_Weapon_Computation(){
     //
     //test the rotation only
     for(int i=5 ; i<365 ; i+=5){
+        for(int w=0 ; w<3 ; w++){
+            ship_rotated.weapons[w][0] = weapons_default[w][0];
+            ship_rotated.weapons[w][1] = weapons_default[w][1];
+        }
         ship_rotated.img = rotate_image(enterprise, i, 0, 0);
         ship_rotated.img->x0 = 100;
         ship_rotated.img->y0 = 100;
@@ -618,7 +623,7 @@ void Tst_Weapon_Computation(){
         point_center(ship_rotated.img, Get_Color(ROUGE, NIVEAU_8));
         embed_image(ship_rotated.img, scene, 100, 100, 1.0);
         embed_image(target, scene, 400, 150, 1.0);
-        compute_weapons_coordinates(&ship_rotated, NO_FLIP, 0, 0, 5, 0);
+        compute_weapons_coordinates(&ship_rotated, NO_FLIP, 0, 0, i, 0);
         shoot(&ship_rotated, target, scene);
         strncpy(scene->nom_base, "Test", FIC_NM);
         memset(name, 0, sizeof(name));
