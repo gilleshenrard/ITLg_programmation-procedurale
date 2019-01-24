@@ -52,7 +52,7 @@ int main(void)
 //    Tst_draw_line("line_wu", 1);
 //    Tst_draw_line_cropped("line_bresenham_cropped", 0);
 //    Tst_draw_line_cropped("line_wu_cropped", 1);
-//    Tst_Rotate();
+    Tst_Rotate();
 //    Tst_Flip();
 //    Tst_Zoom();
 //    Tst_Dir_Tree();
@@ -425,87 +425,26 @@ void Tst_draw_line_cropped(char* filename, char antialiasing)
 ****************************************************************************************/
 void Tst_Rotate(void)
 {
-    image *tst=NULL, *tst2=NULL, *tst3=NULL, *ship=NULL, *background=NULL;
+    image *ship_rotated=NULL, *scene=NULL, *ship=NULL, *background=NULL;
+    char name[32] = {0};
 
     printf("\n--- Test Rotate -----------------------------------------------------\n\n");
     ship = Lire_Image("Ship", NULL, "Enterprise");
     background = Lire_Image("Star", NULL, "Field");
-    tst = copy_image(ship);
     system(MKDIR(Test\\Test_Rotate));
 
-    tst2 = rotate_image(tst, 30, 0, 0);
-    tst3 = copy_image(background);
-    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst2, tst3, 100, 100, 1.0);
-    strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,"Rotate", "rotated_30");
-    Free_Image(tst2);
-    Free_Image(tst3);
-
-    tst2 = rotate_image(tst, -30, 0, 0);
-    tst3 = copy_image(background);
-    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst2, tst3, 100, 100, 1.0);
-    strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,"Rotate", "rotated_-30");
-    Free_Image(tst2);
-    Free_Image(tst3);
-
-    tst2 = rotate_image(tst, 60, 0, 0);
-    tst3 = copy_image(background);
-    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst2, tst3, 100, 100, 1.0);
-    strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,"Rotate", "rotated_60");
-    Free_Image(tst2);
-    Free_Image(tst3);
-
-    tst2 = rotate_image(tst, -60, 0, 0);
-    tst3 = copy_image(background);
-    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst2, tst3, 100, 100, 1.0);
-    strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,"Rotate", "rotated_-60");
-    Free_Image(tst2);
-    Free_Image(tst3);
-
-    tst2 = rotate_image(tst, 90, 0, 0);
-    tst3 = copy_image(background);
-    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst2, tst3, 100, 100, 1.0);
-    strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,"Rotate", "rotated_90");
-    Free_Image(tst2);
-    Free_Image(tst3);
-
-    tst2 = rotate_image(tst, -90, 0, 0);
-    tst3 = copy_image(background);
-    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst2, tst3, 100, 100, 1.0);
-    strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,"Rotate", "rotated_-90");
-    Free_Image(tst2);
-    Free_Image(tst3);
-
-    tst2 = rotate_image(tst, 180, 0, 0);
-    tst3 = copy_image(background);
-    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst2, tst3, 100, 100, 1.0);
-    strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,"Rotate", "rotated_180");
-    Free_Image(tst2);
-    Free_Image(tst3);
-
-    tst2 = rotate_image(tst, 270, 0, 0);
-    tst3 = copy_image(background);
-    point_center(tst2, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst2, tst3, 100, 100, 1.0);
-    strncpy(tst3->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst3,"Rotate", "rotated_270");
-
-    Free_Image(tst);
-    Free_Image(tst2);
-    Free_Image(tst3);
+    for(int i=0 ; i<365 ; i+=5){
+        ship_rotated = rotate_image(ship, i, 0, 0);
+        scene = copy_image(background);
+        point_center(ship_rotated, Get_Color(ROUGE, NIVEAU_8));
+        embed_image(ship_rotated, scene, 100, 100, 1.0);
+        strncpy(scene->nom_base, "Test", FIC_NM);
+        memset(name, 0, sizeof(name));
+        sprintf(name, "rotated_%d", i);
+        Ecrire_Image(scene,"Rotate", name);
+        Free_Image(ship_rotated);
+        Free_Image(scene);
+    }
     Free_Image(ship);
     Free_Image(background);
 
@@ -708,6 +647,21 @@ void Tst_Weapon_Computation(){
     Free_Image(scene);
 
     //
+    //test the rotation
+    scene = copy_image(background);
+    tmp = rotate_image(ship.img, 30, 0, 0);
+    Free_Image(ship.img);
+    ship.img = tmp;
+    point_center(ship.img, Get_Color(ROUGE, NIVEAU_8));
+    embed_image(ship.img, scene, -50, -50, 1.0);
+    compute_weapons_coordinates(&ship, NO_FLIP, 0, 0, 30, 0);
+    embed_image(target, scene, 400, 150, 1.0);
+    shoot(&ship, target, scene);
+    strncpy(scene->nom_base, "Test", FIC_NM);
+    Ecrire_Image(scene,"Weapon_Computation", "4_rotated60");
+    Free_Image(scene);
+
+    //
     //test the zoom
     scene = copy_image(background);
     tmp = zoom_image(ship.img, 0.75);
@@ -721,7 +675,7 @@ void Tst_Weapon_Computation(){
     embed_image(target, scene, 400, 150, 1.0);
     shoot(&ship, target, scene);
     strncpy(scene->nom_base, "Test", FIC_NM);
-    Ecrire_Image(scene,"Weapon_Computation", "4_unzoomed");
+    Ecrire_Image(scene,"Weapon_Computation", "5_unzoomed");
 
     //
     //free the memory
