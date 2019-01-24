@@ -669,18 +669,8 @@ void Tst_Weapon_Computation(){
     tst.img = copy_image(ship);
     scene = copy_image(background);
     point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst.img, scene, 0, 0, 1.0);
-    compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 0, 0);
-    embed_image(target, scene, 400, 150, 1.0);
-    shoot(&tst, target, scene);
-    strncpy(scene->nom_base, "Test", FIC_NM);
-    Ecrire_Image(scene,"Weapon_Computation", "0_no_modif");
-    Free_Image(scene);
-
-    scene = copy_image(background);
-    point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst.img, scene, 100, 100, 1.0);
-    compute_weapons_coordinates(&tst, NO_FLIP, 100, 100, 0, 0);
+    embed_image(tst.img, scene, -50, -50, 1.0);
+    compute_weapons_coordinates(&tst, NO_FLIP, -50, -50, 0, 0);
     embed_image(target, scene, 400, 150, 1.0);
     shoot(&tst, target, scene);
     strncpy(scene->nom_base, "Test", FIC_NM);
@@ -690,7 +680,7 @@ void Tst_Weapon_Computation(){
     scene = copy_image(background);
     flip_image(tst.img, HORIZONTAL);
     point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst.img, scene, 100, 100, 1.0);
+    embed_image(tst.img, scene, -50, -50, 1.0);
     compute_weapons_coordinates(&tst, HORIZONTAL, 0, 0, 0, 0);
     embed_image(target, scene, 400, 150, 1.0);
     shoot(&tst, target, scene);
@@ -703,7 +693,7 @@ void Tst_Weapon_Computation(){
     Free_Image(tst.img);
     tst.img = tmp;
     point_center(tmp, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tmp, scene, 100, 100, 1.0);
+    embed_image(tmp, scene, -50, -50, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 30, 0);
     embed_image(target, scene, 400, 150, 1.0);
     shoot(&tst, target, scene);
@@ -718,7 +708,7 @@ void Tst_Weapon_Computation(){
     Free_Image(tst.img);
     tst.img = tmp;
     point_center(tmp, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tmp, scene, 100+dX, 100+dY, 1.0);
+    embed_image(tmp, scene, -50+dX, -50+dY, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, dX, dY, 0, 0.75);
     embed_image(target, scene, 400, 150, 1.0);
     shoot(&tst, target, scene);
