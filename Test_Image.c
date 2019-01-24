@@ -52,7 +52,7 @@ int main(void)
 //    Tst_draw_line("line_wu", 1);
 //    Tst_draw_line_cropped("line_bresenham_cropped", 0);
 //    Tst_draw_line_cropped("line_wu_cropped", 1);
-    Tst_Rotate();
+//    Tst_Rotate();
 //    Tst_Flip();
 //    Tst_Zoom();
 //    Tst_Dir_Tree();
@@ -673,6 +673,27 @@ void Tst_Weapon_Computation(){
     shoot(&ship, target, scene);
     strncpy(scene->nom_base, "Test", FIC_NM);
     Ecrire_Image(scene,"Weapon_Computation", "4_unzoomed");
+    Free_Image(ship.img);
+    Free_Image(scene);
+
+    scene = copy_image(background);
+    ship.img = copy_image(enterprise);
+    point_center(ship.img, Get_Color(ROUGE, NIVEAU_8));
+    flip_image(ship.img, VERTICAL);
+    tmp = rotate_image(ship.img, 65, 0, 0);
+    Free_Image(ship.img);
+    ship.img = tmp;
+    tmp = zoom_image(ship.img, 1.5);
+    dX = ship.img->header.largeur/2 - tmp->header.largeur/2;
+    dY = ship.img->header.hauteur/2 - tmp->header.hauteur/2;
+    Free_Image(ship.img);
+    ship.img = tmp;
+    embed_image(ship.img, scene, -150+dX, -150+dY, 1.0);
+    compute_weapons_coordinates(&ship, VERTICAL, -150+dX, -150+dY, 65, 1.5);
+    embed_image(target, scene, 400, 150, 1.0);
+    shoot(&ship, target, scene);
+    strncpy(scene->nom_base, "Test", FIC_NM);
+    Ecrire_Image(scene,"Weapon_Computation", "5_full");
 
     //
     //free the memory
