@@ -657,7 +657,7 @@ void Tst_Dir_Tree(void){
 ****************************************************************************************/
 void Tst_Weapon_Computation(){
     image *enterprise=NULL, *background=NULL, *target=NULL, *scene=NULL, *tmp=NULL;
-    ship_t tst={"Enterprise", 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
+    ship_t ship={"Enterprise", 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
     int dX=0, dY=0;
 
     printf("\n--- Test Weapon Computation -----------------------------------------------------\n\n");
@@ -666,59 +666,69 @@ void Tst_Weapon_Computation(){
     background = Lire_Image("Star", NULL, "Field");
     system(MKDIR(Test\\Test_Weapon_Computation));
 
-    tst.img = copy_image(enterprise);
+    //
+    //test the translation
+    ship.img = copy_image(enterprise);
     scene = copy_image(background);
-    point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst.img, scene, -50, -50, 1.0);
-    compute_weapons_coordinates(&tst, NO_FLIP, -50, -50, 0, 0);
+    point_center(ship.img, Get_Color(ROUGE, NIVEAU_8));
+    embed_image(ship.img, scene, -50, -50, 1.0);
+    compute_weapons_coordinates(&ship, NO_FLIP, -50, -50, 0, 0);
     embed_image(target, scene, 400, 150, 1.0);
-    shoot(&tst, target, scene);
+    shoot(&ship, target, scene);
     strncpy(scene->nom_base, "Test", FIC_NM);
     Ecrire_Image(scene,"Weapon_Computation", "1_translated");
     Free_Image(scene);
 
+    //
+    //test the flipping
     scene = copy_image(background);
-    flip_image(tst.img, HORIZONTAL);
-    point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst.img, scene, -50, -50, 1.0);
-    compute_weapons_coordinates(&tst, HORIZONTAL, 0, 0, 0, 0);
+    flip_image(ship.img, HORIZONTAL);
+    point_center(ship.img, Get_Color(ROUGE, NIVEAU_8));
+    embed_image(ship.img, scene, -50, -50, 1.0);
+    compute_weapons_coordinates(&ship, HORIZONTAL, 0, 0, 0, 0);
     embed_image(target, scene, 400, 150, 1.0);
-    shoot(&tst, target, scene);
+    shoot(&ship, target, scene);
     strncpy(scene->nom_base, "Test", FIC_NM);
     Ecrire_Image(scene,"Weapon_Computation", "2_flipped");
     Free_Image(scene);
 
+    //
+    //test the rotation
     scene = copy_image(background);
-    tmp = rotate_image(tst.img, 30, 0, 0);
-    Free_Image(tst.img);
-    tst.img = tmp;
-    point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst.img, scene, -50, -50, 1.0);
-    compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 30, 0);
+    tmp = rotate_image(ship.img, 30, 0, 0);
+    Free_Image(ship.img);
+    ship.img = tmp;
+    point_center(ship.img, Get_Color(ROUGE, NIVEAU_8));
+    embed_image(ship.img, scene, -50, -50, 1.0);
+    compute_weapons_coordinates(&ship, NO_FLIP, 0, 0, 30, 0);
     embed_image(target, scene, 400, 150, 1.0);
-    shoot(&tst, target, scene);
+    shoot(&ship, target, scene);
     strncpy(scene->nom_base, "Test", FIC_NM);
     Ecrire_Image(scene,"Weapon_Computation", "3_rotated30");
     Free_Image(scene);
 
+    //
+    //test the zoom
     scene = copy_image(background);
-    tmp = zoom_image(tst.img, 0.75);
-    dX = tst.img->header.largeur/2 - tmp->header.largeur/2;
-    dY = tst.img->header.hauteur/2 - tmp->header.hauteur/2;
-    Free_Image(tst.img);
-    tst.img = tmp;
-    point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst.img, scene, -50+dX, -50+dY, 1.0);
-    compute_weapons_coordinates(&tst, NO_FLIP, dX, dY, 0, 0.75);
+    tmp = zoom_image(ship.img, 0.75);
+    dX = ship.img->header.largeur/2 - tmp->header.largeur/2;
+    dY = ship.img->header.hauteur/2 - tmp->header.hauteur/2;
+    Free_Image(ship.img);
+    ship.img = tmp;
+    point_center(ship.img, Get_Color(ROUGE, NIVEAU_8));
+    embed_image(ship.img, scene, -50+dX, -50+dY, 1.0);
+    compute_weapons_coordinates(&ship, NO_FLIP, dX, dY, 0, 0.75);
     embed_image(target, scene, 400, 150, 1.0);
-    shoot(&tst, target, scene);
+    shoot(&ship, target, scene);
     strncpy(scene->nom_base, "Test", FIC_NM);
     Ecrire_Image(scene,"Weapon_Computation", "4_unzoomed");
 
+    //
+    //free the memory
     Free_Image(enterprise);
     Free_Image(background);
     Free_Image(target);
-    Free_Image(tst.img);
+    Free_Image(ship.img);
     Free_Image(scene);
     return;
 }
