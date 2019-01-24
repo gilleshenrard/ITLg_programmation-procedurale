@@ -532,3 +532,28 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
 
     return 0;
 }
+
+/****************************************************************************************/
+/*  I : Ship from which the shots are fired                                             */
+/*      Target image of the shots (ship, planet, ...)                                   */
+/*      Scene image in which to draw the shot                                           */
+/*  P : Draws the shot lines between the shooter weapons to the target center           */
+/*  O : -1 if error                                                                     */
+/*       0 otherwise                                                                    */
+/****************************************************************************************/
+int shoot(ship_t* origin, image* target, image* scene){
+    int t_centerX = target->x0 + target->header.largeur/2;
+    int t_centerY = target->y0 + target->header.hauteur/2;
+    line l = {0, 0, 0, 0, NULL, 1.0, 0};
+
+    for(int i=0 ; i<origin->nb_weapons ; i++){
+        l.colour = Get_Color(origin->w_colour, NIVEAU_8);
+        l.xa = origin->weapons[i][0];
+        l.ya = origin->weapons[i][1];
+        l.xb = t_centerX;
+        l.yb = t_centerY;
+        draw_line_generic(scene, &l);
+    }
+
+    return 0;
+}

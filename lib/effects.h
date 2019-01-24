@@ -42,5 +42,6 @@ image* zoom_image(image* img, float factor);
 
 //ship specific
 int compute_weapons_coordinates(ship_t*, char, int, int, int, float);
+int shoot(ship_t* origin, image* target, image* scene);
 
 #endif // EFFECTS_H_INCLUDED
