@@ -515,12 +515,12 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
         if(angle != 0.0){
             double sinVal = sin((float)(-angle*M_PI)/180.0);
             double cosVal = cos((float)(-angle*M_PI)/180.0);
-            double translate_x = (double)(ship->weapons[i][0] - centerX);
-            double translate_y = (double)(ship->weapons[i][1] - centerY);
+            double translate_x = (double)(ship->weapons[i][0] - centerX + ship->img->x0);
+            double translate_y = (double)(ship->weapons[i][1] - centerY + ship->img->y0);
             //| cos    -sin |   | x - center_x |   | center_x |
             //| sin     cos | * | y - center_y | + | center_y |
-            ship->weapons[i][0] = (int)((cosVal*translate_x) - (sinVal*translate_y)) + centerX;
-            ship->weapons[i][1] = (int)((sinVal*translate_x) + (cosVal*translate_y)) + centerY;
+            ship->weapons[i][0] = (int)((cosVal*translate_x) - (sinVal*translate_y)) + centerX - ship->img->x0;
+            ship->weapons[i][1] = (int)((sinVal*translate_x) + (cosVal*translate_y)) + centerY - ship->img->y0;
         }
 
         //compute zoom

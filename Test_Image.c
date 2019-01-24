@@ -612,6 +612,8 @@ void Tst_Weapon_Computation(){
     //test the rotation only
     for(int i=5 ; i<365 ; i+=5){
         ship_rotated.img = rotate_image(enterprise, i, 0, 0);
+        ship_rotated.img->x0 = 100;
+        ship_rotated.img->y0 = 100;
         scene = copy_image(background);
         point_center(ship_rotated.img, Get_Color(ROUGE, NIVEAU_8));
         embed_image(ship_rotated.img, scene, 100, 100, 1.0);
