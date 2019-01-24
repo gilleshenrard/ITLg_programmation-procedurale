@@ -656,7 +656,7 @@ void Tst_Dir_Tree(void){
 * Purpose : Making sure coordinates are properly computed
 ****************************************************************************************/
 void Tst_Weapon_Computation(){
-    image *ship=NULL, *background=NULL, *target=NULL, *tst2=NULL, *tmp=NULL;
+    image *ship=NULL, *background=NULL, *target=NULL, *scene=NULL, *tmp=NULL;
     ship_t tst={"Enterprise", 2, {{247,200},{295,286},{0,0}}, VERT, NULL};
     int dX=0, dY=0;
 
@@ -667,68 +667,69 @@ void Tst_Weapon_Computation(){
     system(MKDIR(Test\\Test_Weapon_Computation));
 
     tst.img = copy_image(ship);
-    tst2 = copy_image(background);
+    scene = copy_image(background);
     point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst.img, tst2, 0, 0, 1.0);
+    embed_image(tst.img, scene, 0, 0, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 0, 0);
-    embed_image(target, tst2, 400, 150, 1.0);
-    shoot(&tst, target, tst2);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"Weapon_Computation", "0_no_modif");
-    Free_Image(tst2);
+    embed_image(target, scene, 400, 150, 1.0);
+    shoot(&tst, target, scene);
+    strncpy(scene->nom_base, "Test", FIC_NM);
+    Ecrire_Image(scene,"Weapon_Computation", "0_no_modif");
+    Free_Image(scene);
 
-    tst2 = copy_image(background);
+    scene = copy_image(background);
     point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst.img, tst2, 100, 100, 1.0);
+    embed_image(tst.img, scene, 100, 100, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, 100, 100, 0, 0);
-    embed_image(target, tst2, 400, 150, 1.0);
-    shoot(&tst, target, tst2);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"Weapon_Computation", "1_translated");
-    Free_Image(tst2);
+    embed_image(target, scene, 400, 150, 1.0);
+    shoot(&tst, target, scene);
+    strncpy(scene->nom_base, "Test", FIC_NM);
+    Ecrire_Image(scene,"Weapon_Computation", "1_translated");
+    Free_Image(scene);
 
-    tst2 = copy_image(background);
+    scene = copy_image(background);
     flip_image(tst.img, HORIZONTAL);
     point_center(tst.img, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tst.img, tst2, 100, 100, 1.0);
+    embed_image(tst.img, scene, 100, 100, 1.0);
     compute_weapons_coordinates(&tst, HORIZONTAL, 0, 0, 0, 0);
-    embed_image(target, tst2, 400, 150, 1.0);
-    shoot(&tst, target, tst2);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"Weapon_Computation", "2_flipped");
-    Free_Image(tst2);
+    embed_image(target, scene, 400, 150, 1.0);
+    shoot(&tst, target, scene);
+    strncpy(scene->nom_base, "Test", FIC_NM);
+    Ecrire_Image(scene,"Weapon_Computation", "2_flipped");
+    Free_Image(scene);
 
-    tst2 = copy_image(background);
+    scene = copy_image(background);
     tmp = rotate_image(tst.img, 30, 0, 0);
     Free_Image(tst.img);
     tst.img = tmp;
     point_center(tmp, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tmp, tst2, 100, 100, 1.0);
+    embed_image(tmp, scene, 100, 100, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, 0, 0, 30, 0);
-    embed_image(target, tst2, 400, 150, 1.0);
-    shoot(&tst, target, tst2);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"Weapon_Computation", "3_rotated30");
-    Free_Image(tst2);
+    embed_image(target, scene, 400, 150, 1.0);
+    shoot(&tst, target, scene);
+    strncpy(scene->nom_base, "Test", FIC_NM);
+    Ecrire_Image(scene,"Weapon_Computation", "3_rotated30");
+    Free_Image(scene);
 
-    tst2 = copy_image(background);
+    scene = copy_image(background);
     tmp = zoom_image(tst.img, 0.75);
     dX = tst.img->header.largeur/2 - tmp->header.largeur/2;
     dY = tst.img->header.hauteur/2 - tmp->header.hauteur/2;
     Free_Image(tst.img);
     tst.img = tmp;
     point_center(tmp, Get_Color(ROUGE, NIVEAU_8));
-    embed_image(tmp, tst2, 100+dX, 100+dY, 1.0);
+    embed_image(tmp, scene, 100+dX, 100+dY, 1.0);
     compute_weapons_coordinates(&tst, NO_FLIP, dX, dY, 0, 0.75);
-    embed_image(target, tst2, 400, 150, 1.0);
-    shoot(&tst, target, tst2);
-    strncpy(tst2->nom_base, "Test", FIC_NM);
-    Ecrire_Image(tst2,"Weapon_Computation", "4_unzoomed");
+    embed_image(target, scene, 400, 150, 1.0);
+    shoot(&tst, target, scene);
+    strncpy(scene->nom_base, "Test", FIC_NM);
+    Ecrire_Image(scene,"Weapon_Computation", "4_unzoomed");
 
     Free_Image(ship);
     Free_Image(background);
     Free_Image(target);
     Free_Image(tst.img);
-    Free_Image(tst2);
+    Free_Image(scene);
+    Free_Image(tmp);
     return;
 }
