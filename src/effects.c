@@ -508,12 +508,7 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
                 break;
         }
 
-        //compute zoom
-        if(zoom > 0){
-            ship->weapons[i][0] = (int)(float)(ship->weapons[i][0] * zoom);
-            ship->weapons[i][1] = (int)(float)(ship->weapons[i][1] * zoom);
-        }
-
+        //compute rotation
         if(angle % 360 != 0){
             double sinVal = sin((double)(angle*M_PI)/180);
             double cosVal = cos((double)(angle*M_PI)/180);
@@ -523,6 +518,12 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
             //| sin     cos | * | y - center_y | + | center_y |
             ship->weapons[i][0] = (int)((cosVal*translate_x) - (sinVal*translate_y)) + centerX;
             ship->weapons[i][1] = (int)((sinVal*translate_x) + (cosVal*translate_y)) + centerY;
+        }
+
+        //compute zoom
+        if(zoom > 0){
+            ship->weapons[i][0] = (int)(float)(ship->weapons[i][0] * zoom);
+            ship->weapons[i][1] = (int)(float)(ship->weapons[i][1] * zoom);
         }
 
         ship->weapons[i][0] += ship->img->x0;
