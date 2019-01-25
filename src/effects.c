@@ -499,6 +499,12 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
         ship->weapons[i][0] += translation_x;
         ship->weapons[i][1] += translation_y;
 
+        //compute zoom
+        if(zoom > 0){
+            ship->weapons[i][0] = (int)(float)(ship->weapons[i][0] * zoom);
+            ship->weapons[i][1] = (int)(float)(ship->weapons[i][1] * zoom);
+        }
+
         //compute flipping
         switch(flipped){
             case VERTICAL:
@@ -522,12 +528,6 @@ int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, i
             //| sin     cos | * | y - center_y | + | center_y |
             ship->weapons[i][0] = (int)((cosVal*translate_x) - (sinVal*translate_y)) + centerX - ship->img->x0;
             ship->weapons[i][1] = (int)((sinVal*translate_x) + (cosVal*translate_y)) + centerY - ship->img->y0;
-        }
-
-        //compute zoom
-        if(zoom > 0){
-            ship->weapons[i][0] = (int)(float)(ship->weapons[i][0] * zoom);
-            ship->weapons[i][1] = (int)(float)(ship->weapons[i][1] * zoom);
         }
 
         ship->weapons[i][0] += ship->img->x0;
