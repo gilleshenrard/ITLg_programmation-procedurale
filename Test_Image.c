@@ -35,6 +35,7 @@ void Tst_Flip(void);
 void Tst_Zoom(void);
 void Tst_Dir_Tree(void);
 void Tst_Weapon_Computation(void);
+void Tst_Text(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -56,7 +57,8 @@ int main(void)
 //    Tst_Flip();
 //    Tst_Zoom();
 //    Tst_Dir_Tree();
-    Tst_Weapon_Computation();
+//    Tst_Weapon_Computation();
+    Tst_Text();
 
     return 0;
 }
@@ -715,4 +717,15 @@ void Tst_Weapon_Computation(){
     Free_Image(ship.img);
     Free_Image(scene);
     return;
+}
+
+/****************************************************************************************
+* Tst_Text : Tests the text generation (character to image)
+*
+* Purpose : Making sure text is properly transposed to images
+****************************************************************************************/
+void Tst_Text(){
+
+    printf("\n--- Test Text -----------------------------------------------------\n\n");
+    get_letter('a');
 }
