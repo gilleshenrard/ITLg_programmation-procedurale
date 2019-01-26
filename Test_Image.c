@@ -725,7 +725,22 @@ void Tst_Weapon_Computation(){
 * Purpose : Making sure text is properly transposed to images
 ****************************************************************************************/
 void Tst_Text(){
+    image *letter=NULL;
 
     printf("\n--- Test Text -----------------------------------------------------\n\n");
-    get_letter('a');
+    system(MKDIR(Test\\Test_Letter));
+
+    letter = get_letter('a');
+    strncpy(letter->nom_base, "Test", FIC_NM);
+    Ecrire_Image(letter,"Letter", "a");
+    Free_Image(letter);
+
+    letter = get_letter('F');
+    strncpy(letter->nom_base, "Test", FIC_NM);
+    Ecrire_Image(letter,"Letter", "F");
+    Free_Image(letter);
+
+    letter = get_letter(';');
+    if(!letter)
+        fprintf(stderr, "\nLetter ';' does not exist\n");
 }
