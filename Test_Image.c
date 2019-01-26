@@ -743,4 +743,9 @@ void Tst_Text(){
     letter = get_letter(';');
     if(!letter)
         fprintf(stderr, "\nLetter ';' does not exist\n");
+
+    letter = get_text("Hello");
+    strncpy(letter->nom_base, "Test", FIC_NM);
+    Ecrire_Image(letter,"Letter", "Hello");
+    Free_Image(letter);
 }

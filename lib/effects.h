@@ -46,5 +46,6 @@ int shoot(ship_t* origin, image* target, image* scene);
 
 //letter specific
 image* get_letter(char l);
+image* get_text(char txt[]);
 
 #endif // EFFECTS_H_INCLUDED
