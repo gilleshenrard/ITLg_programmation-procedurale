@@ -17,6 +17,7 @@
 ****************************************************************************************/
 #include "lib/image.h"
 #include "lib/effects.h"
+#include "lib/film.h"
 
 #define MKDIR(x) "if not exist ..\\Films\\" #x " mkdir ..\\Films\\" #x
 
