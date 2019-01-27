@@ -430,7 +430,7 @@ void Tst_draw_line_cropped(char* filename, char antialiasing)
 ****************************************************************************************/
 void Tst_Rotate(void)
 {
-    ship_t ship_rotated={"Enterprise", 2, {{0}}, VERT, NULL};
+    ship_t ship_rotated={2, {{0}}, VERT, NULL};
     int weapons_default[3][2] = {{347,300},{395,386},{0,0}};
     image *scene=NULL, *enterprise=NULL, *target=NULL, *background=NULL;
     char name[32] = {0};
@@ -446,7 +446,7 @@ void Tst_Rotate(void)
             ship_rotated.weapons[w][0] = weapons_default[w][0];
             ship_rotated.weapons[w][1] = weapons_default[w][1];
         }
-        ship_rotated.img = rotate_image(enterprise, i, 0, 0);
+        ship_rotated.img = rotate_image(enterprise, i);
         ship_rotated.img->x0 = 100;
         ship_rotated.img->y0 = 100;
         scene = copy_image(background);
@@ -613,7 +613,7 @@ void Tst_Dir_Tree(void){
 ****************************************************************************************/
 void Tst_Weapon_Computation(){
     image *enterprise=NULL, *background=NULL, *target=NULL, *scene=NULL, *tmp=NULL;
-    ship_t ship={"Enterprise", 2, {{0}}, VERT, NULL};
+    ship_t ship={2, {{0}}, VERT, NULL};
     int weapons_default[3][2] = {{247,200},{295,286},{0,0}};
     int dX=0, dY=0;
 
@@ -657,7 +657,7 @@ void Tst_Weapon_Computation(){
     //
     //test the rotation
     scene = copy_image(background);
-    tmp = rotate_image(ship.img, 30, 0, 0);
+    tmp = rotate_image(ship.img, 30);
     Free_Image(ship.img);
     ship.img = tmp;
     point_center(ship.img, Get_Color(ROUGE, NIVEAU_8));
@@ -697,7 +697,7 @@ void Tst_Weapon_Computation(){
     ship.img = copy_image(enterprise);
     point_center(ship.img, Get_Color(ROUGE, NIVEAU_8));
     flip_image(ship.img, VERTICAL);
-    tmp = rotate_image(ship.img, 65, 0, 0);
+    tmp = rotate_image(ship.img, 65);
     Free_Image(ship.img);
     ship.img = tmp;
     tmp = zoom_image(ship.img, 1.5);

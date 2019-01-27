@@ -325,7 +325,7 @@ int draw_line_generic(image* img, line* l){
 /*  O : image generated                                                                 */
 /*      NULL if error                                                                   */
 /****************************************************************************************/
-image* rotate_image_90(image* img, int angle, int offsetX, int offsetY){
+image* rotate_image_90(image* img, int angle){
     image* buffer=NULL;
     uint new_width, new_height;
 
@@ -367,7 +367,7 @@ image* rotate_image_90(image* img, int angle, int offsetX, int offsetY){
 /*  O :  0 if OK                                                                        */
 /*      -1 if error                                                                     */
 /****************************************************************************************/
-image* rotate_image(image* img, int angle, int offsetX, int offsetY){
+image* rotate_image(image* img, int angle){
     image* buffer=NULL;
     double sinVal = sin((double)(-angle*M_PI)/180.0);
     double cosVal = cos((double)(-angle*M_PI)/180.0);
@@ -378,7 +378,7 @@ image* rotate_image(image* img, int angle, int offsetX, int offsetY){
         return copy_image(img);
 
     if(angle%90 == 0)
-        return rotate_image_90(img, angle, offsetX, offsetY);
+        return rotate_image_90(img, angle);
 
     //prepare a new image
     buffer = Creer_Image(img->nom_base, img->header.hauteur, img->header.largeur, BLUE_SCREEN, NIVEAU_8);

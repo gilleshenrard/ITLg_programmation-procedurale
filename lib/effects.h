@@ -18,7 +18,6 @@ typedef struct{
 } line;
 
 typedef struct{
-    char    name[32];       //ship's model (Romulan, Klingon, ...)
     char    nb_weapons;     //number of weapons on the ship
     int     weapons[3][2];  //coordinates of the weapons (3 max)
     couleur w_colour;       //colour of the weapons (lasers)
@@ -36,7 +35,8 @@ int draw_line_diagonal(image* img, line* l);
 int draw_line_Bresenham(image *img, line* l);
 int draw_line_Wu(image* img, line* l);
 int draw_line_generic(image* img, line* l);
-image* rotate_image(image* img, int angle, int offsetX, int offsetY);
+image* rotate_image(image* img, int angle);
+image* rotate_image_90(image* img, int angle);
 int flip_image(image* img, int axis);
 image* zoom_image(image* img, float factor);
 
