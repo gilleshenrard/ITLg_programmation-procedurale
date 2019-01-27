@@ -44,8 +44,7 @@ image* zoom_image(image* img, float factor);
 int compute_weapons_coordinates(ship_t*, char, int, int, int, float);
 int shoot(ship_t* origin, image* target, image* scene);
 
-//letter specific
-image* get_letter(char l);
+//text specific
 image* get_text(char txt[]);
 
 #endif // EFFECTS_H_INCLUDED

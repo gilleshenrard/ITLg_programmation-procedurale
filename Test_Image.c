@@ -730,19 +730,20 @@ void Tst_Text(){
     printf("\n--- Test Text -----------------------------------------------------\n\n");
     system(MKDIR(Test\\Test_Letter));
 
-    letter = get_letter('a');
+    letter = get_text("a");
     strncpy(letter->nom_base, "Test", FIC_NM);
     Ecrire_Image(letter,"Letter", "a");
     Free_Image(letter);
 
-    letter = get_letter('F');
+    letter = get_text("F");
     strncpy(letter->nom_base, "Test", FIC_NM);
     Ecrire_Image(letter,"Letter", "F");
     Free_Image(letter);
 
-    letter = get_letter(';');
-    if(!letter)
-        fprintf(stderr, "\nLetter ';' does not exist\n");
+    letter = get_text(";");
+    strncpy(letter->nom_base, "Test", FIC_NM);
+    Ecrire_Image(letter,"Letter", "wrong");
+    Free_Image(letter);
 
     letter = get_text("Hello");
     strncpy(letter->nom_base, "Test", FIC_NM);
