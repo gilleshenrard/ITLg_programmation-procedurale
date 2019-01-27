@@ -745,7 +745,7 @@ void Tst_Text(){
     Ecrire_Image(letter,"Letter", "wrong");
     Free_Image(letter);
 
-    letter = get_text("Hello");
+    letter = get_text("Hello World!");
     strncpy(letter->nom_base, "Test", FIC_NM);
     Ecrire_Image(letter,"Letter", "Hello");
     Free_Image(letter);

@@ -573,16 +573,16 @@ image* get_text(char txt[]){
     int i, x, y;
 
     tmp = Lire_Image("Police", NULL, "Triple");
-    buffer = Creer_Image("", 24, 12*strlen(txt), BLUE_SCREEN, NIVEAU_8);
+    buffer = Creer_Image("", 24, 12*strlen(txt), NOIR, NIVEAU_8);
 
     for(int let=0 ; let<strlen(txt) ; let++){
         i = 0;
         while(i<70 && ascii[i] != txt[let])
             i++;
 
-        for(y=0 ; i<70 && y<buffer->header.hauteur ; y++){
-            for(x=0 ; x<buffer->header.largeur ; x++)
-                assign_pixel(buffer->pic[y][x], tmp->pic[y+24][x+(i*12)]);
+        for(y=0 ; i<70 && y<24 ; y++){
+            for(x=0 ; x<12 ; x++)
+                assign_pixel(buffer->pic[y][x+(let*12)], tmp->pic[y+24][x+(i*12)]);
         }
     }
 
