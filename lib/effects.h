@@ -45,6 +45,6 @@ int compute_weapons_coordinates(ship_t*, char, int, int, int, float);
 int shoot(ship_t* origin, image* target, image* scene);
 
 //text specific
-image* get_text(char txt[]);
+image* get_text(char txt[], couleur font, couleur background);
 
 #endif // EFFECTS_H_INCLUDED

@@ -567,13 +567,13 @@ int shoot(ship_t* origin, image* target, image* scene){
 /*  P : Generates an image containing the received text                                 */
 /*  O : result image                                                                    */
 /****************************************************************************************/
-image* get_text(char txt[]){
+image* get_text(char txt[], couleur font, couleur background){
     char ascii[71]="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz/:-.+!' ";
     image* buffer=NULL, *tmp=NULL;
     int i, x, y;
 
     tmp = Lire_Image("Police", NULL, "Triple");
-    buffer = Creer_Image("", 24, 12*strlen(txt), NOIR, NIVEAU_8);
+    buffer = Creer_Image("", 24, 12*strlen(txt), background, NIVEAU_8);
 
     for(int let=0 ; let<strlen(txt) ; let++){
         i = 0;
@@ -581,8 +581,10 @@ image* get_text(char txt[]){
             i++;
 
         for(y=0 ; i<70 && y<24 ; y++){
-            for(x=0 ; x<12 ; x++)
-                assign_pixel(buffer->pic[y][x+(let*12)], tmp->pic[y+24][x+(i*12)]);
+            for(x=0 ; x<12 ; x++){
+                if(tmp->pic[y+24][x+(i*12)][0]!=0 && tmp->pic[y+24][x+(i*12)][1]!=0 && tmp->pic[y+24][x+(i*12)][2]!=0)
+                    assign_pixel(buffer->pic[y][x+(let*12)], Get_Color(font, NIVEAU_8));
+            }
         }
     }
 

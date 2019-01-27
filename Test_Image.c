@@ -726,26 +726,28 @@ void Tst_Weapon_Computation(){
 ****************************************************************************************/
 void Tst_Text(){
     image *letter=NULL;
+//    uchar* red = Get_Color(ROUGE, NIVEAU_8);
+//    uchar* white = Get_Color(BLANC, NIVEAU_8);
 
     printf("\n--- Test Text -----------------------------------------------------\n\n");
     system(MKDIR(Test\\Test_Letter));
 
-    letter = get_text("a");
+    letter = get_text("a", ROUGE, BLANC);
     strncpy(letter->nom_base, "Test", FIC_NM);
     Ecrire_Image(letter,"Letter", "a");
     Free_Image(letter);
 
-    letter = get_text("F");
+    letter = get_text("F", ROUGE, BLANC);
     strncpy(letter->nom_base, "Test", FIC_NM);
     Ecrire_Image(letter,"Letter", "F");
     Free_Image(letter);
 
-    letter = get_text(";");
+    letter = get_text(";", ROUGE, BLANC);
     strncpy(letter->nom_base, "Test", FIC_NM);
     Ecrire_Image(letter,"Letter", "wrong");
     Free_Image(letter);
 
-    letter = get_text("The quick brown fox jumps over the lazy dog !");
+    letter = get_text("The quick brown fox jumps over the lazy dog !", ROUGE, BLANC);
     strncpy(letter->nom_base, "Test", FIC_NM);
     Ecrire_Image(letter,"Letter", "Fox");
     Free_Image(letter);
