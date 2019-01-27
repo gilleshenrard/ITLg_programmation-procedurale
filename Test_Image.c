@@ -762,6 +762,7 @@ void Tst_Text(){
 void Tst_Save_Movie(){
     film tst = {1, "Test", {0}};
 
+    printf("\n--- Test Movie saving -----------------------------------------------------\n\n");
     save_movie(&tst);
     memset(tst.nm_film, 0, sizeof(tst.nm_film));
     strncpy(tst.nm_film, "USS_Ent", strlen("USS_Ent"));
