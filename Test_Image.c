@@ -37,6 +37,7 @@ void Tst_Zoom(void);
 void Tst_Dir_Tree(void);
 void Tst_Weapon_Computation(void);
 void Tst_Text(void);
+void Tst_Save_Movie(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -59,7 +60,8 @@ int main(void)
 //    Tst_Zoom();
 //    Tst_Dir_Tree();
 //    Tst_Weapon_Computation();
-    Tst_Text();
+//    Tst_Text();
+    Tst_Save_Movie();
 
     return 0;
 }
@@ -727,8 +729,6 @@ void Tst_Weapon_Computation(){
 ****************************************************************************************/
 void Tst_Text(){
     image *letter=NULL;
-//    uchar* red = Get_Color(ROUGE, NIVEAU_8);
-//    uchar* white = Get_Color(BLANC, NIVEAU_8);
 
     printf("\n--- Test Text -----------------------------------------------------\n\n");
     system(MKDIR(Test\\Test_Letter));
@@ -752,4 +752,18 @@ void Tst_Text(){
     strncpy(letter->nom_base, "Test", FIC_NM);
     Ecrire_Image(letter,"Letter", "Fox");
     Free_Image(letter);
+}
+
+/****************************************************************************************
+* Tst_Save_Movie : Tests the movie metadata saving procedure
+*
+* Purpose : Making sure a movie metadata file is properly created
+****************************************************************************************/
+void Tst_Save_Movie(){
+    film tst = {1, "Test", {0}};
+
+    save_movie(&tst);
+    memset(tst.nm_film, 0, sizeof(tst.nm_film));
+    strncpy(tst.nm_film, "USS_Ent", strlen("USS_Ent"));
+    save_movie(&tst);
 }
