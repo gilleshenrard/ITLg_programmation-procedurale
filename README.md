@@ -28,7 +28,7 @@ int draw_line_diagonal(image* img, line* l);
 ```
 * Image rotation procedure :
 ```C
-image* rotate_image(image* img, int angle, int offsetX, int offsetY);
+image* rotate_image(image* img, int angle);
 ```
 * Image flipping procedure :
 ```C
@@ -46,13 +46,11 @@ int compute_weapons_coordinates(ship_t*, char, int, int, int, float);
 ```C
 int shoot(ship_t* origin, image* target, image* scene);
 ```
+* Text image generation procedure :
+```C
+image* get_text(char txt[], couleur font, couleur background);
+```
 * Unit tests for all existing procedures, in [Test_Image.c](https://github.com/gilleshenrard/ITLg_programmation-procedurale/blob/Dossier1/Test_Image.c)
 
 ### 4. To do
-* Implement text display (and manipulation, such as zoom, ...)
-* Create the 'film' structure and make it reflect a film metadata
 * Create basic scenes to test all the procedures in a realistic setup
-
-### 5. Known issues
-The computation procedure works for each manipulation separately, but collapses when trying to compute all the effects at the same time.
-Fix in next version
