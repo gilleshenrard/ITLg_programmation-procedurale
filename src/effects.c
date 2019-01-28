@@ -66,7 +66,7 @@ int embed_image(image* overlay, image* background, uint x, uint y, float alpha){
     for(uint i=0 ; i<background->header.hauteur ; i++){
         for(uint j=0 ; j<background->header.largeur ; j++){
             //if the pixel is to be replaced by the overlay corresponding pixel
-            if(is_in_frame(i-y, j-x, overlay) && !is_dummy_pixel(i-y, j-x, overlay)){
+            if(is_in_frame(j-x, i-y, overlay) && !is_dummy_pixel(j-x, i-y, overlay)){
                 set_pixel_rgba(background, j, i, overlay->pic[i-y][j-x], alpha);
             }
         }
