@@ -60,8 +60,8 @@ int main(void)
 //    Tst_Zoom();
 //    Tst_Dir_Tree();
 //    Tst_Weapon_Computation();
-//    Tst_Text();
-    Tst_Save_Movie();
+    Tst_Text();
+//    Tst_Save_Movie();
 
     return 0;
 }
@@ -728,9 +728,10 @@ void Tst_Weapon_Computation(){
 * Purpose : Making sure text is properly transposed to images
 ****************************************************************************************/
 void Tst_Text(){
-    image *letter=NULL;
+    image *letter=NULL, *background = NULL;
 
     printf("\n--- Test Text -----------------------------------------------------\n\n");
+    background = Lire_Image("Star", NULL, "Field");
     system(MKDIR(Test\\Test_Letter));
 
     letter = get_text("a", ROUGE, BLANC);
@@ -748,10 +749,15 @@ void Tst_Text(){
     Ecrire_Image(letter,"Letter", "wrong");
     Free_Image(letter);
 
-    letter = get_text("The quick brown fox jumps over the lazy dog !", ROUGE, BLANC);
+    letter = get_text("The quick brown fox jumps over the lazy dog !", JAUNE, BLUE_SCREEN);
     strncpy(letter->nom_base, "Test", FIC_NM);
     Ecrire_Image(letter,"Letter", "Fox");
+    embed_image(letter, background, 0, 0, 1.0);
+    strncpy(background->nom_base, "Test", FIC_NM);
+    Ecrire_Image(background,"Letter", "Fox_embed");
     Free_Image(letter);
+
+    Free_Image(background);
 }
 
 /****************************************************************************************
