@@ -125,7 +125,7 @@ void scene02(void){
     for(int time0=1 ; time0 < frames+1 ; time0++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -(time0*2), 0, 1.0);
-        embed_image(planet, frame, 700 - (time0), -200, 1.0);
+        embed_image(planet, frame, 700 - (time0), 200, 1.0);
         sprintf(filename, "%04d", time0);
         Ecrire_Image(frame,"02", filename);
         Free_Image(frame);
