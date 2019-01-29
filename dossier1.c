@@ -39,8 +39,10 @@ void create_directory(char dir_name[]){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void scene01(void){
-    image *background=NULL, *tmp=NULL;
+    image *background=NULL, *title1=NULL, *title2=NULL, *tmp=NULL;
     image *img_txt=NULL;
+    float f_time = 0.0;
+    int i=0, title_height=0, dx=0, frames=260;
     char filename[32] = {0};
     char txt[6][38]={   "              Starship               ",
                         "              Soldiers               ",
@@ -53,20 +55,48 @@ void scene01(void){
     background = Lire_Image("Star", NULL, "Field");
     create_directory("01");
 
-    for(int time=0 ; time<200 ; time++){
+    //Prepare the title images
+    img_txt = get_text(txt[0], JAUNE, BLUE_SCREEN);
+    title1 = zoom_image(img_txt, 4.0);
+    title_height = title1->header.hauteur;
+    dx = background->header.largeur/2 - title1->header.largeur/2;
+    Free_Image(img_txt);
+    img_txt = get_text(txt[1], JAUNE, BLUE_SCREEN);
+    title2 = zoom_image(img_txt, 4.0);
+    Free_Image(img_txt);
+
+    //Fade the title in (alpha 0 to 1) during 50 frames, centered
+    for(int time0=1 ; time0<51 ; time0++){
+        f_time = (float)time0;
         tmp = copy_image(background);
-        for(int i=0 ; i<sizeof(txt)/sizeof(txt[0]) ; i++){
+        embed_image(title1, tmp, dx, tmp->header.hauteur/2, f_time/50.0);
+        embed_image(title2, tmp, dx, tmp->header.hauteur/2 - title_height, f_time/50.0);
+        strncpy(tmp->nom_base, FILM_NAME, FIC_NM);
+        sprintf(filename, "%04d", time0);
+        Ecrire_Image(tmp,"01", filename);
+        Free_Image(tmp);
+    }
+
+    for(int time1=1 ; time1<(frames-49) ; time1++){
+        tmp = copy_image(background);
+
+        dx = background->header.largeur/2 - title1->header.largeur/2;
+        embed_image(title1, tmp, dx, tmp->header.hauteur/2+(time1*3), 1.0);
+        embed_image(title2, tmp, dx, tmp->header.hauteur/2 - title_height + (time1*3), 1.0);
+
+        for(i=2 ; i<sizeof(txt)/sizeof(txt[0]) ; i++){
             img_txt = get_text(txt[i], JAUNE, BLUE_SCREEN);
-            embed_image(img_txt, tmp, 150, (-i*img_txt->header.hauteur) + (time*3) - 20, 1.0);
+            dx = background->header.largeur/2 - img_txt->header.largeur/2;
+            embed_image(img_txt, tmp, dx, -(img_txt->header.hauteur*i) + (time1*3), 1.0);
             Free_Image(img_txt);
         }
         strncpy(tmp->nom_base, FILM_NAME, FIC_NM);
-        sprintf(filename, "%04d", time);
+        sprintf(filename, "%04d", time1+50);
         Ecrire_Image(tmp,"01", filename);
         Free_Image(tmp);
     }
 
     movie.nb_scene += 1;
-    movie.scene[0] = 200;
+    movie.scene[0] = frames;
     Free_Image(background);
 }
