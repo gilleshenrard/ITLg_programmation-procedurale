@@ -10,5 +10,6 @@ typedef struct Film
 } film;
 
 int save_movie(film* movie);
+int register_scene(film* movie, int nb_frames);
 
 #endif // FILM_H_INCLUDED

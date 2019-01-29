@@ -21,3 +21,18 @@ int save_movie(film* movie){
     fclose(file);
     return 0;
 }
+
+/****************************************************************************************/
+/*  I : Movie structure to populate                                                     */
+/*      Number of frames in the scene to regiser                                        */
+/*  P : Increments the scenes counter and registers the number of frames                */
+/*          in the right slot                                                           */
+/*  O : -1 if error                                                                     */
+/*       0 otherwise                                                                    */
+/****************************************************************************************/
+int register_scene(film* movie, int nb_frames){
+    movie->nb_scene += 1;
+    movie->scene[movie->nb_scene-1] = nb_frames;
+
+    return 0;
+}

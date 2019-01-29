@@ -100,7 +100,6 @@ void scene01(void){
         Free_Image(tmp);
     }
 
-    movie.nb_scene += 1;
-    movie.scene[0] = frames;
+    register_scene(&movie, frames);
     Free_Image(background);
 }
