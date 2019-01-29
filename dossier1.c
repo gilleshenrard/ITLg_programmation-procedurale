@@ -77,19 +77,23 @@ void scene01(void){
         Free_Image(tmp);
     }
 
+    //scroll title and text 3 pixels every tick
     for(int time1=1 ; time1<(frames-49) ; time1++){
         tmp = copy_image(background);
 
+        //embed the title
         dx = background->header.largeur/2 - title1->header.largeur/2;
         embed_image(title1, tmp, dx, tmp->header.hauteur/2+(time1*3), 1.0);
         embed_image(title2, tmp, dx, tmp->header.hauteur/2 - title_height + (time1*3), 1.0);
 
+        //create text images and compute their coordinates
         for(i=2 ; i<sizeof(txt)/sizeof(txt[0]) ; i++){
             img_txt = get_text(txt[i], JAUNE, BLUE_SCREEN);
             dx = background->header.largeur/2 - img_txt->header.largeur/2;
             embed_image(img_txt, tmp, dx, -(img_txt->header.hauteur*i) + (time1*3), 1.0);
             Free_Image(img_txt);
         }
+        //write the final frame
         strncpy(tmp->nom_base, FILM_NAME, FIC_NM);
         sprintf(filename, "%04d", time1+50);
         Ecrire_Image(tmp,"01", filename);
