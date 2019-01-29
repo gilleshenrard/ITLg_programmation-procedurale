@@ -58,14 +58,14 @@ void scene01(void){
     create_directory("01");
 
     //Prepare the title images
-    img_txt = get_text(txt[0], JAUNE, BLUE_SCREEN);
-    title1 = zoom_image(img_txt, 4.0);
+    tmp = get_text(txt[0], JAUNE, BLUE_SCREEN);
+    title1 = zoom_image(tmp, 4.0);
     title_height = title1->header.hauteur;
     dx = background->header.largeur/2 - title1->header.largeur/2;
-    Free_Image(img_txt);
-    img_txt = get_text(txt[1], JAUNE, BLUE_SCREEN);
-    title2 = zoom_image(img_txt, 4.0);
-    Free_Image(img_txt);
+    Free_Image(tmp);
+    tmp = get_text(txt[1], JAUNE, BLUE_SCREEN);
+    title2 = zoom_image(tmp, 4.0);
+    Free_Image(tmp);
 
     //Fade the title in (alpha 0 to 1) during 50 frames, centered
     for(int time0=1 ; time0<51 ; time0++){
