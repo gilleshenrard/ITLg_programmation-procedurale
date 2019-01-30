@@ -15,8 +15,8 @@ int main(int argc, char *argv[]){
     memset(&movie, 0, sizeof(film));
     strcpy(movie.nm_film, FILM_NAME);
 
-    //scene01();
-    scene02();
+    scene01();
+    //scene02();
 
     save_movie(&movie);
 
@@ -42,7 +42,7 @@ void create_directory(char dir_name[]){
 /****************************************************************************************/
 void scene01(void){
     image *background=NULL, *title1=NULL, *title2=NULL, *tmp=NULL;
-    image *img_txt=NULL;
+    image *img_txt[4] = {NULL};
     float f_time = 0.0;
     int i=0, title_height=0, dx=0, frames=260;
     char filename[32] = {0};
@@ -67,6 +67,10 @@ void scene01(void){
     title2 = zoom_image(tmp, 4.0);
     Free_Image(tmp);
 
+    for(i=0 ; i<4 ; i++){
+        img_txt[i] = get_text(txt[i+2], JAUNE, BLUE_SCREEN);
+    }
+
     //Fade the title in (alpha 0 to 1) during 50 frames, centered
     for(int time0=1 ; time0<51 ; time0++){
         f_time = (float)time0;
@@ -88,12 +92,10 @@ void scene01(void){
         embed_image(title1, tmp, dx, tmp->header.hauteur/2+(time1*3), 1.0);
         embed_image(title2, tmp, dx, tmp->header.hauteur/2 - title_height + (time1*3), 1.0);
 
-        //create text images and compute their coordinates
-        for(i=2 ; i<sizeof(txt)/sizeof(txt[0]) ; i++){
-            img_txt = get_text(txt[i], JAUNE, BLUE_SCREEN);
-            dx = background->header.largeur/2 - img_txt->header.largeur/2;
-            embed_image(img_txt, tmp, dx, -(img_txt->header.hauteur*i) + (time1*3), 1.0);
-            Free_Image(img_txt);
+        //embed the text
+        for(i=0 ; i<4 ; i++){
+            dx = background->header.largeur/2 - img_txt[i]->header.largeur/2;
+            embed_image(img_txt[i], tmp, dx, -(img_txt[i]->header.hauteur*i) + (time1*3), 1.0);
         }
         //write the final frame
         strncpy(tmp->nom_base, FILM_NAME, FIC_NM);
@@ -104,6 +106,9 @@ void scene01(void){
 
     register_scene(&movie, frames);
     Free_Image(background);
+    for(i=0 ; i<4 ; i++){
+        Free_Image(img_txt[i]);
+    }
 }
 
 /****************************************************************************************/
