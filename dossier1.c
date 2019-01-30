@@ -120,7 +120,7 @@ void scene02(void){
     image *frame=NULL, *star_field=NULL, *planet=NULL, *ship=NULL;
     char filename[32] = {0};
     int frames = 300;
-    double Xt = 0.0;
+    double Xt = 0.0, Alphat = 0.0;
 
     printf("\n------------------- scene 2 : Main ship appearance ---------------------------\n");
     star_field = Lire_Image("Star", NULL, "Field_lg");
@@ -145,7 +145,8 @@ void scene02(void){
         embed_image(planet, frame, 700 - (time1+100), 200, 1.0);
         // during 100 frames, x goes from -500 to 100 and speed goes from 30 to 0
         Xt = (log((double)time1)*130.0)-500.0;
-        embed_image(ship, frame, (int)Xt, 50, 1.0);
+        Alphat = (time1<50 ? 0.0 : log((double)(time1-50))/3.9);
+        embed_image(ship, frame, (int)Xt, 50, (float)Alphat);
         sprintf(filename, "%04d", time1+100);
         Ecrire_Image(frame,"02", filename);
         Free_Image(frame);
