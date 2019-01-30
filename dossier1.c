@@ -122,7 +122,7 @@ void scene02(void){
     create_directory("02");
 
     //Show the scenery with a parallaxed scroll
-    for(int time0=1 ; time0 < frames+1 ; time0++){
+    for(int time0=1 ; time0 <= frames ; time0++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -(time0*2), 0, 1.0);
         embed_image(planet, frame, 700 - (time0), 200, 1.0);
