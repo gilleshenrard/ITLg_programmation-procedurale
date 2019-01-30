@@ -15,8 +15,8 @@ int main(int argc, char *argv[]){
     memset(&movie, 0, sizeof(film));
     strcpy(movie.nm_film, FILM_NAME);
 
-    scene01();
-    //scene02();
+    //scene01();
+    scene02();
 
     save_movie(&movie);
 
@@ -95,7 +95,7 @@ void scene01(void){
         //embed the text
         for(i=0 ; i<4 ; i++){
             dx = background->header.largeur/2 - img_txt[i]->header.largeur/2;
-            embed_image(img_txt[i], tmp, dx, -(img_txt[i]->header.hauteur*i) + (time1*3), 1.0);
+            embed_image(img_txt[i], tmp, dx, -(img_txt[i]->header.hauteur*(i+1)) + (time1*3), 1.0);
         }
         //write the final frame
         strncpy(tmp->nom_base, FILM_NAME, FIC_NM);
