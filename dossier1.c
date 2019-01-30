@@ -117,17 +117,18 @@ void scene01(void){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void scene02(void){
-    image *frame=NULL, *star_field=NULL, *planet=NULL;
+    image *frame=NULL, *star_field=NULL, *planet=NULL, *ship=NULL;
     char filename[32] = {0};
     int frames = 300;
 
     printf("\n------------------- scene 2 : Main ship appearance ---------------------------\n");
     star_field = Lire_Image("Star", NULL, "Field_lg");
     planet = Lire_Image("Star", NULL, "Pla_Coruscant");
+    ship = Lire_Image("Ship", NULL, "Enterprise");
     create_directory("02");
 
     //Show the scenery with a parallaxed scroll
-    for(int time0=1 ; time0 <= frames ; time0++){
+    for(int time0=1 ; time0 <= 100 ; time0++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -(time0*2), 0, 1.0);
         embed_image(planet, frame, 700 - (time0), 200, 1.0);
@@ -136,7 +137,18 @@ void scene02(void){
         Free_Image(frame);
     }
 
+    //Include the main ship (speed expotientially decreasing, alpha expotientially increasing)
+    for(int time1=1 ; time1 <= (frames-99) ; time1++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -((time1+100)*2), 0, 1.0);
+        embed_image(planet, frame, 700 - (time1+100), 200, 1.0);
+        sprintf(filename, "%04d", time1+100);
+        Ecrire_Image(frame,"02", filename);
+        Free_Image(frame);
+    }
+
     register_scene(&movie, frames);
     Free_Image(star_field);
     Free_Image(planet);
+    Free_Image(ship);
 }
