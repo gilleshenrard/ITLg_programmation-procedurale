@@ -152,7 +152,7 @@ void scene02(void){
         Free_Image(frame);
     }
 
-    //slowly decrease the parallax effect  (100 frames)
+    //decrease the parallax speed  (100 frames)
     for(int time2=1 ; time2 <= (frames-200) ; time2++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -(time2+400), 0, 1.0);
