@@ -152,6 +152,17 @@ void scene02(void){
         Free_Image(frame);
     }
 
+    //slowly decrease the parallax effect  (100 frames)
+    for(int time2=1 ; time2 <= (frames-200) ; time2++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -(time2+400), 0, 1.0);
+        embed_image(planet, frame, 500-(time2*0.5), 200, 1.0);
+        embed_image(ship, frame, 131, 50, 1.0);
+        sprintf(filename, "%04d", time2+200);
+        Ecrire_Image(frame,"02", filename);
+        Free_Image(frame);
+    }
+
     register_scene(&movie, frames);
     Free_Image(star_field);
     Free_Image(planet);
