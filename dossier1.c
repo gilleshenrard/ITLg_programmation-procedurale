@@ -16,9 +16,9 @@ int main(int argc, char *argv[]){
     memset(&movie, 0, sizeof(film));
     strcpy(movie.nm_film, FILM_NAME);
 
-/*    scene01("01");
-    scene02("02");
-*/    scene03("01");
+//    scene01("01");
+    scene02("01");
+    scene03("02");
 
     save_movie(&movie);
 
@@ -188,6 +188,7 @@ void scene03(char scene[]){
     ship1 = Lire_Image("Ship", NULL, "Enterprise");
     flip_image(ship1, VERTICAL);
     ship2 = copy_image(ship1);
+    ship3 = copy_image(ship1);
     create_directory(scene);
 
     //Show the scenery (50 frames)
@@ -233,20 +234,21 @@ void scene03(char scene[]){
     Free_Image(ship2);
     ship2 = zoom_image(ship1, 0.25);
 
-    //Make the 3rd enemy ship appear ({300,-150} to {250, -130}, no rotation) (10 frames)
+    //Make the 3rd enemy ship appear ({400,-50} to {300, -30}, no rotation) (10 frames)
     for(int time3=1 ; time3 <= 10 ; time3++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, 0, 0, 1.0);
         embed_image(planet, frame, -250, 250, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
-        embed_image(ship2, frame, 250, -130, 1.0);
-/*        tmp = zoom_image(ship1, 0.025*(float)time2);
-        dX = ship2->header.largeur/2 - tmp->header.largeur/2;
-        dY = ship2->header.hauteur/2 - tmp->header.hauteur/2;
-*/        sprintf(filename, "%04d", time3+70);
+        embed_image(ship2, frame, 437, 58, 1.0);
+        tmp = zoom_image(ship3, 0.03*(float)time3);
+        dX = ship3->header.largeur/2 - tmp->header.largeur/2;
+        dY = ship3->header.hauteur/2 - tmp->header.hauteur/2;
+        embed_image(tmp, frame, -(time3*5)+450+dX, (time3*2)-90+dY, 1.0);
+        sprintf(filename, "%04d", time3+70);
         Ecrire_Image(frame,scene, filename);
         Free_Image(frame);
-//        Free_Image(tmp);
+        Free_Image(tmp);
     }
 
     register_scene(&movie, frames);
