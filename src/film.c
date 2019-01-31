@@ -32,7 +32,7 @@ int save_movie(film* movie){
 /****************************************************************************************/
 int register_scene(film* movie, int nb_frames){
     movie->nb_scene += 1;
-    movie->scene[movie->nb_scene-1] = nb_frames;
+    movie->scene[movie->nb_scene] = nb_frames;
 
     return 0;
 }
