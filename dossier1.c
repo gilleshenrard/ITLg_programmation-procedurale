@@ -187,7 +187,7 @@ void scene03(char scene[]){
     planet = Lire_Image("Star", NULL, "Pla_Coruscant");
     ship1 = Lire_Image("Ship", NULL, "Enterprise");
     flip_image(ship1, VERTICAL);
-    ship2 = rotate_image(ship1, -15);
+    ship2 = copy_image(ship1);
     create_directory(scene);
 
     //Show the scenery (50 frames)
@@ -221,14 +221,14 @@ void scene03(char scene[]){
         embed_image(star_field, frame, 0, 0, 1.0);
         embed_image(planet, frame, -250, 250, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
-/*        tmp = zoom_image(ship1, 0.1*(float)time2);
-        dX = ship1->header.largeur/2 - tmp->header.largeur/2;
-        dY = ship1->header.hauteur/2 - tmp->header.hauteur/2;
-        embed_image(tmp, frame, -(time2*20)+350+dX, (time2*10)-100+dY, 1.0);
-*/        sprintf(filename, "%04d", time2+60);
+        tmp = zoom_image(ship1, 0.025*(float)time2);
+        dX = ship2->header.largeur/2 - tmp->header.largeur/2;
+        dY = ship2->header.hauteur/2 - tmp->header.hauteur/2;
+        embed_image(tmp, frame, -(time2*5)+300+dX, (time2*2)-150+dY, 1.0);
+        sprintf(filename, "%04d", time2+60);
         Ecrire_Image(frame,scene, filename);
         Free_Image(frame);
-//        Free_Image(tmp);
+        Free_Image(tmp);
     }
 
     register_scene(&movie, frames);
