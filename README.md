@@ -52,5 +52,9 @@ image* get_text(char txt[], couleur font, couleur background);
 ```
 * Unit tests for all existing procedures, in [Test_Image.c](https://github.com/gilleshenrard/ITLg_programmation-procedurale/blob/Dossier1/Test_Image.c)
 
-### 4. To do
-* Create basic scenes to test all the procedures in a realistic setup
+### 4. Currently implemented in the final assignment
+- Scene 01 : Intro (title and backstory)
+- Scene 02 : Main ship appearance
+
+### 5. To do
+Continue developping the final scenes
