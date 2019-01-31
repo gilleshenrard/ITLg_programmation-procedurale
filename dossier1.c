@@ -9,6 +9,7 @@ film movie;
 void create_directory(char dir_name[]);
 void scene01(void);
 void scene02(void);
+void scene03(void);
 
 int main(int argc, char *argv[]){
 
@@ -17,6 +18,7 @@ int main(int argc, char *argv[]){
 
     scene01();
     scene02();
+    scene03();
 
     save_movie(&movie);
 
@@ -113,7 +115,7 @@ void scene01(void){
 
 /****************************************************************************************/
 /*  I : /                                                                               */
-/*  P : Generates all the frames for the scene 01 : Main ship appearance                */
+/*  P : Generates all the frames for the scene 02 : Main ship appearance                */
 /*  O : /                                                                               */
 /****************************************************************************************/
 void scene02(void){
@@ -125,7 +127,8 @@ void scene02(void){
     printf("\n------------------- scene 2 : Main ship appearance ---------------------------\n");
     star_field = Lire_Image("Star", NULL, "Field_lg");
     planet = Lire_Image("Star", NULL, "Pla_Coruscant");
-    ship = Lire_Image("Ship", NULL, "Enterprise");
+    ship = Lire_Image("Ship", NULL, "Klingon_Bop");
+    flip_image(ship, VERTICAL);
     create_directory("02");
 
     //Show the scenery with a parallaxed scroll (100 frames)
@@ -160,6 +163,38 @@ void scene02(void){
         embed_image(ship, frame, 131, 50, 1.0);
         sprintf(filename, "%04d", time2+200);
         Ecrire_Image(frame,"02", filename);
+        Free_Image(frame);
+    }
+
+    register_scene(&movie, frames);
+    Free_Image(star_field);
+    Free_Image(planet);
+    Free_Image(ship);
+}
+
+/****************************************************************************************/
+/*  I : /                                                                               */
+/*  P : Generates all the frames for the scene 03 : Ennemies arrival                    */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void scene03(void){
+    image *frame=NULL, *star_field=NULL, *planet=NULL, *ship=NULL;
+    char filename[32] = {0};
+    int frames = 200;
+
+    printf("\n------------------- scene 3 : Ennemies appearance ---------------------------\n");
+    star_field = Lire_Image("Star", NULL, "Field_lg");
+    planet = Lire_Image("Star", NULL, "Pla_Coruscant");
+    ship = Lire_Image("Ship", NULL, "Enterprise");
+    create_directory("03");
+
+    //Show the scenery (50 frames)
+    for(int time0=1 ; time0 <= 50 ; time0++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, 0, 0, 1.0);
+        embed_image(planet, frame, -250, 250, 1.0);
+        sprintf(filename, "%04d", time0);
+        Ecrire_Image(frame,"03", filename);
         Free_Image(frame);
     }
 
