@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
     memset(&movie, 0, sizeof(film));
     strcpy(movie.nm_film, FILM_NAME);
 
-    //scene01();
+    scene01();
     scene02();
 
     save_movie(&movie);
@@ -144,8 +144,8 @@ void scene02(void){
         embed_image(star_field, frame, -((time1+100)*2), 0, 1.0);
         embed_image(planet, frame, 700 - (time1+100), 200, 1.0);
         // during 100 frames, x goes from -500 to 100 and speed goes from 30 to 0
-        Xt = (log((double)time1)*130.0)-500.0;
-        Alphat = (time1<50 ? 0.0 : log((double)(time1-50))/3.9);
+        Xt = (log((double)time1)*50)-100.0;
+        Alphat = (log((double)time1)/7)+0.4;
         embed_image(ship, frame, (int)Xt, 50, (float)Alphat);
         sprintf(filename, "%04d", time1+100);
         Ecrire_Image(frame,"02", filename);
