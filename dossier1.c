@@ -178,9 +178,9 @@ void scene02(char scene[]){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void scene03(char scene[]){
-    image *frame=NULL, *star_field=NULL, *planet=NULL, *ship1=NULL, *ship2=NULL, *ship3=NULL, *ship4=NULL, *tmp=NULL;
+    image *frame=NULL, *star_field=NULL, *planet=NULL, *ship1=NULL, *ship2=NULL, *ship3=NULL, *ship4=NULL, *ship5=NULL, *tmp=NULL;
     char filename[32] = {0};
-    int dX=0, dY=0, frames=90;
+    int dX=0, dY=0, frames=100;
 
     printf("\n------------------- scene 3 : Ennemies appearance ---------------------------\n");
     star_field = Lire_Image("Star", NULL, "Field_lg");
@@ -190,6 +190,7 @@ void scene03(char scene[]){
     ship2 = copy_image(ship1);
     ship3 = copy_image(ship1);
     ship4 = copy_image(ship1);
+    ship5 = copy_image(ship1);
     create_directory(scene);
 
     //Show the scenery (50 frames)
@@ -271,6 +272,27 @@ void scene03(char scene[]){
         Free_Image(frame);
         Free_Image(tmp);
     }
+    Free_Image(ship4);
+    ship4 = zoom_image(ship1, 0.2);
+
+    //Make the 5th enemy ship appear ({350,100} to {30, 10}, no rotation) (10 frames)
+    for(int time5=1 ; time5 <= 10 ; time5++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -1200 + time5 + 90, 0, 1.0);
+        embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(ship1, frame, 150, 0, 1.0);
+        embed_image(ship2, frame, 437, 58, 1.0);
+        embed_image(ship3, frame, 550, 80, 1.0);
+        embed_image(ship4, frame, 200, 110, 1.0);
+        tmp = zoom_image(ship5, 0.07*(float)time5);
+        dX = ship5->header.largeur/2 - tmp->header.largeur/2;
+        dY = ship5->header.hauteur/2 - tmp->header.hauteur/2;
+        embed_image(tmp, frame, -(time5*10)+350+dX, (time5*4)+100+dY, 1.0);
+        sprintf(filename, "%04d", time5+90);
+        Ecrire_Image(frame,scene, filename);
+        Free_Image(frame);
+        Free_Image(tmp);
+    }
 
     register_scene(&movie, frames);
     Free_Image(star_field);
@@ -279,4 +301,5 @@ void scene03(char scene[]){
     Free_Image(ship2);
     Free_Image(ship3);
     Free_Image(ship4);
+    Free_Image(ship5);
 }
