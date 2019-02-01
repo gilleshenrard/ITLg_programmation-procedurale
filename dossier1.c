@@ -16,9 +16,9 @@ int main(int argc, char *argv[]){
     memset(&movie, 0, sizeof(film));
     strcpy(movie.nm_film, FILM_NAME);
 
-    scene01("01");
-    scene02("02");
-    scene03("03");
+//    scene01("01");
+//    scene02("02");
+    scene03("01");
 
     save_movie(&movie);
 
@@ -178,9 +178,9 @@ void scene02(char scene[]){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void scene03(char scene[]){
-    image *frame=NULL, *star_field=NULL, *planet=NULL, *ship1=NULL, *ship2=NULL, *ship3=NULL, *tmp=NULL;
+    image *frame=NULL, *star_field=NULL, *planet=NULL, *ship1=NULL, *ship2=NULL, *ship3=NULL, *ship4=NULL, *tmp=NULL;
     char filename[32] = {0};
-    int dX=0, dY=0, frames=80;
+    int dX=0, dY=0, frames=90;
 
     printf("\n------------------- scene 3 : Ennemies appearance ---------------------------\n");
     star_field = Lire_Image("Star", NULL, "Field_lg");
@@ -189,6 +189,7 @@ void scene03(char scene[]){
     flip_image(ship1, VERTICAL);
     ship2 = copy_image(ship1);
     ship3 = copy_image(ship1);
+    ship4 = copy_image(ship1);
     create_directory(scene);
 
     //Show the scenery (50 frames)
@@ -241,11 +242,31 @@ void scene03(char scene[]){
         embed_image(planet, frame, -250, 250, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(ship2, frame, 437, 58, 1.0);
-        tmp = zoom_image(ship3, 0.03*(float)time3);
+        tmp = zoom_image(ship3, 0.04*(float)time3);
         dX = ship3->header.largeur/2 - tmp->header.largeur/2;
         dY = ship3->header.hauteur/2 - tmp->header.hauteur/2;
         embed_image(tmp, frame, -(time3*5)+450+dX, (time3*2)-90+dY, 1.0);
         sprintf(filename, "%04d", time3+70);
+        Ecrire_Image(frame,scene, filename);
+        Free_Image(frame);
+        Free_Image(tmp);
+    }
+    Free_Image(ship3);
+    ship3 = zoom_image(ship1, 0.4);
+
+    //Make the 4th enemy ship appear ({100,-130} to {30, 10}, no rotation) (10 frames)
+    for(int time4=1 ; time4 <= 10 ; time4++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -1200 + time4 + 80, 0, 1.0);
+        embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(ship1, frame, 150, 0, 1.0);
+        embed_image(ship2, frame, 437, 58, 1.0);
+        embed_image(ship3, frame, 550, 80, 1.0);
+        tmp = zoom_image(ship4, 0.02*(float)time4);
+        dX = ship4->header.largeur/2 - tmp->header.largeur/2;
+        dY = ship4->header.hauteur/2 - tmp->header.hauteur/2;
+        embed_image(tmp, frame, -(time4*10)+100+dX, (time4*4)-130+dY, 1.0);
+        sprintf(filename, "%04d", time4+80);
         Ecrire_Image(frame,scene, filename);
         Free_Image(frame);
         Free_Image(tmp);
@@ -257,4 +278,5 @@ void scene03(char scene[]){
     Free_Image(ship1);
     Free_Image(ship2);
     Free_Image(ship3);
+    Free_Image(ship4);
 }
