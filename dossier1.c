@@ -341,24 +341,32 @@ void scene03(char scene[]){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void scene04(char scene[]){
-    image *frame=NULL, *star_field=NULL, *ship_hero=NULL, *ship_enemy=NULL;
+    image *frame=NULL, *star_field=NULL, *ship_hero=NULL, *enemy1=NULL, *enemy2=NULL, *enemy3=NULL, *enemy4=NULL, *tmp=NULL;
     char filename[32] = {0};
     int frames=350;
 
     printf("\n------------------- scene 4 : Trespassing enemy's first line ---------------------------\n");
     star_field = Lire_Image("Star", NULL, "Field_lg");
-    ship_hero = Lire_Image("Ship", NULL, "Klingon_Bop");
+    tmp = Lire_Image("Ship", NULL, "Klingon_Bop");
+    ship_hero = zoom_image(tmp, 0.5);
+    Free_Image(tmp);
     flip_image(ship_hero, VERTICAL);
-    ship_enemy = Lire_Image("Ship", NULL, "Enterprise");
-    flip_image(ship_enemy, VERTICAL);
+    enemy1 = Lire_Image("Ship", NULL, "Enterprise");
+    flip_image(enemy1, VERTICAL);
+    enemy2 = zoom_image(enemy1, 0.75);
+    enemy3 = zoom_image(enemy1, 0.4);
+    enemy4 = zoom_image(enemy1, 0.25);
     create_directory(scene);
 
     //Oppose the hero and enemy ship (50 frames)
     for(int time0=1 ; time0 <= 50 ; time0++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1500-(time0*0.5), 0, 1.0);
-        embed_image(ship_hero, frame, -100+(time0*2), -200, 1.0);
-        embed_image(ship_enemy, frame, 550-time0, 0, 1.0);
+        embed_image(ship_hero, frame, time0*2, 100, 1.0);
+        embed_image(enemy1, frame, 550-time0, 50, 1.0);
+        embed_image(enemy2, frame, 450-time0, -50, 1.0);
+        embed_image(enemy3, frame, 550-time0, 350, 1.0);
+        embed_image(enemy4, frame, 800-time0, 50, 1.0);
         sprintf(filename, "%04d", time0);
         Ecrire_Image(frame,scene, filename);
         Free_Image(frame);
@@ -368,8 +376,11 @@ void scene04(char scene[]){
     for(int time1=1 ; time1 <= 100 ; time1++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1500-(time1*0.5)-25, 0, 1.0);
-        embed_image(ship_hero, frame, -100+(time1*2)+100, -200, 1.0-(time1*0.01));
-        embed_image(ship_enemy, frame, 550-time1-50, 0, 1.0);
+        embed_image(ship_hero, frame, (time1*2)+100, 100, 1.0-(time1*0.01));
+        embed_image(enemy1, frame, 550-time1-50, 50, 1.0);
+        embed_image(enemy2, frame, 450-time1-50, -50, 1.0);
+        embed_image(enemy3, frame, 550-time1-50, 350, 1.0);
+        embed_image(enemy4, frame, 800-time1-50, 50, 1.0);
         sprintf(filename, "%04d", time1+50);
         Ecrire_Image(frame,scene, filename);
         Free_Image(frame);
@@ -380,7 +391,10 @@ void scene04(char scene[]){
     for(int time2=1 ; time2 <= 200 ; time2++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1500-(time2*0.5)-75, 0, 1.0);
-        embed_image(ship_enemy, frame, 550-time2-150, 0, 1.0);
+        embed_image(enemy1, frame, 550-time2-150, 50, 1.0);
+        embed_image(enemy2, frame, 450-time2-150, -50, 1.0);
+        embed_image(enemy3, frame, 550-time2-150, 350, 1.0);
+        embed_image(enemy4, frame, 800-time2-150, 50, 1.0);
         sprintf(filename, "%04d", time2+150);
         Ecrire_Image(frame,scene, filename);
         Free_Image(frame);
@@ -388,5 +402,8 @@ void scene04(char scene[]){
 
     register_scene(&movie, frames);
     Free_Image(star_field);
-    Free_Image(ship_enemy);
+    Free_Image(enemy1);
+    Free_Image(enemy2);
+    Free_Image(enemy3);
+    Free_Image(enemy4);
 }
