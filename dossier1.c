@@ -17,8 +17,8 @@ int main(int argc, char *argv[]){
     strcpy(movie.nm_film, FILM_NAME);
 
 //    scene01("01");
-//    scene02("02");
-    scene03("01");
+    scene02("01");
+    scene03("02");
 
     save_movie(&movie);
 
@@ -178,9 +178,9 @@ void scene02(char scene[]){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void scene03(char scene[]){
-    image *frame=NULL, *star_field=NULL, *planet=NULL, *ship1=NULL, *ship2=NULL, *ship3=NULL, *ship4=NULL, *ship5=NULL, *tmp=NULL;
+    image *frame=NULL, *star_field=NULL, *planet=NULL, *ship1=NULL, *ship2=NULL, *ship3=NULL, *ship4=NULL, *ship5=NULL, *death_star=NULL, *tmp=NULL;
     char filename[32] = {0};
-    int dX=0, dY=0, frames=100;
+    int dX=0, dY=0, frames=150;
 
     printf("\n------------------- scene 3 : Ennemies appearance ---------------------------\n");
     star_field = Lire_Image("Star", NULL, "Field_lg");
@@ -192,6 +192,9 @@ void scene03(char scene[]){
     ship4 = copy_image(ship1);
     ship5 = copy_image(ship1);
     create_directory(scene);
+    tmp = Lire_Image("Ship", NULL, "Death_Star");
+    flip_image(tmp, VERTICAL);
+    death_star = zoom_image(tmp, 1.5);
 
     //Show the scenery (50 frames)
     for(int time0=1 ; time0 <= 50 ; time0++){
@@ -293,10 +296,29 @@ void scene03(char scene[]){
         Free_Image(frame);
         Free_Image(tmp);
     }
+    Free_Image(ship5);
+    ship5 = zoom_image(ship1, 0.7);
+
+    //Make the death star appear ({350,100} to {30, 10}, no rotation) (50 frames)
+    for(int time6=1 ; time6 <= 50 ; time6++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -1200 + time6 + 100, 0, 1.0);
+        embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(death_star, frame, 500-(time6*5), 0, 1.0);
+        embed_image(ship1, frame, 150, 0, 1.0);
+        embed_image(ship2, frame, 437, 58, 1.0);
+        embed_image(ship3, frame, 550, 80, 1.0);
+        embed_image(ship4, frame, 200, 110, 1.0);
+        embed_image(ship5, frame, 326, 216, 1.0);
+        sprintf(filename, "%04d", time6+100);
+        Ecrire_Image(frame,scene, filename);
+        Free_Image(frame);
+    }
 
     register_scene(&movie, frames);
     Free_Image(star_field);
     Free_Image(planet);
+    Free_Image(death_star);
     Free_Image(ship1);
     Free_Image(ship2);
     Free_Image(ship3);
