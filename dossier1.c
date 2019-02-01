@@ -10,6 +10,7 @@ void create_directory(char dir_name[]);
 void scene01(char scene[]);
 void scene02(char scene[]);
 void scene03(char scene[]);
+void scene04(char scene[]);
 
 int main(int argc, char *argv[]){
 
@@ -18,7 +19,8 @@ int main(int argc, char *argv[]){
 
 //    scene01("01");
 //    scene02("02");
-    scene03("01");
+//    scene03("03");
+    scene04("01");
 
     save_movie(&movie);
 
@@ -195,6 +197,7 @@ void scene03(char scene[]){
     tmp = Lire_Image("Ship", NULL, "Death_Star");
     flip_image(tmp, VERTICAL);
     death_star = zoom_image(tmp, 1.5);
+    Free_Image(tmp);
 
     //Show the scenery + make death star appear (50 frames)
     for(int time0=1 ; time0 <= 50 ; time0++){
@@ -305,7 +308,7 @@ void scene03(char scene[]){
     Free_Image(ship5);
     ship5 = zoom_image(ship1, 0.7);
 
-    //Make the death star appear ({350,100} to {30, 10}, no rotation) (50 frames)
+    //Scroll the scene (50 frames)
     for(int time6=1 ; time6 <= 50 ; time6++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time6 + 100, 0, 1.0);
@@ -330,4 +333,60 @@ void scene03(char scene[]){
     Free_Image(ship3);
     Free_Image(ship4);
     Free_Image(ship5);
+}
+
+/****************************************************************************************/
+/*  I : /                                                                               */
+/*  P : Generates all the frames for the scene 04 : Trespassing enemy's first line     */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void scene04(char scene[]){
+    image *frame=NULL, *star_field=NULL, *ship_hero=NULL, *ship_enemy=NULL;
+    char filename[32] = {0};
+    int frames=350;
+
+    printf("\n------------------- scene 4 : Trespassing enemy's first line ---------------------------\n");
+    star_field = Lire_Image("Star", NULL, "Field_lg");
+    ship_hero = Lire_Image("Ship", NULL, "Klingon_Bop");
+    flip_image(ship_hero, VERTICAL);
+    ship_enemy = Lire_Image("Ship", NULL, "Enterprise");
+    flip_image(ship_enemy, VERTICAL);
+    create_directory(scene);
+
+    //Oppose the hero and enemy ship (50 frames)
+    for(int time0=1 ; time0 <= 50 ; time0++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -1500-(time0*0.5), 0, 1.0);
+        embed_image(ship_hero, frame, -100+(time0*2), -200, 1.0);
+        embed_image(ship_enemy, frame, 550-time0, 0, 1.0);
+        sprintf(filename, "%04d", time0);
+        Ecrire_Image(frame,scene, filename);
+        Free_Image(frame);
+    }
+
+    //Make the hero ship become invisible (100 frames)
+    for(int time1=1 ; time1 <= 100 ; time1++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -1500-(time1*0.5)-25, 0, 1.0);
+        embed_image(ship_hero, frame, -100+(time1*2)+100, -200, 1.0-(time1*0.01));
+        embed_image(ship_enemy, frame, 550-time1-50, 0, 1.0);
+        sprintf(filename, "%04d", time1+50);
+        Ecrire_Image(frame,scene, filename);
+        Free_Image(frame);
+    }
+    Free_Image(ship_hero);
+
+    //Let the enemy ship drift (200 frames)
+    for(int time2=1 ; time2 <= 200 ; time2++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -1500-(time2*0.5)-75, 0, 1.0);
+        embed_image(ship_enemy, frame, 550-time2-150, 0, 1.0);
+        sprintf(filename, "%04d", time2+150);
+        Ecrire_Image(frame,scene, filename);
+        Free_Image(frame);
+    }
+
+    register_scene(&movie, frames);
+    Free_Image(star_field);
+    Free_Image(ship_enemy);
 }
