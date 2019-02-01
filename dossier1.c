@@ -17,8 +17,8 @@ int main(int argc, char *argv[]){
     strcpy(movie.nm_film, FILM_NAME);
 
 //    scene01("01");
-    scene02("01");
-    scene03("02");
+//    scene02("02");
+    scene03("01");
 
     save_movie(&movie);
 
@@ -196,21 +196,23 @@ void scene03(char scene[]){
     flip_image(tmp, VERTICAL);
     death_star = zoom_image(tmp, 1.5);
 
-    //Show the scenery (50 frames)
+    //Show the scenery + make death star appear (50 frames)
     for(int time0=1 ; time0 <= 50 ; time0++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200+time0, 0, 1.0);
         embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(death_star, frame, 500-(time0*1), 0, 1.0);
         sprintf(filename, "%04d", time0);
         Ecrire_Image(frame,scene, filename);
         Free_Image(frame);
     }
 
-    //Make the 1st enemy ship appear ({350,-100} to {250, 0}, no rotation) (10 frames)
+    //Make the 1st enemy ship appear ({350,-100} to {150, 0}, no rotation) (10 frames)
     for(int time1=1 ; time1 <= 10 ; time1++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time1 + 50, 0, 1.0);
         embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(death_star, frame, 500-(time1*1)-50, 0, 1.0);
         tmp = zoom_image(ship1, 0.1*(float)time1);
         dX = ship1->header.largeur/2 - tmp->header.largeur/2;
         dY = ship1->header.hauteur/2 - tmp->header.hauteur/2;
@@ -221,12 +223,13 @@ void scene03(char scene[]){
         Free_Image(tmp);
     }
 
-    //Make the 2nd enemy ship appear ({300,-150} to {250, -130}, no rotation) (10 frames)
+    //Make the 2nd enemy ship appear ({300,-150} to {437, 58}, no rotation) (10 frames)
     for(int time2=1 ; time2 <= 10 ; time2++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time2 + 60, 0, 1.0);
         embed_image(planet, frame, -250, 250, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
+        embed_image(death_star, frame, 500-(time2*1)-60, 0, 1.0);
         tmp = zoom_image(ship1, 0.025*(float)time2);
         dX = ship2->header.largeur/2 - tmp->header.largeur/2;
         dY = ship2->header.hauteur/2 - tmp->header.hauteur/2;
@@ -239,11 +242,12 @@ void scene03(char scene[]){
     Free_Image(ship2);
     ship2 = zoom_image(ship1, 0.25);
 
-    //Make the 3rd enemy ship appear ({400,-50} to {300, -30}, no rotation) (10 frames)
+    //Make the 3rd enemy ship appear ({400,-50} to {550, 80}, no rotation) (10 frames)
     for(int time3=1 ; time3 <= 10 ; time3++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time3 + 70, 0, 1.0);
         embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(death_star, frame, 500-(time3*1)-70, 0, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(ship2, frame, 437, 58, 1.0);
         tmp = zoom_image(ship3, 0.04*(float)time3);
@@ -258,11 +262,12 @@ void scene03(char scene[]){
     Free_Image(ship3);
     ship3 = zoom_image(ship1, 0.4);
 
-    //Make the 4th enemy ship appear ({100,-130} to {30, 10}, no rotation) (10 frames)
+    //Make the 4th enemy ship appear ({100,-130} to {200, 110}, no rotation) (10 frames)
     for(int time4=1 ; time4 <= 10 ; time4++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time4 + 80, 0, 1.0);
         embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(death_star, frame, 500-(time4*1)-80, 0, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(ship2, frame, 437, 58, 1.0);
         embed_image(ship3, frame, 550, 80, 1.0);
@@ -278,11 +283,12 @@ void scene03(char scene[]){
     Free_Image(ship4);
     ship4 = zoom_image(ship1, 0.2);
 
-    //Make the 5th enemy ship appear ({350,100} to {30, 10}, no rotation) (10 frames)
+    //Make the 5th enemy ship appear ({350,100} to {326, 216}, no rotation) (10 frames)
     for(int time5=1 ; time5 <= 10 ; time5++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time5 + 90, 0, 1.0);
         embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(death_star, frame, 500-(time5*1)-90, 0, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(ship2, frame, 437, 58, 1.0);
         embed_image(ship3, frame, 550, 80, 1.0);
@@ -304,7 +310,7 @@ void scene03(char scene[]){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time6 + 100, 0, 1.0);
         embed_image(planet, frame, -250, 250, 1.0);
-        embed_image(death_star, frame, 500-(time6*5), 0, 1.0);
+        embed_image(death_star, frame, 500-(time6*1)-100, 0, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(ship2, frame, 437, 58, 1.0);
         embed_image(ship3, frame, 550, 80, 1.0);
