@@ -16,9 +16,9 @@ int main(int argc, char *argv[]){
     memset(&movie, 0, sizeof(film));
     strcpy(movie.nm_film, FILM_NAME);
 
-//    scene01("01");
-//    scene02("01");
-    scene03("01");
+    scene01("01");
+    scene02("02");
+    scene03("03");
 
     save_movie(&movie);
 
@@ -238,7 +238,7 @@ void scene03(char scene[]){
     for(int time3=1 ; time3 <= 10 ; time3++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time3 + 70, 0, 1.0);
-        embed_image(planet, frame, -250 + time3, 250, 1.0);
+        embed_image(planet, frame, -250, 250, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(ship2, frame, 437, 58, 1.0);
         tmp = zoom_image(ship3, 0.03*(float)time3);
