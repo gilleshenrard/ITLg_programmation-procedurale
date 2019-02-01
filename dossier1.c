@@ -200,7 +200,7 @@ void scene03(char scene[]){
     for(int time0=1 ; time0 <= 50 ; time0++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200+time0, 0, 1.0);
-        embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(planet, frame, -250+(time0*0.5), 250, 1.0);
         embed_image(death_star, frame, 500-(time0*1), 0, 1.0);
         sprintf(filename, "%04d", time0);
         Ecrire_Image(frame,scene, filename);
@@ -211,7 +211,7 @@ void scene03(char scene[]){
     for(int time1=1 ; time1 <= 10 ; time1++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time1 + 50, 0, 1.0);
-        embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(planet, frame, -250+(time1*0.5)+25, 250, 1.0);
         embed_image(death_star, frame, 500-(time1*1)-50, 0, 1.0);
         tmp = zoom_image(ship1, 0.1*(float)time1);
         dX = ship1->header.largeur/2 - tmp->header.largeur/2;
@@ -227,7 +227,7 @@ void scene03(char scene[]){
     for(int time2=1 ; time2 <= 10 ; time2++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time2 + 60, 0, 1.0);
-        embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(planet, frame, -250+(time2*0.5)+30, 250, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(death_star, frame, 500-(time2*1)-60, 0, 1.0);
         tmp = zoom_image(ship1, 0.025*(float)time2);
@@ -246,7 +246,7 @@ void scene03(char scene[]){
     for(int time3=1 ; time3 <= 10 ; time3++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time3 + 70, 0, 1.0);
-        embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(planet, frame, -250+(time3*0.5)+35, 250, 1.0);
         embed_image(death_star, frame, 500-(time3*1)-70, 0, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(ship2, frame, 437, 58, 1.0);
@@ -266,7 +266,7 @@ void scene03(char scene[]){
     for(int time4=1 ; time4 <= 10 ; time4++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time4 + 80, 0, 1.0);
-        embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(planet, frame, -250+(time4*0.5)+40, 250, 1.0);
         embed_image(death_star, frame, 500-(time4*1)-80, 0, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(ship2, frame, 437, 58, 1.0);
@@ -287,7 +287,7 @@ void scene03(char scene[]){
     for(int time5=1 ; time5 <= 10 ; time5++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time5 + 90, 0, 1.0);
-        embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(planet, frame, -250+(time5*0.5)+45, 250, 1.0);
         embed_image(death_star, frame, 500-(time5*1)-90, 0, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(ship2, frame, 437, 58, 1.0);
@@ -309,7 +309,7 @@ void scene03(char scene[]){
     for(int time6=1 ; time6 <= 50 ; time6++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1200 + time6 + 100, 0, 1.0);
-        embed_image(planet, frame, -250, 250, 1.0);
+        embed_image(planet, frame, -250+(time6*0.5)+50, 250, 1.0);
         embed_image(death_star, frame, 500-(time6*1)-100, 0, 1.0);
         embed_image(ship1, frame, 150, 0, 1.0);
         embed_image(ship2, frame, 437, 58, 1.0);
