@@ -17,10 +17,10 @@ int main(int argc, char *argv[]){
     memset(&movie, 0, sizeof(film));
     strcpy(movie.nm_film, FILM_NAME);
 
-    scene01("01");
-    scene02("02");
-    scene03("03");
-    scene04("04");
+//    scene01("01");
+//    scene02("02");
+//    scene03("03");
+    scene04("01");
 
     save_movie(&movie);
 
@@ -351,8 +351,10 @@ void scene04(char scene[]){
     ship_hero = zoom_image(tmp, 0.3);
     Free_Image(tmp);
     flip_image(ship_hero, VERTICAL);
-    enemy1 = Lire_Image("Ship", NULL, "Enterprise");
-    flip_image(enemy1, VERTICAL);
+    tmp = Lire_Image("Ship", NULL, "Enterprise");
+    flip_image(tmp, VERTICAL);
+    enemy1 = rotate_image(tmp, 12);
+    Free_Image(tmp);
     enemy2 = zoom_image(enemy1, 0.75);
     enemy3 = zoom_image(enemy1, 0.4);
     enemy4 = zoom_image(enemy1, 0.25);
