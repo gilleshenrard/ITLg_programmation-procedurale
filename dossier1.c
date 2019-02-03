@@ -12,6 +12,7 @@ void scene02(char scene[]);
 void scene03(char scene[]);
 void scene04(char scene[]);
 void scene05(char scene[]);
+void scene06(char scene[]);
 
 int main(int argc, char *argv[]){
 
@@ -22,7 +23,8 @@ int main(int argc, char *argv[]){
 //    scene02("02");
 //    scene03("03");
 //    scene04("04");
-    scene05("01");
+//    scene05("01");
+    scene06("01");
 
     save_movie(&movie);
 
@@ -459,5 +461,65 @@ void scene05(char scene[]){
     register_scene(&movie, frames);
     Free_Image(star_field);
     Free_Image(ship_hero);
+    Free_Image(death_star);
+}
+
+
+/********************************************************************************************/
+/*  I : /                                                                                   */
+/*  P : Generates all the frames for the scene 06 : Attack the death star                   */
+/*  O : /                                                                                   */
+/********************************************************************************************/
+void scene06(char scene[]){
+    image *frame=NULL, *star_field=NULL, *death_star=NULL, *tmp=NULL;
+    ship_t ship_hero = {3, {{167,273},{387,236},{77,211}}, VERT, NULL} ;
+    char filename[32] = {0};
+    int frames=80;
+    char laser_on = 1;
+
+    printf("\n------------------- scene 6 : Attacking the death star ---------------------------\n");
+    star_field = Lire_Image("Star", NULL, "Field_lg");
+    tmp = Lire_Image("Ship", NULL, "Klingon_Bop");
+    flip_image(tmp, VERTICAL);
+    ship_hero.img = zoom_image(tmp, 0.3);
+    compute_weapons_coordinates(&ship_hero, VERTICAL, 0, 0, 0, 0.3);
+    Free_Image(tmp);
+    tmp = Lire_Image("Ship", NULL, "Death_Star");
+    flip_image(tmp, VERTICAL);
+    death_star = zoom_image(tmp, 2.0);
+    Free_Image(tmp);
+    create_directory(scene);
+
+    //Face the death star (50 frames)
+    for(int time0=1 ; time0 <= 50 ; time0++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -1950-time0, 0, 1.0);
+        embed_image(death_star, frame, 75, -200, 1.0);
+        embed_image(ship_hero.img, frame, 200+time0, 150, 1.0);
+        sprintf(filename, "%04d", time0);
+        Ecrire_Image(frame,scene, filename);
+        Free_Image(frame);
+    }
+    compute_weapons_coordinates(&ship_hero, NO_FLIP, 250, 150, 0, 0.0);
+
+    //Make the hero pew pew pew the death star (30 frames)
+    for(int time1=1 ; time1 <= 30 ; time1++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -1950-time1-50, 0, 1.0);
+        embed_image(death_star, frame, 75, -200, 1.0);
+        embed_image(ship_hero.img, frame, 200+time1+50, 150, 1.0);
+        compute_weapons_coordinates(&ship_hero, NO_FLIP, 1, 0, 0, 0.0);
+        if(laser_on)
+            shoot(&ship_hero, death_star, frame);
+        if(time1 % 5 == 0)
+            laser_on = !laser_on;
+        sprintf(filename, "%04d", time1+50);
+        Ecrire_Image(frame,scene, filename);
+        Free_Image(frame);
+    }
+
+    register_scene(&movie, frames);
+    Free_Image(star_field);
+    Free_Image(ship_hero.img);
     Free_Image(death_star);
 }
