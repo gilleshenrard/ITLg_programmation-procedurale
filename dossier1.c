@@ -11,6 +11,7 @@ void scene01(char scene[]);
 void scene02(char scene[]);
 void scene03(char scene[]);
 void scene04(char scene[]);
+void scene05(char scene[]);
 
 int main(int argc, char *argv[]){
 
@@ -20,7 +21,8 @@ int main(int argc, char *argv[]){
 //    scene01("01");
 //    scene02("02");
 //    scene03("03");
-    scene04("01");
+//    scene04("04");
+    scene05("01");
 
     save_movie(&movie);
 
@@ -408,4 +410,54 @@ void scene04(char scene[]){
     Free_Image(enemy2);
     Free_Image(enemy3);
     Free_Image(enemy4);
+}
+
+
+/********************************************************************************************/
+/*  I : /                                                                                   */
+/*  P : Generates all the frames for the scene 05 : Reappearing in front of the death star  */
+/*  O : /                                                                                   */
+/********************************************************************************************/
+void scene05(char scene[]){
+    image *frame=NULL, *star_field=NULL, *ship_hero=NULL, *death_star=NULL, *tmp=NULL;
+    char filename[32] = {0};
+    int frames=150;
+
+    printf("\n------------------- scene 5 : Reappearing in front of the death star ---------------------------\n");
+    star_field = Lire_Image("Star", NULL, "Field_lg");
+    tmp = Lire_Image("Ship", NULL, "Klingon_Bop");
+    flip_image(tmp, VERTICAL);
+    ship_hero = zoom_image(tmp, 0.3);
+    Free_Image(tmp);
+    tmp = Lire_Image("Ship", NULL, "Death_Star");
+    flip_image(tmp, VERTICAL);
+    death_star = zoom_image(tmp, 2.0);
+    Free_Image(tmp);
+    create_directory(scene);
+
+    //Display the death star (50 frames)
+    for(int time0=1 ; time0 <= 50 ; time0++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -1800-time0, 0, 1.0);
+        embed_image(death_star, frame, 150-(time0*0.5), -200, 1.0);
+        sprintf(filename, "%04d", time0);
+        Ecrire_Image(frame,scene, filename);
+        Free_Image(frame);
+    }
+
+    //Make the hero ship appear (100 frames)
+    for(int time1=1 ; time1 <= 100 ; time1++){
+        frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
+        embed_image(star_field, frame, -1800-time1-50, 0, 1.0);
+        embed_image(death_star, frame, 150-(time1*0.5)-25, -200, 1.0);
+        embed_image(ship_hero, frame, time1*2, 150, time1 > 50 ? 1.0 : time1*0.02);
+        sprintf(filename, "%04d", time1+50);
+        Ecrire_Image(frame,scene, filename);
+        Free_Image(frame);
+    }
+
+    register_scene(&movie, frames);
+    Free_Image(star_field);
+    Free_Image(ship_hero);
+    Free_Image(death_star);
 }
