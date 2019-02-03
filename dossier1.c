@@ -19,12 +19,12 @@ int main(int argc, char *argv[]){
     memset(&movie, 0, sizeof(film));
     strcpy(movie.nm_film, FILM_NAME);
 
-//    scene01("01");
-//    scene02("02");
-//    scene03("03");
-//    scene04("04");
-//    scene05("01");
-    scene06("01");
+    scene01("01");
+    scene02("02");
+    scene03("03");
+    scene04("04");
+    scene05("05");
+    scene06("06");
 
     save_movie(&movie);
 
@@ -471,11 +471,11 @@ void scene05(char scene[]){
 /*  O : /                                                                                   */
 /********************************************************************************************/
 void scene06(char scene[]){
-    image *frame=NULL, *star_field=NULL, *tmp=NULL/*, *explosion[3] = {NULL}*/;
+    image *frame=NULL, *star_field=NULL, *tmp=NULL, *base_explo=NULL, *explosion[7] = {NULL};
     ship_t ship_hero = {3, {{167,273},{387,236},{77,211}}, VERT, NULL} ;
     ship_t death_star = {1, {{457,273}}, ROUGE, NULL} ;
     char filename[32] = {0};
-    int frames=140;
+    int frames=150, i=0;
     char laser_on = 1;
 
     printf("\n------------------- scene 6 : Attacking the death star ---------------------------\n");
@@ -490,6 +490,10 @@ void scene06(char scene[]){
     death_star.img = zoom_image(tmp, 2.0);
     compute_weapons_coordinates(&death_star, VERTICAL, 0, 0, 0, 2.0);
     Free_Image(tmp);
+    base_explo = Lire_Image("Explosion", NULL, "4");
+    for (i=0 ; i<7 ; i++)
+        explosion[i] = get_explosion(base_explo, i);
+    Free_Image(base_explo);
     create_directory(scene);
 
     //Face the death star (50 frames)
@@ -533,11 +537,16 @@ void scene06(char scene[]){
         Free_Image(frame);
     }
 
-    //Make the hero ship explode (30 frames)
-    for(int time3=1 ; time3 <= 30 ; time3++){
+    i=0;
+    //Make the hero ship explode (35 frames)
+    for(int time3=1 ; time3 <= 40 ; time3++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1950-time3-110, 0, 1.0);
         embed_image(death_star.img, frame, 75, -200, 1.0);
+        if(i<7){
+            embed_image(explosion[i], frame, 290, 130, 1.0);
+            i++;
+        }
         sprintf(filename, "%04d", time3+110);
         Ecrire_Image(frame,scene, filename);
         Free_Image(frame);
@@ -547,6 +556,6 @@ void scene06(char scene[]){
     Free_Image(star_field);
     Free_Image(ship_hero.img);
     Free_Image(death_star.img);
-//    for(int i=0 ; i<3 ; i++)
-//        Free_Image(explosion[i]);
+    for(i=0 ; i<7 ; i++)
+        Free_Image(explosion[i]);
 }
