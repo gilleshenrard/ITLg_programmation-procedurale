@@ -38,6 +38,7 @@ void Tst_Dir_Tree(void);
 void Tst_Weapon_Computation(void);
 void Tst_Text(void);
 void Tst_Save_Movie(void);
+void Tst_Draw_Explosion(void);
 
 /****************************************************************************************
 * Test des differentes fonctions de manipulation des images
@@ -60,8 +61,9 @@ int main(void)
 //    Tst_Zoom();
 //    Tst_Dir_Tree();
 //    Tst_Weapon_Computation();
-    Tst_Text();
+//    Tst_Text();
 //    Tst_Save_Movie();
+    Tst_Draw_Explosion();
 
     return 0;
 }
@@ -773,4 +775,30 @@ void Tst_Save_Movie(){
     memset(tst.nm_film, 0, sizeof(tst.nm_film));
     strncpy(tst.nm_film, "USS_Ent", strlen("USS_Ent"));
     save_movie(&tst);
+}
+
+/****************************************************************************************
+* Tst_Draw_Explosion : Tests the explosion drawing procedure
+*
+* Purpose : Making sure explosions are generated properly
+****************************************************************************************/
+void Tst_Draw_Explosion(){
+    image *background=NULL, *base_explo=NULL, *tst=NULL;
+    char filename[7]={0};
+
+    printf("\n--- Test Draw Explosions -----------------------------------------------------\n\n");
+    background = Lire_Image("Star", NULL, "Field");
+    base_explo = Lire_Image("Explosion", NULL, "4");
+    system(MKDIR(Test\\Test_Explosion));
+
+    for(int i=0 ; i<7 ; i++){
+        tst = get_explosion(base_explo, i);
+        strncpy(tst->nom_base, "Test", FIC_NM);
+        sprintf(filename, "step_%d", i);
+        Ecrire_Image(tst,"Explosion", filename);
+        Free_Image(tst);
+    }
+
+    Free_Image(background);
+    Free_Image(base_explo);
 }

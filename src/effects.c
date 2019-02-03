@@ -591,3 +591,21 @@ image* get_text(char txt[], couleur font, couleur background){
     Free_Image(tmp);
     return buffer;
 }
+
+/****************************************************************************************/
+/*  I : step of the explosion (out of 5) to get                                         */
+/*  P : Generates an image containing the right explosion image                         */
+/*  O : result image                                                                    */
+/****************************************************************************************/
+image* get_explosion(image* base, int step){
+    image *buffer = NULL;
+
+    buffer = Creer_Image("", base->header.hauteur, base->header.largeur/7, BLUE_SCREEN, NIVEAU_8);
+    for(int y=0 ; y<buffer->header.hauteur ; y++){
+        for(int x=0 ; x<buffer->header.largeur ; x++){
+            set_pixel_rgba(buffer, x, y, base->pic[y][(step*buffer->header.largeur)+x], 1.0);
+        }
+    }
+
+    return buffer;
+}

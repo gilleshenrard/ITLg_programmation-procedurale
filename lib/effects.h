@@ -47,4 +47,7 @@ int shoot(ship_t* origin, image* target, image* scene);
 //text specific
 image* get_text(char txt[], couleur font, couleur background);
 
+//explosion specific
+image* get_explosion(image* base, int step);
+
 #endif // EFFECTS_H_INCLUDED
