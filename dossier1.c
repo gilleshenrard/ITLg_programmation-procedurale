@@ -19,12 +19,12 @@ int main(int argc, char *argv[]){
     memset(&movie, 0, sizeof(film));
     strcpy(movie.nm_film, FILM_NAME);
 
-//    scene01("01");
+    scene01("01");
 //    scene02("02");
 //    scene03("03");
 //    scene04("04");
 //    scene05("05");
-    scene06("01");
+//    scene06("06");
 
     save_movie(&movie);
 
@@ -50,16 +50,31 @@ void create_directory(char dir_name[]){
 /****************************************************************************************/
 void scene01(char scene[]){
     image *background=NULL, *title1=NULL, *title2=NULL, *tmp=NULL;
-    image *img_txt[4] = {NULL};
+    image *img_txt[19] = {NULL};
     float f_time = 0.0;
-    int i=0, title_height=0, dx=0, frames=260;
+    int i=0, title_height=0, dx=0, frames=550;
     char filename[32] = {0};
-    char txt[6][38]={   "              Starship               ",
+    char txt[21][38]={  "              Starship               ",
                         "              Soldiers               ",
-                        " Alors que des millenaires d'etudes, ",
-                        "observations et preuves scientifiques",
-                        "    avaient permi d'assurer que      ",
-                        "   les astres etaient spheriques...  "};
+                        "L’espace, la ou personne ne vous     ",
+                        "       entendra coloniser...         ",
+                        "Tel est le plan du geant industriel  ",
+                        "Human Spacies. Avide d’exploiter les ",
+                        "   ressources du plus grand nombre   ",
+                        "d’astres et ainsi garantir son empire",
+                        "         economique sur Terre,       ",
+                        "    Human Spacies n’hesite pas a     ",
+                        "    eliminer tout concurrent qui     ",
+                        " chercherait à lui faire de l’ombre. ",
+                        "  L’equipe du Capitaine Ricard, a la ",
+                        " tete d’un petit groupe de rebelles, ",
+                        "    compte bien mettre fin a cette   ",
+                        "     tyrannie qui dure depuis des    ",
+                        " dacennies en datruisant le vaisseau ",
+                        "      amiral et ainsi annihiler      ",
+                        "  Human Spacies. Ces courageux heros ",
+                        "    Parviendront-t-ils a mettre leur ",
+                        "         plan a execution ?          "};
 
     printf("\n------------------- scene 1 : Intro and movie title ---------------------------\n");
     background = Lire_Image("Star", NULL, "Field");
@@ -75,12 +90,12 @@ void scene01(char scene[]){
     title2 = zoom_image(tmp, 4.0);
     Free_Image(tmp);
 
-    for(i=0 ; i<4 ; i++){
+    for(i=0 ; i<19 ; i++){
         img_txt[i] = get_text(txt[i+2], JAUNE, BLUE_SCREEN);
     }
 
     //Fade the title in (alpha 0 to 1) during 50 frames, centered
-    for(int time0=1 ; time0<51 ; time0++){
+    for(int time0=1 ; time0<=50 ; time0++){
         f_time = (float)time0;
         tmp = copy_image(background);
         embed_image(title1, tmp, dx, tmp->header.hauteur/2, f_time/50.0);
@@ -92,18 +107,18 @@ void scene01(char scene[]){
     }
 
     //scroll title and text 3 pixels every tick
-    for(int time1=1 ; time1<(frames-49) ; time1++){
+    for(int time1=1 ; time1<=500 ; time1++){
         tmp = copy_image(background);
 
         //embed the title
         dx = background->header.largeur/2 - title1->header.largeur/2;
-        embed_image(title1, tmp, dx, tmp->header.hauteur/2+(time1*3), 1.0);
-        embed_image(title2, tmp, dx, tmp->header.hauteur/2 - title_height + (time1*3), 1.0);
+        embed_image(title1, tmp, dx, tmp->header.hauteur/2+(time1*2), 1.0);
+        embed_image(title2, tmp, dx, tmp->header.hauteur/2 - title_height + (time1*2), 1.0);
 
         //embed the text
-        for(i=0 ; i<4 ; i++){
+        for(i=0 ; i<19 ; i++){
             dx = background->header.largeur/2 - img_txt[i]->header.largeur/2;
-            embed_image(img_txt[i], tmp, dx, -(img_txt[i]->header.hauteur*(i+1)) + (time1*3), 1.0);
+            embed_image(img_txt[i], tmp, dx, -(img_txt[i]->header.hauteur*(i+1)) + (time1*2), 1.0);
         }
         //write the final frame
         strncpy(tmp->nom_base, FILM_NAME, FIC_NM);
@@ -114,7 +129,7 @@ void scene01(char scene[]){
 
     register_scene(&movie, frames);
     Free_Image(background);
-    for(i=0 ; i<4 ; i++){
+    for(i=0 ; i<19 ; i++){
         Free_Image(img_txt[i]);
     }
 }
