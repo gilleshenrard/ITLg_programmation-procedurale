@@ -19,12 +19,12 @@ int main(int argc, char *argv[]){
     memset(&movie, 0, sizeof(film));
     strcpy(movie.nm_film, FILM_NAME);
 
-    scene01("01");
-    scene02("02");
-    scene03("03");
-    scene04("04");
-    scene05("05");
-    scene06("06");
+//    scene01("01");
+//    scene02("02");
+//    scene03("03");
+//    scene04("04");
+//    scene05("05");
+    scene06("01");
 
     save_movie(&movie);
 
@@ -441,7 +441,7 @@ void scene05(char scene[]){
     for(int time0=1 ; time0 <= 50 ; time0++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1800-time0, 0, 1.0);
-        embed_image(death_star, frame, 150-(time0*0.5), -200, 1.0);
+        embed_image(death_star, frame, 75-(time0*0.5), -200, 1.0);
         sprintf(filename, "%04d", time0);
         Ecrire_Image(frame,scene, filename);
         Free_Image(frame);
@@ -451,7 +451,7 @@ void scene05(char scene[]){
     for(int time1=1 ; time1 <= 100 ; time1++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1800-time1-50, 0, 1.0);
-        embed_image(death_star, frame, 150-(time1*0.5)-25, -200, 1.0);
+        embed_image(death_star, frame, 75-(time1*0.5)-25, -200, 1.0);
         embed_image(ship_hero, frame, time1*2, 150, time1 > 50 ? 1.0 : time1*0.02);
         sprintf(filename, "%04d", time1+50);
         Ecrire_Image(frame,scene, filename);
@@ -500,20 +500,20 @@ void scene06(char scene[]){
     for(int time0=1 ; time0 <= 50 ; time0++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1950-time0, 0, 1.0);
-        embed_image(death_star.img, frame, 75, -200, 1.0);
+        embed_image(death_star.img, frame, 0, -200, 1.0);
         embed_image(ship_hero.img, frame, 200+time0, 150, 1.0);
         sprintf(filename, "%04d", time0);
         Ecrire_Image(frame,scene, filename);
         Free_Image(frame);
     }
     compute_weapons_coordinates(&ship_hero, NO_FLIP, 250, 150, 0, 0.0);
-    compute_weapons_coordinates(&death_star, NO_FLIP, 75, -200, 0, 0.0);
+    compute_weapons_coordinates(&death_star, NO_FLIP, 0, -200, 0, 0.0);
 
     //Make the hero pew pew pew the death star (30 frames)
     for(int time1=1 ; time1 <= 30 ; time1++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1950-time1-50, 0, 1.0);
-        embed_image(death_star.img, frame, 75, -200, 1.0);
+        embed_image(death_star.img, frame, 0, -200, 1.0);
         embed_image(ship_hero.img, frame, 200+time1+50, 150, 1.0);
         compute_weapons_coordinates(&ship_hero, NO_FLIP, 1, 0, 0, 0.0);
         if(laser_on)
@@ -529,7 +529,7 @@ void scene06(char scene[]){
     for(int time2=1 ; time2 <= 30 ; time2++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1950-time2-80, 0, 1.0);
-        embed_image(death_star.img, frame, 75, -200, 1.0);
+        embed_image(death_star.img, frame, 0, -200, 1.0);
         embed_image(ship_hero.img, frame, 200+time2+80, 150, 1.0);
         shoot(&death_star, ship_hero.img, frame);
         sprintf(filename, "%04d", time2+80);
@@ -542,7 +542,7 @@ void scene06(char scene[]){
     for(int time3=1 ; time3 <= 40 ; time3++){
         frame = Creer_Image(FILM_NAME, 500, 800, NOIR, NIVEAU_8);
         embed_image(star_field, frame, -1950-time3-110, 0, 1.0);
-        embed_image(death_star.img, frame, 75, -200, 1.0);
+        embed_image(death_star.img, frame, 0, -200, 1.0);
         if(i<7){
             embed_image(explosion[i], frame, 290, 130, 1.0);
             i++;
