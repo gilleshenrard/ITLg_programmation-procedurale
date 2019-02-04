@@ -40,7 +40,7 @@ image* zoom_image(image* img, float factor);
 ```
 * Weapons coordinates computation procedure :
 ```C
-int compute_weapons_coordinates(ship_t*, char, int, int, int, float);
+int compute_weapons_coordinates(ship_t* ship, char flipped, int translation_x, int translation_y, int angle, float zoom);
 ```
 * Shooting procedure :
 ```C
@@ -50,11 +50,21 @@ int shoot(ship_t* origin, image* target, image* scene);
 ```C
 image* get_text(char txt[], couleur font, couleur background);
 ```
+* Explosion images generation procedure :
+```C
+image* get_explosion(image* base, int step);
+```
 * Unit tests for all existing procedures, in [Test_Image.c](https://github.com/gilleshenrard/ITLg_programmation-procedurale/blob/Dossier1/Test_Image.c)
 
 ### 4. Currently implemented in the final assignment
 - Scene 01 : Intro (title and backstory)
 - Scene 02 : Main ship appearance
+- Scene 03 : Ennemies arrival
+- Scene 04 : Trespassing ennemies first lign
+- Scene 05 : Facing the Death Star
+- Scene 06 : Attacking the Death Star (and counter-attack)
+- Scene 07 : Outro
 
-### 5. To do
-Continue developping the final scenes
+### 5. Known issues
+- Performance drops when embedding large images : could be improved by looping only in the coordinates known to be in the background image
+- Several procedures are not perfectly easy to use yet
