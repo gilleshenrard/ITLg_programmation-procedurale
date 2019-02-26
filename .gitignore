@@ -57,3 +57,8 @@ dkms.conf
 *.layout
 *.dat
 *.txt
+
+# Dossier2 specific files
+Data_DB_Comp/*
+Data_Export/*
+Data_Import/*
