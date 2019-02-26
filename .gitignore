@@ -50,3 +50,15 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# code::blocks files
+*.cbp
+*.depend
+*.layout
+*.dat
+*.txt
+
+# Dossier2 specific files
+Data_DB_Comp/*
+Data_Export/*
+Data_Import/*
