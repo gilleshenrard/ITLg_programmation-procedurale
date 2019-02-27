@@ -182,8 +182,88 @@ void Rec_Country(dbc *db, int id_cty)
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_country_name(void* a, void* b){
-    ccty *tmp_a = (ccty*)a;
-    ccty *tmp_b = (ccty*)b;
+    ccty_recur *tmp_a = (ccty_recur*)a;
+    ccty_recur *tmp_b = (ccty_recur*)b;
 
-    return strcmp(tmp_a->nm_cty, tmp_b->nm_cty);
+    return strcmp(tmp_a->cty.nm_cty, tmp_b->cty.nm_cty);
+}
+
+/****************************************************************************************/
+/*  I : Country to which copy data                                                      */
+/*      Country from which copy data                                                    */
+/*  P : Copies all the fields of countries from new to old                              */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_country(void* oldelem, void* newelem){
+    ccty_recur* oldTuple = (ccty_recur*)oldelem;
+    ccty_recur* newTuple = (ccty_recur*)newelem;
+    ccty_recur *saveRight = NULL, *saveLeft=NULL;
+
+    if(!oldelem || !newelem)
+        return -1;
+
+    //save the pointer values of the old country
+    saveRight = oldTuple->right;
+    saveLeft = oldTuple->left;
+
+    //copy the data from the new country to the old one
+    *oldTuple = *newTuple;
+
+    //restore the pointer values
+    oldTuple->right = saveRight;
+    oldTuple->left = saveLeft;
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Countries to swap                                   */
+/*  P : Swaps two countries                                 */
+/*  O : 0 -> Swapped                                        */
+/*     -1 -> Error                                          */
+/************************************************************/
+int swap_country(void* first, void* second){
+    ccty_recur tmp;
+
+    if(!first || !second)
+        return -1;
+
+    memset(&tmp, 0, sizeof(ccty_recur));
+
+    assign_country((void*)&tmp, first);
+    assign_country(first, second);
+    assign_country(second, (void*)&tmp);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Gets the element to the right of the current        */
+/*  O : Address of the element to the right                 */
+/*          (NULL if current is null)                       */
+/************************************************************/
+void** country_right(void* current){
+    ccty_recur* currentCty = (ccty_recur*)current;
+
+    if(!current)
+        return NULL;
+
+    return (void**)&currentCty->right;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Gets the element to the left of the current         */
+/*  O : Address of the element to the left                  */
+/*          (NULL if current is null)                       */
+/************************************************************/
+void** country_left(void* current){
+    ccty_recur* currentCty = (ccty_recur*)current;
+
+    if(!current)
+        return NULL;
+
+    return (void**)&currentCty->left;
 }
