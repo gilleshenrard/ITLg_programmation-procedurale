@@ -6,6 +6,7 @@
 * Programmation procedurale 2019 - E.Bosly - Version 0
 ****************************************************************************************/
 #include "lib/DB_Main.h"
+#include "lib/DB_Country.h"
 #include "lib/algo.h"
 
 void init_db(dbc*);

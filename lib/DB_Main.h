@@ -5,6 +5,8 @@
 *
 * Programmation procedurale 2019 - E.Bosly - Version 0
 ****************************************************************************************/
+#ifndef DB_MAIN_H_INCLUDED
+#define DB_MAIN_H_INCLUDED
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -97,3 +99,5 @@ void Load_Country(dbc *db);
 
 void Print_Country(dbc *db);
 void Rec_Country(dbc *db, int id_cty);
+
+#endif

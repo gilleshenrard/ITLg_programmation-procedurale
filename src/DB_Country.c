@@ -1,14 +1,4 @@
-/****************************************************************************************
-* Dossier 2 : Database "Analyse de donnees clients"
-*
-* Manipulations de la table country : fichiers non geres globalement
-*
-* Programmation procedurale 2019 - E.Bosly - Version 0
-****************************************************************************************/
-#include "../lib/DB_Main.h"
-
-#define PRT 0
-#define BUF_LEN 200
+#include "../lib/DB_Country.h"
 
 /****************************************************************************************
 * Chargement du fichier DB_Country.csv dans la database
