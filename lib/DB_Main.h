@@ -93,11 +93,4 @@ typedef struct	db_company
 ****************************************************************************************/
 void Create_DB(dbc *db);
 
-void Import_CSV_Country(dbc *db);
-void Export_CSV_Country(dbc *db);
-void Load_Country(dbc *db);
-
-void Print_Country(dbc *db);
-void Rec_Country(dbc *db, int id_cty);
-
 #endif
