@@ -18,4 +18,7 @@ void Load_Country(dbc *db);
 void Print_Country(dbc *db);
 void Rec_Country(dbc *db, int id_cty);
 
+// dynamic lists methods
+int compare_country_name(void* a, void* b);
+
 #endif // DB_COUNTRY_H_INCLUDED

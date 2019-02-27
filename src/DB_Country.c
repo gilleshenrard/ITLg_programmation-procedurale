@@ -170,3 +170,20 @@ void Rec_Country(dbc *db, int id_cty)
 
     return;
 }
+
+// PERSONNAL METHODS
+
+/****************************************************************************************/
+/*  I : First country to compare                                                        */
+/*      Second  country to compare                                                      */
+/*  P : Compares two countries by their names                                           */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_country_name(void* a, void* b){
+    ccty *tmp_a = (ccty*)a;
+    ccty *tmp_b = (ccty*)b;
+
+    return strcmp(tmp_a->nm_cty, tmp_b->nm_cty);
+}
