@@ -17,6 +17,7 @@ typedef enum {COPY, REPLACE} e_listtoarray;
 
 //miscellaneous
 int listToArray(t_algo_meta*, t_algo_meta*, e_listtoarray);
+int arrayToList(t_algo_meta*, t_algo_meta*, e_listtoarray);
 
 //Sorting algorithms
 int bubbleSort(t_algo_meta*);

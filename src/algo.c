@@ -49,6 +49,30 @@ int listToArray(t_algo_meta* dList, t_algo_meta* dArray, e_listtoarray action){
 }
 
 /************************************************************/
+/*  I : Array to copy                                       */
+/*      List to create                                      */
+/*      Action to perform on the list members (free or not) */
+/*  P : Allocates memory for the list and copies the array  */
+/*          into it                                         */
+/*  O :  0 -> List created                                  */
+/*      -1 -> Error                                         */
+/************************************************************/
+int arrayToList(t_algo_meta* dArray, t_algo_meta* dList, e_listtoarray action){
+    void *tmp_array = dArray->structure;
+
+    //copy elements one by one in the list
+    for(int i=0 ; i<dArray->nbelements ; i++){
+        //position the pointer properly
+        tmp_array = dArray->structure+(dArray->elementsize*i);
+        //insert in the list
+        if(insertListSorted(dList,  tmp_array) < 0)
+            return -1;
+    }
+
+    return 0;
+}
+
+/************************************************************/
 /*  I : Array of meta data necessary to the algorithm       */
 /*  P : Sorts the provided array using the Bubble Sort algo */
 /*  O :  0 -> Sorted                                        */

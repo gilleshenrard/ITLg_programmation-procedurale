@@ -20,6 +20,7 @@ struct ccty_recur{
     ccty_recur *right;
 };
 
+//database methods
 void Import_CSV_Country(dbc *db);
 void Export_CSV_Country(dbc *db);
 void Load_Country(dbc *db);
