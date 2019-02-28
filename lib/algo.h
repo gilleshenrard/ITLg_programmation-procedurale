@@ -1,6 +1,8 @@
 #ifndef ALGO_H_INCLUDED
 #define ALGO_H_INCLUDED
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 typedef struct {
     void* structure;
@@ -12,6 +14,10 @@ typedef struct {
     void** (*next)(void*);
     void** (*previous)(void*);
 } t_algo_meta;
+
+int offset, offset_max;
+
+#define LG_MAX 36
 
 typedef enum {COPY, REPLACE} e_listtoarray;
 
@@ -40,5 +46,6 @@ int foreachArray(t_algo_meta*, void*, int (*doAction)(void*, void*));
 
 //AVL trees
 void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd);
+void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(void*));
 
 #endif // ALGO_H_INCLUDED

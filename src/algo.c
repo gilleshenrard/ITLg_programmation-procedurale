@@ -466,3 +466,34 @@ void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
 
     return avl;
 }
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      Element to browse/display                           */
+/*      Character designed to be displayed to indicate      */
+/*          node direction compared to its root             */
+/*      Method to get the string ID of the node             */
+/*  P : Displays an AVL as a tree                           */
+/*  O : /                                                   */
+/************************************************************/
+void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(void*)){
+    char tmp[80]={0};
+    void** child_left=(*meta->previous)(avl);
+    void** child_right=(*meta->next)(avl);
+    int nbc_pad;
+
+    offset_max = ++offset > offset_max ? offset : offset_max;
+
+    if(avl){
+        display_AVL_tree(meta, *child_left, 'L', toString);
+
+        nbc_pad = LG_MAX - (2 * offset) - strlen((*toString)(avl));
+        for (int i=0;i<nbc_pad;i++)
+            strcat(tmp,".");
+        strcat(tmp,(*toString)(avl));
+        printf("%*c%c %s R-%p R-%p L-%p \n", 2*offset, '-', dir, tmp, avl, *child_right, *child_right);
+
+        display_AVL_tree(meta, *child_right, 'R', toString);
+    }
+    offset--;
+}

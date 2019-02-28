@@ -34,5 +34,6 @@ int swap_country(void* first, void* second);
 void** country_right(void* current);
 void** country_left(void* current);
 int Rec_Country_list(void *record, void* nullable);
+char* toString_Country(void* current);
 
 #endif // DB_COUNTRY_H_INCLUDED

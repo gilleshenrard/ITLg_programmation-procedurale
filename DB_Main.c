@@ -97,7 +97,6 @@ void tst_List_country(dbc* db){
 /****************************************************************************************/
 void tst_AVL_country(dbc* db){
     t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, country_right, country_left};
-    //ccty_recur *tmp_cty = NULL;
     ccty cty_array[5] ={{"0", 10, "Germania", "Germany", "DE"},
                         {"0", 25, "Eastern Europe", "Serbia", "FY"},
                         {"0", 2, "Benelux", "Belgium", "DE"},
@@ -108,7 +107,6 @@ void tst_AVL_country(dbc* db){
 
     for(int i=0 ; i<5 ; i++){
         cty_avl.structure = insertAVL(&cty_avl, cty_avl.structure, &cty_array[i]);
-        //tmp_cty = (ccty_recur*)cty_avl.structure;
-        //printf("\n%p\t%28s\t%p", tmp_cty->left, tmp_cty->cty.nm_cty, tmp_cty->right);
     }
+    display_AVL_tree(&cty_avl, cty_avl.structure, 'R', &toString_Country);
 }

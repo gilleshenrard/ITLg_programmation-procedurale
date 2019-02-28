@@ -281,3 +281,15 @@ int Rec_Country_list(void *record, void* nullable){
 
     return 0;
 }
+
+/************************************************************/
+/*  I : record to summarise as a string                     */
+/*      /                                                   */
+/*  P : returns a string representing the country           */
+/*  O : /                                                   */
+/************************************************************/
+char* toString_Country(void* current){
+    ccty_recur *tmp = (ccty_recur*)current;
+
+    return tmp->cty.nm_cty;
+}
