@@ -439,36 +439,30 @@ int foreachArray(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void
 /*  O : AVL root if ok                                      */
 /*      NULL otherwise                                      */
 /************************************************************/
-t_algo_meta* insertAVL(t_algo_meta* meta, void* toAdd){
-    void *newElement=NULL, *tmp=NULL;
+void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
     void** childitem=NULL;
 
-    if(!meta->structure){
+    if(!avl){
         //memory allocation for the new element (calloc to initialize with all 0)
-        newElement = calloc(1, meta->elementsize);
-        if(!newElement)
+        avl = calloc(1, meta->elementsize);
+        if(!avl)
             return NULL;
 
         //copy new element data
-        (*meta->doCopy)(newElement, toAdd);
-        meta->structure = newElement;
-        return meta;
+        (*meta->doCopy)(avl, toAdd);
+        return avl;
     }
 
-    if((*meta->doCompare)(meta->structure, toAdd) != 0){
-        //decide whether going right or left
-        if((*meta->doCompare)(meta->structure, toAdd) < 0)
-            childitem = (*meta->next)(meta->structure);
+    //sort whether the new element goes as right or left child
+    if((*meta->doCompare)(avl, toAdd) != 0){
+        if((*meta->doCompare)(avl, toAdd) < 0)
+            childitem = (*meta->next)(avl);
         else
-            childitem = (*meta->previous)(meta->structure);
+            childitem = (*meta->previous)(avl);
 
-        //save the current node and prepare the temporary child node
-        tmp = meta->structure;
-        meta->structure = *childitem;
-        //invoke the AVL insertion
-        childitem = insertAVL(meta, toAdd);
-        //restore node
-        meta->structure = tmp;
+        //build a new AVL with the child as root
+        *childitem = insertAVL(meta, *childitem, toAdd);
     }
-    return meta;
+
+    return avl;
 }

@@ -39,6 +39,6 @@ int foreachList(t_algo_meta*, void*, int (*doAction)(void*, void*));
 int foreachArray(t_algo_meta*, void*, int (*doAction)(void*, void*));
 
 //AVL trees
-t_algo_meta* insertAVL(t_algo_meta* meta, void* toAdd);
+void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd);
 
 #endif // ALGO_H_INCLUDED

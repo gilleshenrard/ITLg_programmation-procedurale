@@ -14,6 +14,7 @@ void tst_export_country(dbc*);
 void tst_Load_country(dbc*);
 void tst_Print_country(dbc*);
 void tst_List_country(dbc*);
+void tst_AVL_country(dbc*);
 
 /****************************************************************************************
 * Programme principal
@@ -27,6 +28,7 @@ int main(void)
     tst_Load_country(&db);
     tst_Print_country(&db);
     tst_List_country(&db);
+    tst_AVL_country(&db);
 
 	return 0;
 }
@@ -86,4 +88,27 @@ void tst_List_country(dbc* db){
     foreachList(&cty_list, NULL, Rec_Country_list);
     while(cty_list.structure)
         popListTop(&cty_list);
+}
+
+/****************************************************************************************/
+/*  I : Country Database to print                                                       */
+/*  P : Displays all records of a DB in memory                                          */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_AVL_country(dbc* db){
+    t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, country_right, country_left};
+    //ccty_recur *tmp_cty = NULL;
+    ccty cty_array[5] ={{"0", 10, "Germania", "Germany", "DE"},
+                        {"0", 25, "Eastern Europe", "Serbia", "FY"},
+                        {"0", 2, "Benelux", "Belgium", "DE"},
+                        {"0", 11, "Southern Europe", "Greece", "GR"},
+                        {"0", 6, "Scandinavia", "Denmark", "DK"}};
+
+    printf("\n--------------- tst_AVL_country ---------------------------------------\n");
+
+    for(int i=0 ; i<5 ; i++){
+        cty_avl.structure = insertAVL(&cty_avl, cty_avl.structure, &cty_array[i]);
+        //tmp_cty = (ccty_recur*)cty_avl.structure;
+        //printf("\n%p\t%28s\t%p", tmp_cty->left, tmp_cty->cty.nm_cty, tmp_cty->right);
+    }
 }
