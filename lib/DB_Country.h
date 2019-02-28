@@ -25,7 +25,7 @@ void Import_CSV_Country(dbc *db);
 void Export_CSV_Country(dbc *db);
 void Load_Country(dbc *db);
 void Print_Country(dbc *db);
-void Rec_Country(dbc *db, int id_cty);
+void Rec_Country(ccty *rec);
 
 // dynamic lists methods
 int compare_country_name(void* a, void* b);
@@ -33,5 +33,6 @@ int assign_country(void* oldelem, void* newelem);
 int swap_country(void* first, void* second);
 void** country_right(void* current);
 void** country_left(void* current);
+int Rec_Country_list(void *record, void* nullable);
 
 #endif // DB_COUNTRY_H_INCLUDED

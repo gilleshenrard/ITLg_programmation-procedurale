@@ -152,7 +152,7 @@ void Print_Country(dbc *db)
     int i;
 
     for (i=1; i<=db->nr_cty; i++)
-        Rec_Country(db, i);
+        Rec_Country(&db->cty[i]);
 
     return;
 }
@@ -160,13 +160,13 @@ void Print_Country(dbc *db)
 /****************************************************************************************
 * Imprime un record Country depuis le buffer
 ****************************************************************************************/
-void Rec_Country(dbc *db, int id_cty)
+void Rec_Country(ccty *rec)
 {
     printf("%3d %20s %20s %2s \n",
-           db->cty[id_cty].id_cty,
-           db->cty[id_cty].nm_zon,
-           db->cty[id_cty].nm_cty,
-           db->cty[id_cty].cd_iso );
+           rec->id_cty,
+           rec->nm_zon,
+           rec->nm_cty,
+           rec->cd_iso );
 
     return;
 }
@@ -266,4 +266,18 @@ void** country_left(void* current){
         return NULL;
 
     return (void**)&currentCty->left;
+}
+
+/************************************************************/
+/*  I : record to display                                   */
+/*      /                                                   */
+/*  P : Displays an algo-compatible record                  */
+/*  O : /                                                   */
+/************************************************************/
+int Rec_Country_list(void *record, void* nullable){
+    ccty_recur* tmp = (ccty_recur*)record;
+
+    Rec_Country(&tmp->cty);
+
+    return 0;
 }

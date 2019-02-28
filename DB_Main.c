@@ -13,6 +13,7 @@ void init_db(dbc*);
 void tst_export_country(dbc*);
 void tst_Load_country(dbc*);
 void tst_Print_country(dbc*);
+void tst_List_country(dbc*);
 
 /****************************************************************************************
 * Programme principal
@@ -25,6 +26,7 @@ int main(void)
     tst_export_country(&db);
     tst_Load_country(&db);
     tst_Print_country(&db);
+    tst_List_country(&db);
 
 	return 0;
 }
@@ -68,4 +70,20 @@ void tst_Load_country(dbc* db){
 void tst_Print_country(dbc* db){
     printf("\n--------------- tst_print_country -------------------------------------\n");
     Print_Country(db);
+}
+
+/****************************************************************************************/
+/*  I : Country Database to print                                                       */
+/*  P : Displays all records of a DB in memory                                          */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_List_country(dbc* db){
+    t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, country_right, country_left};
+    t_algo_meta cty_array = {db->cty, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL};
+
+    printf("\n--------------- tst_list_country --------------------------------------\n");
+    arrayToList(&cty_array, &cty_list, COPY);
+    foreachList(&cty_list, NULL, Rec_Country_list);
+    while(cty_list.structure)
+        popListTop(&cty_list);
 }
