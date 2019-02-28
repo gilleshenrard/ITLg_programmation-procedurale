@@ -79,7 +79,7 @@ void tst_Print_country(dbc* db){
 /****************************************************************************************/
 void tst_List_country(dbc* db){
     t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, country_right, country_left};
-    t_algo_meta cty_array = {db->cty, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL};
 
     printf("\n--------------- tst_list_country --------------------------------------\n");
     arrayToList(&cty_array, &cty_list, COPY);
