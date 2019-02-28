@@ -311,3 +311,29 @@ char* toString_Country(void* current){
 
     return tmp->cty.nm_cty;
 }
+
+/************************************************************/
+/*  I : Country AVL leaf of which to get the height         */
+/*  P : Gets the height of the current AVL leaf             */
+/*  O : Leaf height                                         */
+/************************************************************/
+int get_country_height(void* current){
+    ccty_recur *tmp = (ccty_recur*)current;
+
+    return tmp->height;
+}
+
+/************************************************************/
+/*  I : Country AVL leaf of which to set the height         */
+/*      New value for the height                            */
+/*  P : Sets the height of the current AVL leaf             */
+/*  O :  0 if OK                                            */
+/*      -1 if error                                         */
+/************************************************************/
+int set_country_height(void* current, int value){
+    ccty_recur *tmp = (ccty_recur*)current;
+
+    tmp->height = value;
+
+    return 0;
+}

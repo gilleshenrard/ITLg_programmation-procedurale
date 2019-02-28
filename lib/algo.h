@@ -12,6 +12,8 @@ typedef struct {
     int     (*doCompare)(void*, void*);
     int     (*doSwap)(void*, void*);
     int     (*doCopy)(void*, void*);
+    int     (*getHeight)(void*);
+    int     (*setHeight)(void*, int);
     void**  (*next)(void*);
     void**  (*previous)(void*);
 } t_algo_meta;
@@ -50,6 +52,7 @@ int foreachArray(t_algo_meta*, void*, int (*doAction)(void*, void*));
 void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd);
 void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(void*));
 void* rotate_AVL(t_algo_meta* meta, void* avl, e_rotation side);
+int get_AVL_balance(t_algo_meta* meta, void* avl);
 
 
 #endif // ALGO_H_INCLUDED

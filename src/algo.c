@@ -440,8 +440,10 @@ int foreachArray(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void
 /*      NULL otherwise                                      */
 /************************************************************/
 void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
-    void** childitem=NULL;
+    void **child_right=NULL, **child_left=NULL;
+    int height_left=0, height_right=0, balance=0;
 
+    //if tree is empty
     if(!avl){
         //memory allocation for the new element
         avl = (*meta->doCreate)();
@@ -453,15 +455,53 @@ void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
         return avl;
     }
 
+    //prepare pointers to the left and right children
+    child_right = (*meta->next)(avl);
+    child_left = (*meta->previous)(avl);
+
     //sort whether the new element goes as right or left child
+    //  + build a new AVL with the child as root
     if((*meta->doCompare)(avl, toAdd) != 0){
         if((*meta->doCompare)(avl, toAdd) < 0)
-            childitem = (*meta->next)(avl);
+            *child_right = insertAVL(meta, *child_right, toAdd);
         else
-            childitem = (*meta->previous)(avl);
+            *child_left = insertAVL(meta, *child_left, toAdd);
+    }
+    else{
+        // TODO add case in which the value is equal (forbidden in AVL)
+    }
 
-        //build a new AVL with the child as root
-        *childitem = insertAVL(meta, *childitem, toAdd);
+    //get the height of the left and right children AVL
+    height_right = (*meta->getHeight)(*child_right);
+    height_left = (*meta->getHeight)(*child_left);
+
+    //update the current node's height
+    (*meta->setHeight)(avl, 1+(height_left > height_right ? height_left : height_right));
+
+    if(avl)
+        balance = height_left - height_right;
+
+    if(balance < -1){
+        // right right case
+        if((*meta->doCompare)(*child_right, toAdd) < 0){
+            return rotate_AVL(meta, avl, LEFT);
+        }
+        // right left case
+        if((*meta->doCompare)(*child_right, toAdd) > 0){
+            *child_right = rotate_AVL(meta, child_right, RIGHT);
+            return rotate_AVL(meta, avl, LEFT);
+        }
+    }
+    if(balance > 1){
+        // left left case
+        if((*meta->doCompare)(*child_left, toAdd) > 0){
+            return rotate_AVL(meta, avl, RIGHT);
+        }
+        //left right case
+        if((*meta->doCompare)(*child_left, toAdd) < 0){
+            *child_left = rotate_AVL(meta, *child_left, LEFT);
+            return rotate_AVL(meta, avl, RIGHT);
+        }
     }
 
     return avl;
@@ -511,6 +551,7 @@ void* rotate_AVL(t_algo_meta* meta, void* avl, e_rotation side){
     void** childitem = NULL;
     void *newTree=NULL, *rightLeaf=NULL;
 
+
     //invert the function pointers to get the right child
     //  depending on the side of the rotation
     normally_left = (side == RIGHT ? meta->previous : meta->next);
@@ -528,9 +569,26 @@ void* rotate_AVL(t_algo_meta* meta, void* avl, e_rotation side){
     childitem = (*normally_left)(avl);
     *childitem = rightLeaf;
 
-    //
-    //  TODO : update the heights of the new AVLs
-    //
-
     return newTree;
+}
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      AVL tree of which to compute the balance            */
+/*  P : Computes and returns the balance of an AVL          */
+/*  O : Balance                                             */
+/************************************************************/
+int get_AVL_balance(t_algo_meta* meta, void* avl){
+    int height_left=0, height_right=0;
+    void** childitem = NULL;
+
+    if(!avl)
+        return 0;
+
+    childitem = (*meta->next)(avl);
+    height_right = (*meta->getHeight)(*childitem);
+    childitem = (*meta->previous)(avl);
+    height_left = (*meta->getHeight)(*childitem);
+
+    return height_left - height_right;
 }

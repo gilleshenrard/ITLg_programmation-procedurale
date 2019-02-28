@@ -37,5 +37,7 @@ void** country_right(void* current);
 void** country_left(void* current);
 int Rec_Country_list(void *record, void* nullable);
 char* toString_Country(void* current);
+int get_country_height(void* current);
+int set_country_height(void* current, int value);
 
 #endif // DB_COUNTRY_H_INCLUDED
