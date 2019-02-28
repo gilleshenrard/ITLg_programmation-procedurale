@@ -431,3 +431,44 @@ int foreachArray(t_algo_meta* meta, void* parameter, int (*doAction)(void*, void
 
     return 0;
 }
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      Element to insert in the AVL                        */
+/*  P : Inserts an element in an AVL                        */
+/*  O : AVL root if ok                                      */
+/*      NULL otherwise                                      */
+/************************************************************/
+t_algo_meta* insertAVL(t_algo_meta* meta, void* toAdd){
+    void *newElement=NULL, *tmp=NULL;
+    void** childitem=NULL;
+
+    if(!meta->structure){
+        //memory allocation for the new element (calloc to initialize with all 0)
+        newElement = calloc(1, meta->elementsize);
+        if(!newElement)
+            return NULL;
+
+        //copy new element data
+        (*meta->doCopy)(newElement, toAdd);
+        meta->structure = newElement;
+        return meta;
+    }
+
+    if((*meta->doCompare)(meta->structure, toAdd) != 0){
+        //decide whether going right or left
+        if((*meta->doCompare)(meta->structure, toAdd) < 0)
+            childitem = (*meta->next)(meta->structure);
+        else
+            childitem = (*meta->previous)(meta->structure);
+
+        //save the current node and prepare the temporary child node
+        tmp = meta->structure;
+        meta->structure = *childitem;
+        //invoke the AVL insertion
+        childitem = insertAVL(meta, toAdd);
+        //restore node
+        meta->structure = tmp;
+    }
+    return meta;
+}
