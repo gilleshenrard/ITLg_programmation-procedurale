@@ -274,8 +274,8 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
     if(!meta || !meta->doCopy || !meta->next || !meta->previous || !toAdd)
         return -1;
 
-    //memory allocation for the new element (calloc to initialize with all 0)
-    newElement = calloc(1, meta->elementsize);
+    //memory allocation for the new element
+    newElement = (*meta->doCreate)();
     if(!newElement)
         return -1;
 
@@ -443,8 +443,8 @@ void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
     void** childitem=NULL;
 
     if(!avl){
-        //memory allocation for the new element (calloc to initialize with all 0)
-        avl = calloc(1, meta->elementsize);
+        //memory allocation for the new element
+        avl = (*meta->doCreate)();
         if(!avl)
             return NULL;
 
@@ -496,4 +496,41 @@ void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(
         display_AVL_tree(meta, *child_right, 'R', toString);
     }
     offset--;
+}
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      AVL tree to rotate                                  */
+/*      Side of the rotation (LEFT or RIGHT)                */
+/*  P : Rotates an AVL to the side required                 */
+/*  O : Rotated AVL                                         */
+/************************************************************/
+void* rotate_AVL(t_algo_meta* meta, void* avl, e_rotation side){
+    void** (*normally_left)(void*);
+    void** (*normally_right)(void*);
+    void** childitem = NULL;
+    void *newTree=NULL, *rightLeaf=NULL;
+
+    //invert the function pointers to get the right child
+    //  depending on the side of the rotation
+    normally_left = (side == RIGHT ? meta->previous : meta->next);
+    normally_right = (side == RIGHT ? meta->next : meta->previous);
+
+    //prepare pointers for the new tree
+    childitem = (*normally_left)(avl);
+    newTree = *childitem;
+    childitem = (*normally_right)(newTree);
+    rightLeaf = *childitem;
+
+    //perform rotation
+    childitem = (*normally_right)(newTree);
+    *childitem = avl;
+    childitem = (*normally_left)(avl);
+    *childitem = rightLeaf;
+
+    //
+    //  TODO : update the heights of the new AVLs
+    //
+
+    return newTree;
 }

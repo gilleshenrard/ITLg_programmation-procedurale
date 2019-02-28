@@ -16,6 +16,7 @@ typedef struct ccty_recur ccty_recur;
 
 struct ccty_recur{
     ccty cty;
+    int height;
     ccty_recur *left;
     ccty_recur *right;
 };
@@ -28,6 +29,7 @@ void Print_Country(dbc *db);
 void Rec_Country(ccty *rec);
 
 // dynamic lists methods
+void* allocate_country(void);
 int compare_country_name(void* a, void* b);
 int assign_country(void* oldelem, void* newelem);
 int swap_country(void* first, void* second);

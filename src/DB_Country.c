@@ -171,7 +171,25 @@ void Rec_Country(ccty *rec)
     return;
 }
 
+//
 // PERSONNAL METHODS
+//
+
+/****************************************************************************************/
+/*  I : /                                                                               */
+/*  P : Allocates memory for a country and sets its height to 1 (leaf for AVL)          */
+/*  O : Country created if OK                                                           */
+/*      NULL if error                                                                   */
+/****************************************************************************************/
+void* allocate_country(void){
+    ccty_recur *tmp=NULL;
+
+    //memory allocation for the new element (calloc to initialize with all 0)
+    tmp = calloc(1, sizeof(ccty_recur));
+    if(tmp) tmp->height = 1;
+
+    return tmp;
+}
 
 /****************************************************************************************/
 /*  I : First country to compare                                                        */
