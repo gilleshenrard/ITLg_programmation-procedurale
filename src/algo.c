@@ -475,6 +475,7 @@ void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
 
         //copy new element data
         (*meta->doCopy)(avl, toAdd);
+        (*meta->setHeight)(avl, 1);
         return avl;
     }
 
@@ -541,6 +542,7 @@ void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
 /************************************************************/
 void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(void*)){
     char tmp[80]={0};
+    int height = (*meta->getHeight)(avl);
     void** child_left=(*meta->previous)(avl);
     void** child_right=(*meta->next)(avl);
     int nbc_pad;
@@ -554,7 +556,7 @@ void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(
         for (int i=0;i<nbc_pad;i++)
             strcat(tmp,".");
         strcat(tmp,(*toString)(avl));
-        printf("%*c%c %s R-%p R-%p L-%p \n", 2*offset, '-', dir, tmp, avl, *child_right, *child_right);
+        printf("%*c%c %s R-%p R-%p L-%p H-%d\n", 2*offset, '-', dir, tmp, avl, *child_left, *child_right, height);
 
         display_AVL_tree(meta, *child_right, 'R', toString);
     }
@@ -571,8 +573,9 @@ void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(
 void* rotate_AVL(t_algo_meta* meta, void* avl, e_rotation side){
     void** (*normally_left)(void*);
     void** (*normally_right)(void*);
-    void** childitem = NULL;
+    void **child_left = NULL, **child_right=NULL;
     void *newTree=NULL, *rightLeaf=NULL;
+    int height_l=0, height_r=0, height=0;
 
 
     //invert the function pointers to get the right child
@@ -581,17 +584,33 @@ void* rotate_AVL(t_algo_meta* meta, void* avl, e_rotation side){
     normally_right = (side == RIGHT ? meta->next : meta->previous);
 
     //prepare pointers for the new tree
-    childitem = (*normally_left)(avl);
-    newTree = *childitem;
-    childitem = (*normally_right)(newTree);
+    child_left = (*normally_left)(avl);
+    newTree = *child_left;
+    child_right = (*normally_right)(newTree);
     //problem here (11th node added in unit test)
-    rightLeaf = *childitem;
+    rightLeaf = *child_right;
 
     //perform rotation
-    childitem = (*normally_right)(newTree);
-    *childitem = avl;
-    childitem = (*normally_left)(avl);
-    *childitem = rightLeaf;
+    child_right = (*normally_right)(newTree);
+    *child_right = avl;
+    child_left = (*normally_left)(avl);
+    *child_left = rightLeaf;
+
+    //set new height of the previous root
+    child_left = (*meta->previous)(avl);
+    child_right = (*meta->next)(avl);
+    height_l = (*meta->getHeight)(*child_left);
+    height_r = (*meta->getHeight)(*child_right);
+    height = (height_l > height_r ? height_l : height_r) + 1;
+    (*meta->setHeight)(avl, height);
+
+    //set new height of the new root
+    child_left = (*meta->previous)(newTree);
+    child_right = (*meta->next)(newTree);
+    height_l = (*meta->getHeight)(*child_left);
+    height_r = (*meta->getHeight)(*child_right);
+    height = (height_l > height_r ? height_l : height_r) + 1;
+    (*meta->setHeight)(newTree, height);
 
     return newTree;
 }
