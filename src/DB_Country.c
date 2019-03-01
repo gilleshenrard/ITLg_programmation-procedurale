@@ -320,7 +320,8 @@ char* toString_Country(void* current){
 int get_country_height(void* current){
     ccty_recur *tmp = (ccty_recur*)current;
 
-    return tmp->height;
+
+    return (tmp == NULL ? 0 : tmp->height);
 }
 
 /************************************************************/
