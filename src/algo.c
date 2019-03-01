@@ -552,11 +552,11 @@ void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(
     if(avl){
         display_AVL_tree(meta, *child_left, 'L', toString);
 
-        nbc_pad = LG_MAX - (2 * offset) - strlen((*toString)(avl));
+        nbc_pad = LG_MAX - (3 * offset) - strlen((*toString)(avl));
         for (int i=0;i<nbc_pad;i++)
             strcat(tmp,".");
         strcat(tmp,(*toString)(avl));
-        printf("%*c%c %s R-%p R-%p L-%p H-%d\n", 2*offset, '-', dir, tmp, avl, *child_left, *child_right, height);
+        printf("%*c%c %s R-%p R-%p L-%p H-%d\n", 3*offset, '-', dir, tmp, avl, *child_left, *child_right, height);
 
         display_AVL_tree(meta, *child_right, 'R', toString);
     }
