@@ -26,8 +26,9 @@ typedef enum {COPY, REPLACE} e_listtoarray;
 typedef enum {RIGHT, LEFT} e_rotation;
 
 //miscellaneous
-int listToArray(t_algo_meta*, t_algo_meta*, e_listtoarray);
-int arrayToList(t_algo_meta*, t_algo_meta*, e_listtoarray);
+int listToArray(t_algo_meta* dList, t_algo_meta* dArray, e_listtoarray action);
+int arrayToList(t_algo_meta* dArray, t_algo_meta* dList, e_listtoarray action);
+int arrayToAVL(t_algo_meta* dArray, t_algo_meta* dAVL, e_listtoarray action);
 
 //Sorting algorithms
 int bubbleSort(t_algo_meta*);
