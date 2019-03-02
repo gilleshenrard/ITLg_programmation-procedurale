@@ -635,3 +635,32 @@ int get_AVL_balance(t_algo_meta* meta, void* avl){
 
     return height_left - height_right;
 }
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      Root of the AVL to which perform the action         */
+/*      Parameter for the action to perform                 */
+/*      Action to perform                                   */
+/*  P : Performs an action on every element of the AVL      */
+/*  O : 0 -> OK                                             */
+/*     -1 -> Error                                          */
+/************************************************************/
+int foreachAVL(t_algo_meta* meta, void* avl, void* parameter, int (*doAction)(void*, void*)){
+    void **child_left=NULL, **child_right=NULL;
+    int ret = 0;
+
+    if(avl){
+        //perform action on left child
+        child_left = (*meta->previous)(avl);
+        foreachAVL(meta, *child_left, parameter, doAction);
+
+        //perform action on root
+        ret = (*doAction)(avl, parameter);
+
+        //perform action on right child
+        child_right = (*meta->next)(avl);
+        foreachAVL(meta, *child_right, parameter, doAction);
+    }
+
+    return ret;
+}

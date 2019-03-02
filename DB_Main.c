@@ -98,18 +98,9 @@ void tst_List_country(dbc* db){
 void tst_AVL_country(dbc* db){
     t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), allocate_country, compare_country_name, swap_country, assign_country, get_country_height, set_country_height, country_right, country_left};
     t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-/*    ccty cty_array[5] ={{"0", 10, "Germania", "Germany", "DE"},
-                        {"0", 25, "Eastern Europe", "Serbia", "FY"},
-                        {"0", 2, "Benelux", "Belgium", "DE"},
-                        {"0", 11, "Southern Europe", "Greece", "GR"},
-                        {"0", 6, "Scandinavia", "Denmark", "DK"}};
-*/
+
     printf("\n--------------- tst_AVL_country ---------------------------------------\n");
-/*
-    for(int i=0 ; i<5 ; i++){
-        cty_avl.structure = insertAVL(&cty_avl, cty_avl.structure, &cty_array[i]);
-    }
-*/
     arrayToAVL(&cty_array, &cty_avl, COPY);
     display_AVL_tree(&cty_avl, cty_avl.structure, 'R', &toString_Country);
+    foreachAVL(&cty_avl, cty_avl.structure, NULL, Rec_Country_list);
 }
