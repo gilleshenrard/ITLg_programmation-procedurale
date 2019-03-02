@@ -338,3 +338,20 @@ int set_country_height(void* current, int value){
 
     return 0;
 }
+
+/************************************************************/
+/*  I : Country AVL leaf to free                            */
+/*      /                                                   */
+/*  P : Frees the memory for the current country            */
+/*  O :  0 if OK                                            */
+/*      -1 if error                                         */
+/************************************************************/
+int free_country(void* country, void* nullable){
+
+//    ccty_recur *tmp = (ccty_recur*)country;
+//    printf("\nFreeing %s", tmp->cty.nm_cty);
+
+    free(country);
+
+    return 0;
+}

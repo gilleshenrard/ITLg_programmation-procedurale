@@ -650,15 +650,17 @@ int foreachAVL(t_algo_meta* meta, void* avl, void* parameter, int (*doAction)(vo
     int ret = 0;
 
     if(avl){
-        //perform action on left child
+        //get the left and right children of the current root
         child_left = (*meta->previous)(avl);
+        child_right = (*meta->next)(avl);
+
+        //perform action on left child
         foreachAVL(meta, *child_left, parameter, doAction);
 
         //perform action on root
         ret = (*doAction)(avl, parameter);
 
         //perform action on right child
-        child_right = (*meta->next)(avl);
         foreachAVL(meta, *child_right, parameter, doAction);
     }
 

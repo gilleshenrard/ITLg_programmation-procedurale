@@ -102,5 +102,7 @@ void tst_AVL_country(dbc* db){
     printf("\n--------------- tst_AVL_country ---------------------------------------\n");
     arrayToAVL(&cty_array, &cty_avl, COPY);
     display_AVL_tree(&cty_avl, cty_avl.structure, 'R', &toString_Country);
+    printf("\n\n");
     foreachAVL(&cty_avl, cty_avl.structure, NULL, Rec_Country_list);
+    foreachAVL(&cty_avl, cty_avl.structure, NULL, free_country);
 }
