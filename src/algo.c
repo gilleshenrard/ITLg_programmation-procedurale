@@ -666,3 +666,28 @@ int foreachAVL(t_algo_meta* meta, void* avl, void* parameter, int (*doAction)(vo
 
     return ret;
 }
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      AVL in which search for the key                     */
+/*      Key to search in the AVL                            */
+/*  P : Recursively search for a key in the AVL             */
+/*  O : Leaf if found                                       */
+/*      NULL otherwise                                      */
+/************************************************************/
+void* search_AVL(t_algo_meta* meta, void* avl, void* key){
+    void **child = NULL;
+
+    // if found or not existing, return the result
+    if(avl == NULL || (*meta->doCompare)(avl, key) == 0)
+        return avl;
+
+    // otherwise, decide whether going to the right or left child
+    if((*meta->doCompare)(avl, key) < 0)
+        child = (*meta->next)(avl);
+    else
+        child = (*meta->previous)(avl);
+
+    // perform the search in the sub-child
+    return search_AVL(meta, *child, key);
+}

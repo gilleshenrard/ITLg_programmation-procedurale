@@ -55,6 +55,7 @@ void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(
 void* rotate_AVL(t_algo_meta* meta, void* avl, e_rotation side);
 int get_AVL_balance(t_algo_meta* meta, void* avl);
 int foreachAVL(t_algo_meta* meta, void* avl, void* parameter, int (*doAction)(void*, void*));
+void* search_AVL(t_algo_meta* meta, void* avl, void* key);
 
 
 #endif // ALGO_H_INCLUDED
