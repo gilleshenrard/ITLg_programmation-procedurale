@@ -31,6 +31,7 @@ void Rec_Country(ccty *rec);
 // dynamic lists methods
 void* allocate_country(void);
 int compare_country_name(void* a, void* b);
+int compare_country_name_char(void* a, void* b);
 int assign_country(void* oldelem, void* newelem);
 int swap_country(void* first, void* second);
 void** country_right(void* current);
