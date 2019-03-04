@@ -29,7 +29,7 @@ int main(void)
     tst_Load_country(&db);
     tst_Print_country(&db);
     tst_List_country(&db);
-//    tst_AVL_country(&db);
+    tst_AVL_country(&db);
     tst_AVL_search_country(&db);
 
 	return 0;
@@ -85,8 +85,11 @@ void tst_List_country(dbc* db){
     t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), allocate_country, compare_country_name, swap_country, assign_country, NULL, NULL, country_right, country_left};
     t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
-    printf("\n--------------- tst_list_country --------------------------------------\n");
+    printf("\n--------------- tst_list_insert ---------------------------------------\n");
     arrayToList(&cty_array, &cty_list, COPY);
+
+    printf("%d countries\n", cty_list.nbelements);
+
     foreachList(&cty_list, NULL, Rec_Country_list);
     while(cty_list.structure)
         popListTop(&cty_list);
@@ -100,12 +103,25 @@ void tst_List_country(dbc* db){
 void tst_AVL_country(dbc* db){
     t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), allocate_country, compare_country_name, swap_country, assign_country, get_country_height, set_country_height, country_right, country_left};
     t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    ccty_recur tmp = {db->cty[3], 0, NULL, NULL};
 
-    printf("\n--------------- tst_AVL_country ---------------------------------------\n");
+    printf("\n--------------- tst_AVL_insert ---------------------------------------\n");
+
+    //prepare the AVL tree from the countries array
     arrayToAVL(&cty_array, &cty_avl, COPY);
     display_AVL_tree(&cty_avl, cty_avl.structure, 'R', &toString_Country);
     printf("\n\n");
+
+    //try to add an already existing node
+    printf("Trying to add an already existing country (forbidden)\n");
+    printf("%d countries before\n", cty_avl.nbelements);
+    insertAVL(&cty_avl, cty_avl.structure, &tmp);
+    printf("%d countries after\n\n", cty_avl.nbelements);
+
+    //display the countries as a list
     foreachAVL(&cty_avl, cty_avl.structure, NULL, Rec_Country_list);
+
+    //free memory
     foreachAVL(&cty_avl, cty_avl.structure, NULL, free_country);
 }
 
