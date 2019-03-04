@@ -15,6 +15,7 @@ void tst_Load_country(dbc*);
 void tst_Print_country(dbc*);
 void tst_List_country(dbc*);
 void tst_AVL_country(dbc*);
+void tst_AVL_search_country(dbc*);
 
 /****************************************************************************************
 * Programme principal
@@ -28,7 +29,8 @@ int main(void)
     tst_Load_country(&db);
     tst_Print_country(&db);
     tst_List_country(&db);
-    tst_AVL_country(&db);
+//    tst_AVL_country(&db);
+    tst_AVL_search_country(&db);
 
 	return 0;
 }
@@ -98,18 +100,34 @@ void tst_List_country(dbc* db){
 void tst_AVL_country(dbc* db){
     t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), allocate_country, compare_country_name, swap_country, assign_country, get_country_height, set_country_height, country_right, country_left};
     t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-/*    ccty cty_array[5] ={{"0", 10, "Germania", "Germany", "DE"},
-                        {"0", 25, "Eastern Europe", "Serbia", "FY"},
-                        {"0", 2, "Benelux", "Belgium", "DE"},
-                        {"0", 11, "Southern Europe", "Greece", "GR"},
-                        {"0", 6, "Scandinavia", "Denmark", "DK"}};
-*/
+
     printf("\n--------------- tst_AVL_country ---------------------------------------\n");
-/*
-    for(int i=0 ; i<5 ; i++){
-        cty_avl.structure = insertAVL(&cty_avl, cty_avl.structure, &cty_array[i]);
-    }
-*/
     arrayToAVL(&cty_array, &cty_avl, COPY);
     display_AVL_tree(&cty_avl, cty_avl.structure, 'R', &toString_Country);
+    printf("\n\n");
+    foreachAVL(&cty_avl, cty_avl.structure, NULL, Rec_Country_list);
+    foreachAVL(&cty_avl, cty_avl.structure, NULL, free_country);
+}
+
+/****************************************************************************************/
+/*  I : Country Database in which look for a key                                        */
+/*  P : Tests the AVL key search method                                                 */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_AVL_search_country(dbc* db){
+    t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), allocate_country, compare_country_name, swap_country, assign_country, get_country_height, set_country_height, country_right, country_left};
+    t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    char countries[5][16] = {"Denmark", "Portugal", "Burkina Faso", "Estonia", "Singapore"};
+
+    printf("\n--------------- tst_AVL_search_country ---------------------------------\n");
+    arrayToAVL(&cty_array, &cty_avl, COPY);
+    cty_avl.doCompare = compare_country_name_char;
+    for(int i=0 ; i<5 ; i++){
+        printf("Searching for %s\t\t: ", countries[i]);
+        if (search_AVL(&cty_avl, cty_avl.structure, countries[i]))
+            printf("found\n");
+        else
+            printf("not found\n");
+    }
+    foreachAVL(&cty_avl, cty_avl.structure, NULL, free_country);
 }

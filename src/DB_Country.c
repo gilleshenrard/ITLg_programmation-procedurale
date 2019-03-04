@@ -207,6 +207,20 @@ int compare_country_name(void* a, void* b){
 }
 
 /****************************************************************************************/
+/*  I : First country to compare                                                        */
+/*      Name of the second  country to compare                                          */
+/*  P : Compares two countries by their names                                           */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_country_name_char(void* a, void* b){
+    ccty_recur *tmp_a = (ccty_recur*)a;
+
+    return strcmp(tmp_a->cty.nm_cty, (char*)b);
+}
+
+/****************************************************************************************/
 /*  I : Country to which copy data                                                      */
 /*      Country from which copy data                                                    */
 /*  P : Copies all the fields of countries from new to old                              */
@@ -335,6 +349,23 @@ int set_country_height(void* current, int value){
     ccty_recur *tmp = (ccty_recur*)current;
 
     tmp->height = value;
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Country AVL leaf to free                            */
+/*      /                                                   */
+/*  P : Frees the memory for the current country            */
+/*  O :  0 if OK                                            */
+/*      -1 if error                                         */
+/************************************************************/
+int free_country(void* country, void* nullable){
+
+//    ccty_recur *tmp = (ccty_recur*)country;
+//    printf("\nFreeing %s", tmp->cty.nm_cty);
+
+    free(country);
 
     return 0;
 }
