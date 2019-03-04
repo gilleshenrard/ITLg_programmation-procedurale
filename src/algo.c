@@ -476,6 +476,7 @@ void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
         //copy new element data
         (*meta->doCopy)(avl, toAdd);
         (*meta->setHeight)(avl, 1);
+        meta->nbelements++;
         return avl;
     }
 
@@ -492,7 +493,8 @@ void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
             *child_left = insertAVL(meta, *child_left, toAdd);
     }
     else{
-        // TODO add case in which the value is equal (forbidden in AVL)
+        //ignore duplicates (forbidden in AVL trees)
+        return avl;
     }
 
     //get the height of the left and right children AVL
