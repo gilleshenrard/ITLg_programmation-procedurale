@@ -32,15 +32,33 @@ int foreachList(t_algo_meta*, void*, int (*doAction)(void*, void*));
 int foreachArray(t_algo_meta*, void*, int (*doAction)(void*, void*));
 ```
 
+* AVL trees manipulation :
+```C
+void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd);
+void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(void*));
+void* rotate_AVL(t_algo_meta* meta, void* avl, e_rotation side);
+int get_AVL_balance(t_algo_meta* meta, void* avl);
+int foreachAVL(t_algo_meta* meta, void* avl, void* parameter, int (*doAction)(void*, void*));
+void* search_AVL(t_algo_meta* meta, void* avl, void* key);
+```
+
+* Structures transformation (one format to another) :
+```C
+int listToArray(t_algo_meta* dList, t_algo_meta* dArray, e_listtoarray action);
+int arrayToList(t_algo_meta* dArray, t_algo_meta* dList, e_listtoarray action);
+int arrayToAVL(t_algo_meta* dArray, t_algo_meta* dAVL, e_listtoarray action);
+```
+
 * Unit tests for all existing procedures, in [DB_Main.c](https://github.com/gilleshenrard/ITLg_programmation-procedurale/blob/master/DB_Main.c)
 
 ### 4. Currently implemented in the final assignment
 None
 
 ### 5. To Do
-* Implement binary trees manipulation
+* Test AVL files instead of dynamically allocated
 * Implement menus manipulation
 * Implement unit tests
 
 ### 6. Known issues
-None
+* Unit tests for AVL work fine when the executable is launched, but fail while debugging
+		(most probably because at some point, the children leaves address is 0xFFFEFFFE)

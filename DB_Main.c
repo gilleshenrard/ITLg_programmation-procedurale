@@ -109,7 +109,7 @@ void tst_AVL_country(dbc* db){
 
     //prepare the AVL tree from the countries array
     arrayToAVL(&cty_array, &cty_avl, COPY);
-    display_AVL_tree(&cty_avl, cty_avl.structure, 'R', &toString_Country);
+    display_AVL_tree(&cty_avl, cty_avl.structure, 'T', &toString_Country);
     printf("\n\n");
 
     //try to add an already existing node
