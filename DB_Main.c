@@ -29,7 +29,7 @@ int main(void)
     tst_Load_country(&db);
     tst_Print_country(&db);
     tst_List_country(&db);
-//    tst_AVL_country(&db);
+    tst_AVL_country(&db);
     tst_AVL_search_country(&db);
 
 	return 0;
@@ -103,7 +103,7 @@ void tst_AVL_country(dbc* db){
 
     printf("\n--------------- tst_AVL_country ---------------------------------------\n");
     arrayToAVL(&cty_array, &cty_avl, COPY);
-    display_AVL_tree(&cty_avl, cty_avl.structure, 'R', &toString_Country);
+    display_AVL_tree(&cty_avl, cty_avl.structure, 'T', &toString_Country);
     printf("\n\n");
     foreachAVL(&cty_avl, cty_avl.structure, NULL, Rec_Country_list);
     foreachAVL(&cty_avl, cty_avl.structure, NULL, free_country);
