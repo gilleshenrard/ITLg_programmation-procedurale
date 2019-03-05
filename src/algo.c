@@ -726,8 +726,11 @@ void* delete_AVL(t_algo_meta* meta, void* root, void* key){
                 tmp = root;
                 root = NULL;
             }
-            else
+            else{
                 (*meta->doCopy)(root, tmp);
+                *(*meta->next)(root) = *(*meta->next)(tmp);
+                *(*meta->previous)(root) = *(*meta->previous)(tmp);
+            }
 
             free(tmp);
             meta->nbelements--;
