@@ -8,14 +8,14 @@ typedef struct {
     void*   structure;
     int     nbelements;
     int     elementsize;
-    void*   (*doCreate)(void);
-    int     (*doCompare)(void*, void*);
-    int     (*doSwap)(void*, void*);
-    int     (*doCopy)(void*, void*);
-    int     (*getHeight)(void*);
-    int     (*setHeight)(void*, int);
-    void**  (*next)(void*);
-    void**  (*previous)(void*);
+    void*   (*doCreate)(void);              //element creation (dynamic allocation, file reading, ...)
+    int     (*doCompare)(void*, void*);     //comparison method
+    int     (*doSwap)(void*, void*);        //swep method
+    int     (*doCopy)(void*, void*);        //data copy method
+    int     (*getHeight)(void*);            //AVL height retrieving
+    int     (*setHeight)(void*, int);       //AVL height setup
+    void**  (*next)(void*);                 //retrieves either next node in a list, or the right child in AVL
+    void**  (*previous)(void*);             //retrieves either previous node in a list, or the left child in AVL
 } t_algo_meta;
 
 int offset, offset_max;
@@ -56,6 +56,7 @@ void* rotate_AVL(t_algo_meta* meta, void* avl, e_rotation side);
 int get_AVL_balance(t_algo_meta* meta, void* avl);
 int foreachAVL(t_algo_meta* meta, void* avl, void* parameter, int (*doAction)(void*, void*));
 void* search_AVL(t_algo_meta* meta, void* avl, void* key);
+void* delete_AVL(t_algo_meta* meta, void* root, void* key);
 
 
 #endif // ALGO_H_INCLUDED

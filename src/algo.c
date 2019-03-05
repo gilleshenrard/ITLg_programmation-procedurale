@@ -693,3 +693,104 @@ void* search_AVL(t_algo_meta* meta, void* avl, void* key){
     // perform the search in the sub-child
     return search_AVL(meta, *child, key);
 }
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      Root of the AVL from which remove an elemnt         */
+/*      Key to remove from the AVL                          */
+/*  P : Removes an element from the AVL provided            */
+/*  O : Leaf if found                                       */
+/*      NULL otherwise                                      */
+/************************************************************/
+void* delete_AVL(t_algo_meta* meta, void* root, void* key){
+    void **child_left=NULL, **child_right=NULL;
+    void **tmp_cl=NULL, **tmp_cr=NULL;
+    int height_right=0, height_left=0, balance=0;
+    void *tmp=NULL;
+
+    if(!root)
+        return root;
+
+    child_right = (*meta->next)(root);
+    child_left = (*meta->previous)(root);
+
+    if((*meta->doCompare)(root, key) < 0)
+        *child_right = delete_AVL(meta, *child_right, key);
+    else if((*meta->doCompare)(root, key) > 0)
+        *child_left = delete_AVL(meta, *child_left, key);
+    else{
+        if(*child_left==NULL || *child_right==NULL){
+            tmp = (*child_left ? *child_left : *child_right);
+
+            if(!tmp){
+                tmp = root;
+                root = NULL;
+            }
+            else
+                (*meta->doCopy)(root, tmp);
+
+            free(tmp);
+            meta->nbelements--;
+        }
+        else{
+            tmp_cr = (*meta->next)(*child_right);
+            tmp_cl = (*meta->previous)(*child_right);
+
+            tmp = ((*meta->doCompare)(*tmp_cl, *tmp_cr) < 0 ? *tmp_cl : *tmp_cr);
+
+            (*meta->doCopy)(root, tmp);
+
+            *child_right = delete_AVL(meta, *child_right, tmp);
+        }
+    }
+
+    if(!root)
+        return root;
+
+    //get the height of the left and right children AVL
+    height_right = (*meta->getHeight)(*child_right);
+    height_left = (*meta->getHeight)(*child_left);
+
+    //update the current node's height
+    (*meta->setHeight)(root, 1+(height_left > height_right ? height_left : height_right));
+
+    if(root)
+        balance = ((*meta->getHeight)(*(*meta->previous)(root))) - ((*meta->getHeight)(*(*meta->next)(root)));
+
+    if(balance < -1){
+        tmp_cr = (*meta->next)(*child_right);
+        tmp_cl = (*meta->previous)(*child_right);
+        height_right = (*meta->getHeight)(*tmp_cr);
+        height_left = (*meta->getHeight)(*tmp_cl);
+        balance = height_left - height_right;
+
+        // right right case
+        if(balance <= 0){
+            return rotate_AVL(meta, root, LEFT);
+        }
+        // right left case
+        if(balance > 0){
+            *child_right = rotate_AVL(meta, *child_right, RIGHT);
+            return rotate_AVL(meta, root, LEFT);
+        }
+    }
+    if(balance > 1){
+        tmp_cr = (*meta->next)(*child_left);
+        tmp_cl = (*meta->previous)(*child_left);
+        height_right = (*meta->getHeight)(*tmp_cr);
+        height_left = (*meta->getHeight)(*tmp_cl);
+        balance = height_left - height_right;
+
+        // left left case
+        if(balance >= 0){
+            return rotate_AVL(meta, root, RIGHT);
+        }
+        //left right case
+        if(balance < 0){
+            *child_left = rotate_AVL(meta, *child_left, LEFT);
+            return rotate_AVL(meta, root, RIGHT);
+        }
+    }
+
+    return root;
+}
