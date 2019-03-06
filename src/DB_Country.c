@@ -361,10 +361,10 @@ int set_country_height(void* current, int value){
 /*      -1 if error                                         */
 /************************************************************/
 void* free_country(void* country, void* nullable){
-
+/*
     ccty_recur *tmp = (ccty_recur*)country;
     printf("Freeing %s\n", tmp->cty.nm_cty);
-
+*/
     free(country);
 
     return 0;
