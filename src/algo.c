@@ -348,7 +348,7 @@ int popListTop(t_algo_meta* meta){
 
     //free and rechain
     //  note : free() takes a void pointer anyway, so no need to cast
-    free(head);
+    (*meta->doFree)(head, NULL);
     if(previous)
         *previous = NULL;
     meta->structure = second;
@@ -743,7 +743,7 @@ void* delete_AVL(t_algo_meta* meta, void* root, void* key){
             }
 
             //free the memory of the father
-            free(tmp);
+            (*meta->doFree)(tmp, NULL);
             meta->nbelements--;
         }
         else{

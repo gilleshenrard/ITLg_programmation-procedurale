@@ -40,6 +40,6 @@ int Rec_Country_list(void *record, void* nullable);
 char* toString_Country(void* current);
 int get_country_height(void* current);
 int set_country_height(void* current, int value);
-int free_country(void* country, void* nullable);
+void* free_country(void* country, void* nullable);
 
 #endif // DB_COUNTRY_H_INCLUDED

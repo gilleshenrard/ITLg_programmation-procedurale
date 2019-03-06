@@ -9,6 +9,7 @@ typedef struct {
     int     nbelements;
     int     elementsize;
     void*   (*doCreate)(void);              //element creation (dynamic allocation, file reading, ...)
+    void*   (*doFree)(void*, void*);        //element deletion (memory deallocation, flag writing in file, ...)
     int     (*doCompare)(void*, void*);     //comparison method
     int     (*doSwap)(void*, void*);        //swep method
     int     (*doCopy)(void*, void*);        //data copy method
