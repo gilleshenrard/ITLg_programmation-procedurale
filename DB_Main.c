@@ -118,11 +118,14 @@ void tst_AVL_country(dbc* db){
     insertAVL(&cty_avl, cty_avl.structure, &tmp);
     printf("%d countries after\n\n", cty_avl.nbelements);
 
+    delete_AVL(&cty_avl, cty_avl.structure, &tmp);
+
     //display the countries as a list
     foreachAVL(&cty_avl, cty_avl.structure, NULL, Rec_Country_list);
 
     //free memory
-    foreachAVL(&cty_avl, cty_avl.structure, NULL, free_country);
+    while(cty_avl.structure)
+        delete_AVL_root(&cty_avl);
 }
 
 /****************************************************************************************/
@@ -137,6 +140,7 @@ void tst_AVL_search_country(dbc* db){
 
     printf("\n--------------- tst_AVL_search_country ---------------------------------\n");
     arrayToAVL(&cty_array, &cty_avl, COPY);
+
     cty_avl.doCompare = compare_country_name_char;
     for(int i=0 ; i<5 ; i++){
         printf("Searching for %s\t\t: ", countries[i]);
@@ -145,5 +149,7 @@ void tst_AVL_search_country(dbc* db){
         else
             printf("not found\n");
     }
-    foreachAVL(&cty_avl, cty_avl.structure, NULL, free_country);
+
+    while(cty_avl.structure)
+        delete_AVL_root(&cty_avl);
 }
