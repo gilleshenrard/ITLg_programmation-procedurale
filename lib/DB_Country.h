@@ -13,12 +13,21 @@
 #define BUF_LEN 200
 
 typedef struct ccty_recur ccty_recur;
+typedef struct ccty_file ccty_file;
 
 struct ccty_recur{
     ccty cty;
     int height;
     ccty_recur *left;
     ccty_recur *right;
+};
+
+struct ccty_file{
+    ccty cty;
+    int height;
+    long left;
+    long right;
+    char filler[52];
 };
 
 //database methods
@@ -28,7 +37,7 @@ void Load_Country(dbc *db);
 void Print_Country(dbc *db);
 void Rec_Country(ccty *rec);
 
-// dynamic lists methods
+// dynamic structures methods
 void* allocate_country(void);
 int compare_country_name(void* a, void* b);
 int compare_country_name_char(void* a, void* b);
@@ -41,5 +50,8 @@ char* toString_Country(void* current);
 int get_country_height(void* current);
 int set_country_height(void* current, int value);
 void* free_country(void* country, void* nullable);
+
+//file structures methods
+int generate_country_file(FILE* fp, char* filename);
 
 #endif // DB_COUNTRY_H_INCLUDED

@@ -171,9 +171,9 @@ void Rec_Country(ccty *rec)
     return;
 }
 
-//
-// PERSONNAL METHODS
-//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////// DYNAMIC ALLOCATION METHODS /////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /****************************************************************************************/
 /*  I : /                                                                               */
@@ -368,4 +368,44 @@ void* free_country(void* country, void* nullable){
     free(country);
 
     return 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////// FILES METHODS /////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/************************************************************/
+/*  I : File pointer to the country DB file                 */
+/*  P : Generates a binary file with a header and a few     */
+/*          (SZ_CITY) records, all available and linked     */
+/*  O :  0 if OK                                            */
+/*      -1 otherwise                                        */
+/************************************************************/
+int generate_country_file(FILE* fp, char* filename){
+    hder_cty header_cty = {SZ_CTY*sizeof(ccty_file), {0}, 0, -1, {0}};
+    ccty_file tmp;
+    char filename_final[28] = "Data_DB_Comp\\";
+
+    //generate the file name with the relative path, and open the file
+    strcat(filename_final, filename);
+    fp = fopen(filename_final, "wb");
+    if(fp){
+        //write the header
+        strcpy(header_cty.db_name, filename);
+        fwrite(&header_cty, sizeof(hder_cty), 1, fp);
+
+        memset(&tmp, 0, sizeof(ccty_file));
+        for(int i=0 ; i<SZ_CTY-1 ; i++){
+            tmp.right++;
+            fwrite(&tmp, sizeof(ccty_file), 1, fp);
+        }
+        tmp.right = -1;
+        fwrite(&tmp, sizeof(ccty_file), 1, fp);
+
+        return 0;
+    }
+
+    return -1;
 }

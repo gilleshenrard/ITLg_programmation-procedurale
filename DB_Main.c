@@ -16,6 +16,7 @@ void tst_Print_country(dbc*);
 void tst_List_country(dbc*);
 void tst_AVL_country(dbc*);
 void tst_AVL_search_country(dbc*);
+void tst_country_file_create(void);
 
 /****************************************************************************************
 * Programme principal
@@ -31,6 +32,7 @@ int main(void)
     tst_List_country(&db);
     tst_AVL_country(&db);
     tst_AVL_search_country(&db);
+    tst_country_file_create();
 
 	return 0;
 }
@@ -153,4 +155,19 @@ void tst_AVL_search_country(dbc* db){
     cty_avl.doCompare = compare_country_name;
     while(cty_avl.structure)
         delete_AVL_root(&cty_avl);
+}
+
+/****************************************************************************************/
+/*  I : /                                                                               */
+/*  P : Tests the generation of a country DB file                                       */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_country_file_create(){
+    FILE* fp = NULL;
+
+    printf("\n--------------- tst_AVL_search_country ---------------------------------\n");
+    if(generate_country_file(fp, "DB_Country_tst") > -1)
+        printf("File generated\n");
+    else
+        fprintf(stderr, "Error while generating the country DB");
 }
