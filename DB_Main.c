@@ -150,6 +150,7 @@ void tst_AVL_search_country(dbc* db){
             printf("not found\n");
     }
 
+    cty_avl.doCompare = compare_country_name;
     while(cty_avl.structure)
         delete_AVL_root(&cty_avl);
 }
