@@ -558,7 +558,7 @@ void display_AVL_tree(t_algo_meta* meta, void* avl, char dir, char* (*toString)(
         for (int i=0;i<nbc_pad;i++)
             strcat(tmp,".");
         strcat(tmp,(*toString)(avl));
-        printf("%*c%c %s R-%p R-%p L-%p H-%d\n", 3*offset, '-', dir, tmp, avl, *child_left, *child_right, height);
+        printf("%*c%c %s T-%p R-%p L-%p H-%d\n", 3*offset, '-', dir, tmp, avl, *child_right, *child_left, height);
 
         display_AVL_tree(meta, *child_right, 'R', toString);
     }
@@ -578,7 +578,6 @@ void* rotate_AVL(t_algo_meta* meta, void* avl, e_rotation side){
     void **child_left = NULL, **child_right=NULL;
     void *newTree=NULL, *rightLeaf=NULL;
     int height_l=0, height_r=0, height=0;
-
 
     //invert the function pointers to get the right child
     //  depending on the side of the rotation
@@ -704,45 +703,54 @@ void* search_AVL(t_algo_meta* meta, void* avl, void* key){
 /************************************************************/
 void* delete_AVL(t_algo_meta* meta, void* root, void* key){
     void **child_left=NULL, **child_right=NULL;
-    void **tmp_cl=NULL, **tmp_cr=NULL;
     int height_right=0, height_left=0, balance=0;
     void *tmp=NULL;
 
+    //if no AVL, skip
     if(!root)
         return root;
 
+    //get the address of the current AVL children
     child_right = (*meta->next)(root);
     child_left = (*meta->previous)(root);
 
+    //key in the right subtree
     if((*meta->doCompare)(root, key) < 0)
         *child_right = delete_AVL(meta, *child_right, key);
+
+    //key in the left subtree
     else if((*meta->doCompare)(root, key) > 0)
         *child_left = delete_AVL(meta, *child_left, key);
+
+    //key is found
     else{
+        //node with less than 2 children nodes
         if(*child_left==NULL || *child_right==NULL){
+            //get at least one existing child
             tmp = (*child_left ? *child_left : *child_right);
 
+            //no children nodes
             if(!tmp){
                 tmp = root;
                 root = NULL;
             }
+            //one child node
             else{
+                //copy the child node in the father node (with addresses of the grand-children)
                 (*meta->doCopy)(root, tmp);
                 *(*meta->next)(root) = *(*meta->next)(tmp);
                 *(*meta->previous)(root) = *(*meta->previous)(tmp);
             }
 
+            //free the memory of the father
             free(tmp);
             meta->nbelements--;
         }
         else{
-            tmp_cr = (*meta->next)(*child_right);
-            tmp_cl = (*meta->previous)(*child_right);
-
-            tmp = ((*meta->doCompare)(*tmp_cl, *tmp_cr) < 0 ? *tmp_cl : *tmp_cr);
-
+            //2 children nodes : copy the child with the smallest value in the root,
+            //                      then delete it
+            tmp = min_AVL_value(meta, *child_right);
             (*meta->doCopy)(root, tmp);
-
             *child_right = delete_AVL(meta, *child_right, tmp);
         }
     }
@@ -757,43 +765,63 @@ void* delete_AVL(t_algo_meta* meta, void* root, void* key){
     //update the current node's height
     (*meta->setHeight)(root, 1+(height_left > height_right ? height_left : height_right));
 
+    //if still a root, re-balance accordingly
     if(root)
-        balance = ((*meta->getHeight)(*(*meta->previous)(root))) - ((*meta->getHeight)(*(*meta->next)(root)));
+        balance = get_AVL_balance(meta, root);
 
     if(balance < -1){
-        tmp_cr = (*meta->next)(*child_right);
-        tmp_cl = (*meta->previous)(*child_right);
-        height_right = (*meta->getHeight)(*tmp_cr);
-        height_left = (*meta->getHeight)(*tmp_cl);
-        balance = height_left - height_right;
-
         // right right case
-        if(balance <= 0){
+        if(get_AVL_balance(meta, *child_right) <= 0){
             return rotate_AVL(meta, root, LEFT);
         }
         // right left case
-        if(balance > 0){
+        if(get_AVL_balance(meta, *child_right) > 0){
             *child_right = rotate_AVL(meta, *child_right, RIGHT);
             return rotate_AVL(meta, root, LEFT);
         }
     }
     if(balance > 1){
-        tmp_cr = (*meta->next)(*child_left);
-        tmp_cl = (*meta->previous)(*child_left);
-        height_right = (*meta->getHeight)(*tmp_cr);
-        height_left = (*meta->getHeight)(*tmp_cl);
-        balance = height_left - height_right;
-
         // left left case
-        if(balance >= 0){
+        if(get_AVL_balance(meta, *child_left) >= 0){
             return rotate_AVL(meta, root, RIGHT);
         }
         //left right case
-        if(balance < 0){
+        if(get_AVL_balance(meta, *child_left) < 0){
             *child_left = rotate_AVL(meta, *child_left, LEFT);
             return rotate_AVL(meta, root, RIGHT);
         }
     }
 
     return root;
+}
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*  P : Removes the root from the AVL provided              */
+/*  O :  0 if OK                                            */
+/*      -1 otherwise                                        */
+/************************************************************/
+int delete_AVL_root(t_algo_meta* meta){
+    meta->structure = delete_AVL(meta, meta->structure, meta->structure);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Metadata necessary to the algorithm                 */
+/*      AVL for which find the smallest value               */
+/*  P : Finds the subtree with the smallest value           */
+/*          (most to the left)                              */
+/*  O : Most left node in the subtree                       */
+/************************************************************/
+void* min_AVL_value(t_algo_meta* meta, void* avl){
+    void* current = avl;
+    void** tmp = (*meta->previous)(current);
+
+    while(*tmp){
+        current = *tmp;
+        tmp = (*meta->previous)(current);
+    }
+
+    return current;
 }

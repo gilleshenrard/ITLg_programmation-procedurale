@@ -57,6 +57,7 @@ int get_AVL_balance(t_algo_meta* meta, void* avl);
 int foreachAVL(t_algo_meta* meta, void* avl, void* parameter, int (*doAction)(void*, void*));
 void* search_AVL(t_algo_meta* meta, void* avl, void* key);
 void* delete_AVL(t_algo_meta* meta, void* root, void* key);
-
+void* min_AVL_value(t_algo_meta* meta, void* avl);
+int delete_AVL_root(t_algo_meta* meta);
 
 #endif // ALGO_H_INCLUDED
