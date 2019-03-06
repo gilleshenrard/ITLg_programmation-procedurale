@@ -143,7 +143,7 @@ void tst_AVL_search_country(dbc* db){
 
     cty_avl.doCompare = compare_country_name_char;
     for(int i=0 ; i<5 ; i++){
-        printf("Searching for %s\t\t: ", countries[i]);
+        printf("Searching for %12s: ", countries[i]);
         if (search_AVL(&cty_avl, cty_avl.structure, countries[i]))
             printf("found\n");
         else
