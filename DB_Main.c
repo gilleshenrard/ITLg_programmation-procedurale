@@ -166,8 +166,11 @@ void tst_country_file_create(){
     FILE* fp = NULL;
 
     printf("\n--------------- tst_AVL_search_country ---------------------------------\n");
-    if(generate_country_file(fp, "DB_Country_tst") > -1)
-        printf("File generated\n");
+    printf("size of the header : %d\n", sizeof(hder_cty));
+    printf("size of a record   : %d\n", sizeof(ccty_file));
+
+    if(generate_country_file(fp, "DB_Country_tst.dat") > -1)
+        printf("File Data_DB_Comp\\DB_Country_tst.dat generated\n");
     else
         fprintf(stderr, "Error while generating the country DB");
 }
