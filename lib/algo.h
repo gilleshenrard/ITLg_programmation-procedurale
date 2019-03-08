@@ -8,15 +8,16 @@ typedef struct {
     void*   structure;
     int     nbelements;
     int     elementsize;
-    void*   (*doCreate)(void);              //element creation (dynamic allocation, file reading, ...)
-    void*   (*doFree)(void*, void*);        //element deletion (memory deallocation, flag writing in file, ...)
-    int     (*doCompare)(void*, void*);     //comparison method
-    int     (*doSwap)(void*, void*);        //swep method
-    int     (*doCopy)(void*, void*);        //data copy method
-    int     (*getHeight)(void*);            //AVL height retrieving
-    int     (*setHeight)(void*, int);       //AVL height setup
-    void**  (*next)(void*);                 //retrieves either next node in a list, or the right child in AVL
-    void**  (*previous)(void*);             //retrieves either previous node in a list, or the left child in AVL
+    int     (*isEmpty)      (void*);            //structure emptiness indicator
+    void*   (*doCreate)     (void*);            //element creation (dynamic allocation, file reading, ...)
+    void*   (*doFree)       (void*, void*);     //element deletion (memory deallocation, flag writing in file, ...)
+    int     (*doCompare)    (void*, void*);     //comparison method
+    int     (*doSwap)       (void*, void*);     //swep method
+    int     (*doCopy)       (void*, void*);     //data copy method
+    int     (*getHeight)    (void*);            //AVL height retrieving
+    int     (*setHeight)    (void*, int);       //AVL height setup
+    void**  (*next)         (void*);            //retrieves either next node in a list, or the right child in AVL
+    void**  (*previous)     (void*);            //retrieves either previous node in a list, or the left child in AVL
 } t_algo_meta;
 
 int offset, offset_max;

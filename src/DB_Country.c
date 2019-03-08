@@ -181,11 +181,12 @@ void Rec_Country(ccty *rec)
 /*  O : Country created if OK                                                           */
 /*      NULL if error                                                                   */
 /****************************************************************************************/
-void* allocate_country(void){
-    ccty_recur *tmp=NULL;
+void* allocate_country(void* country){
+    ccty_recur *tmp = NULL;
 
     //memory allocation for the new element (calloc to initialize with all 0)
-    tmp = calloc(1, sizeof(ccty_recur));
+    country = calloc(1, sizeof(ccty_recur));
+    tmp=(ccty_recur*)country;
     if(tmp) tmp->height = 1;
 
     return tmp;
@@ -368,6 +369,16 @@ void* free_country(void* country, void* nullable){
     free(country);
 
     return 0;
+}
+
+/************************************************************/
+/*  I : Country AVL leaf to check                           */
+/*  P : Checks if the country pointer is NULL               */
+/*  O : 1 if NULL                                           */
+/*      0 otherwise                                         */
+/************************************************************/
+int is_country_null(void* country){
+    return country == NULL;
 }
 
 
