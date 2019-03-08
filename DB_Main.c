@@ -17,6 +17,7 @@ void tst_List_country(dbc*);
 void tst_AVL_country(dbc*);
 void tst_AVL_search_country(dbc*);
 void tst_country_file_create(void);
+void tst_country_AVL_insert_file();
 
 /****************************************************************************************
 * Programme principal
@@ -33,6 +34,7 @@ int main(void)
     tst_AVL_country(&db);
     tst_AVL_search_country(&db);
     tst_country_file_create();
+    tst_country_AVL_insert_file();
 
 	return 0;
 }
@@ -173,4 +175,17 @@ void tst_country_file_create(){
         printf("File Data_DB_Comp\\DB_Country_tst.dat generated\n");
     else
         fprintf(stderr, "Error while generating the country DB");
+}
+
+/****************************************************************************************/
+/*  I : /                                                                               */
+/*  P : Tests the insertion of a country in a DB file (AVL organised)                   */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_country_AVL_insert_file(){
+//    FILE* fp = NULL;
+
+    printf("\n--------------- tst_country_AVL_insert_file ----------------------------\n");
+
+
 }
