@@ -442,10 +442,38 @@ int is_country_fileEmpty(void* fp){
     return header.PTO == -1;
 }
 
+/************************************************************/
+/*  I : File pointer to the current DB                      */
+/*  P : Books a record in the DB and returns it             */
+/*  O : Record if still place                               */
+/*      NULL otherwise                                      */
+/************************************************************/
 void* generate_country_record(void* fp){
     FILE* file = (FILE*)fp;
-    hder_cty tmp = {0};
+    hder_cty header = {0};
+    ccty_file cty = {0};
+    long address = 0;
 
+    //get the header to recover the PTL address
     fseek(fp, 0, SEEK_SET);
-    fread(&tmp, sizeof(hder_cty), 1, file);
+    fread(&header, sizeof(hder_cty), 1, file);
+    if(header.PTL < 0)
+        return NULL;
+
+    //get the record at the address pointed by PTL
+    fseek(file, header.PTL, SEEK_SET);
+    fread(&cty, sizeof(ccty_file), 1, file);
+
+    //save the new PTL
+    address = header.PTL;
+    header.PTL = cty.right;
+
+    //write the header with the new PTL
+    fseek(fp, 0, SEEK_SET);
+    fwrite(&header, sizeof(hder_cty), 1, file);
+
+    //get back to the new record address
+    fseek(file, address, SEEK_SET);
+
+    return (void*)file;
 }
