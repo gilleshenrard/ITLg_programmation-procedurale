@@ -45,7 +45,7 @@ typedef struct Country
     char tp_rec[8];     // Type de record CTY
     int  id_cty;        // Cle primaire
     char nm_zon[20];    // Nom de la zone geographique
-    char nm_cty[24];    // Nom du pays (WARNING ! SHORTENED BY 4 BYTES)
+    char nm_cty[28];    // Nom du pays (WARNING ! SHORTENED BY 4 BYTES)
     char cd_iso[4];     // Code Iso du pays
 } ccty;
 
