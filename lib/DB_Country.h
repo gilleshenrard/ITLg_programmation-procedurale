@@ -24,10 +24,8 @@ struct ccty_recur{
 
 struct ccty_file{
     ccty cty;
-    int height;
-    long left;
-    long right;
-    char filler[52];
+    usint left;
+    usint right;
 };
 
 //database methods

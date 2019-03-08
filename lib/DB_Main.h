@@ -18,6 +18,7 @@
 #define SZ_GRP 3000
 
 typedef unsigned int uint;
+typedef unsigned short usint;
 
 /***************************************************************************************
 * Header de la database
@@ -44,7 +45,7 @@ typedef struct Country
     char tp_rec[8];     // Type de record CTY
     int  id_cty;        // Cle primaire
     char nm_zon[20];    // Nom de la zone geographique
-    char nm_cty[28];    // Nom du pays
+    char nm_cty[24];    // Nom du pays (WARNING ! SHORTENED BY 4 BYTES)
     char cd_iso[4];     // Code Iso du pays
 } ccty;
 
@@ -52,9 +53,8 @@ typedef struct header_cty
 {
     uint db_size;       // DB size
     char db_name[28];   // DB name
-    long PTL;           // First free slot address
     long PTO;           // head (first element in the structure, list or AVL)
-    char filler[88];    // filler (for the struct size to reach 128 bytes)
+    char filler[28];    // filler (for the struct size to reach 64 bytes)
 } hder_cty;
 
 /***************************************************************************************
