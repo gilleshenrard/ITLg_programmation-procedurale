@@ -425,27 +425,3 @@ int generate_country_file(FILE* fp, char* filename){
 
     return -1;
 }
-
-/************************************************************/
-/*  I : File pointer to the current DB                      */
-/*  P : Indicates if there is any record in the file        */
-/*  O : 1 if no record                                      */
-/*      0 otherwise                                         */
-/************************************************************/
-int is_country_fileEmpty(void* fp){
-    FILE* file = (FILE*)fp;
-    hder_cty header = {0};
-
-    fseek(file, 0, SEEK_SET);
-    fread(&header, sizeof(hder_cty), 1, file);
-
-    return header.PTO == -1;
-}
-
-void* generate_country_record(void* fp){
-    FILE* file = (FILE*)fp;
-    hder_cty tmp = {0};
-
-    fseek(fp, 0, SEEK_SET);
-    fread(&tmp, sizeof(hder_cty), 1, file);
-}
