@@ -298,7 +298,7 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
         return -1;
 
     //memory allocation for the new element
-    newElement = (*meta->doCreate)(newElement);
+    newElement = (*meta->doCreate)();
     if(!newElement)
         return -1;
 
@@ -338,7 +338,7 @@ int popListTop(t_algo_meta* meta){
         return -1;
 
     //Structure is empty
-    if((*meta->isEmpty)(meta->structure))
+    if(!meta->structure)
         return 0;
 
     //save list head and retrieve next element
@@ -371,7 +371,7 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
     void *newElement = NULL, *previous=NULL, *next=meta->structure, **tmp = NULL;
 
     //non-existing list or element is supposed to become the first element
-    if((*meta->isEmpty)(meta->structure) || (*meta->doCompare)(toAdd, meta->structure) <= 0)
+    if(!meta->structure || (*meta->doCompare)(toAdd, meta->structure) <= 0)
         return insertListTop(meta, toAdd);
 
     //allocation and filling of the new element
@@ -467,10 +467,10 @@ void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
     int height_left=0, height_right=0, balance=0;
 
     //if tree is empty
-    if((*meta->isEmpty)(avl)){
+    if(!avl){
         //memory allocation for the new element
-        avl = (*meta->doCreate)(avl);
-        if((*meta->isEmpty)(avl))
+        avl = (*meta->doCreate)();
+        if(!avl)
             return NULL;
 
         //copy new element data
@@ -626,7 +626,7 @@ int get_AVL_balance(t_algo_meta* meta, void* avl){
     int height_left=0, height_right=0;
     void** childitem = NULL;
 
-    if((*meta->isEmpty)(avl))
+    if(!avl)
         return 0;
 
     childitem = (*meta->next)(avl);

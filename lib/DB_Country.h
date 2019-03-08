@@ -38,7 +38,7 @@ void Print_Country(dbc *db);
 void Rec_Country(ccty *rec);
 
 // dynamic structures methods
-void* allocate_country(void* Country);
+void* allocate_country(void);
 int compare_country_name(void* a, void* b);
 int compare_country_name_char(void* a, void* b);
 int assign_country(void* oldelem, void* newelem);
@@ -50,7 +50,6 @@ char* toString_Country(void* current);
 int get_country_height(void* current);
 int set_country_height(void* current, int value);
 void* free_country(void* country, void* nullable);
-int is_country_null(void* country);
 
 //file structures methods
 int generate_country_file(FILE* fp, char* filename);
