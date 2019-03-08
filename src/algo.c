@@ -298,7 +298,7 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
         return -1;
 
     //memory allocation for the new element
-    newElement = (*meta->doCreate)();
+    newElement = calloc(1, meta->elementsize);;
     if(!newElement)
         return -1;
 
@@ -348,7 +348,7 @@ int popListTop(t_algo_meta* meta){
 
     //free and rechain
     //  note : free() takes a void pointer anyway, so no need to cast
-    (*meta->doFree)(head, NULL);
+    free(head);
     if(previous)
         *previous = NULL;
     meta->structure = second;
@@ -375,7 +375,7 @@ int insertListSorted(t_algo_meta *meta, void* toAdd){
         return insertListTop(meta, toAdd);
 
     //allocation and filling of the new element
-    newElement = malloc(meta->elementsize);
+    newElement = calloc(1, meta->elementsize);
     if(newElement)
         (*meta->doCopy)(newElement, toAdd);
     else
@@ -469,7 +469,7 @@ void* insertAVL(t_algo_meta* meta, void* avl, void* toAdd){
     //if tree is empty
     if(!avl){
         //memory allocation for the new element
-        avl = (*meta->doCreate)();
+        avl = calloc(1, meta->elementsize);
         if(!avl)
             return NULL;
 
@@ -743,7 +743,7 @@ void* delete_AVL(t_algo_meta* meta, void* root, void* key){
             }
 
             //free the memory of the father
-            (*meta->doFree)(tmp, NULL);
+            free(tmp);
             meta->nbelements--;
         }
         else{

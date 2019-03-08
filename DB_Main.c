@@ -86,7 +86,7 @@ void tst_Print_country(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void tst_List_country(dbc* db){
-    t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), allocate_country, free_country, compare_country_name, swap_country, assign_country, NULL, NULL, country_right, country_left};
+    t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, NULL, country_right, country_left};
     t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
     printf("\n--------------- tst_list_insert ---------------------------------------\n");
@@ -105,7 +105,7 @@ void tst_List_country(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void tst_AVL_country(dbc* db){
-    t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), allocate_country, free_country, compare_country_name, swap_country, assign_country, get_country_height, set_country_height, country_right, country_left};
+    t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, get_country_height, set_country_height, country_right, country_left};
     t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     ccty_recur tmp = {db->cty[3], 0, NULL, NULL};
 
@@ -138,7 +138,7 @@ void tst_AVL_country(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void tst_AVL_search_country(dbc* db){
-    t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), allocate_country, free_country, compare_country_name, swap_country, assign_country, get_country_height, set_country_height, country_right, country_left};
+    t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, get_country_height, set_country_height, country_right, country_left};
     t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char countries[5][16] = {"Denmark", "Portugal", "Burkina Faso", "Estonia", "Singapore"};
 
