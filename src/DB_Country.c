@@ -395,20 +395,14 @@ int generate_country_file(FILE* fp, char* filename){
         //fill and write the header
         strcpy(header_cty.db_name, filename);
         header_cty.db_size = (SZ_CTY * sizeof(ccty_file)) + sizeof(hder_cty);
-        header_cty.PTO = -1;  //no record yet
         fwrite(&header_cty, sizeof(hder_cty), 1, fp);
 
         //generate as much as countries as specified in SZ_CTY
         //      make each one point to the next (all records are available)
         memset(&tmp, 0, sizeof(ccty_file));
-        for(int i=0 ; i<SZ_CTY-1 ; i++){
-            tmp.right++;
+        for(int i=0 ; i<SZ_CTY ; i++){
             fwrite(&tmp, sizeof(ccty_file), 1, fp);
         }
-        //write the last one and indicate there is no next record free (end of file)
-        tmp.right = -1;
-        fwrite(&tmp, sizeof(ccty_file), 1, fp);
-
         return 0;
     }
 
