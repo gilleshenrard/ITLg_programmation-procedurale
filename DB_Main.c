@@ -158,34 +158,3 @@ void tst_AVL_search_country(dbc* db){
     while(cty_avl.structure)
         delete_AVL_root(&cty_avl);
 }
-
-/****************************************************************************************/
-/*  I : /                                                                               */
-/*  P : Tests the generation of a country DB file                                       */
-/*  O : /                                                                               */
-/****************************************************************************************/
-void tst_country_file_create(){
-    FILE* fp = NULL;
-
-    printf("\n--------------- tst_AVL_search_country ---------------------------------\n");
-    printf("size of the header : %d\n", sizeof(hder_cty));
-    printf("size of a record   : %d\n", sizeof(ccty_file));
-
-    if(generate_country_file(fp, "DB_Country_tst.dat") > -1)
-        printf("File Data_DB_Comp\\DB_Country_tst.dat generated\n");
-    else
-        fprintf(stderr, "Error while generating the country DB");
-}
-
-/****************************************************************************************/
-/*  I : /                                                                               */
-/*  P : Tests the insertion of a country in a DB file (AVL organised)                   */
-/*  O : /                                                                               */
-/****************************************************************************************/
-void tst_country_AVL_insert_file(){
-//    FILE* fp = NULL;
-
-    printf("\n--------------- tst_country_AVL_insert_file ----------------------------\n");
-
-
-}

@@ -376,35 +376,3 @@ void* free_country(void* country, void* nullable){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-/************************************************************/
-/*  I : File pointer to the country DB file                 */
-/*  P : Generates a binary file with a header and a few     */
-/*          (SZ_CITY) records, all available and linked     */
-/*  O :  0 if OK                                            */
-/*      -1 otherwise                                        */
-/************************************************************/
-int generate_country_file(FILE* fp, char* filename){
-    hder_cty header_cty = {0};
-    ccty_file tmp;
-    char filename_final[28] = "Data_DB_Comp\\";
-
-    //generate the file name with the relative path, and open the file
-    strcat(filename_final, filename);
-    fp = fopen(filename_final, "wb");
-    if(fp){
-        //fill and write the header
-        strcpy(header_cty.db_name, filename);
-        header_cty.db_size = (SZ_CTY * sizeof(ccty_file)) + sizeof(hder_cty);
-        fwrite(&header_cty, sizeof(hder_cty), 1, fp);
-
-        //generate as much as countries as specified in SZ_CTY
-        //      make each one point to the next (all records are available)
-        memset(&tmp, 0, sizeof(ccty_file));
-        for(int i=0 ; i<SZ_CTY ; i++){
-            fwrite(&tmp, sizeof(ccty_file), 1, fp);
-        }
-        return 0;
-    }
-
-    return -1;
-}

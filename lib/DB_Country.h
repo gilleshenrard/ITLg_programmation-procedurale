@@ -50,6 +50,5 @@ int set_country_height(void* current, int value);
 void* free_country(void* country, void* nullable);
 
 //file structures methods
-int generate_country_file(FILE* fp, char* filename);
 
 #endif // DB_COUNTRY_H_INCLUDED
