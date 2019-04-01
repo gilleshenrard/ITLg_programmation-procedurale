@@ -16,8 +16,6 @@ void tst_Print_country(dbc*);
 void tst_List_country(dbc*);
 void tst_AVL_country(dbc*);
 void tst_AVL_search_country(dbc*);
-void tst_country_file_create(void);
-void tst_country_AVL_insert_file();
 
 /****************************************************************************************
 * Programme principal
@@ -33,8 +31,6 @@ int main(void)
     tst_List_country(&db);
     tst_AVL_country(&db);
     tst_AVL_search_country(&db);
-    tst_country_file_create();
-    tst_country_AVL_insert_file();
 
 	return 0;
 }
