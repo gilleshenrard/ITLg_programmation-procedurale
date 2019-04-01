@@ -49,14 +49,6 @@ typedef struct Country
     char cd_iso[4];     // Code Iso du pays
 } ccty;
 
-typedef struct header_cty
-{
-    uint db_size;       // DB size
-    char db_name[28];   // DB name
-    long PTO;           // head (first element in the structure, list or AVL)
-    char filler[28];    // filler (for the struct size to reach 64 bytes)
-} hder_cty;
-
 /***************************************************************************************
 * Table Job : dummy
 ****************************************************************************************/
@@ -90,7 +82,7 @@ typedef struct Group
 /***************************************************************************************
 * Structure base de donnees
 ****************************************************************************************/
-typedef struct	db_company
+typedef struct	db_country
 {
     hder hdr;           // Header
     ccty cty[SZ_CTY];   // Buffer Country
