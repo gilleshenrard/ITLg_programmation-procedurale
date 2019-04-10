@@ -31,10 +31,14 @@ typedef struct Header
     uint sz_job;        // Taille bloc job
     uint sz_ind;        // Taille bloc industry
     uint sz_grp;        // Taille bloc group
+    uint sz_i_cty_name; // Size of the index for countries (by name)
     uint off_cty;       // Position bloc country
     uint off_job;       // Position bloc job
     uint off_ind;       // Position bloc industry
     uint off_grp;       // Position bloc group
+    uint off_i_cty_name;// Offset of the country index block (by name)
+    uint i_cty_name;    // Address of the root for the country index (by name)
+    char filler[52];    // filler to get the size to 128 bytes
 } hder;
 
 /***************************************************************************************
@@ -48,6 +52,15 @@ typedef struct Country
     char nm_cty[28];    // Nom du pays
     char cd_iso[4];     // Code Iso du pays
 } ccty;
+
+typedef struct i_Country_Name{
+    char tp_rec[8];     //record type (I_CTY)
+    char nm_cty[28];    //Country name
+    uint slot;          //Slot number in the table
+    uint s_left;        //Slot number of the left child in the table
+    uint s_right;       //Slot number of the right child in the table
+    char filler[16];    //filler to get the index size to 64
+}i_ccty_name;
 
 /***************************************************************************************
 * Table Job : dummy

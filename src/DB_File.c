@@ -17,6 +17,7 @@ void Create_DB(dbc *db)
     cjob job;
     cind ind;
     cgrp grp;
+    i_ccty_name index_cty_name;
     FILE *fp_db, *fp_lg;
 
     memset(&db->hdr, 0, sizeof(hder));
@@ -33,12 +34,16 @@ void Create_DB(dbc *db)
     db->hdr.sz_job = SZ_JOB;
     db->hdr.sz_ind = SZ_IND;
     db->hdr.sz_grp = SZ_GRP;
+    db->hdr.sz_i_cty_name = SZ_CTY;
 
     db->hdr.off_cty = sizeof(hder);
     db->hdr.off_job = db->hdr.off_cty + SZ_CTY * sizeof(ccty);
     db->hdr.off_ind = db->hdr.off_job + SZ_JOB * sizeof(cjob);
     db->hdr.off_grp = db->hdr.off_ind + SZ_IND * sizeof(cind);
-    db->hdr.db_size = db->hdr.off_grp + SZ_GRP * sizeof(cgrp);
+    db->hdr.off_i_cty_name = db->hdr.off_grp + SZ_GRP * sizeof(cgrp);
+    db->hdr.db_size = db->hdr.off_i_cty_name + SZ_CTY * sizeof(i_ccty_name);
+
+    db->hdr.i_cty_name = 0;
 
     fwrite(&db->hdr, 1, sizeof(db->hdr), fp_db);
 
@@ -73,6 +78,14 @@ void Create_DB(dbc *db)
 
     for (i=0; i<SZ_GRP; i++)
         fwrite(&grp, 1, sizeof(cgrp), fp_db);
+
+    // Country name index creation ----------------------------
+
+    memset(&index_cty_name, 0, sizeof(i_ccty_name));
+    strcpy(index_cty_name.tp_rec, "I_CTY");
+
+    for (i=0; i<SZ_CTY; i++)
+        fwrite(&index_cty_name, 1, sizeof(i_ccty_name), fp_db);
 
     fprintf(fp_lg, "Database %s created\n", db->hdr.db_name);
 

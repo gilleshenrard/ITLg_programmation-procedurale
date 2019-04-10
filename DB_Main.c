@@ -44,6 +44,13 @@ int main(void)
 void init_db(dbc* db){
     Create_DB(db);
     Import_CSV_Country(db);
+
+    printf("header size : %d\n", sizeof(hder));
+    printf("ccty size : %d\n", sizeof(ccty));
+    printf("cjob size : %d\n", sizeof(cjob));
+    printf("cind size : %d\n", sizeof(cind));
+    printf("cgrp size : %d\n", sizeof(cgrp));
+    printf("i_ccty_name size : %d\n", sizeof(i_ccty_name));
 }
 
 /****************************************************************************************/
