@@ -17,6 +17,9 @@
 #define SZ_IND 100
 #define SZ_GRP 3000
 
+#define DB_file "Data_DB_Comp\\DB_Comp.dat"
+#define log_file "Data_DB_Comp\\DB_Comp.log"
+
 typedef unsigned int uint;
 typedef unsigned short usint;
 
@@ -101,10 +104,5 @@ typedef struct	db_country
     ccty cty[SZ_CTY];   // Buffer Country
     int nr_cty;         // Nr elements dans buffer
 } dbc;
-
-/****************************************************************************************
-* Prototypes
-****************************************************************************************/
-void Create_DB(dbc *db);
 
 #endif

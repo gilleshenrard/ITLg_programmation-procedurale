@@ -8,6 +8,7 @@
 #include "lib/DB_Main.h"
 #include "lib/DB_Country.h"
 #include "lib/algo.h"
+#include "lib/DB_File.h"
 
 void init_db(dbc*);
 void tst_export_country(dbc*);
