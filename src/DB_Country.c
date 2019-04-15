@@ -249,6 +249,27 @@ int assign_country(void* oldelem, void* newelem){
     return 0;
 }
 
+/****************************************************************************************/
+/*  I : Country index buffer to which copy data                                         */
+/*      Country from which copy data                                                    */
+/*  P : Copies all the fields of a country to a country index buffer                    */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_country_index_name(void* index, void* elem){
+    ccty* element = (ccty*)elem;
+    i_ccty_name* i_element = (i_ccty_name*)index;
+
+    if(!index || !element)
+        return -1;
+
+    //copy the data from the country to the buffer
+    strcpy(i_element->nm_cty, element->nm_cty);
+    strcpy(i_element->tp_rec, "I_CTYNM");
+
+    return 0;
+}
+
 /************************************************************/
 /*  I : Countries to swap                                   */
 /*  P : Swaps two countries                                 */
@@ -361,12 +382,7 @@ int set_country_height(void* current, int value){
 /*      -1 if error                                         */
 /************************************************************/
 void* free_country(void* country, void* nullable){
-/*
-    ccty_recur *tmp = (ccty_recur*)country;
-    printf("Freeing %s\n", tmp->cty.nm_cty);
-*/
     free(country);
-
     return 0;
 }
 
@@ -385,37 +401,57 @@ void* free_country(void* country, void* nullable){
 /*      -1 otherwise                                                                */
 /************************************************************************************/
 int create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
-//    t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), doCompare, swap_country, NULL, NULL, NULL, NULL, NULL, NULL};
-    i_ccty_name index_cty_name = {0};
+    t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), doCompare, swap_country, assign_country_index_name, NULL, NULL, NULL, NULL, NULL};
+    i_ccty_name* index_cty_name = NULL;
     ccty buffer = {0};
     FILE *fp_db=NULL, *fp_lg=NULL;
     uint i=0;
 
     //open the files and position the pointers at the end
-    fp_db = fopen(DB_file, "a+b");
+    fp_db = fopen(DB_file, "r+b");
     fp_lg = fopen(log_file, "a");
 
     if(!fp_db || !fp_lg)
         return -1;
 
-    //clean the buffer memory space
-    memset(&index_cty_name, 0, sizeof(i_ccty_name));
-    strcpy(index_cty_name.tp_rec, "I_CTY");
+    //set the index offset to the current file pointer position
+    db->hdr.off_i_cty_name = ftell(fp_db);
 
-    //write all the slots sequentially
-    for (i=0; i<db->nr_cty; i++)
-        fwrite(&index_cty_name, 1, sizeof(i_ccty_name), fp_db);
+    //allocate the memory for the full size buffer and set an iterator pointer to it
+    meta.structure = calloc(db->nr_cty, sizeof(i_ccty_name));
+    index_cty_name = (i_ccty_name*)meta.structure;
 
-//    meta.structure = calloc(db->nr_cty, sizeof(i_ccty_name));
+    //read the country database sequentially and fill the buffer with it
     fseek(fp_db, db->hdr.off_cty, SEEK_SET);
-    for(i=0 ; i<db->nr_cty ; i++){
+    for(i=0 ; i<db->nr_cty ; i++, index_cty_name++){
+        index_cty_name->slot = ftell(fp_db);
         fread(&buffer, sizeof(ccty), 1, fp_db);
+        (*meta.doCopy)(index_cty_name, &buffer);
         memset(&buffer, 0, sizeof(ccty));
     }
 
-    //add a log entry after the creation
-    fprintf(fp_lg, "Index %s created\n", "I_CTY");
+    //sort the buffer
+    quickSort(&meta, 0, db->nr_cty-1);
 
+    //save the index offset in the header
+    fseek(fp_db, 0, SEEK_END);
+    db->hdr.off_i_cty_name = ftell(fp_db);
+
+    //sequentially create all index slots
+    index_cty_name = (i_ccty_name*)meta.structure;
+    for(i=0 ; i < db->nr_cty ; i++, index_cty_name++){
+        fwrite(index_cty_name, sizeof(i_ccty_name), 1, fp_db);
+    }
+
+    //save the new header values
+    db->hdr.db_size += sizeof(i_ccty_name)*db->nr_cty;
+    fseek(fp_db, 0, SEEK_SET);
+    fwrite(&db->hdr, sizeof(hder), 1, fp_db);
+
+    //add a log entry after the creation
+    fprintf(fp_lg, "Index %s created... %d records added\n", "I_CTY_NM", i);
+
+    free(meta.structure);
     fclose(fp_db);
     fclose(fp_lg);
 

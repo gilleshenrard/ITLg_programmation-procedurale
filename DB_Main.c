@@ -17,6 +17,7 @@ void tst_Print_country(dbc*);
 void tst_List_country(dbc*);
 void tst_AVL_country(dbc*);
 void tst_AVL_search_country(dbc*);
+void tst_index_country_name(dbc* db);
 
 /****************************************************************************************
 * Programme principal
@@ -32,6 +33,7 @@ int main(void)
     tst_List_country(&db);
     tst_AVL_country(&db);
     tst_AVL_search_country(&db);
+    tst_index_country_name(&db);
 
 	return 0;
 }
@@ -161,4 +163,16 @@ void tst_AVL_search_country(dbc* db){
     cty_avl.doCompare = compare_country_name;
     while(cty_avl.structure)
         delete_AVL_root(&cty_avl);
+}
+
+/****************************************************************************************/
+/*  I : Country Database in which create a country name index                           */
+/*  P : Tests the country name index creation at the end of the database                */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_index_country_name(dbc* db){
+
+    printf("\n--------------- tst_index_country_name ---------------------------------\n");
+
+    create_index_unbuffered(db, compare_country_name);
 }
