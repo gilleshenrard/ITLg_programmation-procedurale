@@ -56,15 +56,6 @@ typedef struct Country
     char cd_iso[4];     // Code Iso du pays
 } ccty;
 
-typedef struct i_Country_Name{
-    char tp_rec[8];     //record type (I_CTY)
-    char nm_cty[28];    //Country name
-    uint slot;          //Slot number in the table
-    uint s_left;        //Slot number of the left child in the table
-    uint s_right;       //Slot number of the right child in the table
-    char filler[16];    //filler to get the index size to 64
-}i_ccty_name;
-
 /***************************************************************************************
 * Table Job : dummy
 ****************************************************************************************/

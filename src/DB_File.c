@@ -39,8 +39,7 @@ void Create_DB(dbc *db)
     db->hdr.off_job = db->hdr.off_cty + SZ_CTY * sizeof(ccty);
     db->hdr.off_ind = db->hdr.off_job + SZ_JOB * sizeof(cjob);
     db->hdr.off_grp = db->hdr.off_ind + SZ_IND * sizeof(cind);
-    db->hdr.off_i_cty_name = db->hdr.off_grp + SZ_GRP * sizeof(cgrp);
-    db->hdr.db_size = db->hdr.off_i_cty_name + SZ_CTY * sizeof(i_ccty_name);
+    db->hdr.db_size = db->hdr.off_grp + SZ_GRP * sizeof(cgrp);
 
     db->hdr.i_cty_name = 0;
 
@@ -86,37 +85,4 @@ void Create_DB(dbc *db)
     printf("Databse %s created \n", db->hdr.db_name);
 
     return;
-}
-/************************************************************************************/
-/*  I : database in which create the index                                          */
-/*  P : Creates the slots for the requested index at the end of the database        */
-/*  O :  0 if OK                                                                    */
-/*      -1 otherwise                                                                */
-/************************************************************************************/
-int create_index_unbuffered(dbc* db){
-    i_ccty_name index_cty_name;
-    FILE *fp_db=NULL, *fp_lg=NULL;
-
-    //open the files and position the pointers at the end
-    fp_db = fopen(DB_file, "a+b");
-    fp_lg = fopen(log_file, "a");
-
-    if(!fp_db || !fp_lg)
-        return -1;
-
-    //clean the buffer memory space
-    memset(&index_cty_name, 0, sizeof(i_ccty_name));
-    strcpy(index_cty_name.tp_rec, "I_CTY");
-
-    //write all the slots sequentially
-    for (int i=0; i<SZ_CTY; i++)
-        fwrite(&index_cty_name, 1, sizeof(i_ccty_name), fp_db);
-
-    //add a log entry after the creation
-    fprintf(fp_lg, "Index %s created\n", "I_CTY");
-
-    fclose(fp_db);
-    fclose(fp_lg);
-
-    return 0;
 }

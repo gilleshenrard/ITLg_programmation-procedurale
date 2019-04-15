@@ -375,4 +375,51 @@ void* free_country(void* country, void* nullable){
 ////////////////////////////////////////////////// FILES METHODS /////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/************************************************************************************/
+/*  I : database in which create the index                                          */
+/*      metadata of the data structure to be indexed                                */
+/*      number of slots to create                                                   */
+/*      record type of the index                                                    */
+/*  P : Creates the slots for the requested index at the end of the database        */
+/*  O :  0 if OK                                                                    */
+/*      -1 otherwise                                                                */
+/************************************************************************************/
+int create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
+//    t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), doCompare, swap_country, NULL, NULL, NULL, NULL, NULL, NULL};
+    i_ccty_name index_cty_name = {0};
+    ccty buffer = {0};
+    FILE *fp_db=NULL, *fp_lg=NULL;
+    uint i=0;
+
+    //open the files and position the pointers at the end
+    fp_db = fopen(DB_file, "a+b");
+    fp_lg = fopen(log_file, "a");
+
+    if(!fp_db || !fp_lg)
+        return -1;
+
+    //clean the buffer memory space
+    memset(&index_cty_name, 0, sizeof(i_ccty_name));
+    strcpy(index_cty_name.tp_rec, "I_CTY");
+
+    //write all the slots sequentially
+    for (i=0; i<db->nr_cty; i++)
+        fwrite(&index_cty_name, 1, sizeof(i_ccty_name), fp_db);
+
+//    meta.structure = calloc(db->nr_cty, sizeof(i_ccty_name));
+    fseek(fp_db, db->hdr.off_cty, SEEK_SET);
+    for(i=0 ; i<db->nr_cty ; i++){
+        fread(&buffer, sizeof(ccty), 1, fp_db);
+        memset(&buffer, 0, sizeof(ccty));
+    }
+
+    //add a log entry after the creation
+    fprintf(fp_lg, "Index %s created\n", "I_CTY");
+
+    fclose(fp_db);
+    fclose(fp_lg);
+
+    return 0;
+}
+
 

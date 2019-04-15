@@ -8,6 +8,7 @@
 #ifndef DB_COUNTRY_H_INCLUDED
 #define DB_COUNTRY_H_INCLUDED
 #include "../lib/DB_Main.h"
+#include "../lib/algo.h"
 
 #define PRT 0
 #define BUF_LEN 200
@@ -22,11 +23,14 @@ struct ccty_recur{
     ccty_recur *right;
 };
 
-struct ccty_file{
-    ccty cty;
-    usint left;
-    usint right;
-};
+typedef struct i_Country_Name{
+    char tp_rec[8];     //record type (I_CTY)
+    char nm_cty[28];    //Country name
+    uint slot;          //Slot number in the table
+    uint s_left;        //Slot number of the left child in the table
+    uint s_right;       //Slot number of the right child in the table
+    char filler[16];    //filler to get the index size to 64
+}i_ccty_name;
 
 //database methods
 void Import_CSV_Country(dbc *db);
@@ -50,5 +54,6 @@ int set_country_height(void* current, int value);
 void* free_country(void* country, void* nullable);
 
 //file structures methods
+int create_index_unbuffered(dbc* db, int (*doAction)(void*, void*));
 
 #endif // DB_COUNTRY_H_INCLUDED
