@@ -12,6 +12,7 @@
 
 #define PRT 0
 #define BUF_LEN 200
+#define SZ_TYPE 8
 #define SZ_NAME 28
 
 typedef struct ccty_recur ccty_recur;
@@ -25,7 +26,7 @@ struct ccty_recur{
 };
 
 typedef struct i_Country_Name{
-    char tp_rec[8];         //record type (I_CTY)
+    char tp_rec[SZ_TYPE];   //record type (I_CTY)
     char nm_cty[SZ_NAME];   //Country name
     long slot;              //Slot number in the table
     long s_left;            //Slot number of the left child in the table

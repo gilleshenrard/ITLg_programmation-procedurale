@@ -177,6 +177,8 @@ void tst_index_country_name(dbc* db){
     printf("\n--------------- tst_index_country_name ---------------------------------\n");
 
     create_index_unbuffered(db, compare_country_name);
+
+    printf("Number of elements : %d\n", db->nr_cty);
     printf("index block offset : %X\n", db->hdr.off_i_cty_name);
     printf("index tree root : %X\n\n", db->hdr.i_cty_name);
 
@@ -185,7 +187,7 @@ void tst_index_country_name(dbc* db){
         fseek(fp, db->hdr.off_i_cty_name, SEEK_SET);
         for(int i=0 ; i<db->nr_cty ; i++){
             fread(&buffer, sizeof(i_ccty_name), 1, fp);
-            printf("%28s\t%ld\t%ld\t%ld\n", buffer.nm_cty, ftell(fp), buffer.s_left, buffer.s_right);
+            printf("%28s\t%lx\t%lx\t%lx\n", buffer.nm_cty, ftell(fp), buffer.s_left, buffer.s_right);
         }
         fclose(fp);
     }
