@@ -429,7 +429,7 @@ long create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
     }
 
     //sort the buffer
-    quickSort(&meta, 0, db->nr_cty-1);
+    quickSort(&meta, 0, db->nr_cty);
 
     //save the index offset in the header
     fseek(fp_db, 0, SEEK_END);
