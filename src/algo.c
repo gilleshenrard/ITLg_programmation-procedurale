@@ -837,8 +837,8 @@ void* min_AVL_value(t_algo_meta* meta, void* avl){
 /*          binary tree (changes the pointers only)         */
 /*  O : Offset of the current tree root                     */
 /************************************************************/
-int index_tree(dbc* db, uint offset_start, int nb, int key_size, FILE* fp){
-    uint old_offset=0, root=0, subtree=0;
+long index_tree(dbc* db, long offset_start, int nb, int key_size, FILE* fp){
+    long old_offset=0, root=0, subtree=0;
     int nbelem=0, nb_g=0, nb_d=0;
 
     //save the previous tree root offset
@@ -852,19 +852,19 @@ int index_tree(dbc* db, uint offset_start, int nb, int key_size, FILE* fp){
 
     if(nb_g > 0){
         //set the file pointer to the "left child" field of the current root in the disk
-        fseek(fp, offset_start + nb_g*sizeof(i_ccty_name) + (8+key_size+sizeof(uint)), SEEK_SET);
+        fseek(fp, offset_start + nb_g*sizeof(i_ccty_name) + (8+key_size+sizeof(long)), SEEK_SET);
 
         //define the left child offset and save it for the root
         subtree = index_tree(db, offset_start, nb_g, key_size, fp);
-        fwrite(&subtree, sizeof(uint), 1, fp);
+        fwrite(&subtree, sizeof(long), 1, fp);
     }
     if(nb_d > 0){
         //set the file pointer to the "right child" field of the current root in the disk
-        fseek(fp, offset_start + nb_g*sizeof(i_ccty_name) + (8+key_size+2*sizeof(uint)), SEEK_SET);
+        fseek(fp, offset_start + nb_g*sizeof(i_ccty_name) + (8+key_size+2*sizeof(long)), SEEK_SET);
 
         //define the right child offset and save it for the root
         subtree = index_tree(db, offset_start + (nb_g+1)*sizeof(i_ccty_name), nb_g, key_size, fp);
-        fwrite(&subtree, sizeof(uint), 1, fp);
+        fwrite(&subtree, sizeof(long), 1, fp);
     }
 
     //get the offset of the current root

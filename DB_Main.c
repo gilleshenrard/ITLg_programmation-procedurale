@@ -27,12 +27,12 @@ int main(void)
     dbc db;
     init_db(&db);
 
-    tst_export_country(&db);
+//    tst_export_country(&db);
     tst_Load_country(&db);
-    tst_Print_country(&db);
-    tst_List_country(&db);
+//    tst_Print_country(&db);
+//    tst_List_country(&db);
     tst_AVL_country(&db);
-    tst_AVL_search_country(&db);
+//    tst_AVL_search_country(&db);
     tst_index_country_name(&db);
 
 	return 0;
@@ -171,8 +171,22 @@ void tst_AVL_search_country(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void tst_index_country_name(dbc* db){
+    FILE* fp = NULL;
+    i_ccty_name buffer = {0};
 
     printf("\n--------------- tst_index_country_name ---------------------------------\n");
 
     create_index_unbuffered(db, compare_country_name);
+    printf("index block offset : %X\n", db->hdr.off_i_cty_name);
+    printf("index tree root : %X\n\n", db->hdr.i_cty_name);
+
+    fp = fopen(DB_file, "rb");
+    if(fp){
+        fseek(fp, db->hdr.off_i_cty_name, SEEK_SET);
+        for(int i=0 ; i<db->nr_cty ; i++){
+            fread(&buffer, sizeof(i_ccty_name), 1, fp);
+            printf("%28s\t%ld\t%ld\t%ld\n", buffer.nm_cty, ftell(fp), buffer.s_left, buffer.s_right);
+        }
+        fclose(fp);
+    }
 }

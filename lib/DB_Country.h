@@ -12,6 +12,7 @@
 
 #define PRT 0
 #define BUF_LEN 200
+#define SZ_NAME 28
 
 typedef struct ccty_recur ccty_recur;
 typedef struct ccty_file ccty_file;
@@ -24,12 +25,12 @@ struct ccty_recur{
 };
 
 typedef struct i_Country_Name{
-    char tp_rec[8];     //record type (I_CTY)
-    char nm_cty[28];    //Country name
-    uint slot;          //Slot number in the table
-    uint s_left;        //Slot number of the left child in the table
-    uint s_right;       //Slot number of the right child in the table
-    char filler[16];    //filler to get the index size to 64
+    char tp_rec[8];         //record type (I_CTY)
+    char nm_cty[SZ_NAME];   //Country name
+    long slot;              //Slot number in the table
+    long s_left;            //Slot number of the left child in the table
+    long s_right;           //Slot number of the right child in the table
+    char filler[16];        //filler to get the index size to 64
 }i_ccty_name;
 
 //database methods
@@ -54,6 +55,6 @@ int set_country_height(void* current, int value);
 void* free_country(void* country, void* nullable);
 
 //file structures methods
-int create_index_unbuffered(dbc* db, int (*doAction)(void*, void*));
+long create_index_unbuffered(dbc* db, int (*doAction)(void*, void*));
 
 #endif // DB_COUNTRY_H_INCLUDED

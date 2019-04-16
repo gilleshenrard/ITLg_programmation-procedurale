@@ -400,12 +400,13 @@ void* free_country(void* country, void* nullable){
 /*  O :  0 if OK                                                                    */
 /*      -1 otherwise                                                                */
 /************************************************************************************/
-int create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
+long create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
     t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), doCompare, swap_country, assign_country_index_name, NULL, NULL, NULL, NULL, NULL};
     i_ccty_name* index_cty_name = NULL;
     ccty buffer = {0};
     FILE *fp_db=NULL, *fp_lg=NULL;
-    uint i=0;
+    int i=0;
+    long root=0;
 
     //open the files and position the pointers at the end
     fp_db = fopen(DB_file, "r+b");
@@ -440,12 +441,13 @@ int create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
         fwrite(index_cty_name, sizeof(i_ccty_name), 1, fp_db);
     }
 
+    root = index_tree(db, db->hdr.off_i_cty_name, db->nr_cty, SZ_NAME, fp_db);
+
     //write the new header values to disk
     db->hdr.db_size += sizeof(i_ccty_name)*db->nr_cty;
+    db->hdr.i_cty_name = root;
     fseek(fp_db, 0, SEEK_SET);
     fwrite(&db->hdr, sizeof(hder), 1, fp_db);
-
-    index_tree(db, db->hdr.off_i_cty_name, db->nr_cty, 28, fp_db);
 
     //add a log entry after the creation
     fprintf(fp_lg, "Index %s created... %d records added\n", "I_CTY_NM", i);
