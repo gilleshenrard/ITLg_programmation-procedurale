@@ -414,9 +414,6 @@ int create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
     if(!fp_db || !fp_lg)
         return -1;
 
-    //set the index offset to the current file pointer position
-    db->hdr.off_i_cty_name = ftell(fp_db);
-
     //allocate the memory for the full size buffer and set an iterator pointer to it
     meta.structure = calloc(db->nr_cty, sizeof(i_ccty_name));
     index_cty_name = (i_ccty_name*)meta.structure;
@@ -443,10 +440,12 @@ int create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
         fwrite(index_cty_name, sizeof(i_ccty_name), 1, fp_db);
     }
 
-    //save the new header values
+    //write the new header values to disk
     db->hdr.db_size += sizeof(i_ccty_name)*db->nr_cty;
     fseek(fp_db, 0, SEEK_SET);
     fwrite(&db->hdr, sizeof(hder), 1, fp_db);
+
+    index_tree(db, db->hdr.off_i_cty_name, db->nr_cty, 28, fp_db);
 
     //add a log entry after the creation
     fprintf(fp_lg, "Index %s created... %d records added\n", "I_CTY_NM", i);

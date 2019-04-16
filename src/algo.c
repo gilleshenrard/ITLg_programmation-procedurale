@@ -825,3 +825,54 @@ void* min_AVL_value(t_algo_meta* meta, void* avl){
 
     return current;
 }
+
+/************************************************************/
+/*  I : Database in which establish the binary tree         */
+/*      Offset of the first element of the data block       */
+/*      Number of elements in the data block                */
+/*      Size of the elements' key                           */
+/*      file pointer to the database                        */
+/*  P : Assuming the block is filled with a known number of */
+/*          elements, the algo will chain its members as a  */
+/*          binary tree (changes the pointers only)         */
+/*  O : Offset of the current tree root                     */
+/************************************************************/
+int index_tree(dbc* db, uint offset_start, int nb, int key_size, FILE* fp){
+    uint old_offset=0, root=0, subtree=0;
+    int nbelem=0, nb_g=0, nb_d=0;
+
+    //save the previous tree root offset
+    old_offset = ftell(fp);
+
+    //define the number of elements (even or odd number)
+    //  and the number of elements on left and right
+    nbelem = nb-1;
+    nb_g = nbelem/2;
+    nb_d = nbelem - nb_g;
+
+    if(nb_g > 0){
+        //set the file pointer to the "left child" field of the current root in the disk
+        fseek(fp, offset_start + nb_g*sizeof(i_ccty_name) + (8+key_size+sizeof(uint)), SEEK_SET);
+
+        //define the left child offset and save it for the root
+        subtree = index_tree(db, offset_start, nb_g, key_size, fp);
+        fwrite(&subtree, sizeof(uint), 1, fp);
+    }
+    if(nb_d > 0){
+        //set the file pointer to the "right child" field of the current root in the disk
+        fseek(fp, offset_start + nb_g*sizeof(i_ccty_name) + (8+key_size+2*sizeof(uint)), SEEK_SET);
+
+        //define the right child offset and save it for the root
+        subtree = index_tree(db, offset_start + (nb_g+1)*sizeof(i_ccty_name), nb_g, key_size, fp);
+        fwrite(&subtree, sizeof(uint), 1, fp);
+    }
+
+    //get the offset of the current root
+    fseek(fp, offset_start + nb_g*sizeof(i_ccty_name), SEEK_SET);
+    root = ftell(fp);
+
+    //restore the previous tree root offset
+    fseek(fp, old_offset, SEEK_SET);
+
+    return root;
+}

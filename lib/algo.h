@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "DB_Main.h"
+#include "DB_Country.h"
 
 typedef struct {
     void*   structure;
@@ -58,5 +60,8 @@ void* search_AVL(t_algo_meta* meta, void* avl, void* key);
 void* delete_AVL(t_algo_meta* meta, void* root, void* key);
 void* min_AVL_value(t_algo_meta* meta, void* avl);
 int delete_AVL_root(t_algo_meta* meta);
+
+//File binary trees
+int index_tree(dbc* db, uint offset_start, int nb, int key_size, FILE* fp);
 
 #endif // ALGO_H_INCLUDED
