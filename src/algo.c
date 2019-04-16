@@ -867,7 +867,7 @@ long index_tree(dbc* db, long offset_start, int nb, int key_size, FILE* fp){
     }
 
     //get the offset of the current root
-    fseek(fp, offset_start + nb_g*sizeof(i_ccty_name), SEEK_SET);
+    fseek(fp, offset_start + (nb_g+1)*sizeof(i_ccty_name), SEEK_SET);
     root = ftell(fp);
 
     //restore the previous tree root offset
