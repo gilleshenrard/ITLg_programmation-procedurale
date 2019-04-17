@@ -827,11 +827,10 @@ void* min_AVL_value(t_algo_meta* meta, void* avl){
 }
 
 /************************************************************/
-/*  I : Database in which establish the binary tree         */
+/*  I : File pointer to the database                        */
 /*      Offset of the first element of the data block       */
 /*      Number of elements in the data block                */
-/*      Size of the elements' key                           */
-/*      file pointer to the database                        */
+/*      Metadata necessary to the algorithm                 */
 /*  P : Assuming the block is filled with a known number of */
 /*          elements, the algo will chain its members as a  */
 /*          binary tree (changes the pointers only)         */
