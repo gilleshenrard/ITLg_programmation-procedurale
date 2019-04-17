@@ -413,8 +413,8 @@ void* free_country(void* country, void* nullable){
 /************************************************************************************/
 /*  I : database in which create the index                                          */
 /*      metadata of the data structure to be indexed                                */
-/*      number of slots to create                                                   */
-/*      record type of the index                                                    */
+/*      field in the header in which the block offset is held                       */
+/*      field in the header in which the tree root offset is held                   */
 /*  P : Creates the slots for the requested index at the end of the database        */
 /*  O :  0 if OK                                                                    */
 /*      -1 otherwise                                                                */
@@ -440,12 +440,16 @@ long create_country_index_file(dbc* db, t_algo_meta* meta, long* block_off, long
     //read the country database sequentially and fill the buffer with it
     fseek(db->fp, db->hdr.off_cty, SEEK_SET);
     for(i=0 ; i<db->nr_cty ; i++){
+        //get the offset in the actual country table and save it in the corresponding index element
         tmp = ftell(db->fp);
         (*meta->setSlot)(index_cty_name, &tmp);
+
+        //read the element and copy the right field in the index element
         fread(&buffer, sizeof(ccty), 1, db->fp);
         (*meta->doCopy)(index_cty_name, &buffer);
-        memset(&buffer, 0, sizeof(ccty));
 
+        //reset the buffer and increment the iterator
+        memset(&buffer, 0, sizeof(ccty));
         index_cty_name += meta->elementsize;
     }
 
@@ -454,16 +458,16 @@ long create_country_index_file(dbc* db, t_algo_meta* meta, long* block_off, long
 
     //save the index offset in the header
     fseek(db->fp, 0, SEEK_END);
-    db->hdr.off_i_cty_name = ftell(db->fp);
+    *block_off = ftell(db->fp);
 
-    //sequentially create all index slots
+    //sequentially write the buffer in memory (without tree chaining)
     index_cty_name = meta->structure;
     for(i=0 ; i < db->nr_cty ; i++){
         fwrite(index_cty_name, meta->elementsize, 1, db->fp);
-
         index_cty_name += meta->elementsize;
     }
 
+    //create the binary tree chaining
     root = index_tree(db->fp, *block_off, db->nr_cty, meta);
 
     //write the new header values to disk
