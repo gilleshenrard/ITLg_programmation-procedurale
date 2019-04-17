@@ -441,7 +441,7 @@ long create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
         fwrite(index_cty_name, sizeof(i_ccty_name), 1, db->fp);
     }
 
-    root = index_tree(db, db->hdr.off_i_cty_name, db->nr_cty, SZ_NAME);
+    root = index_tree(db->fp, db->hdr.off_i_cty_name, db->nr_cty, SZ_NAME);
 
     //write the new header values to disk
     db->hdr.db_size += sizeof(i_ccty_name)*db->nr_cty;
