@@ -13,10 +13,10 @@ void Import_CSV_Country(dbc *db)
     char fld[BUF_LEN];
     char *ptr1, *ptr2;
 	ccty cty;
-	FILE *fpi, *fp_db, *fp_lg;
+	FILE *fpi, *fp_lg;
 
-    fp_db = fopen("Data_DB_Comp\\DB_Comp.dat", "rb+");
-    fp_lg = fopen("Data_DB_Comp\\DB_Comp.log", "a");
+    db->fp = fopen(DB_file, "rb+");
+    fp_lg = fopen(log_file, "a");
 
 	fpi = fopen("Data_Import/DB_Country.csv", "r");
 	if (fpi == NULL) { printf("Erreur\n"); return; }
@@ -25,7 +25,7 @@ void Import_CSV_Country(dbc *db)
 
     fgets(line, 200, fpi);
 
-    fseek(fp_db, db->hdr.off_cty, SEEK_SET);
+    fseek(db->fp, db->hdr.off_cty, SEEK_SET);
 
     printf("%08X\n",db->hdr.off_cty);
 
@@ -51,7 +51,7 @@ void Import_CSV_Country(dbc *db)
         ptr1 = ptr2;
         strncpy(cty.cd_iso, ptr1, strlen(ptr1)-1); if (PRT) printf("%s\n", cty.cd_iso);
 
-        fwrite(&cty, 1, sizeof(ccty), fp_db);
+        fwrite(&cty, 1, sizeof(ccty), db->fp);
 
         i++;
     }
@@ -60,7 +60,7 @@ void Import_CSV_Country(dbc *db)
 
     fprintf(fp_lg, "Country imported : %d \n", db->nr_cty);
 
-    fclose(fp_db);
+    fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
@@ -76,21 +76,21 @@ void Export_CSV_Country(dbc *db)
 {
     int i;
 	ccty cty;
-	FILE *fpo, *fp_db, *fp_lg;
+	FILE *fpo, *fp_lg;
 
-    fp_db = fopen("Data_DB_Comp\\DB_Comp.dat", "rb+");
-    fp_lg = fopen("Data_DB_Comp\\DB_Comp.log", "a");
+    db->fp = fopen(DB_file, "rb+");
+    fp_lg = fopen(log_file, "a");
 
     printf("\nCountry : exporting ...\n");
     fpo = fopen("Data_Export/Exp_Country.csv", "w");
     fprintf(fpo,"Id;Nm_Cty;Nm_Zon;Cd_Iso\n");
 
-    fseek(fp_db, db->hdr.off_cty, SEEK_SET);
+    fseek(db->fp, db->hdr.off_cty, SEEK_SET);
 
     for (i=0; i<db->nr_cty; i++)
     {
         memset(&cty, 0, sizeof(ccty));
-        fread(&cty, 1, sizeof(ccty), fp_db);
+        fread(&cty, 1, sizeof(ccty), db->fp);
 
         fprintf(fpo,"%d;%s;%s;%s\n",
                 cty.id_cty,
@@ -101,7 +101,7 @@ void Export_CSV_Country(dbc *db)
 
     fprintf(fp_lg, "Country exported : %d \n", db->nr_cty);
 
-    fclose(fp_db);
+    fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
@@ -117,26 +117,26 @@ void Load_Country(dbc *db)
 {
     int i;
 	ccty cty;
-	FILE *fp_db, *fp_lg;
+	FILE *fp_lg;
 
-    fp_db = fopen("Data_DB_Comp\\DB_Comp.dat", "rb+");
-    fp_lg = fopen("Data_DB_Comp\\DB_Comp.log", "a");
+    db->fp = fopen(DB_file, "rb+");
+    fp_lg = fopen(log_file, "a");
 
     printf("\nCountry : loading ...\n");
 
-    fseek(fp_db, db->hdr.off_cty, SEEK_SET);
+    fseek(db->fp, db->hdr.off_cty, SEEK_SET);
 
     for (i=1; i<=db->nr_cty; i++)
     {
         memset(&cty, 0, sizeof(ccty));
-        fread(&cty, 1, sizeof(ccty), fp_db);
+        fread(&cty, 1, sizeof(ccty), db->fp);
 
         db->cty[i] = cty;
     }
 
     fprintf(fp_lg, "Country loaded into buffer : %d \n", db->nr_cty);
 
-    fclose(fp_db);
+    fclose(db->fp);
     fclose(fp_lg);
 
     printf("\nCountry loaded into buffer : %d \n\n", db->nr_cty);
@@ -404,15 +404,15 @@ long create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
     t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), doCompare, swap_country, assign_country_index_name, NULL, NULL, NULL, NULL, NULL};
     i_ccty_name* index_cty_name = NULL;
     ccty buffer = {0};
-    FILE *fp_db=NULL, *fp_lg=NULL;
+    FILE *fp_lg=NULL;
     int i=0;
     long root=0;
 
     //open the files and position the pointers at the end
-    fp_db = fopen(DB_file, "r+b");
+    db->fp = fopen(DB_file, "r+b");
     fp_lg = fopen(log_file, "a");
 
-    if(!fp_db || !fp_lg)
+    if(!db->fp || !fp_lg)
         return -1;
 
     //allocate the memory for the full size buffer and set an iterator pointer to it
@@ -420,10 +420,10 @@ long create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
     index_cty_name = (i_ccty_name*)meta.structure;
 
     //read the country database sequentially and fill the buffer with it
-    fseek(fp_db, db->hdr.off_cty, SEEK_SET);
+    fseek(db->fp, db->hdr.off_cty, SEEK_SET);
     for(i=0 ; i<db->nr_cty ; i++, index_cty_name++){
-        index_cty_name->slot = ftell(fp_db);
-        fread(&buffer, sizeof(ccty), 1, fp_db);
+        index_cty_name->slot = ftell(db->fp);
+        fread(&buffer, sizeof(ccty), 1, db->fp);
         (*meta.doCopy)(index_cty_name, &buffer);
         memset(&buffer, 0, sizeof(ccty));
     }
@@ -432,28 +432,28 @@ long create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
     quickSort(&meta, 0, db->nr_cty);
 
     //save the index offset in the header
-    fseek(fp_db, 0, SEEK_END);
-    db->hdr.off_i_cty_name = ftell(fp_db);
+    fseek(db->fp, 0, SEEK_END);
+    db->hdr.off_i_cty_name = ftell(db->fp);
 
     //sequentially create all index slots
     index_cty_name = (i_ccty_name*)meta.structure;
     for(i=0 ; i < db->nr_cty ; i++, index_cty_name++){
-        fwrite(index_cty_name, sizeof(i_ccty_name), 1, fp_db);
+        fwrite(index_cty_name, sizeof(i_ccty_name), 1, db->fp);
     }
 
-    root = index_tree(db, db->hdr.off_i_cty_name, db->nr_cty, SZ_NAME, fp_db);
+    root = index_tree(db, db->hdr.off_i_cty_name, db->nr_cty, SZ_NAME);
 
     //write the new header values to disk
     db->hdr.db_size += sizeof(i_ccty_name)*db->nr_cty;
     db->hdr.i_cty_name = root;
-    fseek(fp_db, 0, SEEK_SET);
-    fwrite(&db->hdr, sizeof(hder), 1, fp_db);
+    fseek(db->fp, 0, SEEK_SET);
+    fwrite(&db->hdr, sizeof(hder), 1, db->fp);
 
     //add a log entry after the creation
     fprintf(fp_lg, "Index %s created... %d records added\n", "I_CTY_NM", i);
 
     free(meta.structure);
-    fclose(fp_db);
+    fclose(db->fp);
     fclose(fp_lg);
 
     return 0;

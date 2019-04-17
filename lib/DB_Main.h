@@ -91,6 +91,7 @@ typedef struct Group
 ****************************************************************************************/
 typedef struct	db_country
 {
+    FILE* fp;           // File pointer to the database
     hder hdr;           // Header
     ccty cty[SZ_CTY];   // Buffer Country
     int nr_cty;         // Nr elements dans buffer

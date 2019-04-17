@@ -62,6 +62,6 @@ void* min_AVL_value(t_algo_meta* meta, void* avl);
 int delete_AVL_root(t_algo_meta* meta);
 
 //File binary trees
-long index_tree(dbc* db, long offset_start, int nb, int key_size, FILE* fp);
+long index_tree(dbc* db, long offset_start, int nb, int key_size);
 
 #endif // ALGO_H_INCLUDED
