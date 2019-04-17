@@ -26,10 +26,10 @@ struct ccty_recur{
 typedef struct i_Country_Name{
     char tp_rec[SZ_TYPE];   //record type (I_CTY)
     char nm_cty[SZ_NAME];   //Country name
+    char filler[16];        //filler to get the index size to 64
     long slot;              //Slot number in the table
     long s_left;            //Slot number of the left child in the table
     long s_right;           //Slot number of the right child in the table
-    char filler[16];        //filler to get the index size to 64
 }i_ccty_name;
 
 //database methods

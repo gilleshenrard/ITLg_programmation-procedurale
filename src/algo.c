@@ -851,7 +851,7 @@ long index_tree(dbc* db, long offset_start, int nb, int key_size){
 
     if(nb_g > 0){
         //set the file pointer to the "left child" field of the current root in the disk
-        fseek(db->fp, offset_start + nb_g*sizeof(i_ccty_name) + (SZ_TYPE+key_size+sizeof(long)), SEEK_SET);
+        fseek(db->fp, offset_start + nb_g*(SZ_TYPE+key_size+16+3*sizeof(long)) + (SZ_TYPE+key_size+16+sizeof(long)), SEEK_SET);
 
         //define the left child offset and save it for the root
         subtree = index_tree(db, offset_start, nb_g, key_size);
@@ -859,15 +859,15 @@ long index_tree(dbc* db, long offset_start, int nb, int key_size){
     }
     if(nb_d > 0){
         //set the file pointer to the "right child" field of the current root in the disk
-        fseek(db->fp, offset_start + nb_g*sizeof(i_ccty_name) + (SZ_TYPE+key_size+2*sizeof(long)), SEEK_SET);
+        fseek(db->fp, offset_start + nb_g*(SZ_TYPE+key_size+16+3*sizeof(long)) + (SZ_TYPE+key_size+16+2*sizeof(long)), SEEK_SET);
 
         //define the right child offset and save it for the root
-        subtree = index_tree(db, offset_start + (nb_g+1)*sizeof(i_ccty_name), nb_d, key_size);
+        subtree = index_tree(db, offset_start + (nb_g+1)*(SZ_TYPE+key_size+16+3*sizeof(long)), nb_d, key_size);
         fwrite(&subtree, sizeof(long), 1, db->fp);
     }
 
     //get the offset of the current root
-    fseek(db->fp, offset_start + (nb_g)*sizeof(i_ccty_name), SEEK_SET);
+    fseek(db->fp, offset_start + (nb_g)*(SZ_TYPE+key_size+16+3*sizeof(long)), SEEK_SET);
     root = ftell(db->fp);
 
     //restore the previous tree root offset
