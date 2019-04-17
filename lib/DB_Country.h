@@ -12,8 +12,6 @@
 
 #define PRT 0
 #define BUF_LEN 200
-#define SZ_TYPE 8
-#define SZ_NAME 28
 
 typedef struct ccty_recur ccty_recur;
 typedef struct ccty_file ccty_file;

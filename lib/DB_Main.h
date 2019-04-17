@@ -17,6 +17,9 @@
 #define SZ_IND 100
 #define SZ_GRP 3000
 
+#define SZ_TYPE 8
+#define SZ_NAME 28
+
 #define DB_file "Data_DB_Comp\\DB_Comp.dat"
 #define log_file "Data_DB_Comp\\DB_Comp.log"
 
@@ -28,20 +31,20 @@ typedef unsigned short usint;
 ****************************************************************************************/
 typedef struct Header
 {
-    uint db_size;       // Taille de la database
-    char db_name[28];   // Nom de la database
-    uint sz_cty;        // Taille bloc country
-    uint sz_job;        // Taille bloc job
-    uint sz_ind;        // Taille bloc industry
-    uint sz_grp;        // Taille bloc group
-    uint sz_i_cty_name; // Size of the index for countries (by name)
-    uint off_cty;       // Position bloc country
-    uint off_job;       // Position bloc job
-    uint off_ind;       // Position bloc industry
-    uint off_grp;       // Position bloc group
-    uint off_i_cty_name;// Offset of the country index block (by name)
-    uint i_cty_name;    // Address of the root for the country index (by name)
-    char filler[52];    // filler to get the size to 128 bytes
+    uint db_size;           // Taille de la database
+    char db_name[SZ_NAME];  // Nom de la database
+    uint sz_cty;            // Taille bloc country
+    uint sz_job;            // Taille bloc job
+    uint sz_ind;            // Taille bloc industry
+    uint sz_grp;            // Taille bloc group
+    uint sz_i_cty_name;     // Size of the index for countries (by name)
+    uint off_cty;           // Position bloc country
+    uint off_job;           // Position bloc job
+    uint off_ind;           // Position bloc industry
+    uint off_grp;           // Position bloc group
+    uint off_i_cty_name;    // Offset of the country index block (by name)
+    uint i_cty_name;        // Address of the root for the country index (by name)
+    char filler[52];        // filler to get the size to 128 bytes
 } hder;
 
 /***************************************************************************************
@@ -49,11 +52,11 @@ typedef struct Header
 ****************************************************************************************/
 typedef struct Country
 {
-    char tp_rec[8];     // Type de record CTY
-    int  id_cty;        // Cle primaire
-    char nm_zon[20];    // Nom de la zone geographique
-    char nm_cty[28];    // Nom du pays
-    char cd_iso[4];     // Code Iso du pays
+    char tp_rec[SZ_TYPE];   // Type de record CTY
+    int  id_cty;            // Cle primaire
+    char nm_zon[20];        // Nom de la zone geographique
+    char nm_cty[SZ_NAME];   // Nom du pays
+    char cd_iso[4];         // Code Iso du pays
 } ccty;
 
 /***************************************************************************************
@@ -61,8 +64,8 @@ typedef struct Country
 ****************************************************************************************/
 typedef struct Job
 {
-    char tp_rec[8];     // Type de record JOB
-    int  id_job;        // Cle primaire
+    char tp_rec[SZ_TYPE];   // Type de record JOB
+    int  id_job;            // Cle primaire
     char nm_job[20];
 } cjob;
 
@@ -71,8 +74,8 @@ typedef struct Job
 ****************************************************************************************/
 typedef struct Industry
 {
-    char tp_rec[8];     // Type de record IND
-    int  id_ind;        // Cle primaire
+    char tp_rec[SZ_TYPE];   // Type de record IND
+    int  id_ind;            // Cle primaire
     char nm_ind[20];
 } cind;
 
@@ -81,8 +84,8 @@ typedef struct Industry
 ****************************************************************************************/
 typedef struct Group
 {
-    char tp_rec[8];     // Type de record GRP
-    int  id_grp;        // Cle primaire
+    char tp_rec[SZ_TYPE];   // Type de record GRP
+    int  id_grp;            // Cle primaire
     char nm_grp[20];
 } cgrp;
 
