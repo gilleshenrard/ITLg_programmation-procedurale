@@ -45,6 +45,7 @@ int compare_country_name(void* a, void* b);
 int compare_country_name_char(void* a, void* b);
 int assign_country(void* oldelem, void* newelem);
 int assign_country_index_name(void* index, void* elem);
+int assign_country_index_slot(void* index, void* offset);
 int swap_country(void* first, void* second);
 void** country_right(void* current);
 void** country_left(void* current);
@@ -55,6 +56,6 @@ int set_country_height(void* current, int value);
 void* free_country(void* country, void* nullable);
 
 //file structures methods
-long create_country_index_file(dbc* db, t_algo_meta* meta);
+long create_country_index_file(dbc* db, t_algo_meta* meta, long* block_off, long* root_off);
 
 #endif // DB_COUNTRY_H_INCLUDED

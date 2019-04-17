@@ -11,6 +11,7 @@ typedef struct {
     int     (*doCompare)(void*, void*);     //comparison method
     int     (*doSwap)(void*, void*);        //swep method
     int     (*doCopy)(void*, void*);        //data copy method
+    int     (*setSlot)(void*, void*);       //file slot assignment method
     int     (*getHeight)(void*);            //AVL height retrieving
     int     (*setHeight)(void*, int);       //AVL height setup
     void**  (*next)(void*);                 //retrieves either next node in a list, or the right child in AVL
