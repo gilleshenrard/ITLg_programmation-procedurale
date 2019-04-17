@@ -270,26 +270,6 @@ int assign_country_index_name(void* index, void* elem){
     return 0;
 }
 
-/****************************************************************************************/
-/*  I : Country index buffer to which copy data                                         */
-/*      Country from which copy data                                                    */
-/*  P : Copies all the fields of a country to a country index buffer                    */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_country_index_slot(void* elem, void* offset){
-    i_ccty_name* i_element = (i_ccty_name*)elem;
-    long* slot = (long*)offset;
-
-    if(!elem || !offset)
-        return -1;
-
-    //assign the slot to the index element
-    i_element->slot = *slot;
-
-    return 0;
-}
-
 /************************************************************/
 /*  I : Countries to swap                                   */
 /*  P : Swaps two countries                                 */
@@ -420,11 +400,13 @@ void* free_country(void* country, void* nullable){
 /*  O :  0 if OK                                                                    */
 /*      -1 otherwise                                                                */
 /************************************************************************************/
-long create_country_index_file(dbc* db, t_algo_meta* index, int (*assign_slot)(void*, void*), int buffersize, long* root_off){
-    void* index_cty_name = NULL, *buffer = NULL;
+long create_country_index_file(dbc* db, int (*doCompare)(void*, void*)){
+    t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), doCompare, swap_country, assign_country_index_name, NULL, NULL, NULL, NULL, NULL};
+    i_ccty_name* index_cty_name = NULL;
+    ccty buffer = {0};
     FILE *fp_lg=NULL;
     int i=0;
-    long root=0, tmp=0, ret=0;
+    long root=0;
 
     //open the files and position the pointers at the end
     db->fp = fopen(DB_file, "r+b");
@@ -434,38 +416,35 @@ long create_country_index_file(dbc* db, t_algo_meta* index, int (*assign_slot)(v
         return -1;
 
     //allocate the memory for the full size buffer and set an iterator pointer to it
-    index->structure = calloc(db->nr_cty, index->elementsize);
-    index_cty_name = index->structure;
-
-    buffer = calloc(1, buffersize);
+    meta.structure = calloc(db->nr_cty, sizeof(i_ccty_name));
+    index_cty_name = (i_ccty_name*)meta.structure;
 
     //read the country database sequentially and fill the buffer with it
     fseek(db->fp, db->hdr.off_cty, SEEK_SET);
-    for(i=0 ; i<db->nr_cty ; i++, index_cty_name+=index->elementsize){
-        tmp = ftell(db->fp);
-        (*assign_slot)(index_cty_name, &tmp);
-        fread(buffer, buffersize, 1, db->fp);
-        (*index->doCopy)(index_cty_name, buffer);
-        memset(buffer, 0, buffersize);
+    for(i=0 ; i<db->nr_cty ; i++, index_cty_name++){
+        index_cty_name->slot = ftell(db->fp);
+        fread(&buffer, sizeof(ccty), 1, db->fp);
+        (*meta.doCopy)(index_cty_name, &buffer);
+        memset(&buffer, 0, sizeof(ccty));
     }
 
     //sort the buffer
-    quickSort(index, 0, db->nr_cty);
+    quickSort(&meta, 0, db->nr_cty);
 
     //save the index offset in the header
     fseek(db->fp, 0, SEEK_END);
-    ret = ftell(db->fp);
+    db->hdr.off_i_cty_name = ftell(db->fp);
 
     //sequentially create all index slots
-    index_cty_name = index->structure;
-    for(i=0 ; i < db->nr_cty ; i++, index_cty_name+=index->elementsize){
-        fwrite(index_cty_name, index->elementsize, 1, db->fp);
+    index_cty_name = (i_ccty_name*)meta.structure;
+    for(i=0 ; i < db->nr_cty ; i++, index_cty_name++){
+        fwrite(index_cty_name, sizeof(i_ccty_name), 1, db->fp);
     }
 
-    root = index_tree(db->fp, ret, db->nr_cty, index);
+    root = index_tree(db->fp, db->hdr.off_i_cty_name, db->nr_cty, &meta);
 
     //write the new header values to disk
-    db->hdr.db_size += index->elementsize*db->nr_cty;
+    db->hdr.db_size += sizeof(i_ccty_name)*db->nr_cty;
     db->hdr.i_cty_name = root;
     fseek(db->fp, 0, SEEK_SET);
     fwrite(&db->hdr, sizeof(hder), 1, db->fp);
@@ -473,11 +452,11 @@ long create_country_index_file(dbc* db, t_algo_meta* index, int (*assign_slot)(v
     //add a log entry after the creation
     fprintf(fp_lg, "Index %s created... %d records added\n", "I_CTY_NM", i);
 
-    free(index->structure);
+    free(meta.structure);
     fclose(db->fp);
     fclose(fp_lg);
 
-    return ret;
+    return 0;
 }
 
 
