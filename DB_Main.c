@@ -171,13 +171,14 @@ void tst_AVL_search_country(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void tst_index_country_name(dbc* db){
+    t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), compare_country_name, swap_country, assign_country_index_name, NULL, NULL, NULL, NULL, NULL};
     FILE* fp = NULL;
     i_ccty_name buffer = {0};
     long offset = 0;
 
     printf("\n--------------- tst_index_country_name ---------------------------------\n");
 
-    create_country_index_file(db, compare_country_name);
+    db->hdr.off_i_cty_name = create_country_index_file(db, &meta, assign_country_index_slot, sizeof(ccty), &db->hdr.i_cty_name);
 
     fp = fopen(DB_file, "rb");
     if(fp){
@@ -193,8 +194,8 @@ void tst_index_country_name(dbc* db){
         fread(&buffer, sizeof(i_ccty_name), 1, fp);
 
         printf("\nNumber of elements : %d\n", db->nr_cty);
-        printf("index block offset : %X\n", db->hdr.off_i_cty_name);
-        printf("index tree root : %X\n", db->hdr.i_cty_name);
+        printf("index block offset : %lx\n", db->hdr.off_i_cty_name);
+        printf("index tree root : %lX\n", db->hdr.i_cty_name);
         printf("root city name : %s\n", buffer.nm_cty);
 
         fclose(fp);
