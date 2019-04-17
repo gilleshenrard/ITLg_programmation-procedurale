@@ -837,7 +837,10 @@ void* min_AVL_value(t_algo_meta* meta, void* avl){
 /*          binary tree (changes the pointers only)         */
 /*  O : Offset of the current tree root                     */
 /************************************************************/
-long index_tree(FILE* fp, long offset_start, int nb, int key_size){
+/* WARNING : the index structure must finish with left and  */
+/*              right long int types                        */
+/************************************************************/
+long index_tree(FILE* fp, long offset_start, int nb, t_algo_meta* meta){
     long old_offset=0, root=0, subtree=0;
     int nb_g=0, nb_d=0;
 
@@ -851,23 +854,23 @@ long index_tree(FILE* fp, long offset_start, int nb, int key_size){
 
     if(nb_g > 0){
         //set the file pointer to the "left child" field of the current root in the disk
-        fseek(fp, offset_start + nb_g*(8+key_size+16+3*sizeof(long)) + (8+key_size+16+sizeof(long)), SEEK_SET);
+        fseek(fp, offset_start + (nb_g*meta->elementsize) + (meta->elementsize - 2*sizeof(long)), SEEK_SET);
 
-        //define the left child offset and save it for the root
-        subtree = index_tree(fp, offset_start, nb_g, key_size);
+        //define the left child offset and write it in the proper field of the current root
+        subtree = index_tree(fp, offset_start, nb_g, meta);
         fwrite(&subtree, sizeof(long), 1, fp);
     }
     if(nb_d > 0){
         //set the file pointer to the "right child" field of the current root in the disk
-        fseek(fp, offset_start + nb_g*(8+key_size+16+3*sizeof(long)) + (8+key_size+16+2*sizeof(long)), SEEK_SET);
+        fseek(fp, offset_start + (nb_g*meta->elementsize) + (meta->elementsize - sizeof(long)), SEEK_SET);
 
-        //define the right child offset and save it for the root
-        subtree = index_tree(fp, offset_start + (nb_g+1)*(8+key_size+16+3*sizeof(long)), nb_d, key_size);
+        //define the right child offset and write it in the proper field of the current root
+        subtree = index_tree(fp, offset_start + (nb_g+1)*meta->elementsize, nb_d, meta);
         fwrite(&subtree, sizeof(long), 1, fp);
     }
 
     //get the offset of the current root
-    fseek(fp, offset_start + (nb_g)*(8+key_size+16+3*sizeof(long)), SEEK_SET);
+    fseek(fp, offset_start + nb_g*meta->elementsize, SEEK_SET);
     root = ftell(fp);
 
     //restore the previous tree root offset
