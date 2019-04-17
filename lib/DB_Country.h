@@ -54,6 +54,6 @@ int set_country_height(void* current, int value);
 void* free_country(void* country, void* nullable);
 
 //file structures methods
-long create_index_unbuffered(dbc* db, int (*doAction)(void*, void*));
+long create_country_index_file(dbc* db, int (*doAction)(void*, void*));
 
 #endif // DB_COUNTRY_H_INCLUDED

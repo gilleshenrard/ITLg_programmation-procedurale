@@ -177,7 +177,7 @@ void tst_index_country_name(dbc* db){
 
     printf("\n--------------- tst_index_country_name ---------------------------------\n");
 
-    create_index_unbuffered(db, compare_country_name);
+    create_country_index_file(db, compare_country_name);
 
     fp = fopen(DB_file, "rb");
     if(fp){

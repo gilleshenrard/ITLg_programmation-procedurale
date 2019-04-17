@@ -400,7 +400,7 @@ void* free_country(void* country, void* nullable){
 /*  O :  0 if OK                                                                    */
 /*      -1 otherwise                                                                */
 /************************************************************************************/
-long create_index_unbuffered(dbc* db, int (*doCompare)(void*, void*)){
+long create_country_index_file(dbc* db, int (*doCompare)(void*, void*)){
     t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), doCompare, swap_country, assign_country_index_name, NULL, NULL, NULL, NULL, NULL};
     i_ccty_name* index_cty_name = NULL;
     ccty buffer = {0};
