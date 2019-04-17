@@ -171,14 +171,13 @@ void tst_AVL_search_country(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void tst_index_country_name(dbc* db){
-    t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), compare_country_name, swap_country, assign_country_index_name, NULL, NULL, NULL, NULL, NULL};
     FILE* fp = NULL;
     i_ccty_name buffer = {0};
     long offset = 0;
 
     printf("\n--------------- tst_index_country_name ---------------------------------\n");
 
-    create_index_unbuffered(db, db->nr_cty, &meta);
+    create_index_unbuffered(db, compare_country_name);
 
     fp = fopen(DB_file, "rb");
     if(fp){
