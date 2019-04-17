@@ -181,12 +181,12 @@ void tst_index_country_name(dbc* db){
 
     fp = fopen(DB_file, "rb");
     if(fp){
-        printf("\n\t\t\tNAME\tSLOT\tOFFSET\tLEFT\tRIGHT\n\n");
+        printf("\n\t\t\tNAME\tSLOT\tLEFT\tOFFSET\tRIGHT\n\n");
         fseek(fp, db->hdr.off_i_cty_name, SEEK_SET);
         for(int i=0 ; i<db->nr_cty ; i++){
             offset = ftell(fp);
             fread(&buffer, sizeof(i_ccty_name), 1, fp);
-            printf("%28s\t%lx\t%lx\t%lx\t%lx\n", buffer.nm_cty, buffer.slot, offset, buffer.s_left, buffer.s_right);
+            printf("%28s\t%lx\t%lx\t%lx\t%lx\n", buffer.nm_cty, buffer.slot, buffer.s_left, offset, buffer.s_right);
         }
 
         fseek(fp, db->hdr.i_cty_name, SEEK_SET);
