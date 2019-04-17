@@ -7,8 +7,8 @@
 ****************************************************************************************/
 #ifndef DB_COUNTRY_H_INCLUDED
 #define DB_COUNTRY_H_INCLUDED
-#include "../lib/DB_Main.h"
-#include "../lib/algo.h"
+#include "DB_Main.h"
+#include "algo.h"
 
 #define PRT 0
 #define BUF_LEN 200
@@ -44,6 +44,7 @@ void* allocate_country(void);
 int compare_country_name(void* a, void* b);
 int compare_country_name_char(void* a, void* b);
 int assign_country(void* oldelem, void* newelem);
+int assign_country_index_name(void* index, void* elem);
 int swap_country(void* first, void* second);
 void** country_right(void* current);
 void** country_left(void* current);
@@ -54,6 +55,6 @@ int set_country_height(void* current, int value);
 void* free_country(void* country, void* nullable);
 
 //file structures methods
-long create_index_unbuffered(dbc* db, int (*doAction)(void*, void*));
+long create_index_unbuffered(dbc* db, int nb, t_algo_meta* meta);
 
 #endif // DB_COUNTRY_H_INCLUDED
