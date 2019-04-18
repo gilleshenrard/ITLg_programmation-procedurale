@@ -35,6 +35,8 @@ int main(void)
 //    tst_AVL_search_country(&db);
     tst_index_country_name(&db);
 
+    free(db.cty);
+
 	return 0;
 }
 
@@ -73,6 +75,9 @@ void tst_export_country(dbc* db){
 /****************************************************************************************/
 void tst_Load_country(dbc* db){
     printf("\n--------------- tst_Load_country --------------------------------------\n");
+
+    db->cty = (ccty*)calloc(db->nr_cty, sizeof(ccty));
+
     Load_Country(db);
 }
 
@@ -95,7 +100,7 @@ void tst_List_country(dbc* db){
     t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, NULL, NULL, country_right, country_left};
     t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
-    printf("\n--------------- tst_list_insert ---------------------------------------\n");
+    printf("\n--------------- tst_list_country ---------------------------------------\n");
     arrayToList(&cty_array, &cty_list, COPY);
 
     printf("%d countries\n", cty_list.nbelements);
@@ -113,7 +118,7 @@ void tst_List_country(dbc* db){
 void tst_AVL_country(dbc* db){
     t_algo_meta cty_avl = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, get_country_height, set_country_height, country_right, country_left};
     t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-    ccty_recur tmp = {db->cty[3], 0, NULL, NULL};
+    ccty_recur tmp = {*(db->cty+3), 0, NULL, NULL};
 
     printf("\n--------------- tst_AVL_insert ---------------------------------------\n");
 
