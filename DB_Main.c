@@ -76,8 +76,6 @@ void tst_export_country(dbc* db){
 void tst_Load_country(dbc* db){
     printf("\n--------------- tst_Load_country --------------------------------------\n");
 
-    db->cty = (ccty*)calloc(db->nr_cty, sizeof(ccty));
-
     Load_Country(db);
 }
 

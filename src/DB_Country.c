@@ -122,6 +122,11 @@ void Load_Country(dbc *db)
     db->fp = fopen(DB_file, "rb+");
     fp_lg = fopen(log_file, "a");
 
+    if(db->cty)
+        free(db->cty);
+
+    db->cty = (ccty*)calloc(db->nr_cty, sizeof(ccty));
+
     printf("\nCountry : loading ...\n");
 
     fseek(db->fp, db->hdr.off_cty, SEEK_SET);
