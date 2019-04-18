@@ -86,3 +86,76 @@ void Create_DB(dbc *db)
 
     return;
 }
+
+/************************************************************************************/
+/*  I : database in which create the index                                          */
+/*      metadata of the data structure to be indexed                                */
+/*      number of records present in the table                                      */
+/*      info about the index block (offset, root, size of an element)               */
+/*      info about the table block (offset, root, size of an element)               */
+/*  P : Creates the slots for the requested index at the end of the database,       */
+/*          then fills them and chains them as a binary tree (file algo approach)   */
+/*  O :  0 if OK                                                                    */
+/*      -1 otherwise                                                                */
+/************************************************************************************/
+long create_index_file(dbc* db, t_algo_meta* meta, int nb, t_datablock* i_block, t_datablock* t_block){
+    void *i_iterator=NULL, *buffer=NULL;
+    int i=0;
+    long root=0, tmp=0;
+
+    //open the files and position the pointers at the end
+    db->fp = fopen(DB_file, "r+b");
+
+    if(!db->fp)
+        return -1;
+
+    //allocate the memory for the full size and single element buffer and set an iterator pointer to it
+    meta->structure = calloc(nb, meta->elementsize);
+    i_iterator = meta->structure;
+    buffer = calloc(1, t_block->elem_size);
+
+    //read the proper table sequentially and fill the buffer with it
+    fseek(db->fp, *t_block->block_off, SEEK_SET);
+    for(i=0 ; i < nb ; i++){
+        //get the offset in the actual table and save it in the corresponding index element
+        tmp = ftell(db->fp);
+        (*meta->setSlot)(i_iterator, &tmp);
+
+        //read the element and copy the selected field in the index element
+        fread(buffer, t_block->elem_size, 1, db->fp);
+        (*meta->doCopy)(i_iterator, buffer);
+
+        //reset the buffer and increment the iterator
+        memset(buffer, 0, t_block->elem_size);
+        i_iterator += meta->elementsize;
+    }
+
+    //sort the buffer
+    quickSort(meta, 0, nb);
+
+    //save the index offset in the header
+    fseek(db->fp, 0, SEEK_END);
+    *i_block->block_off = ftell(db->fp);
+
+    //sequentially write the buffer in memory (without tree chaining)
+    i_iterator = meta->structure;
+    for(i=0 ; i < nb ; i++){
+        fwrite(i_iterator, meta->elementsize, 1, db->fp);
+        i_iterator += meta->elementsize;
+    }
+
+    //create the binary tree chaining
+    root = index_tree(db->fp, *i_block->block_off, nb, meta);
+
+    //write the new header values to disk
+    db->hdr.db_size += meta->elementsize*nb;
+    *i_block->root_off = root;
+    fseek(db->fp, 0, SEEK_SET);
+    fwrite(&db->hdr, sizeof(hder), 1, db->fp);
+
+    free(buffer);
+    free(meta->structure);
+    fclose(db->fp);
+
+    return 0;
+}

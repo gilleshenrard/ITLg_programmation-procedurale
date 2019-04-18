@@ -38,10 +38,10 @@ typedef struct Header
     uint sz_ind;            // Taille bloc industry
     uint sz_grp;            // Taille bloc group
     uint sz_i_cty_name;     // Size of the index for countries (by name)
-    uint off_cty;           // Position bloc country
-    uint off_job;           // Position bloc job
-    uint off_ind;           // Position bloc industry
-    uint off_grp;           // Position bloc group
+    long off_cty;           // Position bloc country
+    long off_job;           // Position bloc job
+    long off_ind;           // Position bloc industry
+    long off_grp;           // Position bloc group
     long off_i_cty_name;    // Offset of the country index block (by name)
     long i_cty_name;        // Address of the root for the country index (by name)
     char filler[52];        // filler to get the size to 128 bytes

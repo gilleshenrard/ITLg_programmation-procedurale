@@ -7,8 +7,9 @@
 ****************************************************************************************/
 #ifndef DB_COUNTRY_H_INCLUDED
 #define DB_COUNTRY_H_INCLUDED
-#include "../lib/DB_Main.h"
-#include "../lib/algo.h"
+#include "DB_Main.h"
+#include "DB_File.h"
+#include "algo.h"
 
 #define PRT 0
 #define BUF_LEN 200
@@ -56,6 +57,5 @@ int set_country_height(void* current, int value);
 void* free_country(void* country, void* nullable);
 
 //file structures methods
-long create_country_index_file(dbc* db, t_algo_meta* meta, long* block_off, long* root_off);
 
 #endif // DB_COUNTRY_H_INCLUDED
