@@ -24,15 +24,15 @@ void tst_index_country_name(dbc* db);
 ****************************************************************************************/
 int main(void)
 {
-    dbc db;
+    dbc db = {0};
     init_db(&db);
 
-//    tst_export_country(&db);
+    tst_export_country(&db);
     tst_Load_country(&db);
-//    tst_Print_country(&db);
-//    tst_List_country(&db);
+    tst_Print_country(&db);
+    tst_List_country(&db);
     tst_AVL_country(&db);
-//    tst_AVL_search_country(&db);
+    tst_AVL_search_country(&db);
     tst_index_country_name(&db);
 
     free(db.cty);
