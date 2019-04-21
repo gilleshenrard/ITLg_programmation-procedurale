@@ -226,6 +226,20 @@ int compare_country_name_char(void* a, void* b){
 }
 
 /****************************************************************************************/
+/*  I : Country index element to compare                                                */
+/*      Name of the second  country to compare                                          */
+/*  P : Compares two countries by their names                                           */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_country_index_char(void* a, void* b){
+    i_ccty_name *tmp_a = (i_ccty_name*)a;
+
+    return strcmp(tmp_a->nm_cty, (char*)b);
+}
+
+/****************************************************************************************/
 /*  I : Country to which copy data                                                      */
 /*      Country from which copy data                                                    */
 /*  P : Copies all the fields of countries from new to old                              */

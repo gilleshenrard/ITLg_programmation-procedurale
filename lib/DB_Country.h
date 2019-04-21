@@ -44,6 +44,7 @@ void Rec_Country(ccty *rec);
 void* allocate_country(void);
 int compare_country_name(void* a, void* b);
 int compare_country_name_char(void* a, void* b);
+int compare_country_index_char(void* a, void* b);
 int assign_country(void* oldelem, void* newelem);
 int assign_country_index_name(void* index, void* elem);
 int assign_country_index_slot(void* index, void* offset);
