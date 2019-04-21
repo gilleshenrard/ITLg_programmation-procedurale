@@ -906,7 +906,6 @@ int searchall_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, t
     //compare it to the key received
     comparison = (*index->doCompare)(index_buf, key);
     if(!comparison){
-        printf("key found\n");
         //get the offset of the corresponding element in the table
         fseek(fp, offset_root + (index->elementsize - 3*sizeof(long)), SEEK_SET);
         fread(&offset, 1, sizeof(long), fp);
