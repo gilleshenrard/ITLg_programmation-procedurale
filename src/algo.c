@@ -877,3 +877,64 @@ long index_tree(FILE* fp, long offset_start, int nb, t_algo_meta* meta){
 
     return root;
 }
+
+/************************************************************/
+/*  I : File pointer to the database                        */
+/*      Offset of the index tree root                       */
+/*      Key to search in the index                          */
+/*      Metadata necessary to the index algorithm           */
+/*      Metadata necessary to the list algorithm            */
+/*      Size of an element in the table                     */
+/*  P : Searches for the key in the index and add all       */
+/*          matching elements in a list                     */
+/*  O :  0 if OK                                            */
+/*      -1 otherwise                                        */
+/************************************************************/
+/* WARNING : the index structure must finish with left and  */
+/*              right long int types                        */
+/************************************************************/
+int searchall_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, t_algo_meta* list, int elem_size){
+    void *index_buf=NULL, *table_buf=NULL;
+    int comparison = 0;
+    long offset = 0;
+
+    //fill a buffer with the element of the current tree root
+    index_buf = calloc(1, index->elementsize);
+    fseek(fp, offset_root, SEEK_SET);
+    fread(index_buf, 1, index->elementsize, fp);
+
+    //compare it to the key received
+    comparison = (*index->doCompare)(index_buf, key);
+    if(!comparison){
+        printf("key found\n");
+        //get the offset of the corresponding element in the table
+        fseek(fp, offset_root + (index->elementsize - 3*sizeof(long)), SEEK_SET);
+        fread(&offset, 1, sizeof(long), fp);
+
+        //read the corresponding element and add it to the list
+        fseek(fp, offset, SEEK_SET);
+        table_buf = calloc(1, elem_size);
+        fread(table_buf, 1, elem_size, fp);
+        insertListSorted(list, table_buf);
+        free(table_buf);
+    }
+
+    //perform the search in the left subtree
+    if(comparison <= 0){
+        fseek(fp, offset_root + (index->elementsize - 2*sizeof(long)), SEEK_SET);
+        fread(&offset, 1, sizeof(long), fp);
+        if(offset)
+            searchall_index(fp, offset, key, index, list, elem_size);
+    }
+
+    //perform the search in the right subtree
+    if(comparison >= 0){
+        fseek(fp, offset_root + (index->elementsize - sizeof(long)), SEEK_SET);
+        fread(&offset, 1, sizeof(long), fp);
+        if(offset)
+            searchall_index(fp, offset, key, index, list, elem_size);
+    }
+
+    free(index_buf);
+    return 0;
+}

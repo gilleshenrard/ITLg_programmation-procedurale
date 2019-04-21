@@ -62,5 +62,6 @@ int delete_AVL_root(t_algo_meta* meta);
 
 //File binary trees
 long index_tree(FILE* fp, long offset_start, int nb, t_algo_meta* meta);
+int searchall_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, t_algo_meta* list, int elem_size);
 
 #endif // ALGO_H_INCLUDED
