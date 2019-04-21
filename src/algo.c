@@ -920,7 +920,7 @@ int searchall_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, t
     }
 
     //perform the search in the left subtree
-    if(comparison <= 0){
+    if(comparison >= 0){
         fseek(fp, offset_root + (index->elementsize - 2*sizeof(long)), SEEK_SET);
         fread(&offset, 1, sizeof(long), fp);
         if(offset)
@@ -928,7 +928,7 @@ int searchall_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, t
     }
 
     //perform the search in the right subtree
-    if(comparison >= 0){
+    if(comparison <= 0){
         fseek(fp, offset_root + (index->elementsize - sizeof(long)), SEEK_SET);
         fread(&offset, 1, sizeof(long), fp);
         if(offset)
