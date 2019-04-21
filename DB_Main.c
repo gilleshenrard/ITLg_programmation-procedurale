@@ -18,6 +18,7 @@ void tst_List_country(dbc*);
 void tst_AVL_country(dbc*);
 void tst_AVL_search_country(dbc*);
 void tst_index_country_name(dbc* db);
+void tst_search_index_country_name(dbc* db);
 
 /****************************************************************************************
 * Programme principal
@@ -25,17 +26,19 @@ void tst_index_country_name(dbc* db);
 int main(void)
 {
     dbc db;
-    init_db(&db);
+//    init_db(&db);
 
 //    tst_export_country(&db);
-    tst_Load_country(&db);
+//    tst_Load_country(&db);
 //    tst_Print_country(&db);
 //    tst_List_country(&db);
-    tst_AVL_country(&db);
+//    tst_AVL_country(&db);
 //    tst_AVL_search_country(&db);
-    tst_index_country_name(&db);
+//    tst_index_country_name(&db);
+    tst_search_index_country_name(&db);
 
-    free(db.cty);
+    if(db.cty)
+        free(db.cty);
 
 	return 0;
 }
@@ -205,4 +208,30 @@ void tst_index_country_name(dbc* db){
 
         fclose(fp);
     }
+}
+
+/****************************************************************************************/
+/*  I : Country Database in which create a country name index                           */
+/*  P : Tests the country name index creation at the end of the database                */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_search_index_country_name(dbc* db){
+    t_algo_meta index = {NULL, db->nr_cty, sizeof(i_ccty_name), compare_country_name_char, swap_country, assign_country, assign_country_index_slot, NULL, NULL, NULL, NULL};
+    t_algo_meta list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, NULL, NULL, country_left, country_right};
+    hder tst = {0};
+
+    printf("\n--------------- tst_search_index_country_name --------------------------\n");
+
+    db->cty = NULL;
+
+    db->fp = fopen(DB_file, "rb");
+    if(db->fp){
+        fread(&tst, 1, sizeof(hder), db->fp);
+        searchall_index(db->fp, db->hdr.i_cty_name, "France", &index, &list, sizeof(ccty));
+        fclose(db->fp);
+    }
+
+    foreachList(&list, NULL, Rec_Country_list);
+    while(list.structure)
+        popListTop(&list);
 }
