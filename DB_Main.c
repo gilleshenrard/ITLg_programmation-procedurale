@@ -216,16 +216,19 @@ void tst_index_country_name(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void tst_search_index_country_name(dbc* db){
-    t_algo_meta index = {NULL, db->nr_cty, sizeof(i_ccty_name), compare_country_name_char, swap_country, assign_country, assign_country_index_slot, NULL, NULL, NULL, NULL};
+    t_algo_meta index = {0};
     t_algo_meta list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, NULL, NULL, country_left, country_right};
     hder tst = {0};
 
     printf("\n--------------- tst_search_index_country_name --------------------------\n");
 
+    index.elementsize = sizeof(i_ccty_name);
+    index.doCompare = compare_country_index_char;
+
     db->fp = fopen(DB_file, "rb");
     if(db->fp){
         fread(&tst, 1, sizeof(hder), db->fp);
-        searchall_index(db->fp, db->hdr.i_cty_name, "France", &index, &list, sizeof(ccty));
+        searchall_index(db->fp, tst.i_cty_name, "France", &index, &list, sizeof(ccty));
         fclose(db->fp);
     }
 
