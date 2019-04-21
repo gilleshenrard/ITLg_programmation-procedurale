@@ -25,7 +25,7 @@ void tst_search_index_country_name(dbc* db);
 ****************************************************************************************/
 int main(void)
 {
-    dbc db;
+    dbc db = {0};
 //    init_db(&db);
 
 //    tst_export_country(&db);
@@ -221,8 +221,6 @@ void tst_search_index_country_name(dbc* db){
     hder tst = {0};
 
     printf("\n--------------- tst_search_index_country_name --------------------------\n");
-
-    db->cty = NULL;
 
     db->fp = fopen(DB_file, "rb");
     if(db->fp){
