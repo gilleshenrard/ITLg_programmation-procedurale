@@ -42,6 +42,7 @@ void Create_DB(dbc *db)
     db->hdr.db_size = db->hdr.off_grp + SZ_GRP * sizeof(cgrp);
 
     db->hdr.i_cty_name = 0;
+    db->cty = NULL;
 
     fwrite(&db->hdr, 1, sizeof(db->hdr), fp_db);
 
