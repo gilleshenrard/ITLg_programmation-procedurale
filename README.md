@@ -45,6 +45,7 @@ void* search_AVL(t_algo_meta* meta, void* avl, void* key);
 * File binary trees manipulation :
 ```C
 long index_tree(FILE* fp, long offset_start, int nb, t_algo_meta* meta);
+long create_index_file(dbc* db, t_algo_meta* meta, int nb, t_datablock* i_block, t_datablock* t_block);
 ```
 
 * Structures transformation (one format to another) :
@@ -65,4 +66,4 @@ int arrayToAVL(t_algo_meta* dArray, t_algo_meta* dAVL, e_listtoarray action);
 * Implement unit tests
 
 ### 6. Known issues
-* Country loading method sometimes fails (hickups)
+* Country loading method sometimes fails (hickups) : method Load_Country fails (sometimes when executed, systematically while debugging) at the "fclose(db->fp);" line
