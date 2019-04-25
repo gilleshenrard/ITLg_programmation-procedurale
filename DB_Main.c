@@ -50,7 +50,7 @@ int main(void)
 /*  O : /                                                                               */
 /****************************************************************************************/
 void init_db(dbc* db){
-    Create_DB(db);
+    Create_DB(db, "DB_Comp");
     Import_CSV_Country(db);
 
     printf("header size : %d\n", sizeof(hder));

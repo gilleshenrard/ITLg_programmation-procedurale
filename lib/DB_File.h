@@ -9,7 +9,7 @@ typedef struct{
     int     elem_size;
 }t_datablock;
 
-void Create_DB(dbc *db);
+int Create_DB(dbc *db, char filename[]);
 long create_index_file(dbc* db, t_algo_meta* meta, int nb, t_datablock* i_block, t_datablock* t_block);
 
 #endif // DB_FILE_H_INCLUDED
