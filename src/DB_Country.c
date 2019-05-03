@@ -131,7 +131,7 @@ void Load_Country(dbc *db)
 
     fseek(db->fp, db->hdr.off_cty, SEEK_SET);
 
-    for (i=1; i<=db->nr_cty; i++)
+    for (i=0; i<db->nr_cty; i++)
     {
         memset(&cty, 0, sizeof(ccty));
         fread(&cty, 1, sizeof(ccty), db->fp);
