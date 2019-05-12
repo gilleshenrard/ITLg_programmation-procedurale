@@ -9,6 +9,7 @@
 #include "lib/DB_Country.h"
 #include "lib/algo.h"
 #include "lib/DB_File.h"
+#include "lib/DB_Group.h"
 
 void init_db(dbc*);
 void tst_export_country(dbc*);
@@ -61,6 +62,7 @@ void init_db(dbc* db){
     printf("cind size : %d\n", sizeof(cind));
     printf("cgrp size : %d\n", sizeof(cgrp));
     printf("i_ccty_name size : %d\n", sizeof(i_ccty_name));
+    printf("i_cgrp_FK size : %d\n", sizeof(i_cgrp_FK));
 }
 
 /****************************************************************************************/
