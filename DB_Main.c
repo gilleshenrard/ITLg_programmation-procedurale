@@ -43,6 +43,9 @@ int main(void)
     if(db.cty)
         free(db.cty);
 
+    if(db.grp)
+        free(db.grp);
+
 	return 0;
 }
 
@@ -249,4 +252,5 @@ void tst_index_group(dbc* db){
 
     printf("\n--------------------- tst_index_group -------------------------------\n");
     Export_CSV_Group(db);
+    Load_Group(db);
 }

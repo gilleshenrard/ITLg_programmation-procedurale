@@ -68,6 +68,11 @@ void Import_CSV_Group(dbc *db){
 	return ;
 }
 
+/****************************************************************************************/
+/*  I : Database from which export the groups CSV file                                  */
+/*  P : Reads the whole groups database and exports it in a CSV file                    */
+/*  O : /                                                                               */
+/****************************************************************************************/
 void Export_CSV_Group(dbc *db){
     int i;
 	cgrp grp;
@@ -101,6 +106,46 @@ void Export_CSV_Group(dbc *db){
 	fclose(fpo);
 
     printf("\nCountry exported : %d \n\n", db->nr_grp);
+
+    return;
+}
+
+/****************************************************************************************/
+/*  I : Database from which import the records in memory                                */
+/*  P : Reads the whole groups database and loads them in memory                        */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void Load_Group(dbc *db){
+    int i;
+	cgrp grp;
+	FILE *fp_lg;
+
+    db->fp = fopen(DB_file, "rb+");
+    fp_lg = fopen(log_file, "a");
+
+    if(db->grp)
+        free(db->grp);
+
+    db->grp = (cgrp*)calloc(db->nr_grp, sizeof(cgrp));
+
+    printf("\nGroup : loading ...\n");
+
+    fseek(db->fp, db->hdr.off_grp, SEEK_SET);
+
+    for (i=0; i<db->nr_grp; i++)
+    {
+        memset(&grp, 0, sizeof(cgrp));
+        fread(&grp, 1, sizeof(cgrp), db->fp);
+
+        db->grp[i] = grp;
+    }
+
+    fprintf(fp_lg, "Country loaded into buffer : %d \n", db->nr_grp);
+
+    fclose(db->fp);
+    fclose(fp_lg);
+
+    printf("\nCountry loaded into buffer : %d \n\n", db->nr_grp);
 
     return;
 }
