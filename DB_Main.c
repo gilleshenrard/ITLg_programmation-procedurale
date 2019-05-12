@@ -31,8 +31,8 @@ int main(void)
     init_db(&db);
 
 //    tst_export_country(&db);
-    tst_Load_country(&db);
-    tst_Print_country(&db);
+//    tst_Load_country(&db);
+//    tst_Print_country(&db);
 //    tst_List_country(&db);
 //    tst_AVL_country(&db);
 //    tst_AVL_search_country(&db);
@@ -250,13 +250,16 @@ void tst_search_index_country_name(dbc* db){
 /****************************************************************************************/
 void tst_index_group(dbc* db){
     t_algo_meta grp_list = {NULL, 0, sizeof(cgrp_recur), compare_group_FK, swap_group, assign_group, NULL, NULL, NULL, group_right, group_left};
-    t_algo_meta grp_array = {db->grp+1, db->nr_grp, sizeof(cgrp), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta grp_array = {NULL, db->nr_grp, sizeof(cgrp), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
     printf("\n--------------------- tst_index_group -------------------------------\n");
     Export_CSV_Group(db);
     Load_Group(db);
     Print_Group(db);
 
+    printf("\n\nList of groups sorted by their FK : \n\n");
+
+    grp_array.structure = db->grp;
     arrayToList(&grp_array, &grp_list, COPY);
 
     printf("%d groups\n", grp_list.nbelements);
