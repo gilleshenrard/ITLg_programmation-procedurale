@@ -253,4 +253,5 @@ void tst_index_group(dbc* db){
     printf("\n--------------------- tst_index_group -------------------------------\n");
     Export_CSV_Group(db);
     Load_Group(db);
+    Print_Group(db);
 }

@@ -149,3 +149,32 @@ void Load_Group(dbc *db){
 
     return;
 }
+
+/****************************************************************************************/
+/*  I : Database from which print the groups                                            */
+/*  P : Prints all the groups in the memory buffer                                      */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void Print_Group(dbc *db){
+    int i;
+
+    for (i=1; i<=db->nr_grp; i++)
+        Rec_Group(&db->grp[i]);
+
+    return;
+}
+
+/****************************************************************************************/
+/*  I : Group record to print                                                           */
+/*  P : Prints a group record                                                           */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void Rec_Group(cgrp *rec){
+    printf("%3d %32s %4s %3d \n",
+           rec->id_grp,
+           rec->nm_grp,
+           rec->cd_cty,
+           rec->id_cty );
+
+    return;
+}
