@@ -298,7 +298,7 @@ int insertListTop(t_algo_meta* meta, void *toAdd){
         return -1;
 
     //memory allocation for the new element
-    newElement = calloc(1, meta->elementsize);;
+    newElement = calloc(1, meta->elementsize);
     if(!newElement)
         return -1;
 
