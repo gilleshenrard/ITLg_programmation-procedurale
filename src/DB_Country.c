@@ -18,7 +18,7 @@ void Import_CSV_Country(dbc *db)
     db->fp = fopen(DB_file, "rb+");
     fp_lg = fopen(log_file, "a");
 
-	fpi = fopen(CSV_imp, "r");
+	fpi = fopen(CSV_cty_imp, "r");
 	if (fpi == NULL) { printf("Erreur\n"); return; }
 
     printf("\nCountry : importing ...\n");

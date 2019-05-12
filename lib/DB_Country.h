@@ -14,7 +14,7 @@
 #define PRT 0
 #define BUF_LEN 200
 
-#define CSV_imp "Data_Import/DB_Country.csv"
+#define CSV_cty_imp "Data_Import/DB_Country.csv"
 
 typedef struct ccty_recur ccty_recur;
 typedef struct ccty_file ccty_file;
