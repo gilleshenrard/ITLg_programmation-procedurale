@@ -31,8 +31,8 @@ int main(void)
     init_db(&db);
 
 //    tst_export_country(&db);
-//    tst_Load_country(&db);
-//    tst_Print_country(&db);
+    tst_Load_country(&db);
+    tst_Print_country(&db);
 //    tst_List_country(&db);
 //    tst_AVL_country(&db);
 //    tst_AVL_search_country(&db);
