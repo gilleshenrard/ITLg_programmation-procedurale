@@ -88,7 +88,9 @@ typedef struct Group
     char tp_rec[SZ_TYPE];   // Type de record GRP
     int  id_grp;            // Cle primaire
     char nm_grp[SZ_NAME_SM];
+    char cd_cty[4];         // Group country tag
     int id_cty;             // Foreign Key
+    char filler[24];        // Filler to bring the group record size to 64 bytes
 } cgrp;
 
 /***************************************************************************************

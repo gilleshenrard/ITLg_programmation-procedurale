@@ -55,6 +55,7 @@ int main(void)
 void init_db(dbc* db){
     Create_DB(db, "DB_Comp");
     Import_CSV_Country(db);
+    Import_CSV_Group(db);
 
     printf("header size : %d\n", sizeof(hder));
     printf("ccty size : %d\n", sizeof(ccty));
