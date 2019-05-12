@@ -22,11 +22,11 @@ struct cgrp_recur{
 typedef struct i_Group_FK{
     char tp_rec[SZ_TYPE];   //record type (I_GRP)
     int cty_id;             //foreign key
-    char filler[16];        //filler to get the index size to 64
+    char filler[8];         //filler to get the index size to 32
     long slot;              //Slot number in the table
     long s_left;            //Slot number of the left child in the table
     long s_right;           //Slot number of the right child in the table
-}i_cgrp_name;
+}i_cgrp_FK;
 
 //database methods
 void Import_CSV_Group(dbc *db);
