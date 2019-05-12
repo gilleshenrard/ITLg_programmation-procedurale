@@ -251,20 +251,48 @@ void tst_search_index_country_name(dbc* db){
 void tst_index_group(dbc* db){
     t_algo_meta grp_list = {NULL, 0, sizeof(cgrp_recur), compare_group_FK, swap_group, assign_group, NULL, NULL, NULL, group_right, group_left};
     t_algo_meta grp_array = {NULL, db->nr_grp, sizeof(cgrp), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta index = {NULL, db->nr_grp, sizeof(i_cgrp_FK), compare_group_FK, swap_group, assign_group_index_FK, assign_group_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block={&db->hdr.off_i_grp_fk, &db->hdr.i_grp_fk, sizeof(i_cgrp_FK)};
+    t_datablock table_block={&db->hdr.off_grp, 0, sizeof(cgrp)};
+    FILE* fp = NULL;
+    i_cgrp_FK buffer = {0};
+    long offset = 0;
 
     printf("\n--------------------- tst_index_group -------------------------------\n");
     Export_CSV_Group(db);
     Load_Group(db);
     Print_Group(db);
 
+    // test list creation
     printf("\n\nList of groups sorted by their FK : \n\n");
-
     grp_array.structure = db->grp;
     arrayToList(&grp_array, &grp_list, COPY);
-
     printf("%d groups\n", grp_list.nbelements);
-
     foreachList(&grp_list, NULL, Rec_group_list);
     while(grp_list.structure)
         popListTop(&grp_list);
+
+    //test index creation
+    create_index_file(db, &index, db->nr_grp, &index_block, &table_block);
+
+    fp = fopen(DB_file, "rb");
+    if(fp){
+        printf("\nFK\tSLOT\tLEFT\tOFFSET\tRIGHT\n\n");
+        fseek(fp, db->hdr.off_i_grp_fk, SEEK_SET);
+        for(int i=0 ; i<db->nr_grp ; i++){
+            offset = ftell(fp);
+            fread(&buffer, sizeof(i_cgrp_FK), 1, fp);
+            printf("%d\t%6lx\t%6lx\t%6lx\t%6lx  %d\n", buffer.cty_id, buffer.slot, buffer.s_left, offset, buffer.s_right, i+1);
+        }
+
+        fseek(fp, db->hdr.i_grp_fk, SEEK_SET);
+        fread(&buffer, sizeof(i_cgrp_FK), 1, fp);
+
+        printf("\nNumber of elements : %d\n", db->nr_grp);
+        printf("index block offset : %lX\n", db->hdr.off_i_grp_fk);
+        printf("index tree root : %lX\n", db->hdr.i_grp_fk);
+        printf("root FK : %d\n", buffer.cty_id);
+
+        fclose(fp);
+    }
 }
