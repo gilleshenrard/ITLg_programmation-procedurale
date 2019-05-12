@@ -19,6 +19,7 @@
 
 #define SZ_TYPE 8
 #define SZ_NAME 28
+#define SZ_NAME_SM 20
 
 #define DB_file "Data_DB_Comp\\DB_Comp.dat"
 #define log_file "Data_DB_Comp\\DB_Comp.log"
@@ -54,7 +55,7 @@ typedef struct Country
 {
     char tp_rec[SZ_TYPE];   // Type de record CTY
     int  id_cty;            // Cle primaire
-    char nm_zon[20];        // Nom de la zone geographique
+    char nm_zon[SZ_NAME_SM];        // Nom de la zone geographique
     char nm_cty[SZ_NAME];   // Nom du pays
     char cd_iso[4];         // Code Iso du pays
 } ccty;
@@ -66,7 +67,7 @@ typedef struct Job
 {
     char tp_rec[SZ_TYPE];   // Type de record JOB
     int  id_job;            // Cle primaire
-    char nm_job[20];
+    char nm_job[SZ_NAME_SM];
 } cjob;
 
 /***************************************************************************************
@@ -76,7 +77,7 @@ typedef struct Industry
 {
     char tp_rec[SZ_TYPE];   // Type de record IND
     int  id_ind;            // Cle primaire
-    char nm_ind[20];
+    char nm_ind[SZ_NAME_SM];
 } cind;
 
 /***************************************************************************************
@@ -86,7 +87,8 @@ typedef struct Group
 {
     char tp_rec[SZ_TYPE];   // Type de record GRP
     int  id_grp;            // Cle primaire
-    char nm_grp[20];
+    char nm_grp[SZ_NAME_SM];
+    int id_cty;             // Foreign Key
 } cgrp;
 
 /***************************************************************************************
@@ -97,7 +99,9 @@ typedef struct	db_country
     FILE*   fp;     // File pointer to the database
     hder    hdr;    // Header
     ccty*   cty;    // Buffer Country
+    cgrp*   grp;    // Buffer Group
     int     nr_cty; // Nr elements dans buffer
+    int     nr_grp; // Nr Groups in the buffer
 } dbc;
 
 #endif

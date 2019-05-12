@@ -19,6 +19,7 @@ void tst_AVL_country(dbc*);
 void tst_AVL_search_country(dbc*);
 void tst_index_country_name(dbc* db);
 void tst_search_index_country_name(dbc* db);
+void tst_index_group(dbc* db);
 
 /****************************************************************************************
 * Programme principal
@@ -29,13 +30,14 @@ int main(void)
     init_db(&db);
 
 //    tst_export_country(&db);
-    tst_Load_country(&db);
+//    tst_Load_country(&db);
 //    tst_Print_country(&db);
 //    tst_List_country(&db);
 //    tst_AVL_country(&db);
 //    tst_AVL_search_country(&db);
-    tst_index_country_name(&db);
-    tst_search_index_country_name(&db);
+//    tst_index_country_name(&db);
+//    tst_search_index_country_name(&db);
+    tst_index_group(&db);
 
     if(db.cty)
         free(db.cty);
@@ -233,4 +235,14 @@ void tst_search_index_country_name(dbc* db){
     foreachList(&list, NULL, Rec_Country_list);
     while(list.structure)
         popListTop(&list);
+}
+
+/****************************************************************************************/
+/*  I : Database in which create a group FK index                                       */
+/*  P : Tests the group FK index creation at the end of the database                    */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_index_group(dbc* db){
+
+    printf("\n--------------------- tst_index_group -------------------------------\n");
 }
