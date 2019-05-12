@@ -47,6 +47,7 @@ void Import_CSV_Group(dbc *db){
         ptr2 = strtok(NULL,";");
         strncpy(grp.cd_cty, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", grp.cd_cty);
         ptr1 = ptr2;
+        memset(fld, 0, BUF_LEN);
         strncpy(fld, ptr1, strlen(ptr1)-1);
         grp.id_cty = atoi(fld);                    if (PRT) printf("%d\n", grp.id_cty);
 
