@@ -158,7 +158,7 @@ void Load_Group(dbc *db){
 void Print_Group(dbc *db){
     int i;
 
-    for (i=1; i<=db->nr_grp; i++)
+    for (i=0; i<db->nr_grp; i++)
         Rec_Group(&db->grp[i]);
 
     return;

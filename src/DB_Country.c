@@ -156,7 +156,7 @@ void Print_Country(dbc *db)
 {
     int i;
 
-    for (i=1; i<=db->nr_cty; i++)
+    for (i=0; i<db->nr_cty; i++)
         Rec_Country(&db->cty[i]);
 
     return;
