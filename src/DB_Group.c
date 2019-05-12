@@ -171,7 +171,7 @@ void Print_Group(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Rec_Group(cgrp *rec){
-    printf("%3d %32s %4s %3d \n",
+    printf("%4d %32s %4s %3d \n",
            rec->id_grp,
            rec->nm_grp,
            rec->cd_cty,
