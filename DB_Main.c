@@ -248,4 +248,5 @@ void tst_search_index_country_name(dbc* db){
 void tst_index_group(dbc* db){
 
     printf("\n--------------------- tst_index_group -------------------------------\n");
+    Export_CSV_Group(db);
 }

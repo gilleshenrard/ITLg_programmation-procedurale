@@ -67,3 +67,40 @@ void Import_CSV_Group(dbc *db){
 
 	return ;
 }
+
+void Export_CSV_Group(dbc *db){
+    int i;
+	cgrp grp;
+	FILE *fpo, *fp_lg;
+
+    db->fp = fopen(DB_file, "rb+");
+    fp_lg = fopen(log_file, "a");
+
+    printf("\nCountry : exporting ...\n");
+    fpo = fopen("Data_Export/Exp_Group.csv", "w");
+    fprintf(fpo,"Id;Nm_grp;Nm_Zon;Cd_Iso\n");
+
+    fseek(db->fp, db->hdr.off_grp, SEEK_SET);
+
+    for (i=0; i<db->nr_grp; i++)
+    {
+        memset(&grp, 0, sizeof(cgrp));
+        fread(&grp, 1, sizeof(cgrp), db->fp);
+
+        fprintf(fpo,"%d;%s;%s;%d\n",
+                grp.id_grp,
+                grp.nm_grp,
+                grp.cd_cty,
+                grp.id_cty);
+    }
+
+    fprintf(fp_lg, "Country exported : %d \n", db->nr_grp);
+
+    fclose(db->fp);
+    fclose(fp_lg);
+	fclose(fpo);
+
+    printf("\nCountry exported : %d \n\n", db->nr_grp);
+
+    return;
+}
