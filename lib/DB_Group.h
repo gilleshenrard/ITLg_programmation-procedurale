@@ -38,12 +38,15 @@ void Rec_Group(cgrp *rec);
 // dynamic structures methods
 void* allocate_group(void);
 int compare_group_FK(void* a, void* b);
+int compare_group_FK_index(void* a, void* b);
 int compare_group_FK_int(void* a, void* b);
 int compare_group_index_int(void* a, void* b);
 int assign_group(void* oldelem, void* newelem);
+int assign_group_index(void* oldelem, void* newelem);
 int assign_group_index_FK(void* index, void* elem);
 int assign_group_index_slot(void* index, void* offset);
 int swap_group(void* first, void* second);
+int swap_group_index(void* first, void* second);
 void** group_right(void* current);
 void** group_left(void* current);
 int Rec_group_list(void *record, void* nullable);

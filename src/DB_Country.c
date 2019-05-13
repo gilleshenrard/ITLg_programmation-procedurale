@@ -213,6 +213,21 @@ int compare_country_name(void* a, void* b){
 
 /****************************************************************************************/
 /*  I : First country to compare                                                        */
+/*      Second  country to compare                                                      */
+/*  P : Compares two countries by their names                                           */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_country_index_name(void* a, void* b){
+    i_ccty_name *tmp_a = (i_ccty_name*)a;
+    i_ccty_name *tmp_b = (i_ccty_name*)b;
+
+    return strcmp(tmp_a->nm_cty, tmp_b->nm_cty);
+}
+
+/****************************************************************************************/
+/*  I : First country to compare                                                        */
 /*      Name of the second  country to compare                                          */
 /*  P : Compares two countries by their names                                           */
 /*  O :  1 if A > B                                                                     */
@@ -264,6 +279,26 @@ int assign_country(void* oldelem, void* newelem){
     //restore the pointer values
     oldTuple->right = saveRight;
     oldTuple->left = saveLeft;
+
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : Country to which copy data                                                      */
+/*      Country from which copy data                                                    */
+/*  P : Copies all the fields of countries from new to old                              */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_country_index(void* oldelem, void* newelem){
+    i_ccty_name* oldTuple = (i_ccty_name*)oldelem;
+    i_ccty_name* newTuple = (i_ccty_name*)newelem;
+
+    if(!oldelem || !newelem)
+        return -1;
+
+    //copy the data from the new country to the old one
+    *oldTuple = *newTuple;
 
     return 0;
 }
@@ -325,6 +360,27 @@ int swap_country(void* first, void* second){
     assign_country((void*)&tmp, first);
     assign_country(first, second);
     assign_country(second, (void*)&tmp);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Countries to swap                                   */
+/*  P : Swaps two countries                                 */
+/*  O : 0 -> Swapped                                        */
+/*     -1 -> Error                                          */
+/************************************************************/
+int swap_country_index(void* first, void* second){
+    i_ccty_name tmp;
+
+    if(!first || !second)
+        return -1;
+
+    memset(&tmp, 0, sizeof(i_ccty_name));
+
+    assign_country_index((void*)&tmp, first);
+    assign_country_index(first, second);
+    assign_country_index(second, (void*)&tmp);
 
     return 0;
 }

@@ -185,7 +185,7 @@ void tst_AVL_search_country(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void tst_index_country_name(dbc* db){
-    t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), compare_country_name, swap_country, assign_country_index_name, assign_country_index_slot, NULL, NULL, NULL, NULL};
+    t_algo_meta meta = {NULL, db->nr_cty, sizeof(i_ccty_name), compare_country_index_name, swap_country_index, assign_country_index_name, assign_country_index_slot, NULL, NULL, NULL, NULL};
     t_datablock index_block={&db->hdr.off_i_cty_name, &db->hdr.i_cty_name, sizeof(i_ccty_name)};
     t_datablock table_block={&db->hdr.off_cty, 0, sizeof(ccty)};
     FILE* fp = NULL;
@@ -251,7 +251,7 @@ void tst_search_index_country_name(dbc* db){
 void tst_index_group(dbc* db){
     t_algo_meta grp_list = {NULL, 0, sizeof(cgrp_recur), compare_group_FK, swap_group, assign_group, NULL, NULL, NULL, group_right, group_left};
     t_algo_meta grp_array = {NULL, db->nr_grp, sizeof(cgrp), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-    t_algo_meta index = {NULL, db->nr_grp, sizeof(i_cgrp_FK), compare_group_FK, swap_group, assign_group_index_FK, assign_group_index_slot, NULL, NULL, NULL, NULL};
+    t_algo_meta index = {NULL, db->nr_grp, sizeof(i_cgrp_FK), compare_group_FK_index, swap_group_index, assign_group_index_FK, assign_group_index_slot, NULL, NULL, NULL, NULL};
     t_datablock index_block={&db->hdr.off_i_grp_fk, &db->hdr.i_grp_fk, sizeof(i_cgrp_FK)};
     t_datablock table_block={&db->hdr.off_grp, 0, sizeof(cgrp)};
     FILE* fp = NULL;

@@ -225,6 +225,26 @@ int compare_group_FK(void* a, void* b){
 
 /****************************************************************************************/
 /*  I : First group to compare                                                          */
+/*      Second  group to compare                                                        */
+/*  P : Compares two groups by their PK                                                 */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_group_FK_index(void* a, void* b){
+    i_cgrp_FK *tmp_a = (i_cgrp_FK*)a;
+    i_cgrp_FK *tmp_b = (i_cgrp_FK*)b;
+
+    if(tmp_a->cty_id > tmp_b->cty_id)
+        return 1;
+    else if(tmp_a->cty_id < tmp_b->cty_id)
+        return -1;
+    else
+        return 0;
+}
+
+/****************************************************************************************/
+/*  I : First group to compare                                                          */
 /*      FK of the second group to compare                                               */
 /*  P : Compares two groups by their FK                                                 */
 /*  O :  1 if A > B                                                                     */
@@ -293,6 +313,26 @@ int assign_group(void* oldelem, void* newelem){
 }
 
 /****************************************************************************************/
+/*  I : Group to which copy data                                                        */
+/*      Group from which copy data                                                      */
+/*  P : Copies all the fields of groups from new to old                                 */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_group_index(void* oldelem, void* newelem){
+    i_cgrp_FK* oldTuple = (i_cgrp_FK*)oldelem;
+    i_cgrp_FK* newTuple = (i_cgrp_FK*)newelem;
+
+    if(!oldelem || !newelem)
+        return -1;
+
+    //copy the data from the new country to the old one
+    *oldTuple = *newTuple;
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : Group index buffer to which copy data                                           */
 /*      Group from which copy data                                                      */
 /*  P : Copies all the fields of a group to a group index buffer                        */
@@ -349,6 +389,27 @@ int swap_group(void* first, void* second){
     assign_group((void*)&tmp, first);
     assign_group(first, second);
     assign_group(second, (void*)&tmp);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Groups to swap                                      */
+/*  P : Swaps two groups                                    */
+/*  O : 0 -> Swapped                                        */
+/*     -1 -> Error                                          */
+/************************************************************/
+int swap_group_index(void* first, void* second){
+    i_cgrp_FK tmp;
+
+    if(!first || !second)
+        return -1;
+
+    memset(&tmp, 0, sizeof(i_cgrp_FK));
+
+    assign_group_index((void*)&tmp, first);
+    assign_group_index(first, second);
+    assign_group_index(second, (void*)&tmp);
 
     return 0;
 }
