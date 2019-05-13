@@ -61,7 +61,7 @@ int arrayToAVL(t_algo_meta* dArray, t_algo_meta* dAVL, e_listtoarray action);
 * File binary trees creation
 
 ### 5. To Do
-* File binary trees research
+* Implement data manipulation for the remaining tables
 * Implement menus
 * Implement unit tests
 
