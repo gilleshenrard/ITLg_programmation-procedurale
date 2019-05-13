@@ -120,7 +120,7 @@ long create_index_file(dbc* db, t_algo_meta* meta, int nb, t_datablock* i_block,
     }
 
     //sort the buffer
-    quickSort(meta, 0, nb);
+    quickSort(meta, 0, nb-1);
 
     //save the index offset in the header
     fseek(db->fp, 0, SEEK_END);
