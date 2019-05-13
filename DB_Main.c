@@ -264,7 +264,7 @@ void tst_index_group(dbc* db){
     Print_Group(db);
 
     // test list creation
-    printf("\n\nList of groups sorted by their FK : \n\n");
+    printf("\n\n========= List of groups sorted by their FK : ==============\n\n");
     grp_array.structure = db->grp;
     arrayToList(&grp_array, &grp_list, COPY);
     printf("%d groups\n", grp_list.nbelements);
@@ -273,11 +273,12 @@ void tst_index_group(dbc* db){
         popListTop(&grp_list);
 
     //test index creation
+    printf("\n\n======== Index of groups sorted by their FK : =============\n\n");
     create_index_file(db, &index, db->nr_grp, &index_block, &table_block);
 
     fp = fopen(DB_file, "rb");
     if(fp){
-        printf("\nFK\tSLOT\tLEFT\tOFFSET\tRIGHT\n\n");
+        printf("\nFK\t  SLOT\t  LEFT\t OFFSET\t RIGHT\n\n");
         fseek(fp, db->hdr.off_i_grp_fk, SEEK_SET);
         for(int i=0 ; i<db->nr_grp ; i++){
             offset = ftell(fp);
