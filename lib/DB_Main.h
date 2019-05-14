@@ -45,9 +45,11 @@ typedef struct Header
     long off_grp;           // Position bloc group
     long off_i_cty_name;    // Offset of the country index block (by name)
     long off_i_grp_fk;      // Offset of the group index block (by fk)
+    long off_i_job_name;    // Offset of the job index block (by name)
     long i_cty_name;        // Address of the root for the country index (by name)
     long i_grp_fk;          // Address of the root for the group index (by fk)
-    char filler[44];        // filler to get the size to 128 bytes
+    long i_job_name;        // Address of the root for the job index (by name)
+    char filler[36];        // filler to get the size to 128 bytes
 } hder;
 
 /***************************************************************************************
@@ -69,7 +71,10 @@ typedef struct Job
 {
     char tp_rec[SZ_TYPE];   // Type de record JOB
     int  id_job;            // Cle primaire
-    char nm_job[SZ_NAME_SM];
+    char nm_lev[SZ_NAME];
+    char nm_dep[SZ_NAME];
+    char nm_job[SZ_NAME];
+    char filler[32];
 } cjob;
 
 /***************************************************************************************
@@ -104,8 +109,10 @@ typedef struct	db_country
     hder    hdr;    // Header
     ccty*   cty;    // Buffer Country
     cgrp*   grp;    // Buffer Group
+    cjob*   job;    // Job Group
     int     nr_cty; // Nr elements dans buffer
     int     nr_grp; // Nr Groups in the buffer
+    int     nr_job; // Nr Groups in the buffer
 } dbc;
 
 #endif

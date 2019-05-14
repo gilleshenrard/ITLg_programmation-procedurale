@@ -10,6 +10,7 @@
 #include "lib/algo.h"
 #include "lib/DB_File.h"
 #include "lib/DB_Group.h"
+#include "lib/DB_Job.h"
 
 void init_db(dbc*);
 void tst_export_country(dbc*);
@@ -21,6 +22,7 @@ void tst_AVL_search_country(dbc*);
 void tst_index_country_name(dbc* db);
 void tst_search_index_country_name(dbc* db);
 void tst_index_group(dbc* db);
+void tst_index_job(dbc* db);
 
 /****************************************************************************************
 * Programme principal
@@ -38,13 +40,17 @@ int main(void)
 //    tst_AVL_search_country(&db);
 //    tst_index_country_name(&db);
 //    tst_search_index_country_name(&db);
-    tst_index_group(&db);
+//    tst_index_group(&db);
+    tst_index_job(&db);
 
     if(db.cty)
         free(db.cty);
 
     if(db.grp)
         free(db.grp);
+
+    if(db.job)
+        free(db.job);
 
 	return 0;
 }
@@ -59,6 +65,7 @@ void init_db(dbc* db){
     Create_DB(db, "DB_Comp");
     Import_CSV_Country(db);
     Import_CSV_Group(db);
+    Import_CSV_job(db);
 
     printf("header size : %d\n", sizeof(hder));
     printf("ccty size : %d\n", sizeof(ccty));
@@ -293,6 +300,61 @@ void tst_index_group(dbc* db){
         printf("index block offset : %lX\n", db->hdr.off_i_grp_fk);
         printf("index tree root : %lX\n", db->hdr.i_grp_fk);
         printf("root FK : %d\n", buffer.cty_id);
+
+        fclose(fp);
+    }
+}
+
+/****************************************************************************************/
+/*  I : Database in which create a job FK index                                       */
+/*  P : Tests the job FK index creation at the end of the database                    */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_index_job(dbc* db){
+    t_algo_meta job_list = {NULL, 0, sizeof(cjob_recur), compare_job_name, swap_job, assign_job, NULL, NULL, NULL, job_right, job_left};
+    t_algo_meta job_array = {NULL, db->nr_job, sizeof(cjob), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta index = {NULL, db->nr_job, sizeof(i_cjob_name), compare_job_index_name, swap_job_index, assign_job_index_name, assign_job_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block={&db->hdr.off_i_job_name, &db->hdr.i_job_name, sizeof(i_cjob_name)};
+    t_datablock table_block={&db->hdr.off_job, 0, sizeof(cjob)};
+    FILE* fp = NULL;
+    i_cjob_name buffer = {0};
+    long offset = 0;
+
+    printf("\n--------------------- tst_index_job -------------------------------\n");
+    Export_CSV_job(db);
+    Load_job(db);
+    Print_job(db);
+
+    // test list creation
+    printf("\n\n========= List of jobs sorted by their name : ==============\n\n");
+    job_array.structure = db->job;
+    arrayToList(&job_array, &job_list, COPY);
+    printf("%d jobs\n", job_list.nbelements);
+    foreachList(&job_list, NULL, Rec_job_list);
+    while(job_list.structure)
+        popListTop(&job_list);
+
+    //test index creation
+    printf("\n\n======== Index of jobs sorted by their name : =============\n\n");
+    create_index_file(db, &index, db->nr_job, &index_block, &table_block);
+
+    fp = fopen(DB_file, "rb");
+    if(fp){
+        printf("\n\t\t\t    NAME\t  SLOT\t  LEFT\t OFFSET\t RIGHT\n\n");
+        fseek(fp, db->hdr.off_i_job_name, SEEK_SET);
+        for(int i=0 ; i<db->nr_job ; i++){
+            offset = ftell(fp);
+            fread(&buffer, sizeof(i_cjob_name), 1, fp);
+            printf("%32s\t%6lx\t%6lx\t%6lx\t%6lx  %d\n", buffer.nm_job, buffer.slot, buffer.s_left, offset, buffer.s_right, i+1);
+        }
+
+        fseek(fp, db->hdr.i_job_name, SEEK_SET);
+        fread(&buffer, sizeof(i_cjob_name), 1, fp);
+
+        printf("\nNumber of elements : %d\n", db->nr_job);
+        printf("index block offset : %lX\n", db->hdr.off_i_job_name);
+        printf("index tree root : %lX\n", db->hdr.i_job_name);
+        printf("root FK : %s\n", buffer.nm_job);
 
         fclose(fp);
     }
