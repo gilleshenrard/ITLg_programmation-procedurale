@@ -11,6 +11,7 @@
 #include "lib/DB_File.h"
 #include "lib/DB_Group.h"
 #include "lib/DB_Job.h"
+#include "lib/DB_Industry.h"
 
 void init_db(dbc*);
 void tst_export_country(dbc*);
@@ -23,6 +24,7 @@ void tst_index_country_name(dbc* db);
 void tst_search_index_country_name(dbc* db);
 void tst_index_group(dbc* db);
 void tst_index_job(dbc* db);
+void tst_index_industry(dbc* db);
 
 /****************************************************************************************
 * Programme principal
@@ -41,7 +43,8 @@ int main(void)
 //    tst_index_country_name(&db);
 //    tst_search_index_country_name(&db);
 //    tst_index_group(&db);
-    tst_index_job(&db);
+//    tst_index_job(&db);
+    tst_index_industry(&db);
 
     if(db.cty)
         free(db.cty);
@@ -51,6 +54,9 @@ int main(void)
 
     if(db.job)
         free(db.job);
+
+    if(db.ind)
+        free(db.ind);
 
 	return 0;
 }
@@ -63,9 +69,10 @@ int main(void)
 /****************************************************************************************/
 void init_db(dbc* db){
     Create_DB(db, "DB_Comp");
-    Import_CSV_Country(db);
-    Import_CSV_Group(db);
-    Import_CSV_job(db);
+//    Import_CSV_Country(db);
+//    Import_CSV_Group(db);
+//    Import_CSV_job(db);
+    Import_CSV_industry(db);
 
     printf("header size : %d\n", sizeof(hder));
     printf("ccty size : %d\n", sizeof(ccty));
@@ -306,8 +313,8 @@ void tst_index_group(dbc* db){
 }
 
 /****************************************************************************************/
-/*  I : Database in which create a job FK index                                       */
-/*  P : Tests the job FK index creation at the end of the database                    */
+/*  I : Database in which create a job name index                                       */
+/*  P : Tests the job name index creation at the end of the database                    */
 /*  O : /                                                                               */
 /****************************************************************************************/
 void tst_index_job(dbc* db){
@@ -355,6 +362,61 @@ void tst_index_job(dbc* db){
         printf("index block offset : %lX\n", db->hdr.off_i_job_name);
         printf("index tree root : %lX\n", db->hdr.i_job_name);
         printf("root FK : %s\n", buffer.nm_job);
+
+        fclose(fp);
+    }
+}
+
+/****************************************************************************************/
+/*  I : Database in which create a industry PK index                                    */
+/*  P : Tests the industry PK index creation at the end of the database                 */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_index_industry(dbc* db){
+    t_algo_meta ind_list = {NULL, 0, sizeof(cind_recur), compare_industry_PK, swap_industry, assign_industry, NULL, NULL, NULL, industry_right, industry_left};
+    t_algo_meta ind_array = {NULL, db->nr_ind, sizeof(cind), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta index = {NULL, db->nr_ind, sizeof(i_cind_PK), compare_industry_PK_index, swap_industry_index, assign_industry_index_PK, assign_industry_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block={&db->hdr.off_i_ind_pk, &db->hdr.i_ind_pk, sizeof(i_cind_PK)};
+    t_datablock table_block={&db->hdr.off_ind, 0, sizeof(cind)};
+    FILE* fp = NULL;
+    i_cind_PK buffer = {0};
+    long offset = 0;
+
+    printf("\n--------------------- tst_index_industry -------------------------------\n");
+    Export_CSV_industry(db);
+    Load_industry(db);
+    Print_industry(db);
+
+    // test list creation
+    printf("\n\n========= List of industries sorted by their FK : ==============\n\n");
+    ind_array.structure = db->ind;
+    arrayToList(&ind_array, &ind_list, COPY);
+    printf("%d industries\n", ind_list.nbelements);
+    foreachList(&ind_list, NULL, Rec_industry_list);
+    while(ind_list.structure)
+        popListTop(&ind_list);
+
+    //test index creation
+    printf("\n\n======== Index of industries sorted by their FK : =============\n\n");
+    create_index_file(db, &index, db->nr_ind, &index_block, &table_block);
+
+    fp = fopen(DB_file, "rb");
+    if(fp){
+        printf("\nPK\t  SLOT\t  LEFT\t OFFSET\t RIGHT\n\n");
+        fseek(fp, db->hdr.off_i_ind_pk, SEEK_SET);
+        for(int i=0 ; i<db->nr_ind ; i++){
+            offset = ftell(fp);
+            fread(&buffer, sizeof(i_cind_PK), 1, fp);
+            printf("%d\t%6lx\t%6lx\t%6lx\t%6lx  %d\n", buffer.ind_id, buffer.slot, buffer.s_left, offset, buffer.s_right, i+1);
+        }
+
+        fseek(fp, db->hdr.i_ind_pk, SEEK_SET);
+        fread(&buffer, sizeof(i_cind_PK), 1, fp);
+
+        printf("\nNumber of elements : %d\n", db->nr_ind);
+        printf("index block offset : %lX\n", db->hdr.off_i_ind_pk);
+        printf("index tree root : %lX\n", db->hdr.i_ind_pk);
+        printf("root FK : %d\n", buffer.ind_id);
 
         fclose(fp);
     }
