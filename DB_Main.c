@@ -12,7 +12,8 @@
 #include "lib/DB_Group.h"
 #include "lib/DB_Job.h"
 #include "lib/DB_Industry.h"
-#include "lib/DB_Campain.h"
+#include "lib/DB_campaign.h"
+#include "lib/DB_Contact.h"
 
 void init_db(dbc*);
 void tst_export_country(dbc*);
@@ -26,7 +27,8 @@ void tst_search_index_country_name(dbc* db);
 void tst_index_group(dbc* db);
 void tst_index_job(dbc* db);
 void tst_index_industry(dbc* db);
-void tst_index_campain(dbc* db);
+void tst_index_campaign(dbc* db);
+void tst_index_contact(dbc* db);
 
 /****************************************************************************************
 * Programme principal
@@ -47,7 +49,8 @@ int main(void)
 //    tst_index_group(&db);
 //    tst_index_job(&db);
 //    tst_index_industry(&db);
-    tst_index_campain(&db);
+//    tst_index_campaign(&db);
+    tst_index_contact(&db);
 
     if(db.cty)
         free(db.cty);
@@ -64,6 +67,9 @@ int main(void)
     if(db.cam)
         free(db.cam);
 
+    if(db.con)
+        free(db.con);
+
 	return 0;
 }
 
@@ -79,15 +85,22 @@ void init_db(dbc* db){
 //    Import_CSV_Group(db);
 //    Import_CSV_job(db);
 //    Import_CSV_industry(db);
-    Import_CSV_campain(db);
+//    Import_CSV_campaign(db);
+    Import_CSV_contact(db);
 
     printf("header size : %d\n", sizeof(hder));
     printf("ccty size : %d\n", sizeof(ccty));
     printf("cjob size : %d\n", sizeof(cjob));
     printf("cind size : %d\n", sizeof(cind));
     printf("cgrp size : %d\n", sizeof(cgrp));
+    printf("cgrp size : %d\n", sizeof(ccam));
+    printf("cgrp size : %d\n", sizeof(ccon));
     printf("i_ccty_name size : %d\n", sizeof(i_ccty_name));
+    printf("i_cgrp_FK size : %d\n", sizeof(i_cjob_name));
+    printf("i_cgrp_FK size : %d\n", sizeof(i_cind_PK));
     printf("i_cgrp_FK size : %d\n", sizeof(i_cgrp_FK));
+    printf("i_cgrp_FK size : %d\n", sizeof(i_ccam_PK));
+    printf("i_cgrp_FK size : %d\n", sizeof(i_ccon_cam));
 }
 
 /****************************************************************************************/
@@ -430,36 +443,36 @@ void tst_index_industry(dbc* db){
 }
 
 /****************************************************************************************/
-/*  I : Database in which create a campain PK index                                    */
-/*  P : Tests the campain PK index creation at the end of the database                 */
+/*  I : Database in which create a campaign PK index                                    */
+/*  P : Tests the campaign PK index creation at the end of the database                 */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void tst_index_campain(dbc* db){
-    t_algo_meta campain_list = {NULL, 0, sizeof(ccam_recur), compare_campain_PK, swap_campain, assign_campain, NULL, NULL, NULL, campain_right, campain_left};
-    t_algo_meta campain_array = {NULL, db->nr_cam, sizeof(ccam), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-    t_algo_meta index = {NULL, db->nr_cam, sizeof(i_ccam_PK), compare_campain_PK_index, swap_campain_index, assign_campain_index_PK, assign_campain_index_slot, NULL, NULL, NULL, NULL};
+void tst_index_campaign(dbc* db){
+    t_algo_meta campaign_list = {NULL, 0, sizeof(ccam_recur), compare_campaign_PK, swap_campaign, assign_campaign, NULL, NULL, NULL, campaign_right, campaign_left};
+    t_algo_meta campaign_array = {NULL, db->nr_cam, sizeof(ccam), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta index = {NULL, db->nr_cam, sizeof(i_ccam_PK), compare_campaign_PK_index, swap_campaign_index, assign_campaign_index_PK, assign_campaign_index_slot, NULL, NULL, NULL, NULL};
     t_datablock index_block={&db->hdr.off_i_cam_pk, &db->hdr.i_cam_pk, sizeof(i_ccam_PK)};
     t_datablock table_block={&db->hdr.off_cam, 0, sizeof(ccam)};
     FILE* fp = NULL;
     i_ccam_PK buffer = {0};
     long offset = 0;
 
-    printf("\n--------------------- tst_index_campain -------------------------------\n");
-    Export_CSV_campain(db);
-    Load_campain(db);
-    Print_campain(db);
+    printf("\n--------------------- tst_index_campaign -------------------------------\n");
+    Export_CSV_campaign(db);
+    Load_campaign(db);
+    Print_campaign(db);
 
     // test list creation
-    printf("\n\n========= List of campains sorted by their PK : ==============\n\n");
-    campain_array.structure = db->cam;
-    arrayToList(&campain_array, &campain_list, COPY);
-    printf("%d campains\n", campain_list.nbelements);
-    foreachList(&campain_list, NULL, Rec_campain_list);
-    while(campain_list.structure)
-        popListTop(&campain_list);
+    printf("\n\n========= List of campaigns sorted by their PK : ==============\n\n");
+    campaign_array.structure = db->cam;
+    arrayToList(&campaign_array, &campaign_list, COPY);
+    printf("%d campaigns\n", campaign_list.nbelements);
+    foreachList(&campaign_list, NULL, Rec_campaign_list);
+    while(campaign_list.structure)
+        popListTop(&campaign_list);
 
     //test index creation
-    printf("\n\n======== index of campains sorted by their PK : =============\n\n");
+    printf("\n\n======== index of campaigns sorted by their PK : =============\n\n");
     create_index_file(db, &index, db->nr_cam, &index_block, &table_block);
 
     fp = fopen(DB_file, "rb");
@@ -478,6 +491,61 @@ void tst_index_campain(dbc* db){
         printf("\nNumber of elements : %d\n", db->nr_cam);
         printf("index block offset : %lX\n", db->hdr.off_i_cam_pk);
         printf("index tree root : %lX\n", db->hdr.i_cam_pk);
+        printf("root FK : %d\n", buffer.cam_id);
+
+        fclose(fp);
+    }
+}
+
+/****************************************************************************************/
+/*  I : Database in which create a contact PK index                                    */
+/*  P : Tests the contact PK index creation at the end of the database                 */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_index_contact(dbc* db){
+    t_algo_meta contact_list = {NULL, 0, sizeof(ccon_recur), compare_contact_cam, swap_contact, assign_contact, NULL, NULL, NULL, contact_right, contact_left};
+    t_algo_meta contact_array = {NULL, db->nr_con, sizeof(ccon), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta index = {NULL, db->nr_con, sizeof(i_ccon_cam), compare_contact_cam_index, swap_contact_index, assign_contact_index_cam, assign_contact_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block={&db->hdr.off_i_con_cam, &db->hdr.i_con_cam, sizeof(i_ccon_cam)};
+    t_datablock table_block={&db->hdr.off_con, 0, sizeof(ccon)};
+    FILE* fp = NULL;
+    i_ccon_cam buffer = {0};
+    long offset = 0;
+
+    printf("\n--------------------- tst_index_contact -------------------------------\n");
+    Export_CSV_contact(db);
+    Load_contact(db);
+    Print_contact(db);
+
+    // test list creation
+    printf("\n\n========= List of contacts sorted by their PK : ==============\n\n");
+    contact_array.structure = db->con;
+    arrayToList(&contact_array, &contact_list, COPY);
+    printf("%d contacts\n", contact_list.nbelements);
+    foreachList(&contact_list, NULL, Rec_contact_list);
+    while(contact_list.structure)
+        popListTop(&contact_list);
+
+    //test index creation
+    printf("\n\n======== index of contacts sorted by their PK : =============\n\n");
+    create_index_file(db, &index, db->nr_con, &index_block, &table_block);
+
+    fp = fopen(DB_file, "rb");
+    if(fp){
+        printf("\nPK\t  SLOT\t  LEFT\t OFFSET\t RIGHT\n\n");
+        fseek(fp, db->hdr.off_i_con_cam, SEEK_SET);
+        for(int i=0 ; i<db->nr_con ; i++){
+            offset = ftell(fp);
+            fread(&buffer, sizeof(i_ccon_cam), 1, fp);
+            printf("%d\t%6lx\t%6lx\t%6lx\t%6lx  %d\n", buffer.cam_id, buffer.slot, buffer.s_left, offset, buffer.s_right, i+1);
+        }
+
+        fseek(fp, db->hdr.i_con_cam, SEEK_SET);
+        fread(&buffer, sizeof(i_ccon_cam), 1, fp);
+
+        printf("\nNumber of elements : %ld\n", db->nr_con);
+        printf("index block offset : %lX\n", db->hdr.off_i_con_cam);
+        printf("index tree root : %lX\n", db->hdr.i_con_cam);
         printf("root FK : %d\n", buffer.cam_id);
 
         fclose(fp);
