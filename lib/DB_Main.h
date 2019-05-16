@@ -16,6 +16,7 @@
 #define SZ_JOB 200
 #define SZ_IND 100
 #define SZ_GRP 3000
+#define SZ_CAM 600
 
 #define SZ_TYPE 8
 #define SZ_NAME 28
@@ -38,18 +39,22 @@ typedef struct Header
     uint sz_job;            // Taille bloc job
     uint sz_ind;            // Taille bloc industry
     uint sz_grp;            // Taille bloc group
+    uint sz_cam;            // Taille bloc campain
     long off_cty;           // Position bloc country
     long off_job;           // Position bloc job
     long off_ind;           // Position bloc industry
     long off_grp;           // Position bloc group
+    long off_cam;           // Position bloc campain
     long off_i_cty_name;    // Offset of the country index block (by name)
     long off_i_grp_fk;      // Offset of the group index block (by fk)
     long off_i_job_name;    // Offset of the job index block (by name)
     long off_i_ind_pk;      // Offset of the industry index block (by pk)
+    long off_i_cam_pk;      // Offset of the campain index block (by pk)
     long i_cty_name;        // Address of the root for the country index (by name)
     long i_grp_fk;          // Address of the root for the group index (by fk)
     long i_job_name;        // Address of the root for the job index (by name)
     long i_ind_pk;          // Address of the root for the industry index (by pk)
+    long i_cam_pk;          // Address of the root for the campain index (by pk)
     char filler[32];        // filler to get the size to 128 bytes
 } hder;
 
@@ -99,9 +104,28 @@ typedef struct Group
     int  id_grp;            // Cle primaire
     char nm_grp[SZ_NAME];
     char cd_cty[4];         // Group country tag
-    int id_cty;             // Foreign Key
+    int  id_cty;             // Foreign Key
     char filler[16];        // Filler to bring the group record size to 64 bytes
 } cgrp;
+
+/***************************************************************************************
+* Table Campain : dummy
+****************************************************************************************/
+typedef struct Campain
+{
+    char  tp_rec[SZ_TYPE];   // Type de record CAM
+    int   id_cam;            // Cle primaire
+    char  nm_cam[SZ_NAME];   // Campain name
+    char  tp_cam[SZ_NAME];   // Campain type
+    char  dt_cam[11];        // Campain start date
+    char  nm_lev[SZ_NAME];   // Campain level denomination
+    char  nm_dep[SZ_NAME];   // Campain relevant department name
+    char  nm_sec[SZ_NAME];   // Campain relevant sector name
+    char  nm_zon[SZ_NAME];   // Campain targeted zone
+    int   nr_year;           // Amount of years the campain lasts
+    float cost;              // Cost per year ?
+    char  filler[16];        // Filler to bring the group record size to 64 bytes
+} ccam;
 
 /***************************************************************************************
 * Structure base de donnees
@@ -114,10 +138,12 @@ typedef struct	db_country
     cgrp*   grp;    // Buffer Group
     cjob*   job;    // Buffer Job
     cind*   ind;    // Buffer industry
+    ccam*   cam;    // Buffer campain
     int     nr_cty; // Nr elements dans buffer
     int     nr_grp; // Nr Groups in the buffer
     int     nr_job; // Nr Jobs in the buffer
     int     nr_ind; // Nr Industries in the buffer
+    int     nr_cam; // Nr campains in the buffer
 } dbc;
 
 #endif

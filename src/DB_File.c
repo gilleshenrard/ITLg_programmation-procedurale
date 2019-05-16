@@ -17,6 +17,7 @@ int Create_DB(dbc *db, char filename[])
     cjob job = {0};
     cind ind = {0};
     cgrp grp = {0};
+    ccam cam = {0};
     FILE *fp_lg = NULL;
 
     memset(db, 0, sizeof(dbc));
@@ -37,12 +38,14 @@ int Create_DB(dbc *db, char filename[])
     db->hdr.sz_job = SZ_JOB;
     db->hdr.sz_ind = SZ_IND;
     db->hdr.sz_grp = SZ_GRP;
+    db->hdr.sz_cam = SZ_CAM;
 
     db->hdr.off_cty = sizeof(hder);
     db->hdr.off_job = db->hdr.off_cty + SZ_CTY * sizeof(ccty);
     db->hdr.off_ind = db->hdr.off_job + SZ_JOB * sizeof(cjob);
     db->hdr.off_grp = db->hdr.off_ind + SZ_IND * sizeof(cind);
-    db->hdr.db_size = db->hdr.off_grp + SZ_GRP * sizeof(cgrp);
+    db->hdr.off_cam = db->hdr.off_grp + SZ_GRP * sizeof(cgrp);
+    db->hdr.db_size = db->hdr.off_cam + SZ_CAM * sizeof(ccam);
 
     fwrite(&db->hdr, 1, sizeof(db->hdr), db->fp);
 
@@ -65,6 +68,11 @@ int Create_DB(dbc *db, char filename[])
     strcpy(grp.tp_rec, "GRP");
     for (i=0; i<SZ_GRP; i++)
         fwrite(&grp, 1, sizeof(cgrp), db->fp);
+
+    // Creation de la table campain ----------------------------
+    strcpy(cam.tp_rec, "CAM");
+    for (i=0; i<SZ_CAM; i++)
+        fwrite(&cam, 1, sizeof(ccam), db->fp);
 
     fprintf(fp_lg, "Database %s created\n", db->hdr.db_name);
 
