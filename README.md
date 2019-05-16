@@ -58,12 +58,20 @@ int arrayToAVL(t_algo_meta* dArray, t_algo_meta* dAVL, e_listtoarray action);
 * Unit tests for all existing procedures, in [DB_Main.c](https://github.com/gilleshenrard/ITLg_programmation-procedurale/blob/master/DB_Main.c)
 
 ### 4. Currently implemented in the final assignment
-* File binary trees creation
+* AVL trees (in memory)
+* chained lists (in memory)
+* File binary trees creation and research
+* data manipulation for all the tables
+* file index creation
+* unit tests
 
 ### 5. To Do
-* Implement data manipulation for the remaining tables
 * Implement menus
-* Implement unit tests
+* figure out which indexes are necessary for the final reports
+* report generation method
+* paginated table printing for large tables
+* (modify AVL trees to create indexes directly for small tables)
+* push further testing and debugging for very large tables 
 
 ### 6. Known issues
 n/a
