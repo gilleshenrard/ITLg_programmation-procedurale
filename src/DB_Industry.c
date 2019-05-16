@@ -54,13 +54,13 @@ void Import_CSV_industry(dbc *db){
 
     db->nr_ind = i;
 
-    fprintf(fp_lg, "industries imported : %d \n", db->nr_ind);
+    fprintf(fp_lg, "industries imported : %ld \n", db->nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nindustries imported : %d \n\n", db->nr_ind);
+    printf("\nindustries imported : %ld \n\n", db->nr_ind);
 
 	return ;
 }
@@ -95,13 +95,13 @@ void Export_CSV_industry(dbc *db){
                 ind.nm_ind);
     }
 
-    fprintf(fp_lg, "Industry exported : %d \n", db->nr_ind);
+    fprintf(fp_lg, "Industry exported : %ld \n", db->nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nIndustry exported : %d \n\n", db->nr_ind);
+    printf("\nIndustry exported : %ld \n\n", db->nr_ind);
 
     return;
 }
@@ -136,12 +136,12 @@ void Load_industry(dbc *db){
         db->ind[i] = ind;
     }
 
-    fprintf(fp_lg, "Industry loaded into buffer : %d \n", db->nr_ind);
+    fprintf(fp_lg, "Industry loaded into buffer : %ld \n", db->nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nIndustry loaded into buffer : %d \n\n", db->nr_ind);
+    printf("\nIndustry loaded into buffer : %ld \n\n", db->nr_ind);
 
     return;
 }

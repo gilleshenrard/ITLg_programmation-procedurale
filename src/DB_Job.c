@@ -58,13 +58,13 @@ void Import_CSV_job(dbc *db)
 
     db->nr_job = i;
 
-    fprintf(fp_lg, "Job imported : %d \n", db->nr_job);
+    fprintf(fp_lg, "Job imported : %ld \n", db->nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nJob imported : %d \n\n", db->nr_job);
+    printf("\nJob imported : %ld \n\n", db->nr_job);
 
 	return ;
 }
@@ -99,13 +99,13 @@ void Export_CSV_job(dbc *db)
                 job.nm_job);
     }
 
-    fprintf(fp_lg, "Job exported : %d \n", db->nr_job);
+    fprintf(fp_lg, "Job exported : %ld \n", db->nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nJob exported : %d \n\n", db->nr_job);
+    printf("\nJob exported : %ld \n\n", db->nr_job);
 
     return;
 }
@@ -139,12 +139,12 @@ void Load_job(dbc *db)
         db->job[i] = job;
     }
 
-    fprintf(fp_lg, "Job loaded into buffer : %d \n", db->nr_job);
+    fprintf(fp_lg, "Job loaded into buffer : %ld \n", db->nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nJob loaded into buffer : %d \n\n", db->nr_job);
+    printf("\nJob loaded into buffer : %ld \n\n", db->nr_job);
 
     return;
 }

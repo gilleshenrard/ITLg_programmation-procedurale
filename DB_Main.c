@@ -243,7 +243,7 @@ void tst_index_country_name(dbc* db){
         fseek(fp, db->hdr.i_cty_name, SEEK_SET);
         fread(&buffer, sizeof(i_ccty_name), 1, fp);
 
-        printf("\nNumber of elements : %d\n", db->nr_cty);
+        printf("\nNumber of elements : %ld\n", db->nr_cty);
         printf("index block offset : %lX\n", db->hdr.off_i_cty_name);
         printf("index tree root : %lX\n", db->hdr.i_cty_name);
         printf("root city name : %s\n", buffer.nm_cty);
@@ -323,7 +323,7 @@ void tst_index_group(dbc* db){
         fseek(fp, db->hdr.i_grp_fk, SEEK_SET);
         fread(&buffer, sizeof(i_cgrp_FK), 1, fp);
 
-        printf("\nNumber of elements : %d\n", db->nr_grp);
+        printf("\nNumber of elements : %ld\n", db->nr_grp);
         printf("index block offset : %lX\n", db->hdr.off_i_grp_fk);
         printf("index tree root : %lX\n", db->hdr.i_grp_fk);
         printf("root FK : %d\n", buffer.cty_id);
@@ -378,7 +378,7 @@ void tst_index_job(dbc* db){
         fseek(fp, db->hdr.i_job_name, SEEK_SET);
         fread(&buffer, sizeof(i_cjob_name), 1, fp);
 
-        printf("\nNumber of elements : %d\n", db->nr_job);
+        printf("\nNumber of elements : %ld\n", db->nr_job);
         printf("index block offset : %lX\n", db->hdr.off_i_job_name);
         printf("index tree root : %lX\n", db->hdr.i_job_name);
         printf("root FK : %s\n", buffer.nm_job);
@@ -433,7 +433,7 @@ void tst_index_industry(dbc* db){
         fseek(fp, db->hdr.i_ind_pk, SEEK_SET);
         fread(&buffer, sizeof(i_cind_PK), 1, fp);
 
-        printf("\nNumber of elements : %d\n", db->nr_ind);
+        printf("\nNumber of elements : %ld\n", db->nr_ind);
         printf("index block offset : %lX\n", db->hdr.off_i_ind_pk);
         printf("index tree root : %lX\n", db->hdr.i_ind_pk);
         printf("root FK : %d\n", buffer.ind_id);
@@ -488,7 +488,7 @@ void tst_index_campaign(dbc* db){
         fseek(fp, db->hdr.i_cam_pk, SEEK_SET);
         fread(&buffer, sizeof(i_ccam_PK), 1, fp);
 
-        printf("\nNumber of elements : %d\n", db->nr_cam);
+        printf("\nNumber of elements : %ld\n", db->nr_cam);
         printf("index block offset : %lX\n", db->hdr.off_i_cam_pk);
         printf("index tree root : %lX\n", db->hdr.i_cam_pk);
         printf("root FK : %d\n", buffer.cam_id);

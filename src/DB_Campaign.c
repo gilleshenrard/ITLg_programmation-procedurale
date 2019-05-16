@@ -77,13 +77,13 @@ void Import_CSV_campaign(dbc *db){
 
     db->nr_cam = i;
 
-    fprintf(fp_lg, "campaigns imported : %d \n", db->nr_cam);
+    fprintf(fp_lg, "campaigns imported : %ld \n", db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\ncampaigns imported : %d \n\n", db->nr_cam);
+    printf("\ncampaigns imported : %ld \n\n", db->nr_cam);
 
 	return ;
 }
@@ -125,13 +125,13 @@ void Export_CSV_campaign(dbc *db){
                 cam.cost);
     }
 
-    fprintf(fp_lg, "campaign exported : %d \n", db->nr_cam);
+    fprintf(fp_lg, "campaign exported : %ld \n", db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\ncampaign exported : %d \n\n", db->nr_cam);
+    printf("\ncampaign exported : %ld \n\n", db->nr_cam);
 
     return;
 }
@@ -166,12 +166,12 @@ void Load_campaign(dbc *db){
         db->cam[i] = cam;
     }
 
-    fprintf(fp_lg, "campaign loaded into buffer : %d \n", db->nr_cam);
+    fprintf(fp_lg, "campaign loaded into buffer : %ld \n", db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\ncampaign loaded into buffer : %d \n\n", db->nr_cam);
+    printf("\ncampaign loaded into buffer : %ld \n\n", db->nr_cam);
 
     return;
 }

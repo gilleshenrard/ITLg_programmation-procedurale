@@ -58,13 +58,13 @@ void Import_CSV_Group(dbc *db){
 
     db->nr_grp = i;
 
-    fprintf(fp_lg, "Groups imported : %d \n", db->nr_grp);
+    fprintf(fp_lg, "Groups imported : %ld \n", db->nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nGroups imported : %d \n\n", db->nr_grp);
+    printf("\nGroups imported : %ld \n\n", db->nr_grp);
 
 	return ;
 }
@@ -100,13 +100,13 @@ void Export_CSV_Group(dbc *db){
                 grp.id_cty);
     }
 
-    fprintf(fp_lg, "Country exported : %d \n", db->nr_grp);
+    fprintf(fp_lg, "Country exported : %ld \n", db->nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCountry exported : %d \n\n", db->nr_grp);
+    printf("\nCountry exported : %ld \n\n", db->nr_grp);
 
     return;
 }
@@ -141,12 +141,12 @@ void Load_Group(dbc *db){
         db->grp[i] = grp;
     }
 
-    fprintf(fp_lg, "Country loaded into buffer : %d \n", db->nr_grp);
+    fprintf(fp_lg, "Country loaded into buffer : %ld \n", db->nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCountry loaded into buffer : %d \n\n", db->nr_grp);
+    printf("\nCountry loaded into buffer : %ld \n\n", db->nr_grp);
 
     return;
 }

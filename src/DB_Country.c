@@ -58,13 +58,13 @@ void Import_CSV_Country(dbc *db)
 
     db->nr_cty = i;
 
-    fprintf(fp_lg, "Country imported : %d \n", db->nr_cty);
+    fprintf(fp_lg, "Country imported : %ld \n", db->nr_cty);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nCountry imported : %d \n\n", db->nr_cty);
+    printf("\nCountry imported : %ld \n\n", db->nr_cty);
 
 	return ;
 }
@@ -99,13 +99,13 @@ void Export_CSV_Country(dbc *db)
                 cty.cd_iso);
     }
 
-    fprintf(fp_lg, "Country exported : %d \n", db->nr_cty);
+    fprintf(fp_lg, "Country exported : %ld \n", db->nr_cty);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCountry exported : %d \n\n", db->nr_cty);
+    printf("\nCountry exported : %ld \n\n", db->nr_cty);
 
     return;
 }
@@ -139,12 +139,12 @@ void Load_Country(dbc *db)
         db->cty[i] = cty;
     }
 
-    fprintf(fp_lg, "Country loaded into buffer : %d \n", db->nr_cty);
+    fprintf(fp_lg, "Country loaded into buffer : %ld \n", db->nr_cty);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCountry loaded into buffer : %d \n\n", db->nr_cty);
+    printf("\nCountry loaded into buffer : %ld \n\n", db->nr_cty);
 
     return;
 }

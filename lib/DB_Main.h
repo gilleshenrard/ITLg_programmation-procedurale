@@ -157,11 +157,11 @@ typedef struct	db_country
     cind*   ind;    // Buffer industry
     ccam*   cam;    // Buffer campain
     ccon*   con;    // Buffer contacts
-    int     nr_cty; // Nr elements dans buffer
-    int     nr_grp; // Nr Groups in the buffer
-    int     nr_job; // Nr Jobs in the buffer
-    int     nr_ind; // Nr Industries in the buffer
-    int     nr_cam; // Nr campains in the buffer
+    long    nr_cty; // Nr elements dans buffer
+    long    nr_grp; // Nr Groups in the buffer
+    long    nr_job; // Nr Jobs in the buffer
+    long    nr_ind; // Nr Industries in the buffer
+    long    nr_cam; // Nr campains in the buffer
     long    nr_con; // Nr contacts in the buffer
 } dbc;
 
