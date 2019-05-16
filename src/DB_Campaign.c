@@ -1,11 +1,11 @@
-#include "../lib/DB_Campain.h"
+#include "../lib/DB_Campaign.h"
 
 /****************************************************************************************/
-/*  I : Database to which import the campains CSV file                                  */
-/*  P : Reads the whole campains CSV file and writes it in the Database file            */
+/*  I : Database to which import the campaigns CSV file                                  */
+/*  P : Reads the whole campaigns CSV file and writes it in the Database file            */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void Import_CSV_campain(dbc *db){
+void Import_CSV_campaign(dbc *db){
     int i=0;
     char line[BUF_LEN];
     char fld[BUF_LEN];
@@ -19,7 +19,7 @@ void Import_CSV_campain(dbc *db){
 	fpi = fopen(CSV_cam_imp, "r");
 	if (fpi == NULL) { printf("Erreur\n"); return; }
 
-    printf("\ncampains : importing ...\n");
+    printf("\ncampaigns : importing ...\n");
 
     fgets(line, 200, fpi);
 
@@ -77,23 +77,23 @@ void Import_CSV_campain(dbc *db){
 
     db->nr_cam = i;
 
-    fprintf(fp_lg, "campains imported : %d \n", db->nr_cam);
+    fprintf(fp_lg, "campaigns imported : %d \n", db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\ncampains imported : %d \n\n", db->nr_cam);
+    printf("\ncampaigns imported : %d \n\n", db->nr_cam);
 
 	return ;
 }
 
 /****************************************************************************************/
-/*  I : Database from which export the campains CSV file                                */
-/*  P : Reads the whole campains database and exports it in a CSV file                  */
+/*  I : Database from which export the campaigns CSV file                                */
+/*  P : Reads the whole campaigns database and exports it in a CSV file                  */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void Export_CSV_campain(dbc *db){
+void Export_CSV_campaign(dbc *db){
     int i;
 	ccam cam;
 	FILE *fpo, *fp_lg;
@@ -101,8 +101,8 @@ void Export_CSV_campain(dbc *db){
     db->fp = fopen(DB_file, "rb+");
     fp_lg = fopen(log_file, "a");
 
-    printf("\nCampain : exporting ...\n");
-    fpo = fopen("Data_Export/Exp_Campain.csv", "w");
+    printf("\ncampaign : exporting ...\n");
+    fpo = fopen("Data_Export/Exp_campaign.csv", "w");
     fprintf(fpo,"Id;Nm_Cam;Tp_Cam;Dt_Cam;Nm_Lev;Nm_Dep;Nm_Sec;Nm_Zon;Nr_Yr;Cost\n");
 
     fseek(db->fp, db->hdr.off_cam, SEEK_SET);
@@ -125,23 +125,23 @@ void Export_CSV_campain(dbc *db){
                 cam.cost);
     }
 
-    fprintf(fp_lg, "Campain exported : %d \n", db->nr_cam);
+    fprintf(fp_lg, "campaign exported : %d \n", db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCampain exported : %d \n\n", db->nr_cam);
+    printf("\ncampaign exported : %d \n\n", db->nr_cam);
 
     return;
 }
 
 /****************************************************************************************/
 /*  I : Database from which import the records in memory                                */
-/*  P : Reads the whole campains database and loads them in memory                      */
+/*  P : Reads the whole campaigns database and loads them in memory                      */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void Load_campain(dbc *db){
+void Load_campaign(dbc *db){
     int i;
 	ccam cam;
 	FILE *fp_lg;
@@ -154,7 +154,7 @@ void Load_campain(dbc *db){
 
     db->cam = (ccam*)calloc(db->nr_cam, sizeof(ccam));
 
-    printf("\nCampain : loading ...\n");
+    printf("\ncampaign : loading ...\n");
 
     fseek(db->fp, db->hdr.off_cam, SEEK_SET);
 
@@ -166,36 +166,36 @@ void Load_campain(dbc *db){
         db->cam[i] = cam;
     }
 
-    fprintf(fp_lg, "Campain loaded into buffer : %d \n", db->nr_cam);
+    fprintf(fp_lg, "campaign loaded into buffer : %d \n", db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCampain loaded into buffer : %d \n\n", db->nr_cam);
+    printf("\ncampaign loaded into buffer : %d \n\n", db->nr_cam);
 
     return;
 }
 
 /****************************************************************************************/
-/*  I : Database from which print the campains                                          */
-/*  P : Prints all the campains in the memory buffer                                    */
+/*  I : Database from which print the campaigns                                          */
+/*  P : Prints all the campaigns in the memory buffer                                    */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void Print_campain(dbc *db){
+void Print_campaign(dbc *db){
     int i;
 
     for (i=0; i<db->nr_cam; i++)
-        Rec_campain(&db->cam[i]);
+        Rec_campaign(&db->cam[i]);
 
     return;
 }
 
 /****************************************************************************************/
-/*  I : Campain record to print                                                        */
-/*  P : Prints an Campain record                                                       */
+/*  I : campaign record to print                                                        */
+/*  P : Prints an campaign record                                                       */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void Rec_campain(ccam *rec){
+void Rec_campaign(ccam *rec){
     printf("%4d %32s %32s %32s %32s %32s %32s %32s %4d %f\n",
             rec->id_cam,
             rec->nm_cam,
@@ -220,11 +220,11 @@ void Rec_campain(ccam *rec){
 
 /****************************************************************************************/
 /*  I : /                                                                               */
-/*  P : Allocates memory for a Campain and sets its height to 1 (leaf for AVL)          */
-/*  O : Campain created if OK                                                           */
+/*  P : Allocates memory for a campaign and sets its height to 1 (leaf for AVL)          */
+/*  O : campaign created if OK                                                           */
 /*      NULL if error                                                                   */
 /****************************************************************************************/
-void* allocate_campain(void){
+void* allocate_campaign(void){
     ccam_recur *tmp=NULL;
 
     //memory allocation for the new element (calloc to initialize with all 0)
@@ -235,14 +235,14 @@ void* allocate_campain(void){
 }
 
 /****************************************************************************************/
-/*  I : First campain to compare                                                        */
-/*      Second  campain to compare                                                      */
-/*  P : Compares two campains by their PK                                               */
+/*  I : First campaign to compare                                                        */
+/*      Second  campaign to compare                                                      */
+/*  P : Compares two campaigns by their PK                                               */
 /*  O :  1 if A > B                                                                     */
 /*       0 if A = B                                                                     */
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
-int compare_campain_PK(void* a, void* b){
+int compare_campaign_PK(void* a, void* b){
     ccam_recur *tmp_a = (ccam_recur*)a;
     ccam_recur *tmp_b = (ccam_recur*)b;
 
@@ -255,14 +255,14 @@ int compare_campain_PK(void* a, void* b){
 }
 
 /****************************************************************************************/
-/*  I : First campain to compare                                                        */
-/*      Second  campain to compare                                                      */
-/*  P : Compares two campains by their PK                                               */
+/*  I : First campaign to compare                                                        */
+/*      Second  campaign to compare                                                      */
+/*  P : Compares two campaigns by their PK                                               */
 /*  O :  1 if A > B                                                                     */
 /*       0 if A = B                                                                     */
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
-int compare_campain_PK_index(void* a, void* b){
+int compare_campaign_PK_index(void* a, void* b){
     i_ccam_PK *tmp_a = (i_ccam_PK*)a;
     i_ccam_PK *tmp_b = (i_ccam_PK*)b;
 
@@ -275,14 +275,14 @@ int compare_campain_PK_index(void* a, void* b){
 }
 
 /****************************************************************************************/
-/*  I : First campain to compare                                                        */
-/*      PK of the second campain to compare                                             */
-/*  P : Compares two campains by their PK                                               */
+/*  I : First campaign to compare                                                        */
+/*      PK of the second campaign to compare                                             */
+/*  P : Compares two campaigns by their PK                                               */
 /*  O :  1 if A > B                                                                     */
 /*       0 if A = B                                                                     */
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
-int compare_campain_PK_int(void* a, void* b){
+int compare_campaign_PK_int(void* a, void* b){
     ccam_recur *tmp_a = (ccam_recur*)a;
     int* PK = (int*)b;
 
@@ -295,14 +295,14 @@ int compare_campain_PK_int(void* a, void* b){
 }
 
 /****************************************************************************************/
-/*  I : campain index element to compare                                                */
-/*      PK of the second campain to compare                                             */
-/*  P : Compares two campains by their PK                                               */
+/*  I : campaign index element to compare                                                */
+/*      PK of the second campaign to compare                                             */
+/*  P : Compares two campaigns by their PK                                               */
 /*  O :  1 if A > B                                                                     */
 /*       0 if A = B                                                                     */
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
-int compare_campain_index_int(void* a, void* b){
+int compare_campaign_index_int(void* a, void* b){
     i_ccam_PK *tmp_a = (i_ccam_PK*)a;
     int* PK = (int*)b;
 
@@ -315,13 +315,13 @@ int compare_campain_index_int(void* a, void* b){
 }
 
 /****************************************************************************************/
-/*  I : campain to which copy data                                                      */
-/*      campain from which copy data                                                    */
-/*  P : Copies all the fields of campains from new to old                               */
+/*  I : campaign to which copy data                                                      */
+/*      campaign from which copy data                                                    */
+/*  P : Copies all the fields of campaigns from new to old                               */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_campain(void* oldelem, void* newelem){
+int assign_campaign(void* oldelem, void* newelem){
     ccam_recur* oldTuple = (ccam_recur*)oldelem;
     ccam_recur* newTuple = (ccam_recur*)newelem;
     ccam_recur *saveRight = NULL, *saveLeft=NULL;
@@ -329,11 +329,11 @@ int assign_campain(void* oldelem, void* newelem){
     if(!oldelem || !newelem)
         return -1;
 
-    //save the pointer values of the old campain
+    //save the pointer values of the old campaign
     saveRight = oldTuple->right;
     saveLeft = oldTuple->left;
 
-    //copy the data from the new campain to the old one
+    //copy the data from the new campaign to the old one
     *oldTuple = *newTuple;
 
     //restore the pointer values
@@ -344,40 +344,40 @@ int assign_campain(void* oldelem, void* newelem){
 }
 
 /****************************************************************************************/
-/*  I : campain to which copy data                                                      */
-/*      campain from which copy data                                                    */
-/*  P : Copies all the fields of campains from new to old                               */
+/*  I : campaign to which copy data                                                      */
+/*      campaign from which copy data                                                    */
+/*  P : Copies all the fields of campaigns from new to old                               */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_campain_index(void* oldelem, void* newelem){
+int assign_campaign_index(void* oldelem, void* newelem){
     i_ccam_PK* oldTuple = (i_ccam_PK*)oldelem;
     i_ccam_PK* newTuple = (i_ccam_PK*)newelem;
 
     if(!oldelem || !newelem)
         return -1;
 
-    //copy the data from the new campain to the old one
+    //copy the data from the new campaign to the old one
     *oldTuple = *newTuple;
 
     return 0;
 }
 
 /****************************************************************************************/
-/*  I : campain index buffer to which copy data                                         */
-/*      campain from which copy data                                                    */
-/*  P : Copies all the fields of a campain to a campain index buffer                    */
+/*  I : campaign index buffer to which copy data                                         */
+/*      campaign from which copy data                                                    */
+/*  P : Copies all the fields of a campaign to a campaign index buffer                    */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_campain_index_PK(void* index, void* elem){
+int assign_campaign_index_PK(void* index, void* elem){
     ccam* element = (ccam*)elem;
     i_ccam_PK* i_element = (i_ccam_PK*)index;
 
     if(!index || !element)
         return -1;
 
-    //copy the data from the campain to the buffer
+    //copy the data from the campaign to the buffer
     i_element->cam_id = element->id_cam;
     strcpy(i_element->tp_rec, "I_CAMPK");
 
@@ -391,7 +391,7 @@ int assign_campain_index_PK(void* index, void* elem){
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_campain_index_slot(void* index, void* offset){
+int assign_campaign_index_slot(void* index, void* offset){
     i_ccam_PK* element = (i_ccam_PK*)index;
     long* slot = (long*)offset;
 
@@ -404,12 +404,12 @@ int assign_campain_index_slot(void* index, void* offset){
 }
 
 /************************************************************/
-/*  I : campains to swap                                    */
-/*  P : Swaps two campains                                  */
+/*  I : campaigns to swap                                    */
+/*  P : Swaps two campaigns                                  */
 /*  O : 0 -> Swapped                                        */
 /*     -1 -> Error                                          */
 /************************************************************/
-int swap_campain(void* first, void* second){
+int swap_campaign(void* first, void* second){
     ccam_recur tmp;
 
     if(!first || !second)
@@ -417,20 +417,20 @@ int swap_campain(void* first, void* second){
 
     memset(&tmp, 0, sizeof(ccam_recur));
 
-    assign_campain((void*)&tmp, first);
-    assign_campain(first, second);
-    assign_campain(second, (void*)&tmp);
+    assign_campaign((void*)&tmp, first);
+    assign_campaign(first, second);
+    assign_campaign(second, (void*)&tmp);
 
     return 0;
 }
 
 /************************************************************/
-/*  I : campains to swap                                    */
-/*  P : Swaps two campains                                  */
+/*  I : campaigns to swap                                    */
+/*  P : Swaps two campaigns                                  */
 /*  O : 0 -> Swapped                                        */
 /*     -1 -> Error                                          */
 /************************************************************/
-int swap_campain_index(void* first, void* second){
+int swap_campaign_index(void* first, void* second){
     i_ccam_PK tmp;
 
     if(!first || !second)
@@ -438,9 +438,9 @@ int swap_campain_index(void* first, void* second){
 
     memset(&tmp, 0, sizeof(i_ccam_PK));
 
-    assign_campain_index((void*)&tmp, first);
-    assign_campain_index(first, second);
-    assign_campain_index(second, (void*)&tmp);
+    assign_campaign_index((void*)&tmp, first);
+    assign_campaign_index(first, second);
+    assign_campaign_index(second, (void*)&tmp);
 
     return 0;
 }
@@ -451,7 +451,7 @@ int swap_campain_index(void* first, void* second){
 /*  O : Address of the element to the right                 */
 /*          (NULL if current is null)                       */
 /************************************************************/
-void** campain_right(void* current){
+void** campaign_right(void* current){
     ccam_recur* currentcam = (ccam_recur*)current;
 
     if(!current)
@@ -466,7 +466,7 @@ void** campain_right(void* current){
 /*  O : Address of the element to the left                  */
 /*          (NULL if current is null)                       */
 /************************************************************/
-void** campain_left(void* current){
+void** campaign_left(void* current){
     ccam_recur* currentcam = (ccam_recur*)current;
 
     if(!current)
@@ -481,10 +481,10 @@ void** campain_left(void* current){
 /*  P : Displays an algo-compatible record                  */
 /*  O : /                                                   */
 /************************************************************/
-int Rec_campain_list(void *record, void* nullable){
+int Rec_campaign_list(void *record, void* nullable){
     ccam_recur* tmp = (ccam_recur*)record;
 
-    Rec_campain(&tmp->cam);
+    Rec_campaign(&tmp->cam);
 
     return 0;
 }
@@ -492,34 +492,34 @@ int Rec_campain_list(void *record, void* nullable){
 /************************************************************/
 /*  I : record to summarise as a string                     */
 /*      /                                                   */
-/*  P : returns a string representing the campain          */
+/*  P : returns a string representing the campaign          */
 /*  O : /                                                   */
 /************************************************************/
-char* toString_campain(void* current){
+char* toString_campaign(void* current){
     ccam_recur *tmp = (ccam_recur*)current;
 
     return tmp->cam.nm_cam;
 }
 
 /************************************************************/
-/*  I : campain AVL leaf of which to get the height        */
+/*  I : campaign AVL leaf of which to get the height        */
 /*  P : Gets the height of the current AVL leaf             */
 /*  O : Leaf height                                         */
 /************************************************************/
-int get_campain_height(void* current){
+int get_campaign_height(void* current){
     ccam_recur *tmp = (ccam_recur*)current;
 
     return (tmp == NULL ? 0 : tmp->height);
 }
 
 /************************************************************/
-/*  I : campain AVL leaf of which to set the height        */
+/*  I : campaign AVL leaf of which to set the height        */
 /*      New value for the height                            */
 /*  P : Sets the height of the current AVL leaf             */
 /*  O :  0 if OK                                            */
 /*      -1 if error                                         */
 /************************************************************/
-int set_campain_height(void* current, int value){
+int set_campaign_height(void* current, int value){
     ccam_recur *tmp = (ccam_recur*)current;
 
     tmp->height = value;
@@ -528,13 +528,13 @@ int set_campain_height(void* current, int value){
 }
 
 /************************************************************/
-/*  I : campain AVL leaf to free                           */
+/*  I : campaign AVL leaf to free                           */
 /*      /                                                   */
-/*  P : Frees the memory for the current campain           */
+/*  P : Frees the memory for the current campaign           */
 /*  O :  0 if OK                                            */
 /*      -1 if error                                         */
 /************************************************************/
-void* free_campain(void* campain, void* nullable){
-    free(campain);
+void* free_campaign(void* campaign, void* nullable){
+    free(campaign);
     return 0;
 }
