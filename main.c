@@ -14,6 +14,9 @@
 
 int main(int argc, char *argv[])
 {
-    printf("Hello world!\n");
+    dbc db = {0};
+
+    Create_DB(&db, "DB_Comp");
+
     return EXIT_SUCCESS;
 }
