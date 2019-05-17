@@ -30,6 +30,7 @@ void tst_index_job(dbc* db);
 void tst_index_industry(dbc* db);
 void tst_index_campaign(dbc* db);
 void tst_index_contact(dbc* db);
+void tst_index_company(dbc* db);
 
 /****************************************************************************************
 * Programme principal
@@ -52,6 +53,7 @@ int main(void)
 //    tst_index_industry(&db);
 //    tst_index_campaign(&db);
 //    tst_index_contact(&db);
+//    tst_index_company(&db);
 
     if(db.cty)
         free(db.cty);
@@ -71,6 +73,9 @@ int main(void)
     if(db.con)
         free(db.con);
 
+    if(db.cpy)
+        free(db.cpy);
+
 	return 0;
 }
 
@@ -88,6 +93,7 @@ void init_db(dbc* db){
 //    Import_CSV_industry(db);
 //    Import_CSV_campaign(db);
 //    Import_CSV_contact(db);
+//    Import_CSV_company(db);
 
     printf("header size : %d\n", sizeof(hder));
     printf("ccty size : %d\n", sizeof(ccty));
@@ -550,6 +556,61 @@ void tst_index_contact(dbc* db){
         printf("index block offset : %lX\n", db->hdr.off_i_con_cpy);
         printf("index tree root : %lX\n", db->hdr.i_con_cpy);
         printf("root FK : %d\n", buffer.cam_id);
+
+        fclose(fp);
+    }
+}
+
+/****************************************************************************************/
+/*  I : Database in which create a company PK index                                    */
+/*  P : Tests the company PK index creation at the end of the database                 */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_index_company(dbc* db){
+    t_algo_meta company_list = {NULL, 0, sizeof(ccpy_recur), compare_company_name, swap_company, assign_company, NULL, NULL, NULL, company_right, company_left};
+    t_algo_meta company_array = {NULL, db->nr_cpy, sizeof(ccpy), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta index = {NULL, db->nr_cpy, sizeof(i_ccpy_name), compare_company_index_name, swap_company_index, assign_company_index_name, assign_company_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block={&db->hdr.off_i_cpy_name, &db->hdr.i_cpy_name, sizeof(i_ccpy_name)};
+    t_datablock table_block={&db->hdr.off_cpy, 0, sizeof(ccpy)};
+    FILE* fp = NULL;
+    i_ccpy_name buffer = {0};
+    long offset = 0;
+
+    printf("\n--------------------- tst_index_company -------------------------------\n");
+    Export_CSV_company(db);
+    Load_company(db);
+    Print_company(db);
+
+    // test list creation
+    printf("\n\n========= List of companies sorted by their PK : ==============\n\n");
+    company_array.structure = db->cpy;
+    arrayToList(&company_array, &company_list, COPY);
+    printf("%d companys\n", company_list.nbelements);
+    foreachList(&company_list, NULL, Rec_company_list);
+    while(company_list.structure)
+        popListTop(&company_list);
+
+    //test index creation
+    printf("\n\n======== index of companies sorted by their PK : =============\n\n");
+    create_index_file(db, &index, db->nr_cpy, &index_block, &table_block);
+
+    fp = fopen(DB_file, "rb");
+    if(fp){
+        printf("\nPK\t  SLOT\t  LEFT\t OFFSET\t RIGHT\n\n");
+        fseek(fp, db->hdr.off_i_cpy_name, SEEK_SET);
+        for(int i=0 ; i<db->nr_cpy ; i++){
+            offset = ftell(fp);
+            fread(&buffer, sizeof(i_ccpy_name), 1, fp);
+            printf("%28s\t%6lx\t%6lx\t%6lx\t%6lx  %d\n", buffer.nm_cpy, buffer.slot, buffer.s_left, offset, buffer.s_right, i+1);
+        }
+
+        fseek(fp, db->hdr.i_cpy_name, SEEK_SET);
+        fread(&buffer, sizeof(i_ccpy_name), 1, fp);
+
+        printf("\nNumber of elements : %ld\n", db->nr_cpy);
+        printf("index block offset : %lX\n", db->hdr.off_i_cpy_name);
+        printf("index tree root : %lX\n", db->hdr.i_cpy_name);
+        printf("root FK : %28s\n", buffer.nm_cpy);
 
         fclose(fp);
     }
