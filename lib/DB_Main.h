@@ -159,14 +159,13 @@ typedef struct Company
     int   id_cty;            // FK Country ID
     int   id_ind;            // FK Industry ID
     int   id_grp;            // FK Group ID
-    char  nm_cpy[SZ_NAME];   // Company name
-    char  nm_adr[SZ_NAME];   // Company address
-    char  nm_cit[SZ_NAME];   // Company city
+    char  nm_cpy[64];        // Company name
+    char  nm_adr[64];        // Company address
+    char  nm_cit[SZ_NAME-4]; // Company city
     char  cd_pos[10];        // company postcode
-    char  nr_tel[16];        // company phone number
+    char  nr_tel[SZ_NAME];   // company phone number
     char  nm_www[SZ_NAME];   // company website
     char  dt_cre[11];        // company foundation date
-    char  filler[80];        // Filler to bring the group record size to 64 bytes
 } ccpy;
 
 /***************************************************************************************
