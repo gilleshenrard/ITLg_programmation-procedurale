@@ -42,24 +42,29 @@ typedef struct Header
     uint sz_grp;            // Taille bloc group
     uint sz_cam;            // Taille bloc campain
     long sz_con;            // Taille bloc contact
+    long sz_cpy;            // Taille bloc company
     long off_cty;           // Position bloc country
     long off_job;           // Position bloc job
     long off_ind;           // Position bloc industry
     long off_grp;           // Position bloc group
     long off_cam;           // Position bloc campain
     long off_con;           // Position bloc contact
+    long off_cpy;           // Position bloc company
     long off_i_cty_name;    // Offset of the country index block (by name)
     long off_i_grp_fk;      // Offset of the group index block (by fk)
     long off_i_job_name;    // Offset of the job index block (by name)
     long off_i_ind_pk;      // Offset of the industry index block (by pk)
     long off_i_cam_pk;      // Offset of the campain index block (by pk)
     long off_i_con_cpy;     // Offset of the contact index block (by campains)
+    long off_i_cpy_name;    // Offset of the company index block (by name)
     long i_cty_name;        // Address of the root for the country index (by name)
     long i_grp_fk;          // Address of the root for the group index (by fk)
     long i_job_name;        // Address of the root for the job index (by name)
     long i_ind_pk;          // Address of the root for the industry index (by pk)
     long i_cam_pk;          // Address of the root for the campain index (by pk)
     long i_con_cpy;         // Address of the root for the contact index (by campains)
+    long i_cpy_name;        // Address of the root for the company index (by name)
+    char filler[112];
 } hder;
 
 /***************************************************************************************
@@ -128,7 +133,7 @@ typedef struct Campain
     char  nm_zon[SZ_NAME];   // Campain targeted zone
     int   nr_year;           // Amount of years the campain lasts
     float cost;              // Cost per year ?
-    char  filler[16];        // Filler to bring the group record size to 64 bytes
+    char  filler[56];        // Filler to bring the group record size to 64 bytes
 } ccam;
 
 /***************************************************************************************
@@ -141,8 +146,28 @@ typedef struct Contact
     int   id_cpy;            // FK Company
     int   id_job;            // FK Job
     int   nr_rep;            // Number of replies ?
-    char  filler[16];        // Filler to bring the group record size to 64 bytes
+    char  filler[8];        // Filler to bring the group record size to 64 bytes
 } ccon;
+
+/***************************************************************************************
+* Table Company : dummy
+****************************************************************************************/
+typedef struct Company
+{
+    char  tp_rec[SZ_TYPE];   // Type de record CPY
+    int   id_cpy;            // PK company ID
+    int   id_cty;            // FK Country ID
+    int   id_ind;            // FK Industry ID
+    int   id_grp;            // FK Group ID
+    char  nm_cpy[SZ_NAME];   // Company name
+    char  nm_adr[SZ_NAME];   // Company address
+    char  nm_cit[SZ_NAME];   // Company city
+    char  cd_pos[10];        // company postcode
+    char  nr_tel[16];        // company phone number
+    char  nm_www[SZ_NAME];   // company website
+    char  dt_cre[11];        // company foundation date
+    char  filler[80];        // Filler to bring the group record size to 64 bytes
+} ccpy;
 
 /***************************************************************************************
 * Structure base de donnees
@@ -157,12 +182,14 @@ typedef struct	db_country
     cind*   ind;    // Buffer industry
     ccam*   cam;    // Buffer campain
     ccon*   con;    // Buffer contacts
+    ccpy*   cpy;    // Buffer contacts
     long    nr_cty; // Nr elements dans buffer
     long    nr_grp; // Nr Groups in the buffer
     long    nr_job; // Nr Jobs in the buffer
     long    nr_ind; // Nr Industries in the buffer
     long    nr_cam; // Nr campains in the buffer
     long    nr_con; // Nr contacts in the buffer
+    long    nr_cpy; // Nr contacts in the buffer
 } dbc;
 
 #endif

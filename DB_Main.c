@@ -14,6 +14,7 @@
 #include "lib/DB_Industry.h"
 #include "lib/DB_campaign.h"
 #include "lib/DB_Contact.h"
+#include "lib/DB_Company.h"
 
 void init_db(dbc*);
 void tst_export_country(dbc*);
@@ -50,7 +51,7 @@ int main(void)
 //    tst_index_job(&db);
 //    tst_index_industry(&db);
 //    tst_index_campaign(&db);
-    tst_index_contact(&db);
+//    tst_index_contact(&db);
 
     if(db.cty)
         free(db.cty);
@@ -86,21 +87,23 @@ void init_db(dbc* db){
 //    Import_CSV_job(db);
 //    Import_CSV_industry(db);
 //    Import_CSV_campaign(db);
-    Import_CSV_contact(db);
+//    Import_CSV_contact(db);
 
     printf("header size : %d\n", sizeof(hder));
     printf("ccty size : %d\n", sizeof(ccty));
     printf("cjob size : %d\n", sizeof(cjob));
     printf("cind size : %d\n", sizeof(cind));
     printf("cgrp size : %d\n", sizeof(cgrp));
-    printf("cgrp size : %d\n", sizeof(ccam));
-    printf("cgrp size : %d\n", sizeof(ccon));
+    printf("ccam size : %d\n", sizeof(ccam));
+    printf("ccon size : %d\n", sizeof(ccon));
+    printf("ccpy size : %d\n", sizeof(ccpy));
     printf("i_ccty_name size : %d\n", sizeof(i_ccty_name));
-    printf("i_cgrp_FK size : %d\n", sizeof(i_cjob_name));
-    printf("i_cgrp_FK size : %d\n", sizeof(i_cind_PK));
+    printf("i_cjob_FK size : %d\n", sizeof(i_cjob_name));
+    printf("i_cind_FK size : %d\n", sizeof(i_cind_PK));
     printf("i_cgrp_FK size : %d\n", sizeof(i_cgrp_FK));
-    printf("i_cgrp_FK size : %d\n", sizeof(i_ccam_PK));
-    printf("i_cgrp_FK size : %d\n", sizeof(i_ccon_cpy));
+    printf("i_ccam_FK size : %d\n", sizeof(i_ccam_PK));
+    printf("i_ccon_FK size : %d\n", sizeof(i_ccon_cpy));
+    printf("i_ccpy_name size : %d\n", sizeof(i_ccpy_name));
 }
 
 /****************************************************************************************/
