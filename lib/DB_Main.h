@@ -53,13 +53,13 @@ typedef struct Header
     long off_i_job_name;    // Offset of the job index block (by name)
     long off_i_ind_pk;      // Offset of the industry index block (by pk)
     long off_i_cam_pk;      // Offset of the campain index block (by pk)
-    long off_i_con_cam;     // Offset of the contact index block (by campains)
+    long off_i_con_cpy;     // Offset of the contact index block (by campains)
     long i_cty_name;        // Address of the root for the country index (by name)
     long i_grp_fk;          // Address of the root for the group index (by fk)
     long i_job_name;        // Address of the root for the job index (by name)
     long i_ind_pk;          // Address of the root for the industry index (by pk)
     long i_cam_pk;          // Address of the root for the campain index (by pk)
-    long i_con_cam;         // Address of the root for the contact index (by campains)
+    long i_con_cpy;         // Address of the root for the contact index (by campains)
 } hder;
 
 /***************************************************************************************

@@ -100,7 +100,7 @@ void init_db(dbc* db){
     printf("i_cgrp_FK size : %d\n", sizeof(i_cind_PK));
     printf("i_cgrp_FK size : %d\n", sizeof(i_cgrp_FK));
     printf("i_cgrp_FK size : %d\n", sizeof(i_ccam_PK));
-    printf("i_cgrp_FK size : %d\n", sizeof(i_ccon_cam));
+    printf("i_cgrp_FK size : %d\n", sizeof(i_ccon_cpy));
 }
 
 /****************************************************************************************/
@@ -503,13 +503,13 @@ void tst_index_campaign(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void tst_index_contact(dbc* db){
-    t_algo_meta contact_list = {NULL, 0, sizeof(ccon_recur), compare_contact_cam, swap_contact, assign_contact, NULL, NULL, NULL, contact_right, contact_left};
+    t_algo_meta contact_list = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, swap_contact, assign_contact, NULL, NULL, NULL, contact_right, contact_left};
     t_algo_meta contact_array = {NULL, db->nr_con, sizeof(ccon), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-    t_algo_meta index = {NULL, db->nr_con, sizeof(i_ccon_cam), compare_contact_cam_index, swap_contact_index, assign_contact_index_cam, assign_contact_index_slot, NULL, NULL, NULL, NULL};
-    t_datablock index_block={&db->hdr.off_i_con_cam, &db->hdr.i_con_cam, sizeof(i_ccon_cam)};
+    t_algo_meta index = {NULL, db->nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, swap_contact_index, assign_contact_index_cpy, assign_contact_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block={&db->hdr.off_i_con_cpy, &db->hdr.i_con_cpy, sizeof(i_ccon_cpy)};
     t_datablock table_block={&db->hdr.off_con, 0, sizeof(ccon)};
     FILE* fp = NULL;
-    i_ccon_cam buffer = {0};
+    i_ccon_cpy buffer = {0};
     long offset = 0;
 
     printf("\n--------------------- tst_index_contact -------------------------------\n");
@@ -533,19 +533,74 @@ void tst_index_contact(dbc* db){
     fp = fopen(DB_file, "rb");
     if(fp){
         printf("\nPK\t  SLOT\t  LEFT\t OFFSET\t RIGHT\n\n");
-        fseek(fp, db->hdr.off_i_con_cam, SEEK_SET);
+        fseek(fp, db->hdr.off_i_con_cpy, SEEK_SET);
         for(int i=0 ; i<db->nr_con ; i++){
             offset = ftell(fp);
-            fread(&buffer, sizeof(i_ccon_cam), 1, fp);
+            fread(&buffer, sizeof(i_ccon_cpy), 1, fp);
             printf("%d\t%6lx\t%6lx\t%6lx\t%6lx  %d\n", buffer.cam_id, buffer.slot, buffer.s_left, offset, buffer.s_right, i+1);
         }
 
-        fseek(fp, db->hdr.i_con_cam, SEEK_SET);
-        fread(&buffer, sizeof(i_ccon_cam), 1, fp);
+        fseek(fp, db->hdr.i_con_cpy, SEEK_SET);
+        fread(&buffer, sizeof(i_ccon_cpy), 1, fp);
 
         printf("\nNumber of elements : %ld\n", db->nr_con);
-        printf("index block offset : %lX\n", db->hdr.off_i_con_cam);
-        printf("index tree root : %lX\n", db->hdr.i_con_cam);
+        printf("index block offset : %lX\n", db->hdr.off_i_con_cpy);
+        printf("index tree root : %lX\n", db->hdr.i_con_cpy);
+        printf("root FK : %d\n", buffer.cam_id);
+
+        fclose(fp);
+    }
+}
+
+/****************************************************************************************/
+/*  I : Database in which create a contact PK index                                    */
+/*  P : Tests the contact PK index creation at the end of the database                 */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void tst_index_contact(dbc* db){
+    t_algo_meta contact_list = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, swap_contact, assign_contact, NULL, NULL, NULL, contact_right, contact_left};
+    t_algo_meta contact_array = {NULL, db->nr_con, sizeof(ccon), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta index = {NULL, db->nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, swap_contact_index, assign_contact_index_cpy, assign_contact_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block={&db->hdr.off_i_con_cpy, &db->hdr.i_con_cpy, sizeof(i_ccon_cpy)};
+    t_datablock table_block={&db->hdr.off_con, 0, sizeof(ccon)};
+    FILE* fp = NULL;
+    i_ccon_cpy buffer = {0};
+    long offset = 0;
+
+    printf("\n--------------------- tst_index_contact -------------------------------\n");
+    Export_CSV_contact(db);
+    Load_contact(db);
+    Print_contact(db);
+
+    // test list creation
+    printf("\n\n========= List of contacts sorted by their PK : ==============\n\n");
+    contact_array.structure = db->con;
+    arrayToList(&contact_array, &contact_list, COPY);
+    printf("%d contacts\n", contact_list.nbelements);
+    foreachList(&contact_list, NULL, Rec_contact_list);
+    while(contact_list.structure)
+        popListTop(&contact_list);
+
+    //test index creation
+    printf("\n\n======== index of contacts sorted by their PK : =============\n\n");
+    create_index_file(db, &index, db->nr_con, &index_block, &table_block);
+
+    fp = fopen(DB_file, "rb");
+    if(fp){
+        printf("\nPK\t  SLOT\t  LEFT\t OFFSET\t RIGHT\n\n");
+        fseek(fp, db->hdr.off_i_con_cpy, SEEK_SET);
+        for(int i=0 ; i<db->nr_con ; i++){
+            offset = ftell(fp);
+            fread(&buffer, sizeof(i_ccon_cpy), 1, fp);
+            printf("%d\t%6lx\t%6lx\t%6lx\t%6lx  %d\n", buffer.cam_id, buffer.slot, buffer.s_left, offset, buffer.s_right, i+1);
+        }
+
+        fseek(fp, db->hdr.i_con_cpy, SEEK_SET);
+        fread(&buffer, sizeof(i_ccon_cpy), 1, fp);
+
+        printf("\nNumber of elements : %ld\n", db->nr_con);
+        printf("index block offset : %lX\n", db->hdr.off_i_con_cpy);
+        printf("index tree root : %lX\n", db->hdr.i_con_cpy);
         printf("root FK : %d\n", buffer.cam_id);
 
         fclose(fp);

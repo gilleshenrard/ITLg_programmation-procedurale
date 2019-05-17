@@ -213,13 +213,13 @@ void* allocate_contact(void){
 /*       0 if A = B                                                                     */
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
-int compare_contact_cam(void* a, void* b){
+int compare_contact_cpy(void* a, void* b){
     ccon_recur *tmp_a = (ccon_recur*)a;
     ccon_recur *tmp_b = (ccon_recur*)b;
 
-    if(tmp_a->con.id_cam > tmp_b->con.id_cam)
+    if(tmp_a->con.id_cpy > tmp_b->con.id_cpy)
         return 1;
-    else if(tmp_a->con.id_cam < tmp_b->con.id_cam)
+    else if(tmp_a->con.id_cpy < tmp_b->con.id_cpy)
         return -1;
     else
         return 0;
@@ -233,9 +233,9 @@ int compare_contact_cam(void* a, void* b){
 /*       0 if A = B                                                                     */
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
-int compare_contact_cam_index(void* a, void* b){
-    i_ccon_cam *tmp_a = (i_ccon_cam*)a;
-    i_ccon_cam *tmp_b = (i_ccon_cam*)b;
+int compare_contact_cpy_index(void* a, void* b){
+    i_ccon_cpy *tmp_a = (i_ccon_cpy*)a;
+    i_ccon_cpy *tmp_b = (i_ccon_cpy*)b;
 
     if(tmp_a->cam_id > tmp_b->cam_id)
         return 1;
@@ -253,13 +253,13 @@ int compare_contact_cam_index(void* a, void* b){
 /*       0 if A = B                                                                     */
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
-int compare_contact_cam_int(void* a, void* b){
+int compare_contact_cpy_int(void* a, void* b){
     ccon_recur *tmp_a = (ccon_recur*)a;
     int* FK = (int*)b;
 
-    if(tmp_a->con.id_cam > *FK)
+    if(tmp_a->con.id_cpy > *FK)
         return 1;
-    else if(tmp_a->con.id_cam < *FK)
+    else if(tmp_a->con.id_cpy < *FK)
         return -1;
     else
         return 0;
@@ -274,7 +274,7 @@ int compare_contact_cam_int(void* a, void* b){
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_contact_index_int(void* a, void* b){
-    i_ccon_cam *tmp_a = (i_ccon_cam*)a;
+    i_ccon_cpy *tmp_a = (i_ccon_cpy*)a;
     int* FK = (int*)b;
 
     if(tmp_a->cam_id > *FK)
@@ -322,8 +322,8 @@ int assign_contact(void* oldelem, void* newelem){
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
 int assign_contact_index(void* oldelem, void* newelem){
-    i_ccon_cam* oldTuple = (i_ccon_cam*)oldelem;
-    i_ccon_cam* newTuple = (i_ccon_cam*)newelem;
+    i_ccon_cpy* oldTuple = (i_ccon_cpy*)oldelem;
+    i_ccon_cpy* newTuple = (i_ccon_cpy*)newelem;
 
     if(!oldelem || !newelem)
         return -1;
@@ -341,15 +341,15 @@ int assign_contact_index(void* oldelem, void* newelem){
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_contact_index_cam(void* index, void* elem){
+int assign_contact_index_cpy(void* index, void* elem){
     ccon* element = (ccon*)elem;
-    i_ccon_cam* i_element = (i_ccon_cam*)index;
+    i_ccon_cpy* i_element = (i_ccon_cpy*)index;
 
     if(!index || !element)
         return -1;
 
     //copy the data from the contact to the buffer
-    i_element->cam_id = element->id_cam;
+    i_element->cam_id = element->id_cpy;
     strcpy(i_element->tp_rec, "I_CONCA");
 
     return 0;
@@ -363,7 +363,7 @@ int assign_contact_index_cam(void* index, void* elem){
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
 int assign_contact_index_slot(void* index, void* offset){
-    i_ccon_cam* element = (i_ccon_cam*)index;
+    i_ccon_cpy* element = (i_ccon_cpy*)index;
     long* slot = (long*)offset;
 
     if(!index || !offset)
@@ -402,12 +402,12 @@ int swap_contact(void* first, void* second){
 /*     -1 -> Error                                          */
 /************************************************************/
 int swap_contact_index(void* first, void* second){
-    i_ccon_cam tmp;
+    i_ccon_cpy tmp;
 
     if(!first || !second)
         return -1;
 
-    memset(&tmp, 0, sizeof(i_ccon_cam));
+    memset(&tmp, 0, sizeof(i_ccon_cpy));
 
     assign_contact_index((void*)&tmp, first);
     assign_contact_index(first, second);
@@ -469,7 +469,7 @@ int Rec_contact_list(void *record, void* nullable){
 char* toString_contact(void* current){
     ccon_recur *tmp = (ccon_recur*)current;
 
-    return tmp->con.id_cam;
+    return tmp->con.id_cpy;
 }
 */
 /************************************************************/
