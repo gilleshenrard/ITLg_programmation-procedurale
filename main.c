@@ -10,6 +10,7 @@
 #include "lib/DB_Industry.h"
 #include "lib/DB_campaign.h"
 #include "lib/DB_Contact.h"
+#include "lib/DB_Company.h"
 
 
 int main(int argc, char *argv[])
