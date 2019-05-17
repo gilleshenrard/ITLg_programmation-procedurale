@@ -94,7 +94,6 @@ int print_screen_report(dbc* db, char* nm_cpy){
 
         next = cpy_list.structure;
         for(int i=1 ; i<choix ; i++){
-            cpy_buffer = next;
             next = *company_right(next);
         }
         cpy_buffer = (ccpy_recur*)next;
