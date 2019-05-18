@@ -237,9 +237,9 @@ int compare_contact_cpy_index(void* a, void* b){
     i_ccon_cpy *tmp_a = (i_ccon_cpy*)a;
     i_ccon_cpy *tmp_b = (i_ccon_cpy*)b;
 
-    if(tmp_a->cam_id > tmp_b->cam_id)
+    if(tmp_a->cpy_id > tmp_b->cpy_id)
         return 1;
-    else if(tmp_a->cam_id < tmp_b->cam_id)
+    else if(tmp_a->cpy_id < tmp_b->cpy_id)
         return -1;
     else
         return 0;
@@ -277,9 +277,9 @@ int compare_contact_index_int(void* a, void* b){
     i_ccon_cpy *tmp_a = (i_ccon_cpy*)a;
     int* FK = (int*)b;
 
-    if(tmp_a->cam_id > *FK)
+    if(tmp_a->cpy_id > *FK)
         return 1;
-    else if(tmp_a->cam_id < *FK)
+    else if(tmp_a->cpy_id < *FK)
         return -1;
     else
         return 0;
@@ -349,7 +349,7 @@ int assign_contact_index_cpy(void* index, void* elem){
         return -1;
 
     //copy the data from the contact to the buffer
-    i_element->cam_id = element->id_cpy;
+    i_element->cpy_id = element->id_cpy;
     strcpy(i_element->tp_rec, "I_CONCA");
 
     return 0;

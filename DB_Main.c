@@ -155,7 +155,7 @@ void tst_List_country(dbc* db){
     printf("\n--------------- tst_list_country ---------------------------------------\n");
     arrayToList(&cty_array, &cty_list, COPY);
 
-    printf("%d countries\n", cty_list.nbelements);
+    printf("%ld countries\n", cty_list.nbelements);
 
     foreachList(&cty_list, NULL, Rec_Country_list);
     while(cty_list.structure)
@@ -181,9 +181,9 @@ void tst_AVL_country(dbc* db){
 
     //try to add an already existing node
     printf("Trying to add an already existing country (forbidden)\n");
-    printf("%d countries before\n", cty_avl.nbelements);
+    printf("%ld countries before\n", cty_avl.nbelements);
     insertAVL(&cty_avl, cty_avl.structure, &tmp);
-    printf("%d countries after\n\n", cty_avl.nbelements);
+    printf("%ld countries after\n\n", cty_avl.nbelements);
 
     delete_AVL(&cty_avl, cty_avl.structure, &tmp);
 
@@ -310,7 +310,7 @@ void tst_index_group(dbc* db){
     printf("\n\n========= List of groups sorted by their FK : ==============\n\n");
     grp_array.structure = db->grp;
     arrayToList(&grp_array, &grp_list, COPY);
-    printf("%d groups\n", grp_list.nbelements);
+    printf("%ld groups\n", grp_list.nbelements);
     foreachList(&grp_list, NULL, Rec_group_list);
     while(grp_list.structure)
         popListTop(&grp_list);
@@ -365,7 +365,7 @@ void tst_index_job(dbc* db){
     printf("\n\n========= List of jobs sorted by their name : ==============\n\n");
     job_array.structure = db->job;
     arrayToList(&job_array, &job_list, COPY);
-    printf("%d jobs\n", job_list.nbelements);
+    printf("%ld jobs\n", job_list.nbelements);
     foreachList(&job_list, NULL, Rec_job_list);
     while(job_list.structure)
         popListTop(&job_list);
@@ -420,7 +420,7 @@ void tst_index_industry(dbc* db){
     printf("\n\n========= List of industries sorted by their FK : ==============\n\n");
     ind_array.structure = db->ind;
     arrayToList(&ind_array, &ind_list, COPY);
-    printf("%d industries\n", ind_list.nbelements);
+    printf("%ld industries\n", ind_list.nbelements);
     foreachList(&ind_list, NULL, Rec_industry_list);
     while(ind_list.structure)
         popListTop(&ind_list);
@@ -475,7 +475,7 @@ void tst_index_campaign(dbc* db){
     printf("\n\n========= List of campaigns sorted by their PK : ==============\n\n");
     campaign_array.structure = db->cam;
     arrayToList(&campaign_array, &campaign_list, COPY);
-    printf("%d campaigns\n", campaign_list.nbelements);
+    printf("%ld campaigns\n", campaign_list.nbelements);
     foreachList(&campaign_list, NULL, Rec_campaign_list);
     while(campaign_list.structure)
         popListTop(&campaign_list);
@@ -530,7 +530,7 @@ void tst_index_contact(dbc* db){
     printf("\n\n========= List of contacts sorted by their PK : ==============\n\n");
     contact_array.structure = db->con;
     arrayToList(&contact_array, &contact_list, COPY);
-    printf("%d contacts\n", contact_list.nbelements);
+    printf("%ld contacts\n", contact_list.nbelements);
     foreachList(&contact_list, NULL, Rec_contact_list);
     while(contact_list.structure)
         popListTop(&contact_list);
@@ -546,7 +546,7 @@ void tst_index_contact(dbc* db){
         for(int i=0 ; i<db->nr_con ; i++){
             offset = ftell(fp);
             fread(&buffer, sizeof(i_ccon_cpy), 1, fp);
-            printf("%d\t%6lx\t%6lx\t%6lx\t%6lx  %d\n", buffer.cam_id, buffer.slot, buffer.s_left, offset, buffer.s_right, i+1);
+            printf("%d\t%6lx\t%6lx\t%6lx\t%6lx  %d\n", buffer.cpy_id, buffer.slot, buffer.s_left, offset, buffer.s_right, i+1);
         }
 
         fseek(fp, db->hdr.i_con_cpy, SEEK_SET);
@@ -555,7 +555,7 @@ void tst_index_contact(dbc* db){
         printf("\nNumber of elements : %ld\n", db->nr_con);
         printf("index block offset : %lX\n", db->hdr.off_i_con_cpy);
         printf("index tree root : %lX\n", db->hdr.i_con_cpy);
-        printf("root FK : %d\n", buffer.cam_id);
+        printf("root FK : %d\n", buffer.cpy_id);
 
         fclose(fp);
     }
@@ -585,7 +585,7 @@ void tst_index_company(dbc* db){
     printf("\n\n========= List of companies sorted by their PK : ==============\n\n");
     company_array.structure = db->cpy;
     arrayToList(&company_array, &company_list, COPY);
-    printf("%d companys\n", company_list.nbelements);
+    printf("%ld companys\n", company_list.nbelements);
     foreachList(&company_list, NULL, Rec_company_list);
     while(company_list.structure)
         popListTop(&company_list);

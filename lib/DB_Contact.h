@@ -21,7 +21,7 @@ struct ccon_recur{
 
 typedef struct i_Contact_cpy{
     char tp_rec[SZ_TYPE];   //record type (I_CON)
-    int cam_id;             //foreign key campaign
+    int cpy_id;             //foreign key company
     char filler[8];         //filler to get the index size to 32
     long slot;              //Slot number in the table
     long s_left;            //Slot number of the left child in the table

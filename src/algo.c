@@ -175,7 +175,7 @@ int bubbleSortList(t_algo_meta* meta){
 /************************************************************/
 /*  WARNING : is solely to be used by the quick sort func.! */
 /************************************************************/
-int quickSortPartitioning(t_algo_meta* meta, int low, int high){
+int quickSortPartitioning(t_algo_meta* meta, long low, long high){
     void* pivot = meta->structure+(meta->elementsize*high), *elem_i=NULL, *elem_j=NULL;
     int i = low-1;
 
@@ -207,7 +207,7 @@ int quickSortPartitioning(t_algo_meta* meta, int low, int high){
 /*  O :  0 -> Sorted                                        */
 /*      -1 -> Error                                         */
 /************************************************************/
-int quickSort(t_algo_meta* meta, int low, int high){
+int quickSort(t_algo_meta* meta, long low, long high){
     int pivot=0;
 
     //no meta data available
@@ -839,7 +839,7 @@ void* min_AVL_value(t_algo_meta* meta, void* avl){
 /* WARNING : the index structure must finish with left and  */
 /*              right long int types                        */
 /************************************************************/
-long index_tree(FILE* fp, long offset_start, int nb, t_algo_meta* meta){
+long index_tree(FILE* fp, long offset_start, long nb, t_algo_meta* meta){
     long old_offset=0, root=0, subtree=0;
     int nb_g=0, nb_d=0;
 

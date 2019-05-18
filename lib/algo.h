@@ -6,7 +6,7 @@
 
 typedef struct {
     void*   structure;
-    int     nbelements;
+    long    nbelements;
     int     elementsize;
     int     (*doCompare)(void*, void*);     //comparison method
     int     (*doSwap)(void*, void*);        //swep method
@@ -33,8 +33,8 @@ int arrayToAVL(t_algo_meta* dArray, t_algo_meta* dAVL, e_listtoarray action);
 //Sorting algorithms
 int bubbleSort(t_algo_meta*);
 int bubbleSortList(t_algo_meta*);
-int quickSortPartitioning(t_algo_meta*, int, int);
-int quickSort(t_algo_meta*, int, int);
+int quickSortPartitioning(t_algo_meta*, long, long);
+int quickSort(t_algo_meta*, long, long);
 
 //Research algorithms
 int binarySearch(t_algo_meta*, void*);
@@ -61,7 +61,7 @@ void* min_AVL_value(t_algo_meta* meta, void* avl);
 int delete_AVL_root(t_algo_meta* meta);
 
 //File binary trees
-long index_tree(FILE* fp, long offset_start, int nb, t_algo_meta* meta);
+long index_tree(FILE* fp, long offset_start, long nb, t_algo_meta* meta);
 int searchall_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, t_algo_meta* list, int elem_size);
 
 #endif // ALGO_H_INCLUDED
