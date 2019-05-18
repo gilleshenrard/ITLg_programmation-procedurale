@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     init_db(&db);
 
-    print_screen_report(&db, "Ernst & Young Management Consultants");
+    print_screen_report(&db, "Pfizer Great Britain Ltd");
 
     if(db.cpy)
         free(db.cpy);
@@ -97,7 +97,7 @@ int print_screen_report(dbc* db, char* nm_cpy){
 
     //if more than one occurrence, make the user choose which one
     if(list_cpy.nbelements > 1){
-        printf("\nVeuillez choisir pour quelle compagnie afficher le rapport : (1 a %d)\n\n", list_cpy.nbelements);
+        printf("\nVeuillez choisir pour quelle compagnie afficher le rapport : (1 a %ld)\n\n", list_cpy.nbelements);
         foreachList(&list_cpy, NULL, Rec_company_list);
 
         printf("\nChoix : ");
