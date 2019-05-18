@@ -18,6 +18,8 @@ int Create_DB(dbc *db, char filename[])
     cind ind = {0};
     cgrp grp = {0};
     ccam cam = {0};
+    ccon con = {0};
+    ccpy cpy = {0};
     FILE *fp_lg = NULL;
 
     memset(db, 0, sizeof(dbc));
@@ -39,13 +41,17 @@ int Create_DB(dbc *db, char filename[])
     db->hdr.sz_ind = SZ_IND;
     db->hdr.sz_grp = SZ_GRP;
     db->hdr.sz_cam = SZ_CAM;
+    db->hdr.sz_con = SZ_CON;
+    db->hdr.sz_cpy = SZ_CPY;
 
     db->hdr.off_cty = sizeof(hder);
     db->hdr.off_job = db->hdr.off_cty + SZ_CTY * sizeof(ccty);
     db->hdr.off_ind = db->hdr.off_job + SZ_JOB * sizeof(cjob);
     db->hdr.off_grp = db->hdr.off_ind + SZ_IND * sizeof(cind);
     db->hdr.off_cam = db->hdr.off_grp + SZ_GRP * sizeof(cgrp);
-    db->hdr.db_size = db->hdr.off_cam + SZ_CAM * sizeof(ccam);
+    db->hdr.off_con = db->hdr.off_cam + SZ_CAM * sizeof(ccam);
+    db->hdr.off_cpy = db->hdr.off_con + SZ_CON * sizeof(ccon);
+    db->hdr.db_size = db->hdr.off_cpy + SZ_CPY * sizeof(ccpy);
 
     fwrite(&db->hdr, 1, sizeof(db->hdr), db->fp);
 
@@ -74,6 +80,16 @@ int Create_DB(dbc *db, char filename[])
     for (i=0; i<SZ_CAM; i++)
         fwrite(&cam, 1, sizeof(ccam), db->fp);
 
+    // Creation de la table contact ----------------------------
+    strcpy(con.tp_rec, "CON");
+    for (i=0; i<SZ_CON; i++)
+        fwrite(&con, 1, sizeof(ccon), db->fp);
+
+    // Creation de la table company ----------------------------
+    strcpy(cpy.tp_rec, "CPY");
+    for (i=0; i<SZ_CPY; i++)
+        fwrite(&cpy, 1, sizeof(ccpy), db->fp);
+
     fprintf(fp_lg, "Database %s created\n", db->hdr.db_name);
 
     fclose(db->fp);
@@ -95,7 +111,7 @@ int Create_DB(dbc *db, char filename[])
 /*  O :  0 if OK                                                                    */
 /*      -1 otherwise                                                                */
 /************************************************************************************/
-long create_index_file(dbc* db, t_algo_meta* meta, int nb, t_datablock* i_block, t_datablock* t_block){
+long create_index_file(dbc* db, t_algo_meta* meta, long nb, t_datablock* i_block, t_datablock* t_block){
     void *i_iterator=NULL, *buffer=NULL;
     int i=0;
     long root=0, tmp=0;

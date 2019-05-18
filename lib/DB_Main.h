@@ -18,6 +18,7 @@
 #define SZ_GRP 3000
 #define SZ_CAM 600
 #define SZ_CON 25000000
+#define SZ_CPY 100000
 
 #define SZ_TYPE 8
 #define SZ_NAME 28
