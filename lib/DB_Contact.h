@@ -50,7 +50,7 @@ int swap_contact_index(void* first, void* second);
 void** contact_right(void* current);
 void** contact_left(void* current);
 int Rec_contact_list(void *record, void* nullable);
-//char* toString_contact(void* current);
+char* toString_contact(void* current);
 int get_contact_height(void* current);
 int set_contact_height(void* current, int value);
 void* free_contact(void* contact, void* nullable);

@@ -45,8 +45,8 @@ int compare_scr_report_type(void* a, void* b){
 }
 
 /****************************************************************************************/
-/*  I : First scr_report to compare                                                        */
-/*      Name of the second  Screen Report to compare                                          */
+/*  I : First scr_report to compare                                                     */
+/*      Name of the second  Screen Report to compare                                    */
 /*  P : Compares two countries by their names                                           */
 /*  O :  1 if A > B                                                                     */
 /*       0 if A = B                                                                     */
@@ -59,8 +59,8 @@ int compare_scr_report_type_char(void* a, void* b){
 }
 
 /****************************************************************************************/
-/*  I : Screen Report to which copy data                                                      */
-/*      Screen Report from which copy data                                                    */
+/*  I : Screen Report to which copy data                                                */
+/*      Screen Report from which copy data                                              */
 /*  P : Copies all the fields of countries from new to old                              */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
@@ -242,19 +242,26 @@ void* free_scr_report(void* report, void* nullable){
 /*       0 otherwise                                                                    */
 /****************************************************************************************/
 int print_screen_report(dbc* db, char* nm_cpy){
-    t_algo_meta index_cpy = {0};
+    //metadata for all the lists created
     t_algo_meta list_cpy = {NULL, 0, sizeof(ccpy_recur), compare_company_name, swap_company, assign_company, NULL, NULL, NULL, company_right, company_left};
-    t_algo_meta index_con = {0};
     t_algo_meta list_con = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, swap_contact, assign_contact, NULL, NULL, NULL, contact_right, contact_left};
+    //metadata for all the indexes used
+    t_algo_meta index_cpy = {0};
+    t_algo_meta index_con = {0};
+    t_algo_meta index_cam = {0};
+
     int choix = 0;
     char buffer[6] = {0};
-    ccpy_recur* cpy_buffer = NULL, *next=NULL;
+    ccpy_recur* cpy_buffer = NULL, *cpy_next=NULL;
+    ccon_recur* con_buffer = NULL;
 
-    //finish preparing the metadata structures
+    //finish preparing the indexes metadata
     index_cpy.elementsize = sizeof(i_ccpy_name);
     index_cpy.doCompare = compare_company_index_char;
     index_con.elementsize = sizeof(i_ccon_cpy);
     index_con.doCompare = compare_contact_index_int;
+    index_cam.elementsize = sizeof(i_ccam_PK);
+    index_cam.doCompare = compare_campaign_index_int;
 
     // open the DB
     db->fp = fopen(DB_file, "rb");
@@ -275,24 +282,37 @@ int print_screen_report(dbc* db, char* nm_cpy){
 
     //if more than one occurrence, make the user choose which one
     if(list_cpy.nbelements > 1){
+        //display all the possibilities
         printf("\nVeuillez choisir pour quelle compagnie afficher le rapport : (1 a %ld)\n\n", list_cpy.nbelements);
         foreachList(&list_cpy, NULL, Rec_company_list);
 
+        //ask the user to pick a one
         printf("\nChoix : ");
         fflush(stdin);
         fgets(buffer, 6, stdin);
         choix = atoi(buffer);
 
-        next = list_cpy.structure;
+        //save the selected one in a buffer
+        cpy_next = list_cpy.structure;
         for(int i=1 ; i<choix ; i++){
-            next = *company_right(next);
+            cpy_next = *company_right(cpy_next);
         }
-        cpy_buffer = (ccpy_recur*)next;
+        cpy_buffer = (ccpy_recur*)cpy_next;
     }
 
+    //look for all the contacts related to the chosen company and create a linked list
     searchall_index(db->fp, db->hdr.i_con_cpy, &cpy_buffer->cpy.id_cpy, &index_con, &list_con, sizeof(ccon));
-    foreachList(&list_con, NULL, Rec_contact_list);
 
+    //browse through all the contacts found
+    con_buffer = list_con.structure;
+    for(int i=0 ; i<list_con.nbelements ; i++){
+        //search for the related campaigns
+        searchall_index(db->fp, db->hdr.i_cam_pk, &db->hdr.i_cam_pk, &index_cam, &list_cpy, sizeof(ccam));
+
+        con_buffer = *contact_right(con_buffer);
+    }
+
+    //clean up all the lists and close the DB
     while(list_cpy.structure)
         popListTop(&list_cpy);
 
