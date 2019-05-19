@@ -47,11 +47,17 @@ void init_db(dbc* db){
     t_algo_meta index_con = {NULL, db->nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, swap_contact_index, assign_contact_index_cpy, assign_contact_index_slot, NULL, NULL, NULL, NULL};
     t_datablock index_block_con = {&db->hdr.off_i_con_cpy, &db->hdr.i_con_cpy, sizeof(i_ccon_cpy)};
     t_datablock table_block_con = {&db->hdr.off_con, 0, sizeof(ccon)};
+    //campain metadata
+    t_algo_meta index_cam = {NULL, db->nr_cam, sizeof(i_ccam_PK), compare_campaign_PK_index, swap_campaign_index, assign_campaign_index_PK, assign_campaign_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block_cam = {&db->hdr.off_i_cam_pk, &db->hdr.i_cam_pk, sizeof(i_ccam_PK)};
+    t_datablock table_block_cam = {&db->hdr.off_cam, 0, sizeof(ccam)};
 
     Create_DB(db, DB_name);
     Import_CSV_company(db);
     Import_CSV_contact(db);
+    Import_CSV_campaign(db);
 
     create_index_file(db, &index_cpy, db->nr_cpy, &index_block_cpy, &table_block_cpy);
     create_index_file(db, &index_con, db->nr_con, &index_block_con, &table_block_con);
+    create_index_file(db, &index_cam, db->nr_cam, &index_block_cam, &table_block_cam);
 }
