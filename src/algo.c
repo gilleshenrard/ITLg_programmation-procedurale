@@ -937,3 +937,23 @@ int searchall_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, t
     free(index_buf);
     return 0;
 }
+
+/************************************************************/
+/*  I : File pointer to the database                        */
+/*      Offset of the index tree root                       */
+/*      Key to search in the index                          */
+/*      Metadata necessary to the index algorithm           */
+/*      element in which putting the search result          */
+/*      Size of an element in the table                     */
+/*  P : Searches for the first occurence of the key         */
+/*          in the index                                    */
+/*  O :  0 if OK                                            */
+/*      -1 otherwise                                        */
+/************************************************************/
+/* WARNING : the index structure must finish with left and  */
+/*              right long int types                        */
+/************************************************************/
+int searchone_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, void* elem, int elem_size){
+
+    return 0;
+}
