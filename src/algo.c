@@ -954,6 +954,43 @@ int searchall_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, t
 /*              right long int types                        */
 /************************************************************/
 int searchone_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, void* elem, int elem_size){
+    void *index_buf=NULL;
+    int comparison = 0;
+    long offset = 0;
 
+    //fill a buffer with the element of the current tree root
+    index_buf = calloc(1, index->elementsize);
+    fseek(fp, offset_root, SEEK_SET);
+    fread(index_buf, 1, index->elementsize, fp);
+
+    //compare it to the key received
+    comparison = (*index->doCompare)(index_buf, key);
+    if(!comparison){
+        //get the offset of the corresponding element in the table
+        fseek(fp, offset_root + (index->elementsize - 3*sizeof(long)), SEEK_SET);
+        fread(&offset, 1, sizeof(long), fp);
+
+        //read the corresponding element and add it to the list
+        fseek(fp, offset, SEEK_SET);
+        fread(elem, 1, elem_size, fp);
+
+        free(index_buf);
+        return 0;
+    }
+
+    if(comparison > 0){
+        fseek(fp, offset_root + (index->elementsize - 2*sizeof(long)), SEEK_SET);
+        fread(&offset, 1, sizeof(long), fp);
+        if(offset)
+            searchone_index(fp, offset, key, index, elem, elem_size);
+    }
+    else{
+        fseek(fp, offset_root + (index->elementsize - sizeof(long)), SEEK_SET);
+        fread(&offset, 1, sizeof(long), fp);
+        if(offset)
+            searchone_index(fp, offset, key, index, elem, elem_size);
+    }
+
+    free(index_buf);
     return 0;
 }

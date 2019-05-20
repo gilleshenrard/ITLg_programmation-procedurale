@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     init_db(&db);
 
-    print_screen_report(&db, "Pfizer Great Britain Ltd");
+    print_screen_report(&db, "Groupe Danone");
 
     if(db.cpy)
         free(db.cpy);

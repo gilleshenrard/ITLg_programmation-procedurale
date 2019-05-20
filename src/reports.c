@@ -5,10 +5,12 @@
 ****************************************************************************************/
 void Rec_scr_report(cscr *rec)
 {
-    printf("%6d %6d %6d\n",
+    printf("%6d %6d %6d %28s %28s\n",
            rec->id_job,
            rec->id_cam,
-           rec->nr_rep);
+           rec->nr_rep,
+           rec->cam_nm,
+           rec->cam_tp);
 
     return;
 }
@@ -96,7 +98,7 @@ int copy_scr_report(void* oldelem, void* newelem){
 /****************************************************************************************/
 int assign_scr_report(void* oldelem, void* newelem){
     cscr_recur* oldTuple = (cscr_recur*)oldelem;
-    ccon* newTuple = (ccon*)newelem;
+    cscr_recur* newTuple = (cscr_recur*)newelem;
     cscr_recur *saveRight = NULL, *saveLeft=NULL;
 
     if(!oldelem || !newelem)
@@ -107,9 +109,7 @@ int assign_scr_report(void* oldelem, void* newelem){
     saveLeft = oldTuple->left;
 
     //copy the data from the new Screen Report to the old one
-    oldTuple->rep.id_cam = newTuple->id_cam;
-    oldTuple->rep.id_job = newTuple->id_job;
-    oldTuple->rep.nr_rep = newTuple->nr_rep;
+    *oldTuple = *newTuple;
 
     //restore the pointer values
     oldTuple->right = saveRight;
@@ -245,6 +245,7 @@ int print_screen_report(dbc* db, char* nm_cpy){
     //metadata for all the lists created
     t_algo_meta list_cpy = {NULL, 0, sizeof(ccpy_recur), compare_company_name, swap_company, assign_company, NULL, NULL, NULL, company_right, company_left};
     t_algo_meta list_con = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, swap_contact, assign_contact, NULL, NULL, NULL, contact_right, contact_left};
+    t_algo_meta list_rep = {NULL, 0, sizeof(cscr_recur), compare_scr_report_type, swap_scr_report, assign_scr_report, NULL, NULL, NULL, scr_report_right, scr_report_left};
     //metadata for all the indexes used
     t_algo_meta index_cpy = {0};
     t_algo_meta index_con = {0};
@@ -254,6 +255,8 @@ int print_screen_report(dbc* db, char* nm_cpy){
     char buffer[6] = {0};
     ccpy_recur* cpy_buffer = NULL, *cpy_next=NULL;
     ccon_recur* con_buffer = NULL;
+    cscr_recur* rep_buffer = NULL;
+    ccam cam = {0};
 
     //finish preparing the indexes metadata
     index_cpy.elementsize = sizeof(i_ccpy_name);
@@ -306,11 +309,27 @@ int print_screen_report(dbc* db, char* nm_cpy){
     //browse through all the contacts found
     con_buffer = list_con.structure;
     for(int i=0 ; i<list_con.nbelements ; i++){
-        //search for the related campaigns
-        searchall_index(db->fp, db->hdr.i_cam_pk, &db->hdr.i_cam_pk, &index_cam, &list_cpy, sizeof(ccam));
+        //search for the related campaign
+        searchone_index(db->fp, db->hdr.i_cam_pk, &con_buffer->con.id_cam, &index_cam, &cam, sizeof(ccam));
 
+        //fill the report buffer with the campaign found
+        rep_buffer = calloc(1, sizeof(cscr_recur));
+        rep_buffer->rep.id_cam = cam.id_cam;
+        rep_buffer->rep.id_job = con_buffer->con.id_job;
+        rep_buffer->rep.nr_rep = con_buffer->con.nr_rep;
+        strcpy(rep_buffer->rep.cam_nm, cam.nm_cam);
+        strcpy(rep_buffer->rep.cam_tp, cam.tp_cam);
+
+        //add it to a list
+        insertListSorted(&list_rep, rep_buffer);
+
+        //go to the next contact
         con_buffer = *contact_right(con_buffer);
     }
+
+    //display all the campaigns sorted by type, according to the report requested
+    printf("ID_job\tID_cam\tnr_rep\t\t\t   cam_nm\t\t      cam_type\n");
+    foreachList(&list_rep, NULL, Rec_scr_report_list);
 
     //clean up all the lists and close the DB
     while(list_cpy.structure)
@@ -318,6 +337,9 @@ int print_screen_report(dbc* db, char* nm_cpy){
 
     while(list_con.structure)
         popListTop(&list_con);
+
+    while(list_rep.structure)
+        popListTop(&list_rep);
 
     fclose(db->fp);
 
