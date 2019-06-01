@@ -233,36 +233,36 @@ int menu_countries(dbc* db){
 int menu_companies(dbc* db){
     char choice=0, i;
     long j = 0;
-    ccpy *companies = NULL;
-    t_algo_meta cpy_list = {NULL, 0, sizeof(ccpy_recur), compare_company_name, swap_company, assign_company, NULL, NULL, NULL, country_right, country_left};
+    ccpy_recur *companies = NULL;
+    void **right = NULL;
+    t_algo_meta cpy_list = {NULL, 0, sizeof(ccpy_recur), compare_company_name, swap_company, assign_company, NULL, NULL, NULL, company_right, company_left};
+    t_algo_meta cpy_array = {NULL, db->nr_cpy, sizeof(ccpy), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_cpy[4][32]={  "Menu des Pays",
                             "Lister les pays",
                             "Exporter les pays",
                             "Menu principal"};
 
     Load_company(db);
+    cpy_array.structure = db->cpy;
+    arrayToList(&cpy_array, &cpy_list, COPY);
 
     do{
         choice = menu(sizeof(menu_cpy)/32, menu_cpy);
         switch(choice){
             case '0': //paginated listing of all the countries
                 //create a list with PG_SIZE elements from the loaded array
-                companies = db->cpy;
-                while(j<db->hdr.sz_cpy && choice!='q'){
+                companies = cpy_list.structure;
+                while(j<cpy_list.nbelements && choice!='q'){
                     i = 0;
-                    while(i<PG_SIZE && j < db->hdr.sz_cpy){
-                        insertListSorted(&cpy_list,  companies);
+                    while(i<PG_SIZE && j < cpy_list.nbelements){
+                        Rec_company_list(companies, NULL);
+                        right = company_right(companies);
+                        companies = *((ccpy_recur**)right);
                         i++;
                         j++;
-                        companies++;
                     }
 
-                    //display the list
-                    foreachList(&cpy_list, NULL, Rec_company_list);
-
                     //prepare to set a new list
-                    while(cpy_list.structure)
-                        popListTop(&cpy_list);
                     i = 0;
 
                     //ask the user if he wants to continue
@@ -284,6 +284,9 @@ int menu_companies(dbc* db){
             getch();
         }
     }while(choice!=27);
+
+    while(cpy_list.structure)
+        popListTop(&cpy_list);
 
     return 0;
 }
