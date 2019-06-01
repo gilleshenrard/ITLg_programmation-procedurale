@@ -41,9 +41,9 @@ int main(void)
     init_db(&db);
 
 //    tst_export_country(&db);
-//    tst_Load_country(&db);
+    tst_Load_country(&db);
 //    tst_Print_country(&db);
-//    tst_List_country(&db);
+    tst_List_country(&db);
 //    tst_AVL_country(&db);
 //    tst_AVL_search_country(&db);
 //    tst_index_country_name(&db);
@@ -87,7 +87,7 @@ int main(void)
 /****************************************************************************************/
 void init_db(dbc* db){
     Create_DB(db, "DB_Comp");
-//    Import_CSV_Country(db);
+    Import_CSV_Country(db);
 //    Import_CSV_Group(db);
 //    Import_CSV_job(db);
 //    Import_CSV_industry(db);
@@ -150,7 +150,7 @@ void tst_Print_country(dbc* db){
 /****************************************************************************************/
 void tst_List_country(dbc* db){
     t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, NULL, NULL, country_right, country_left};
-    t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta cty_array = {db->cty, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
     printf("\n--------------- tst_list_country ---------------------------------------\n");
     arrayToList(&cty_array, &cty_list, COPY);
