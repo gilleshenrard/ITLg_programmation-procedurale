@@ -132,6 +132,7 @@ void init_db(dbc* db){
     Import_CSV_contact(db);
     Import_CSV_campaign(db);
     Import_CSV_Country(db);
+    Load_Country(db);
     Import_CSV_Group(db);
     Import_CSV_industry(db);
     Import_CSV_job(db);
@@ -181,12 +182,14 @@ char menu(int i, char sections[i][32]){
 int menu_countries(dbc* db){
     char choice=0;
     t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, NULL, NULL, country_right, country_left};
-    t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta cty_array = {NULL, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_cty[4][32]={  "Menu des Pays",
                             "Lister les pays",
                             "Exporter les pays",
                             "Menu principal"};
 
+    Load_Country(db);
+    cty_array.structure = db->cty;
     arrayToList(&cty_array, &cty_list, COPY);
 
     do{
