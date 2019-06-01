@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <conio.h>
 #include "lib/DB_Main.h"
 #include "lib/DB_Country.h"
 #include "lib/algo.h"
@@ -20,11 +21,55 @@ char menu(int, char[][32]);
 
 int main(int argc, char *argv[])
 {
+    char choice=0;
+    char princ_menu[10][32]={"Main menu",
+                            "Menu des Pays",
+                            "Menu des Compagnies",
+                            "Menu des Campagnes",
+                            "Menu des Contacts",
+                            "Menu des Groupes",
+                            "Menu des Industries",
+                            "Menu des Jobs",
+                            "Changer de DB",
+                            "Quitter"};
     dbc db = {0};
 
     init_db(&db);
 
-    print_screen_report(&db, "Groupe Danone");
+    do{
+        choice = menu(sizeof(princ_menu)/32, princ_menu);
+        switch(choice){
+            case '0':   //Countries menu
+                break;
+
+            case '1':   //Companies menu
+                break;
+
+            case '2':   //Campaigns menu
+                break;
+
+            case '3':   //Contacts menu
+                break;
+
+            case '4':   //Groups menu
+                break;
+
+            case '5':   //Industries menu
+                break;
+
+            case '6':   //Jobs menu
+                break;
+
+            case '7':   //Change DB menu
+                break;
+
+            default:
+                break;
+        }
+        printf("\nAppuyez sur une touche pour continuer ");
+        fflush(stdin);
+        getch();
+    }while(choice!=27);
 
     if(db.cpy)
         free(db.cpy);
@@ -78,7 +123,7 @@ char menu(int i, char sections[i][32]){
     printf("****************************************\n");
     printf("\t\t%s\n", sections[0]);
     printf("****************************************\n");
-    printf("Current file : %s\n\n", filename);
+    printf("Current file : %s\n\n", DB_name);
     for(j=1; j<i-1; j++)
         printf("%d) %s\n", j-1, sections[j]);
     printf("ESC) %s\n", sections[j]);
