@@ -169,6 +169,7 @@ char menu(int i, char sections[i][32]){
     printf("\nEffectuez votre choix : ");
     fflush(stdin);
     choice = getch();
+    printf("\n");
 
     return choice;
 }
