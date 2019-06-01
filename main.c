@@ -21,6 +21,7 @@ char menu(int, char[][32]);
 
 int main(int argc, char *argv[])
 {
+    dbc db = {0};
     char choice=0;
     char princ_menu[10][32]={"Main menu",
                             "Menu des Pays",
@@ -32,11 +33,11 @@ int main(int argc, char *argv[])
                             "Menu des Jobs",
                             "Changer de DB",
                             "Quitter"};
-    dbc db = {0};
 
     init_db(&db);
 
     do{
+        //let the user make a choice in the main menu
         choice = menu(sizeof(princ_menu)/32, princ_menu);
         switch(choice){
             case '0':   //Countries menu
