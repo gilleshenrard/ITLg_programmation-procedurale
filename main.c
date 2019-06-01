@@ -18,6 +18,7 @@ char DB_name[32] = "DB_Comp";
 
 void init_db(dbc* db);
 char menu(int, char[][32]);
+int menu_countries(dbc*);
 
 int main(int argc, char *argv[])
 {
@@ -41,6 +42,7 @@ int main(int argc, char *argv[])
         choice = menu(sizeof(princ_menu)/32, princ_menu);
         switch(choice){
             case '0':   //Countries menu
+                menu_countries(&db);
                 break;
 
             case '1':   //Companies menu
@@ -168,4 +170,48 @@ char menu(int i, char sections[i][32]){
     choice = getch();
 
     return choice;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Handles the menu specific to Countries              */
+/*  O : -1 if error                                         */
+/*       0 otherwise                                        */
+/************************************************************/
+int menu_countries(dbc* db){
+    char choice=0;
+    t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, NULL, NULL, country_right, country_left};
+    t_algo_meta cty_array = {db->cty+1, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    char menu_cty[4][32]={  "Menu des Pays",
+                            "Lister les pays",
+                            "Exporter les pays",
+                            "Menu principal"};
+
+    arrayToList(&cty_array, &cty_list, COPY);
+
+    do{
+        choice = menu(sizeof(menu_cty)/32, menu_cty);
+        switch(choice){
+            case '0':
+                foreachList(&cty_list, NULL, Rec_Country_list);
+                break;
+
+            case '1':
+                Export_CSV_Country(db);
+                break;
+
+            default:
+                break;
+        }
+        if(choice != 27){
+            printf("\nAppuyez sur une touche pour continuer ");
+            fflush(stdin);
+            getch();
+        }
+    }while(choice!=27);
+
+    while(cty_list.structure)
+        popListTop(&cty_list);
+
+    return 0;
 }
