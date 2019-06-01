@@ -14,11 +14,14 @@
 #include "lib/DB_Company.h"
 #include "lib/reports.h"
 
+#define PG_SIZE 32
+
 char DB_name[32] = "DB_Comp";
 
 void init_db(dbc* db);
 char menu(int, char[][32]);
 int menu_countries(dbc*);
+int menu_companies(dbc*);
 
 int main(int argc, char *argv[])
 {
@@ -46,6 +49,7 @@ int main(int argc, char *argv[])
                 break;
 
             case '1':   //Companies menu
+                menu_companies(&db);
                 break;
 
             case '2':   //Campaigns menu
@@ -216,6 +220,70 @@ int menu_countries(dbc* db){
 
     while(cty_list.structure)
         popListTop(&cty_list);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Handles the menu specific to Companies              */
+/*  O : -1 if error                                         */
+/*       0 otherwise                                        */
+/************************************************************/
+int menu_companies(dbc* db){
+    char choice=0, i;
+    long j = 0;
+    ccpy *companies = NULL;
+    t_algo_meta cpy_list = {NULL, 0, sizeof(ccpy_recur), compare_company_name, swap_company, assign_company, NULL, NULL, NULL, country_right, country_left};
+    char menu_cpy[4][32]={  "Menu des Pays",
+                            "Lister les pays",
+                            "Exporter les pays",
+                            "Menu principal"};
+
+    Load_company(db);
+
+    do{
+        choice = menu(sizeof(menu_cpy)/32, menu_cpy);
+        switch(choice){
+            case '0': //paginated listing of all the countries
+                //create a list with PG_SIZE elements from the loaded array
+                companies = db->cpy;
+                while(j<db->hdr.sz_cpy && choice!='q'){
+                    i = 0;
+                    while(i<PG_SIZE && j < db->hdr.sz_cpy){
+                        insertListSorted(&cpy_list,  companies);
+                        i++;
+                        j++;
+                        companies++;
+                    }
+
+                    //display the list
+                    foreachList(&cpy_list, NULL, Rec_company_list);
+
+                    //prepare to set a new list
+                    while(cpy_list.structure)
+                        popListTop(&cpy_list);
+                    i = 0;
+
+                    //ask the user if he wants to continue
+                    printf("\nQ : arreter, ESPACE : continuer\n");
+                    choice = getch();
+                }
+                break;
+
+            case '1': //export the countries to a CSV file
+                Export_CSV_company(db);
+                break;
+
+            default:
+                break;
+        }
+        if(choice != 27){
+            printf("\nAppuyez sur une touche pour continuer ");
+            fflush(stdin);
+            getch();
+        }
+    }while(choice!=27);
 
     return 0;
 }
