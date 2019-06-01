@@ -67,9 +67,11 @@ int main(int argc, char *argv[])
             default:
                 break;
         }
-        printf("\nAppuyez sur une touche pour continuer ");
-        fflush(stdin);
-        getch();
+        if(choice != 27){
+            printf("\nAppuyez sur une touche pour continuer ");
+            fflush(stdin);
+            getch();
+        }
     }while(choice!=27);
 
     if(db.cpy)
