@@ -76,6 +76,14 @@ int main(int argc, char *argv[])
         free(db.cpy);
     if(db.con)
         free(db.con);
+    if(db.cty)
+        free(db.cty);
+    if(db.grp)
+        free(db.grp);
+    if(db.ind)
+        free(db.ind);
+    if(db.job)
+        free(db.job);
 
     return EXIT_SUCCESS;
 }
@@ -94,19 +102,43 @@ void init_db(dbc* db){
     t_algo_meta index_con = {NULL, db->nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, swap_contact_index, assign_contact_index_cpy, assign_contact_index_slot, NULL, NULL, NULL, NULL};
     t_datablock index_block_con = {&db->hdr.off_i_con_cpy, &db->hdr.i_con_cpy, sizeof(i_ccon_cpy)};
     t_datablock table_block_con = {&db->hdr.off_con, 0, sizeof(ccon)};
-    //campain metadata
+    //campaign metadata
     t_algo_meta index_cam = {NULL, db->nr_cam, sizeof(i_ccam_PK), compare_campaign_PK_index, swap_campaign_index, assign_campaign_index_PK, assign_campaign_index_slot, NULL, NULL, NULL, NULL};
     t_datablock index_block_cam = {&db->hdr.off_i_cam_pk, &db->hdr.i_cam_pk, sizeof(i_ccam_PK)};
     t_datablock table_block_cam = {&db->hdr.off_cam, 0, sizeof(ccam)};
+    //country metadata
+    t_algo_meta index_cty = {NULL, db->nr_cty, sizeof(i_ccty_name), compare_country_index_name, swap_country_index, assign_country_index_name, assign_country_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block_cty = {&db->hdr.off_i_cty_name, &db->hdr.i_cty_name, sizeof(i_ccty_name)};
+    t_datablock table_block_cty = {&db->hdr.off_cty, 0, sizeof(ccty)};
+    //group metadata
+    t_algo_meta index_grp = {NULL, db->nr_grp, sizeof(i_cgrp_FK), compare_group_FK_index, swap_group_index, assign_group_index_FK, assign_group_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block_grp = {&db->hdr.off_i_grp_fk, &db->hdr.i_grp_fk, sizeof(i_cgrp_FK)};
+    t_datablock table_block_grp = {&db->hdr.off_grp, 0, sizeof(cgrp)};
+    //industry metadata
+    t_algo_meta index_ind = {NULL, db->nr_ind, sizeof(i_cind_PK), compare_industry_PK_index, swap_industry_index, assign_industry_index_PK, assign_industry_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block_ind = {&db->hdr.off_i_ind_pk, &db->hdr.i_ind_pk, sizeof(i_cind_PK)};
+    t_datablock table_block_ind = {&db->hdr.off_ind, 0, sizeof(cind)};
+    //job metadata
+    t_algo_meta index_job = {NULL, db->nr_job, sizeof(i_cjob_name), compare_job_index_name, swap_job_index, assign_job_index_name, assign_job_index_slot, NULL, NULL, NULL, NULL};
+    t_datablock index_block_job = {&db->hdr.off_i_job_name, &db->hdr.i_job_name, sizeof(i_cjob_name)};
+    t_datablock table_block_job = {&db->hdr.off_job, 0, sizeof(cjob)};
 
     Create_DB(db, DB_name);
     Import_CSV_company(db);
     Import_CSV_contact(db);
     Import_CSV_campaign(db);
+    Import_CSV_Country(db);
+    Import_CSV_Group(db);
+    Import_CSV_industry(db);
+    Import_CSV_job(db);
 
     create_index_file(db, &index_cpy, db->nr_cpy, &index_block_cpy, &table_block_cpy);
     create_index_file(db, &index_con, db->nr_con, &index_block_con, &table_block_con);
     create_index_file(db, &index_cam, db->nr_cam, &index_block_cam, &table_block_cam);
+    create_index_file(db, &index_cty, db->nr_cty, &index_block_cty, &table_block_cty);
+    create_index_file(db, &index_grp, db->nr_grp, &index_block_grp, &table_block_grp);
+    create_index_file(db, &index_ind, db->nr_ind, &index_block_ind, &table_block_ind);
+    create_index_file(db, &index_job, db->nr_job, &index_block_job, &table_block_job);
 }
 
 /************************************************************/
