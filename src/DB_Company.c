@@ -198,7 +198,7 @@ void Print_company(dbc *db)
 ****************************************************************************************/
 void Rec_company(ccpy *rec)
 {
-    printf("%3d %20s %28s %16s \n",
+    printf("%6d %30s %40s %16s \n",
            rec->id_cpy,
            rec->nm_cpy,
            rec->nm_www,
