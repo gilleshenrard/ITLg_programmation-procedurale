@@ -46,6 +46,8 @@ void* search_AVL(t_algo_meta* meta, void* avl, void* key);
 ```C
 long index_tree(FILE* fp, long offset_start, int nb, t_algo_meta* meta);
 long create_index_file(dbc* db, t_algo_meta* meta, int nb, t_datablock* i_block, t_datablock* t_block);
+int searchall_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, t_algo_meta* list, int elem_size);
+int searchone_index(FILE* fp, long offset_root, void* key, t_algo_meta* index, void* element, int elem_size);
 ```
 
 * Structures transformation (one format to another) :
