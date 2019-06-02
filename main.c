@@ -24,6 +24,7 @@ int menu_countries(dbc*);
 int menu_companies(dbc*);
 int menu_campaigns(dbc*);
 int menu_contacts(dbc*);
+int menu_groups(dbc*);
 
 int main(int argc, char *argv[])
 {
@@ -63,6 +64,7 @@ int main(int argc, char *argv[])
                 break;
 
             case '4':   //Groups menu
+                menu_groups(&db);
                 break;
 
             case '5':   //Industries menu
@@ -425,6 +427,73 @@ int menu_contacts(dbc* db){
 
     while(con_list.structure)
         popListTop(&con_list);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Handles the menu specific to Groupes                */
+/*  O : -1 if error                                         */
+/*       0 otherwise                                        */
+/************************************************************/
+int menu_groups(dbc* db){
+    char choice=0, i;
+    long j = 0;
+    cgrp_recur *group = NULL;
+    void **right = NULL;
+    t_algo_meta grp_list = {NULL, 0, sizeof(cgrp_recur), compare_group_FK, swap_group, assign_group, NULL, NULL, NULL, group_right, group_left};
+    t_algo_meta grp_array = {NULL, db->nr_grp, sizeof(cgrp), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    char menu_grp[4][32]={  "Menu des groupes",
+                            "Lister les groupes",
+                            "Exporter les groupes",
+                            "Menu principal"};
+
+    Load_Group(db);
+    grp_array.structure = db->grp;
+    arrayToList(&grp_array, &grp_list, COPY);
+
+    do{
+        choice = menu(sizeof(menu_grp)/32, menu_grp);
+        switch(choice){
+            case '0': //paginated listing of all the countries
+                //create a list with PG_SIZE elements from the loaded array
+                group = grp_list.structure;
+                while(j<grp_list.nbelements && choice!='q'){
+                    i = 0;
+                    while(i<PG_SIZE && j < grp_list.nbelements){
+                        Rec_group_list(group, NULL);
+                        right = group_right(group);
+                        group = *((cgrp_recur**)right);
+                        i++;
+                        j++;
+                    }
+
+                    //prepare to set a new list
+                    i = 0;
+
+                    //ask the user if he wants to continue
+                    printf("\nQ : arreter, ESPACE : continuer\n");
+                    choice = getch();
+                }
+                break;
+
+            case '1': //export the countries to a CSV file
+                Export_CSV_Group(db);
+                break;
+
+            default:
+                break;
+        }
+        if(choice != 27){
+            printf("\nAppuyez sur une touche pour continuer ");
+            fflush(stdin);
+            getch();
+        }
+    }while(choice!=27);
+
+    while(grp_list.structure)
+        popListTop(&grp_list);
 
     return 0;
 }
