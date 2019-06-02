@@ -656,8 +656,9 @@ int gen_screen_report(dbc* db){
     printf("****************************************\n");
 
     printf("\n\nVeuillez taper le nom d'une compagnie : ");
-    fflush(stdin);
-    scanf("%s", com);
+    fgets(com, sizeof(com), stdin);
+    if ((strlen(com) > 0) && (com[strlen(com)-1] == '\n'))
+        com[strlen(com)-1] = '\0';
 
     printf("\n\nGeneration du rapport\n");
     print_screen_report(db, com);
