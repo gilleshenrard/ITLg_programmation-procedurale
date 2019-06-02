@@ -65,13 +65,12 @@ int arrayToAVL(t_algo_meta* dArray, t_algo_meta* dAVL, e_listtoarray action);
 * file index creation
 * unit tests
 * screen reports as stated in the final assignment
+* menus
 
 ### 5. To Do
-* Implement menus
 * CSV report generation method
-* paginated table printing for large tables
 * (modify AVL trees to create indexes directly for small tables)
-* push further testing and debugging for very large tables 
+* push further testing and debugging for very large tables
 
 ### 6. Known issues
 n/a
