@@ -25,6 +25,7 @@ int menu_companies(dbc*);
 int menu_campaigns(dbc*);
 int menu_contacts(dbc*);
 int menu_groups(dbc*);
+int menu_industries(dbc*);
 
 int main(int argc, char *argv[])
 {
@@ -68,6 +69,7 @@ int main(int argc, char *argv[])
                 break;
 
             case '5':   //Industries menu
+                menu_industries(&db);
                 break;
 
             case '6':   //Jobs menu
@@ -494,6 +496,73 @@ int menu_groups(dbc* db){
 
     while(grp_list.structure)
         popListTop(&grp_list);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Handles the menu specific to Industries             */
+/*  O : -1 if error                                         */
+/*       0 otherwise                                        */
+/************************************************************/
+int menu_industries(dbc* db){
+    char choice=0, i;
+    long j = 0;
+    cind_recur *industry = NULL;
+    void **right = NULL;
+    t_algo_meta ind_list = {NULL, 0, sizeof(cind_recur), compare_industry_PK, swap_industry, assign_industry, NULL, NULL, NULL, industry_right, industry_left};
+    t_algo_meta ind_array = {NULL, db->nr_ind, sizeof(cind), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    char menu_ind[4][32]={  "Menu des Industries",
+                            "Lister les industries",
+                            "Exporter les industries",
+                            "Menu principal"};
+
+    Load_industry(db);
+    ind_array.structure = db->ind;
+    arrayToList(&ind_array, &ind_list, COPY);
+
+    do{
+        choice = menu(sizeof(menu_ind)/32, menu_ind);
+        switch(choice){
+            case '0': //paginated listing of all the countries
+                //create a list with PG_SIZE elements from the loaded array
+                industry = ind_list.structure;
+                while(j<ind_list.nbelements && choice!='q'){
+                    i = 0;
+                    while(i<PG_SIZE && j < ind_list.nbelements){
+                        Rec_industry_list(industry, NULL);
+                        right = industry_right(industry);
+                        industry = *((cind_recur**)right);
+                        i++;
+                        j++;
+                    }
+
+                    //prepare to set a new list
+                    i = 0;
+
+                    //ask the user if he wants to continue
+                    printf("\nQ : arreter, ESPACE : continuer\n");
+                    choice = getch();
+                }
+                break;
+
+            case '1': //export the countries to a CSV file
+                Export_CSV_industry(db);
+                break;
+
+            default:
+                break;
+        }
+        if(choice != 27){
+            printf("\nAppuyez sur une touche pour continuer ");
+            fflush(stdin);
+            getch();
+        }
+    }while(choice!=27);
+
+    while(ind_list.structure)
+        popListTop(&ind_list);
 
     return 0;
 }
