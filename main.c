@@ -85,11 +85,9 @@ int main(int argc, char *argv[])
             default:
                 break;
         }
-        if(choice != 27){
-            printf("\nAppuyez sur une touche pour continuer ");
-            fflush(stdin);
-            getch();
-        }
+        if(choice != 27)
+            system("pause");
+
     }while(choice!=27);
 
     if(db.cpy)
@@ -223,11 +221,9 @@ int menu_countries(dbc* db){
             default:
                 break;
         }
-        if(choice != 27){
-            printf("\nAppuyez sur une touche pour continuer ");
-            fflush(stdin);
-            getch();
-        }
+        if(choice != 27)
+            system("pause");
+
     }while(choice!=27);
 
     while(cty_list.structure)
@@ -290,11 +286,9 @@ int menu_companies(dbc* db){
             default:
                 break;
         }
-        if(choice != 27){
-            printf("\nAppuyez sur une touche pour continuer ");
-            fflush(stdin);
-            getch();
-        }
+        if(choice != 27)
+            system("pause");
+
     }while(choice!=27);
 
     while(cpy_list.structure)
@@ -357,11 +351,9 @@ int menu_campaigns(dbc* db){
             default:
                 break;
         }
-        if(choice != 27){
-            printf("\nAppuyez sur une touche pour continuer ");
-            fflush(stdin);
-            getch();
-        }
+        if(choice != 27)
+            system("pause");
+
     }while(choice!=27);
 
     while(cam_list.structure)
@@ -424,11 +416,9 @@ int menu_contacts(dbc* db){
             default:
                 break;
         }
-        if(choice != 27){
-            printf("\nAppuyez sur une touche pour continuer ");
-            fflush(stdin);
-            getch();
-        }
+        if(choice != 27)
+            system("pause");
+
     }while(choice!=27);
 
     while(con_list.structure)
@@ -491,11 +481,9 @@ int menu_groups(dbc* db){
             default:
                 break;
         }
-        if(choice != 27){
-            printf("\nAppuyez sur une touche pour continuer ");
-            fflush(stdin);
-            getch();
-        }
+        if(choice != 27)
+            system("pause");
+
     }while(choice!=27);
 
     while(grp_list.structure)
@@ -558,11 +546,9 @@ int menu_industries(dbc* db){
             default:
                 break;
         }
-        if(choice != 27){
-            printf("\nAppuyez sur une touche pour continuer ");
-            fflush(stdin);
-            getch();
-        }
+        if(choice != 27)
+            system("pause");
+
     }while(choice!=27);
 
     while(ind_list.structure)
@@ -625,11 +611,9 @@ int menu_jobs(dbc* db){
             default:
                 break;
         }
-        if(choice != 27){
-            printf("\nAppuyez sur une touche pour continuer ");
-            fflush(stdin);
-            getch();
-        }
+        if(choice != 27)
+            system("pause");
+
     }while(choice!=27);
 
     while(job_list.structure)
