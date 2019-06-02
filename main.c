@@ -156,18 +156,31 @@ void init_db(dbc* db){
     Import_CSV_contact(db);
     Import_CSV_campaign(db);
     Import_CSV_Country(db);
-    Load_Country(db);
     Import_CSV_Group(db);
     Import_CSV_industry(db);
     Import_CSV_job(db);
 
+    printf("Creating the index for Companies (by name) : ");
     create_index_file(db, &index_cpy, db->nr_cpy, &index_block_cpy, &table_block_cpy);
+    printf("done\n");
+    printf("Creating the index for Contacts (by company FK) : ");
     create_index_file(db, &index_con, db->nr_con, &index_block_con, &table_block_con);
+    printf("done\n");
+    printf("Creating the index for Campaigns (by ID) : ");
     create_index_file(db, &index_cam, db->nr_cam, &index_block_cam, &table_block_cam);
+    printf("done\n");
+    printf("Creating the index for Countries (by name) : ");
     create_index_file(db, &index_cty, db->nr_cty, &index_block_cty, &table_block_cty);
+    printf("done\n");
+    printf("Creating the index for Groups (by FK) : ");
     create_index_file(db, &index_grp, db->nr_grp, &index_block_grp, &table_block_grp);
+    printf("done\n");
+    printf("Creating the index for Industries (by ID) : ");
     create_index_file(db, &index_ind, db->nr_ind, &index_block_ind, &table_block_ind);
+    printf("done\n");
+    printf("Creating the index for Jobs (by name) : ");
     create_index_file(db, &index_job, db->nr_job, &index_block_job, &table_block_job);
+    printf("done\n");
 }
 
 /************************************************************/
