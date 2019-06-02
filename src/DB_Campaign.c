@@ -196,7 +196,7 @@ void Print_campaign(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Rec_campaign(ccam *rec){
-    printf("%4d %32s %32s %32s %32s %32s %32s %32s %4d %f\n",
+    printf("%4d %40s %16s %10s %16s %10s %16s %16s %3d %f\n",
             rec->id_cam,
             rec->nm_cam,
             rec->tp_cam,
