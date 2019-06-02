@@ -26,6 +26,7 @@ int menu_campaigns(dbc*);
 int menu_contacts(dbc*);
 int menu_groups(dbc*);
 int menu_industries(dbc*);
+int menu_jobs(dbc*);
 
 int main(int argc, char *argv[])
 {
@@ -73,6 +74,7 @@ int main(int argc, char *argv[])
                 break;
 
             case '6':   //Jobs menu
+                menu_jobs(&db);
                 break;
 
             case '7':   //Change DB menu
@@ -563,6 +565,73 @@ int menu_industries(dbc* db){
 
     while(ind_list.structure)
         popListTop(&ind_list);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Handles the menu specific to Jobs                   */
+/*  O : -1 if error                                         */
+/*       0 otherwise                                        */
+/************************************************************/
+int menu_jobs(dbc* db){
+    char choice=0, i;
+    long j = 0;
+    cjob_recur *job = NULL;
+    void **right = NULL;
+    t_algo_meta job_list = {NULL, 0, sizeof(cjob_recur), compare_job_name, swap_job, assign_job, NULL, NULL, NULL, job_right, job_left};
+    t_algo_meta job_array = {NULL, db->nr_job, sizeof(cjob), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    char menu_job[4][32]={  "Menu des Jobs",
+                            "Lister les jobs",
+                            "Exporter les jobs",
+                            "Menu principal"};
+
+    Load_job(db);
+    job_array.structure = db->job;
+    arrayToList(&job_array, &job_list, COPY);
+
+    do{
+        choice = menu(sizeof(menu_job)/32, menu_job);
+        switch(choice){
+            case '0': //paginated listing of all the countries
+                //create a list with PG_SIZE elements from the loaded array
+                job = job_list.structure;
+                while(j<job_list.nbelements && choice!='q'){
+                    i = 0;
+                    while(i<PG_SIZE && j < job_list.nbelements){
+                        Rec_job_list(job, NULL);
+                        right = job_right(job);
+                        job = *((cjob_recur**)right);
+                        i++;
+                        j++;
+                    }
+
+                    //prepare to set a new list
+                    i = 0;
+
+                    //ask the user if he wants to continue
+                    printf("\nQ : arreter, ESPACE : continuer\n");
+                    choice = getch();
+                }
+                break;
+
+            case '1': //export the countries to a CSV file
+                Export_CSV_job(db);
+                break;
+
+            default:
+                break;
+        }
+        if(choice != 27){
+            printf("\nAppuyez sur une touche pour continuer ");
+            fflush(stdin);
+            getch();
+        }
+    }while(choice!=27);
+
+    while(job_list.structure)
+        popListTop(&job_list);
 
     return 0;
 }
