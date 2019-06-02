@@ -27,6 +27,7 @@ int menu_contacts(dbc*);
 int menu_groups(dbc*);
 int menu_industries(dbc*);
 int menu_jobs(dbc*);
+int gen_screen_report(dbc*);
 
 int main(int argc, char *argv[])
 {
@@ -40,7 +41,7 @@ int main(int argc, char *argv[])
                             "Menu des Groupes",
                             "Menu des Industries",
                             "Menu des Jobs",
-                            "Changer de DB",
+                            "Generer le rapport ecran",
                             "Quitter"};
 
     init_db(&db);
@@ -77,7 +78,8 @@ int main(int argc, char *argv[])
                 menu_jobs(&db);
                 break;
 
-            case '7':   //Change DB menu
+            case '7':   //Print screen report
+                gen_screen_report(&db);
                 break;
 
             default:
@@ -632,6 +634,33 @@ int menu_jobs(dbc* db){
 
     while(job_list.structure)
         popListTop(&job_list);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Generates and prints the appointed screen report    */
+/*          Contacts for 1 company, ordered by campaign type*/
+/*  O : -1 if error                                         */
+/*       0 otherwise                                        */
+/************************************************************/
+int gen_screen_report(dbc* db){
+    char com[64] = "0";
+
+    system("cls");
+    printf("****************************************\n");
+    printf("*           Rapport ecran :            *\n");
+    printf("*  Contacts pour une compagnie, tries  *\n");
+    printf("*         par type de campagne         *\n");
+    printf("****************************************\n");
+
+    printf("\n\nVeuillez taper le nom d'une compagnie : ");
+    fflush(stdin);
+    scanf("%s", com);
+
+    printf("\n\nGeneration du rapport\n");
+    print_screen_report(db, com);
 
     return 0;
 }
