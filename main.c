@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 {
     dbc db = {0};
     char choice=0;
-    char princ_menu[10][32]={"Main menu",
+    char princ_menu[12][32]={"Main menu",
                             "Menu des Pays",
                             "Menu des Compagnies",
                             "Menu des Campagnes",
@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
                             "Menu des Industries",
                             "Menu des Jobs",
                             "Generer le rapport ecran",
+                            "Generer le rapport agrege",
+                            "Generer le rapport detaille",
                             "Quitter"};
 
     init_db(&db);
@@ -80,6 +82,14 @@ int main(int argc, char *argv[])
 
             case '7':   //Print screen report
                 gen_screen_report(&db);
+                break;
+
+            case '8':   //Export aggregated report
+                export_aggregated_report(&db);
+                break;
+
+            case '9':   //Export detailed report
+                export_detailed_report(&db);
                 break;
 
             default:

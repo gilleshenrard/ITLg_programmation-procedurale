@@ -236,6 +236,7 @@ void* free_scr_report(void* report, void* nullable){
 
 /****************************************************************************************/
 /*  I : Database from which print the screen report                                     */
+/*      Company name to find                                                            */
 /*  P : Creates and prints a report                                                     */
 /*          report : Contacts for a company, sorted by campaign type                    */
 /*  O : -1 if not found                                                                 */
@@ -343,5 +344,28 @@ int print_screen_report(dbc* db, char* nm_cpy){
 
     fclose(db->fp);
 
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : Database from which print the screen report                                     */
+/*  P : Creates and exports an aggretated report                                        */
+/*          report : response rate by amount of contacts per year and camp. type        */
+/*  O : -1 if not found                                                                 */
+/*       0 otherwise                                                                    */
+/****************************************************************************************/
+int export_aggregated_report(dbc* db){
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : Database from which print the screen report                                     */
+/*  P : Creates and exports a detailed report                                           */
+/*          report : Companies per geographical zones                                   */
+/*                      + for a company group, ordered by zone and name                 */
+/*  O : -1 if not found                                                                 */
+/*       0 otherwise                                                                    */
+/****************************************************************************************/
+int export_detailed_report(dbc* db){
     return 0;
 }
