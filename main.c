@@ -22,6 +22,7 @@ void init_db(dbc* db);
 char menu(int, char[][32]);
 int menu_countries(dbc*);
 int menu_companies(dbc*);
+int menu_campaigns(dbc*);
 
 int main(int argc, char *argv[])
 {
@@ -53,6 +54,7 @@ int main(int argc, char *argv[])
                 break;
 
             case '2':   //Campaigns menu
+                menu_campaigns(&db);
                 break;
 
             case '3':   //Contacts menu
@@ -287,6 +289,73 @@ int menu_companies(dbc* db){
 
     while(cpy_list.structure)
         popListTop(&cpy_list);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Handles the menu specific to Campaigns              */
+/*  O : -1 if error                                         */
+/*       0 otherwise                                        */
+/************************************************************/
+int menu_campaigns(dbc* db){
+    char choice=0, i;
+    long j = 0;
+    ccam_recur *campaign = NULL;
+    void **right = NULL;
+    t_algo_meta cam_list = {NULL, 0, sizeof(ccam_recur), compare_campaign_PK, swap_campaign, assign_campaign, NULL, NULL, NULL, campaign_right, campaign_left};
+    t_algo_meta cam_array = {NULL, db->nr_cam, sizeof(ccam), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    char menu_cam[4][32]={  "Menu des Campagnes",
+                            "Lister les campagnes",
+                            "Exporter les campagnes",
+                            "Menu principal"};
+
+    Load_campaign(db);
+    cam_array.structure = db->cam;
+    arrayToList(&cam_array, &cam_list, COPY);
+
+    do{
+        choice = menu(sizeof(menu_cam)/32, menu_cam);
+        switch(choice){
+            case '0': //paginated listing of all the countries
+                //create a list with PG_SIZE elements from the loaded array
+                campaign = cam_list.structure;
+                while(j<cam_list.nbelements && choice!='q'){
+                    i = 0;
+                    while(i<PG_SIZE && j < cam_list.nbelements){
+                        Rec_campaign_list(campaign, NULL);
+                        right = campaign_right(campaign);
+                        campaign = *((ccam_recur**)right);
+                        i++;
+                        j++;
+                    }
+
+                    //prepare to set a new list
+                    i = 0;
+
+                    //ask the user if he wants to continue
+                    printf("\nQ : arreter, ESPACE : continuer\n");
+                    choice = getch();
+                }
+                break;
+
+            case '1': //export the countries to a CSV file
+                Export_CSV_campaign(db);
+                break;
+
+            default:
+                break;
+        }
+        if(choice != 27){
+            printf("\nAppuyez sur une touche pour continuer ");
+            fflush(stdin);
+            getch();
+        }
+    }while(choice!=27);
+
+    while(cam_list.structure)
+        popListTop(&cam_list);
 
     return 0;
 }
