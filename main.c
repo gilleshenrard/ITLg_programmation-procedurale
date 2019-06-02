@@ -23,6 +23,7 @@ char menu(int, char[][32]);
 int menu_countries(dbc*);
 int menu_companies(dbc*);
 int menu_campaigns(dbc*);
+int menu_contacts(dbc*);
 
 int main(int argc, char *argv[])
 {
@@ -58,6 +59,7 @@ int main(int argc, char *argv[])
                 break;
 
             case '3':   //Contacts menu
+                menu_contacts(&db);
                 break;
 
             case '4':   //Groups menu
@@ -356,6 +358,73 @@ int menu_campaigns(dbc* db){
 
     while(cam_list.structure)
         popListTop(&cam_list);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Handles the menu specific to Contacts               */
+/*  O : -1 if error                                         */
+/*       0 otherwise                                        */
+/************************************************************/
+int menu_contacts(dbc* db){
+    char choice=0, i;
+    long j = 0;
+    ccon_recur *contact = NULL;
+    void **right = NULL;
+    t_algo_meta con_list = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, swap_contact, assign_contact, NULL, NULL, NULL, contact_right, contact_left};
+    t_algo_meta con_array = {NULL, db->nr_con, sizeof(ccon), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    char menu_con[4][32]={  "Menu des Contacts",
+                            "Lister les contacts",
+                            "Exporter les contacts",
+                            "Menu principal"};
+
+    Load_contact(db);
+    con_array.structure = db->con;
+    arrayToList(&con_array, &con_list, COPY);
+
+    do{
+        choice = menu(sizeof(menu_con)/32, menu_con);
+        switch(choice){
+            case '0': //paginated listing of all the countries
+                //create a list with PG_SIZE elements from the loaded array
+                contact = con_list.structure;
+                while(j<con_list.nbelements && choice!='q'){
+                    i = 0;
+                    while(i<PG_SIZE && j < con_list.nbelements){
+                        Rec_contact_list(contact, NULL);
+                        right = contact_right(contact);
+                        contact = *((ccon_recur**)right);
+                        i++;
+                        j++;
+                    }
+
+                    //prepare to set a new list
+                    i = 0;
+
+                    //ask the user if he wants to continue
+                    printf("\nQ : arreter, ESPACE : continuer\n");
+                    choice = getch();
+                }
+                break;
+
+            case '1': //export the countries to a CSV file
+                Export_CSV_contact(db);
+                break;
+
+            default:
+                break;
+        }
+        if(choice != 27){
+            printf("\nAppuyez sur une touche pour continuer ");
+            fflush(stdin);
+            getch();
+        }
+    }while(choice!=27);
+
+    while(con_list.structure)
+        popListTop(&con_list);
 
     return 0;
 }
