@@ -19,6 +19,7 @@
 char DB_name[32] = "DB_Comp";
 
 void create_db(dbc* db);
+void load_db(dbc* db);
 char menu(int, char[][32]);
 int menu_countries(dbc*);
 int menu_companies(dbc*);
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
 {
     dbc db = {0};
     char choice=0;
-    char princ_menu[13][32]={"Main menu",
+    char princ_menu[14][32]={"Main menu",
                             "Menu des Pays",
                             "Menu des Compagnies",
                             "Menu des Campagnes",
@@ -42,6 +43,7 @@ int main(int argc, char *argv[])
                             "Menu des Industries",
                             "Menu des Jobs",
                             "Creer la DB",
+                            "Charger la DB en memoire",
                             "Generer le rapport ecran",
                             "Generer le rapport agrege",
                             "Generer le rapport detaille",
@@ -83,15 +85,19 @@ int main(int argc, char *argv[])
                 create_db(&db);
                 break;
 
-            case '8':   //Print screen report
+            case '8':   //Load DB in memory
+                load_db(&db);
+                break;
+
+            case '9':   //Print screen report
                 gen_screen_report(&db);
                 break;
 
-            case '9':   //Export aggregated report
+            case 'a':   //Export aggregated report
                 export_aggregated_report(&db);
                 break;
 
-            case 'a':   //Export detailed report
+            case 'b':   //Export detailed report
                 export_detailed_report(&db);
                 break;
 
@@ -186,6 +192,37 @@ void create_db(dbc* db){
     printf("done\n");
 }
 
+/****************************************************************************************/
+/*  I : Database to load in memory                                                      */
+/*  P : Reads the whole database and creates arrays containing the data                 */
+/*  O : /                                                                               */
+/****************************************************************************************/
+void load_db(dbc* db){
+    system("cls");
+    printf("Loading countries : ");
+    Load_Country(db);
+    printf("done\n");
+    printf("Loading companies : ");
+    Load_company(db);
+    printf("done\n");
+    printf("Loading campaigns : ");
+    Load_campaign(db);
+    printf("done\n");
+    printf("Loading contacts : ");
+    Load_contact(db);
+    printf("done\n");
+    printf("Loading groups : ");
+    Load_Group(db);
+    printf("done\n");
+    printf("Loading industries: ");
+    Load_industry(db);
+    printf("done\n");
+    printf("Loading jobs : ");
+    Load_job(db);
+    printf("done\n\n");
+    system("pause");
+}
+
 /************************************************************/
 /*  I : Number of possible sections in the menu             */
 /*      Sections of the menu to display                     */
@@ -232,7 +269,6 @@ int menu_countries(dbc* db){
                             "Exporter les pays",
                             "Menu principal"};
 
-    Load_Country(db);
     cty_array.structure = db->cty;
     arrayToList(&cty_array, &cty_list, COPY);
 
@@ -279,7 +315,6 @@ int menu_companies(dbc* db){
                             "Exporter les pays",
                             "Menu principal"};
 
-    Load_company(db);
     cpy_array.structure = db->cpy;
     arrayToList(&cpy_array, &cpy_list, COPY);
 
@@ -344,7 +379,6 @@ int menu_campaigns(dbc* db){
                             "Exporter les campagnes",
                             "Menu principal"};
 
-    Load_campaign(db);
     cam_array.structure = db->cam;
     arrayToList(&cam_array, &cam_list, COPY);
 
@@ -409,7 +443,6 @@ int menu_contacts(dbc* db){
                             "Exporter les contacts",
                             "Menu principal"};
 
-    Load_contact(db);
     con_array.structure = db->con;
     arrayToList(&con_array, &con_list, COPY);
 
@@ -474,7 +507,6 @@ int menu_groups(dbc* db){
                             "Exporter les groupes",
                             "Menu principal"};
 
-    Load_Group(db);
     grp_array.structure = db->grp;
     arrayToList(&grp_array, &grp_list, COPY);
 
@@ -539,7 +571,6 @@ int menu_industries(dbc* db){
                             "Exporter les industries",
                             "Menu principal"};
 
-    Load_industry(db);
     ind_array.structure = db->ind;
     arrayToList(&ind_array, &ind_list, COPY);
 
@@ -604,7 +635,6 @@ int menu_jobs(dbc* db){
                             "Exporter les jobs",
                             "Menu principal"};
 
-    Load_job(db);
     job_array.structure = db->job;
     arrayToList(&job_array, &job_list, COPY);
 
