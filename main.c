@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 {
     dbc db = {0};
     char choice=0;
-    char princ_menu[12][32]={"Main menu",
+    char princ_menu[14][32]={"Main menu",
                             "Menu des Pays",
                             "Menu des Compagnies",
                             "Menu des Campagnes",
@@ -41,12 +41,14 @@ int main(int argc, char *argv[])
                             "Menu des Groupes",
                             "Menu des Industries",
                             "Menu des Jobs",
+                            "Creer la DB",
+                            "Charger la DB en memoire",
                             "Generer le rapport ecran",
                             "Generer le rapport agrege",
                             "Generer le rapport detaille",
                             "Quitter"};
 
-    init_db(&db);
+    //init_db(&db);
 
     do{
         //let the user make a choice in the main menu
@@ -80,15 +82,21 @@ int main(int argc, char *argv[])
                 menu_jobs(&db);
                 break;
 
-            case '7':   //Print screen report
+            case '7':   //Create DB
+                break;
+
+            case '8':   //Load DB in memory
+                break;
+
+            case '9':   //Print screen report
                 gen_screen_report(&db);
                 break;
 
-            case '8':   //Export aggregated report
+            case 'a':   //Export aggregated report
                 export_aggregated_report(&db);
                 break;
 
-            case '9':   //Export detailed report
+            case 'b':   //Export detailed report
                 export_detailed_report(&db);
                 break;
 
@@ -200,7 +208,10 @@ char menu(int i, char sections[i][32]){
     printf("****************************************\n");
     printf("Current file : %s\n\n", DB_name);
     for(j=1; j<i-1; j++)
-        printf("%d) %s\n", j-1, sections[j]);
+        if(j <= 10)
+            printf("%d) %s\n", j-1, sections[j]);
+        else
+            printf("%c) %s\n", j+86, sections[j]);
     printf("ESC) %s\n", sections[j]);
 
     printf("\nEffectuez votre choix : ");
