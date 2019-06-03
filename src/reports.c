@@ -369,7 +369,63 @@ int export_aggregated_report(dbc* db){
 /*       0 otherwise                                                                    */
 /****************************************************************************************/
 int export_detailed_report(dbc* db, char* nm_grp){
+    //metadata for all the lists created
+    t_algo_meta list_grp_nm = {NULL, 0, sizeof(cgrp_recur), compare_group_nm, swap_group, assign_group, NULL, NULL, NULL, group_right, group_left};
+    t_algo_meta list_cpy_grp = {NULL, 0, sizeof(ccpy_recur), compare_company_grp, swap_company, assign_company, NULL, NULL, NULL, company_right, company_left};
+//    t_algo_meta list_rep = {NULL, 0, sizeof(cscr_recur), compare_scr_report_type, swap_scr_report, assign_scr_report, NULL, NULL, NULL, scr_report_right, scr_report_left};
+    //metadata for all the indexes used
+    t_algo_meta index_grp = {0};
+    t_algo_meta index_cpy = {0};
 
+    int choix = 0;
+    char buffer[6] = {0};
+    cgrp_recur* grp_buffer = NULL, *grp_next=NULL;
+
+    //finish preparing the indexes metadata
+    index_grp.elementsize = sizeof(i_cgrp_nm);
+    index_grp.doCompare = compare_group_nm_index;
+    index_cpy.elementsize = sizeof(i_ccpy_grp);
+    index_cpy.doCompare = compare_company_grp;
+
+    // open the DB
+    db->fp = fopen(DB_file, "rb");
+    if(!db->fp){
+        fprintf(stderr, "\n\nErreur a l'ouverture de la DB\n\n");
+        return -1;
+    }
+
+    //search for all occurrences of the company name (creates a linked list)
+    searchall_index(db->fp, db->hdr.i_grp_nm, nm_grp, &index_grp, &list_grp_nm, sizeof(cgrp));
+    grp_buffer=list_grp_nm.structure;
+
+    //if not found, error
+    if(!list_grp_nm.nbelements){
+        fprintf(stderr, "\n\n%s : non-trouve\n\n", nm_grp);
+        return -1;
+    }
+
+    //if more than one occurrence, make the user choose which one
+    if(list_grp_nm.nbelements > 1){
+        //display all the possibilities
+        printf("\nVeuillez choisir pour quel groupe afficher le rapport : (1 a %ld)\n\n", list_grp_nm.nbelements);
+        foreachList(&list_grp_nm, NULL, Rec_group_list);
+
+        //ask the user to pick a one
+        printf("\nChoix : ");
+        fflush(stdin);
+        fgets(buffer, 6, stdin);
+        choix = atoi(buffer);
+
+        //save the selected one in a buffer
+        grp_next = list_grp_nm.structure;
+        for(int i=1 ; i<choix ; i++){
+            grp_next = *group_right(grp_next);
+        }
+        grp_buffer = (cgrp_recur*)grp_next;
+    }
+
+    //look for all the contacts related to the chosen company and create a linked list
+    searchall_index(db->fp, db->hdr.i_cpy_grp, &grp_buffer->grp.id_grp, &index_cpy, &list_cpy_grp, sizeof(ccpy));
 
     return 0;
 }

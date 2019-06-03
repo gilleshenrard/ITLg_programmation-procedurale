@@ -58,6 +58,8 @@ typedef struct Header
     long off_i_cam_pk;      // Offset of the campain index block (by pk)
     long off_i_con_cpy;     // Offset of the contact index block (by campains)
     long off_i_cpy_name;    // Offset of the company index block (by name)
+    long off_i_cpy_grp;     // Offset of the company index block (by group ID)
+    long off_i_grp_nm;      // Offset of the group index block (by name)
     long i_cty_name;        // Address of the root for the country index (by name)
     long i_grp_fk;          // Address of the root for the group index (by fk)
     long i_job_name;        // Address of the root for the job index (by name)
@@ -65,7 +67,9 @@ typedef struct Header
     long i_cam_pk;          // Address of the root for the campain index (by pk)
     long i_con_cpy;         // Address of the root for the contact index (by campains)
     long i_cpy_name;        // Address of the root for the company index (by name)
-    char filler[112];
+    long i_cpy_grp;         // Address of the root for the company index (by group)
+    long i_grp_nm;          // Address of the root for the group index (by name)
+    char filler[88];
 } hder;
 
 /***************************************************************************************

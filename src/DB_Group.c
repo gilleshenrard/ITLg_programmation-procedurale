@@ -226,6 +226,21 @@ int compare_group_FK(void* a, void* b){
 /****************************************************************************************/
 /*  I : First group to compare                                                          */
 /*      Second  group to compare                                                        */
+/*  P : Compares two groups by their name                                               */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_group_nm(void* a, void* b){
+    cgrp_recur *tmp_a = (cgrp_recur*)a;
+    cgrp_recur *tmp_b = (cgrp_recur*)b;
+
+    return strcmp(tmp_a->grp.nm_grp, tmp_b->grp.nm_grp);
+}
+
+/****************************************************************************************/
+/*  I : First group to compare                                                          */
+/*      Second  group to compare                                                        */
 /*  P : Compares two groups by their PK                                                 */
 /*  O :  1 if A > B                                                                     */
 /*       0 if A = B                                                                     */
@@ -241,6 +256,21 @@ int compare_group_FK_index(void* a, void* b){
         return -1;
     else
         return 0;
+}
+
+/****************************************************************************************/
+/*  I : First group to compare                                                          */
+/*      Second  group to compare                                                        */
+/*  P : Compares two groups by their name                                               */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_group_nm_index(void* a, void* b){
+    i_cgrp_nm *tmp_a = (i_cgrp_nm*)a;
+    i_cgrp_nm *tmp_b = (i_cgrp_nm*)b;
+
+    return strcmp(tmp_a->nm_grp, tmp_b->nm_grp);
 }
 
 /****************************************************************************************/
@@ -333,6 +363,26 @@ int assign_group_index(void* oldelem, void* newelem){
 }
 
 /****************************************************************************************/
+/*  I : Group to which copy data                                                        */
+/*      Group from which copy data                                                      */
+/*  P : Copies all the fields of groups from new to old                                 */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_group_index_nm(void* oldelem, void* newelem){
+    i_cgrp_nm* oldTuple = (i_cgrp_nm*)oldelem;
+    i_cgrp_nm* newTuple = (i_cgrp_nm*)newelem;
+
+    if(!oldelem || !newelem)
+        return -1;
+
+    //copy the data from the new country to the old one
+    *oldTuple = *newTuple;
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : Group index buffer to which copy data                                           */
 /*      Group from which copy data                                                      */
 /*  P : Copies all the fields of a group to a group index buffer                        */
@@ -362,6 +412,25 @@ int assign_group_index_FK(void* index, void* elem){
 /****************************************************************************************/
 int assign_group_index_slot(void* index, void* offset){
     i_cgrp_FK* element = (i_cgrp_FK*)index;
+    long* slot = (long*)offset;
+
+    if(!index || !offset)
+        return -1;
+
+    element->slot = *slot;
+
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : index element to which assign the slot                                          */
+/*      slot (file offset) in which the base data element is                            */
+/*  P : assigns a slot (file offset) to an index element                                */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_group_index_nm_slot(void* index, void* offset){
+    i_cgrp_nm* element = (i_cgrp_nm*)index;
     long* slot = (long*)offset;
 
     if(!index || !offset)
@@ -410,6 +479,27 @@ int swap_group_index(void* first, void* second){
     assign_group_index((void*)&tmp, first);
     assign_group_index(first, second);
     assign_group_index(second, (void*)&tmp);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Groups to swap                                      */
+/*  P : Swaps two groups                                    */
+/*  O : 0 -> Swapped                                        */
+/*     -1 -> Error                                          */
+/************************************************************/
+int swap_group_index_nm(void* first, void* second){
+    i_cgrp_nm tmp;
+
+    if(!first || !second)
+        return -1;
+
+    memset(&tmp, 0, sizeof(i_cgrp_nm));
+
+    assign_group_index_nm((void*)&tmp, first);
+    assign_group_index_nm(first, second);
+    assign_group_index_nm(second, (void*)&tmp);
 
     return 0;
 }

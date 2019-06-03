@@ -15,6 +15,7 @@
 #include "DB_Company.h"
 
 typedef struct cscr_recur cscr_recur;
+typedef struct cdtl_recur cdtl_recur;
 
 typedef struct scr_report{
     int id_job;
@@ -31,6 +32,20 @@ struct cscr_recur{
     cscr_recur *right;
 };
 
+typedef struct dtl_report{
+    char nm_zone[SZ_NAME_SM];
+    ccpy_recur* companies;
+}cdtl;
+
+struct cdtl_recur{
+    cdtl rep;
+    int height;
+    cdtl_recur *left;
+    cdtl_recur *right;
+};
+
+// SCREEN REPORT METHODS
+
 void* allocate_scr_report(void);
 int compare_scr_report_name(void* a, void* b);
 int compare_scr_report_name_char(void* a, void* b);
@@ -44,6 +59,11 @@ int get_scr_report_height(void* current);
 int set_scr_report_height(void* current, int value);
 void* free_scr_report(void* report, void* nullable);
 
+// DETAILED REPORT METHODS
+
+
+
+// REPORT GENERATION METHODS
 
 int print_screen_report(dbc* db, char* nm_cpy);
 int export_aggregated_report(dbc* db);

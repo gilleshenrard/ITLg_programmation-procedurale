@@ -245,6 +245,26 @@ int compare_company_name(void* a, void* b){
 /****************************************************************************************/
 /*  I : First Company to compare                                                        */
 /*      Second  Company to compare                                                      */
+/*  P : Compares two countries by their group ID                                        */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_company_grp(void* a, void* b){
+    ccpy_recur *tmp_a = (ccpy_recur*)a;
+    ccpy_recur *tmp_b = (ccpy_recur*)b;
+
+    if(tmp_a->cpy.id_grp > tmp_b->cpy.id_grp)
+        return 1;
+    else if(tmp_a->cpy.id_grp < tmp_b->cpy.id_grp)
+        return -1;
+    else
+        return 0;
+}
+
+/****************************************************************************************/
+/*  I : First Company to compare                                                        */
+/*      Second  Company to compare                                                      */
 /*  P : Compares two countries by their names                                           */
 /*  O :  1 if A > B                                                                     */
 /*       0 if A = B                                                                     */
@@ -255,6 +275,26 @@ int compare_company_index_name(void* a, void* b){
     i_ccpy_name *tmp_b = (i_ccpy_name*)b;
 
     return strcmp(tmp_a->nm_cpy, tmp_b->nm_cpy);
+}
+
+/****************************************************************************************/
+/*  I : First Company to compare                                                        */
+/*      Second  Company to compare                                                      */
+/*  P : Compares two countries by their group FK                                        */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_company_index_grp(void* a, void* b){
+    i_ccpy_grp *tmp_a = (i_ccpy_grp*)a;
+    i_ccpy_grp *tmp_b = (i_ccpy_grp*)b;
+
+    if(tmp_a->grp_id > tmp_b->grp_id)
+        return 1;
+    else if(tmp_a->grp_id < tmp_b->grp_id)
+        return -1;
+    else
+        return 0;
 }
 
 /****************************************************************************************/
@@ -335,6 +375,26 @@ int assign_company_index(void* oldelem, void* newelem){
 }
 
 /****************************************************************************************/
+/*  I : Company to which copy data                                                      */
+/*      Company from which copy data                                                    */
+/*  P : Copies all the fields of countries from new to old                              */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_company_index_grp(void* oldelem, void* newelem){
+    i_ccpy_grp* oldTuple = (i_ccpy_grp*)oldelem;
+    i_ccpy_grp* newTuple = (i_ccpy_grp*)newelem;
+
+    if(!oldelem || !newelem)
+        return -1;
+
+    //copy the data from the new Company to the old one
+    *oldTuple = *newTuple;
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : Company index buffer to which copy data                                         */
 /*      Company from which copy data                                                    */
 /*  P : Copies all the fields of a Company to a Company index buffer                    */
@@ -364,6 +424,25 @@ int assign_company_index_name(void* index, void* elem){
 /****************************************************************************************/
 int assign_company_index_slot(void* index, void* offset){
     i_ccpy_name* element = (i_ccpy_name*)index;
+    long* slot = (long*)offset;
+
+    if(!index || !offset)
+        return -1;
+
+    element->slot = *slot;
+
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : index element to which assign the slot                                          */
+/*      slot (file offset) in which the base data element is                            */
+/*  P : assigns a slot (file offset) to an index element                                */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_company_index_grp_slot(void* index, void* offset){
+    i_ccpy_grp* element = (i_ccpy_grp*)index;
     long* slot = (long*)offset;
 
     if(!index || !offset)
@@ -412,6 +491,27 @@ int swap_company_index(void* first, void* second){
     assign_company_index((void*)&tmp, first);
     assign_company_index(first, second);
     assign_company_index(second, (void*)&tmp);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Countries to swap                                   */
+/*  P : Swaps two countries                                 */
+/*  O : 0 -> Swapped                                        */
+/*     -1 -> Error                                          */
+/************************************************************/
+int swap_company_index_grp(void* first, void* second){
+    i_ccpy_grp tmp;
+
+    if(!first || !second)
+        return -1;
+
+    memset(&tmp, 0, sizeof(i_ccpy_grp));
+
+    assign_company_index_grp((void*)&tmp, first);
+    assign_company_index_grp(first, second);
+    assign_company_index_grp(second, (void*)&tmp);
 
     return 0;
 }
