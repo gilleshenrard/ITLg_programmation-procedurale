@@ -355,17 +355,21 @@ int print_screen_report(dbc* db, char* nm_cpy){
 /*       0 otherwise                                                                    */
 /****************************************************************************************/
 int export_aggregated_report(dbc* db){
+
+    printf("\nNot implemented yet...\n");
+
     return 0;
 }
 
 /****************************************************************************************/
-/*  I : Database from which print the screen report                                     */
-/*  P : Creates and exports a detailed report                                           */
-/*          report : Companies per geographical zones                                   */
-/*                      + for a company group, ordered by zone and name                 */
-/*  O : -1 if not found                                                                 */
+/*  I : /                                                                               */
+/*  P : Generates and exports the appointed det. report                                 */
+/*          For 1 group, group companies by zone, sorted by name                        */
+/*  O : -1 if error                                                                     */
 /*       0 otherwise                                                                    */
 /****************************************************************************************/
 int export_detailed_report(dbc* db){
+
+    printf("\nNot implemented yet...\n");
     return 0;
 }
