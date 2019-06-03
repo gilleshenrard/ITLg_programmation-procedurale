@@ -368,8 +368,8 @@ int export_aggregated_report(dbc* db){
 /*  O : -1 if error                                                                     */
 /*       0 otherwise                                                                    */
 /****************************************************************************************/
-int export_detailed_report(dbc* db){
+int export_detailed_report(dbc* db, char* nm_grp){
 
-    printf("\nNot implemented yet...\n");
+
     return 0;
 }

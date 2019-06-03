@@ -29,6 +29,7 @@ int menu_groups(dbc*);
 int menu_industries(dbc*);
 int menu_jobs(dbc*);
 int gen_screen_report(dbc*);
+int gen_detailed_report(dbc*);
 
 int main(int argc, char *argv[])
 {
@@ -98,7 +99,7 @@ int main(int argc, char *argv[])
                 break;
 
             case 'b':   //Export detailed report
-                export_detailed_report(&db);
+                gen_detailed_report(&db);
                 break;
 
             default:
@@ -705,6 +706,33 @@ int gen_screen_report(dbc* db){
 
     printf("\n\nGeneration du rapport\n");
     print_screen_report(db, com);
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : /                                                   */
+/*  P : Generates and exports the appointed screen report   */
+/*  O : -1 if error                                         */
+/*       0 otherwise                                        */
+/************************************************************/
+int gen_detailed_report(dbc* db){
+    char com[64] = "0";
+
+    system("cls");
+    printf("****************************************\n");
+    printf("*           Rapport detaille :         *\n");
+    printf("*  Contacts pour une compagnie, tries  *\n");
+    printf("*         par type de campagne         *\n");
+    printf("****************************************\n");
+
+    printf("\n\nVeuillez taper le nom d'un groupe : ");
+    fgets(com, sizeof(com), stdin);
+    if ((strlen(com) > 0) && (com[strlen(com)-1] == '\n'))
+        com[strlen(com)-1] = '\0';
+
+    printf("\n\nGeneration du rapport\n");
+    export_detailed_report(db, com);
 
     return 0;
 }

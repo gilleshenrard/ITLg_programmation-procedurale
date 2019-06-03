@@ -47,6 +47,6 @@ void* free_scr_report(void* report, void* nullable);
 
 int print_screen_report(dbc* db, char* nm_cpy);
 int export_aggregated_report(dbc* db);
-int export_detailed_report(dbc* db);
+int export_detailed_report(dbc* db, char* nm_grp);
 
 #endif // REPORTS_H_INCLUDED
