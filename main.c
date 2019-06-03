@@ -18,7 +18,7 @@
 
 char DB_name[32] = "DB_Comp";
 
-void init_db(dbc* db);
+void create_db(dbc* db);
 char menu(int, char[][32]);
 int menu_countries(dbc*);
 int menu_companies(dbc*);
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 {
     dbc db = {0};
     char choice=0;
-    char princ_menu[14][32]={"Main menu",
+    char princ_menu[13][32]={"Main menu",
                             "Menu des Pays",
                             "Menu des Compagnies",
                             "Menu des Campagnes",
@@ -42,13 +42,10 @@ int main(int argc, char *argv[])
                             "Menu des Industries",
                             "Menu des Jobs",
                             "Creer la DB",
-                            "Charger la DB en memoire",
                             "Generer le rapport ecran",
                             "Generer le rapport agrege",
                             "Generer le rapport detaille",
                             "Quitter"};
-
-    //init_db(&db);
 
     do{
         //let the user make a choice in the main menu
@@ -83,20 +80,18 @@ int main(int argc, char *argv[])
                 break;
 
             case '7':   //Create DB
+                create_db(&db);
                 break;
 
-            case '8':   //Load DB in memory
-                break;
-
-            case '9':   //Print screen report
+            case '8':   //Print screen report
                 gen_screen_report(&db);
                 break;
 
-            case 'a':   //Export aggregated report
+            case '9':   //Export aggregated report
                 export_aggregated_report(&db);
                 break;
 
-            case 'b':   //Export detailed report
+            case 'a':   //Export detailed report
                 export_detailed_report(&db);
                 break;
 
@@ -129,7 +124,7 @@ int main(int argc, char *argv[])
 /*  P : Creates a database file and initializes it with the required tables and indexes */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void init_db(dbc* db){
+void create_db(dbc* db){
     //company metadata
     t_algo_meta index_cpy = {NULL, db->nr_cpy, sizeof(i_ccpy_name), compare_company_index_name, swap_company_index, assign_company_index_name, assign_company_index_slot, NULL, NULL, NULL, NULL};
     t_datablock index_block_cpy = {&db->hdr.off_i_cpy_name, &db->hdr.i_cpy_name, sizeof(i_ccpy_name)};
