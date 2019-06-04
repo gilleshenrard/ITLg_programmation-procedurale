@@ -134,9 +134,7 @@ int main(int argc, char *argv[])
 void create_db(dbc* db){
     //company metadata
     t_algo_meta index_cpy = {NULL, db->nr_cpy, sizeof(i_ccpy_name), compare_company_index_name, swap_company_index, assign_company_index_name, assign_company_index_slot, NULL, NULL, NULL, NULL};
-    t_algo_meta index_cpy_grp = {NULL, db->nr_cpy, sizeof(i_ccpy_grp), compare_company_index_grp, swap_company_index_grp, assign_company_index_grp, assign_company_index_grp_slot, NULL, NULL, NULL, NULL};
     t_datablock index_block_cpy = {&db->hdr.off_i_cpy_name, &db->hdr.i_cpy_name, sizeof(i_ccpy_name)};
-    t_datablock index_block_cpy_grp = {&db->hdr.off_i_cpy_grp, &db->hdr.i_cpy_grp, sizeof(i_ccpy_grp)};
     t_datablock table_block_cpy = {&db->hdr.off_cpy, 0, sizeof(ccpy)};
     //contacts metadata
     t_algo_meta index_con = {NULL, db->nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, swap_contact_index, assign_contact_index_cpy, assign_contact_index_slot, NULL, NULL, NULL, NULL};
@@ -151,9 +149,7 @@ void create_db(dbc* db){
     t_datablock index_block_cty = {&db->hdr.off_i_cty_name, &db->hdr.i_cty_name, sizeof(i_ccty_name)};
     t_datablock table_block_cty = {&db->hdr.off_cty, 0, sizeof(ccty)};
     //group metadata
-    t_algo_meta index_grp_nm = {NULL, db->nr_grp, sizeof(i_cgrp_nm), compare_group_nm_index, swap_group_index_nm, assign_group_index_nm, assign_group_index_nm_slot, NULL, NULL, NULL, NULL};
     t_algo_meta index_grp = {NULL, db->nr_grp, sizeof(i_cgrp_FK), compare_group_FK_index, swap_group_index, assign_group_index_FK, assign_group_index_slot, NULL, NULL, NULL, NULL};
-    t_datablock index_block_grp_nm = {&db->hdr.off_i_grp_nm, &db->hdr.i_grp_nm, sizeof(i_cgrp_nm)};
     t_datablock index_block_grp = {&db->hdr.off_i_grp_fk, &db->hdr.i_grp_fk, sizeof(i_cgrp_FK)};
     t_datablock table_block_grp = {&db->hdr.off_grp, 0, sizeof(cgrp)};
     //industry metadata
@@ -194,12 +190,6 @@ void create_db(dbc* db){
     printf("done\n");
     printf("Creating the index for Jobs (by name) : ");
     create_index_file(db, &index_job, db->nr_job, &index_block_job, &table_block_job);
-    printf("done\n");
-    printf("Creating the index for Companies (by group ID) : ");
-    create_index_file(db, &index_cpy_grp, db->nr_cpy, &index_block_cpy_grp, &table_block_cpy);
-    printf("done\n");
-    printf("Creating the index for Groups (by names) : ");
-    create_index_file(db, &index_grp_nm, db->nr_grp, &index_block_grp_nm, &table_block_grp);
     printf("done\n");
 }
 
