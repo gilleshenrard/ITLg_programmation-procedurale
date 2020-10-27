@@ -57,6 +57,7 @@ dkms.conf
 *.layout
 *.dat
 *.txt
+*.cscope_file_list
 
 # Dossier2 specific files
 Data_DB_Comp/*
