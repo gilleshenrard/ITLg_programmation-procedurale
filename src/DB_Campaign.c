@@ -1,4 +1,4 @@
-#include "DB_Campaign.h"
+#include "../lib/DB_Campaign.h"
 
 /****************************************************************************************/
 /*  I : Database to which import the campaigns CSV file                                  */

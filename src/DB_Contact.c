@@ -1,4 +1,4 @@
-#include "DB_Contact.h"
+#include "../lib/DB_Contact.h"
 
 /****************************************************************************************/
 /*  I : Database to which import the contacts CSV file                                  */

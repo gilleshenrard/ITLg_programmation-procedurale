@@ -5,7 +5,7 @@
 *
 * Programmation procedurale 2019 - E.Bosly - Version 0
 ****************************************************************************************/
-#include "DB_File.h"
+#include "../lib/DB_File.h"
 
 /****************************************************************************************
 * Creation de la database sur base des constantes SZ_*
