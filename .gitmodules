@@ -1,3 +1,0 @@
-[submodule "lib/cstructures"]
-	path = lib/cstructures
-	url = git@github.com:gilleshenrard/cstructures.git
