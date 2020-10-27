@@ -1,4 +1,4 @@
-#include "../lib/DB_Group.h"
+#include "DB_Group.h"
 
 /****************************************************************************************/
 /*  I : Database to which import the groups CSV file                                    */
