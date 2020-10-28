@@ -481,6 +481,9 @@ void** campaign_left(void* current){
 /*  P : Displays an algo-compatible record                  */
 /*  O : /                                                   */
 /************************************************************/
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 int Rec_campaign_list(void *record, void* nullable){
     ccam_recur* tmp = (ccam_recur*)record;
 

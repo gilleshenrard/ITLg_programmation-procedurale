@@ -421,6 +421,9 @@ void** country_left(void* current){
 /*  P : Displays an algo-compatible record                  */
 /*  O : /                                                   */
 /************************************************************/
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 int Rec_Country_list(void *record, void* nullable){
     ccty_recur* tmp = (ccty_recur*)record;
 

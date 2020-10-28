@@ -21,6 +21,9 @@ int menu_jobs(dbc*);
 int gen_screen_report(dbc*);
 int gen_detailed_report(dbc*);
 
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 int main(int argc, char *argv[])
 {
     dbc db = {0};
@@ -300,7 +303,7 @@ int menu_countries(dbc* db){
 /************************************************************/
 int menu_companies(dbc* db){
     char choice=0, i;
-    long j = 0;
+    uint64_t j = 0;
     ccpy_recur *companies = NULL;
     void **right = NULL;
     meta_t cpy_list = {NULL, 0, sizeof(ccpy_recur), compare_company_name, NULL};
@@ -364,7 +367,7 @@ int menu_companies(dbc* db){
 /************************************************************/
 int menu_campaigns(dbc* db){
     char choice=0, i;
-    long j = 0;
+    uint64_t j = 0;
     ccam_recur *campaign = NULL;
     void **right = NULL;
     meta_t cam_list = {NULL, 0, sizeof(ccam_recur), compare_campaign_PK, NULL};
@@ -428,7 +431,7 @@ int menu_campaigns(dbc* db){
 /************************************************************/
 int menu_contacts(dbc* db){
     char choice=0, i;
-    long j = 0;
+    uint64_t j = 0;
     ccon_recur *contact = NULL;
     void **right = NULL;
     meta_t con_list = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, NULL};
@@ -492,7 +495,7 @@ int menu_contacts(dbc* db){
 /************************************************************/
 int menu_groups(dbc* db){
     char choice=0, i;
-    long j = 0;
+    uint64_t j = 0;
     cgrp_recur *group = NULL;
     void **right = NULL;
     meta_t grp_list = {NULL, 0, sizeof(cgrp_recur), compare_group_FK, NULL};
@@ -556,7 +559,7 @@ int menu_groups(dbc* db){
 /************************************************************/
 int menu_industries(dbc* db){
     char choice=0, i;
-    long j = 0;
+    uint64_t j = 0;
     cind_recur *industry = NULL;
     void **right = NULL;
     meta_t ind_list = {NULL, 0, sizeof(cind_recur), compare_industry_PK, NULL};
@@ -620,7 +623,7 @@ int menu_industries(dbc* db){
 /************************************************************/
 int menu_jobs(dbc* db){
     char choice=0, i;
-    long j = 0;
+    uint64_t j = 0;
     cjob_recur *job = NULL;
     void **right = NULL;
     meta_t job_list = {NULL, 0, sizeof(cjob_recur), compare_job_name, NULL};

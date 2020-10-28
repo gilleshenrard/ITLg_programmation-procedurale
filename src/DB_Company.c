@@ -552,6 +552,9 @@ void** company_left(void* current){
 /*  P : Displays an algo-compatible record                  */
 /*  O : /                                                   */
 /************************************************************/
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 int Rec_company_list(void *record, void* nullable){
     ccpy_recur* tmp = (ccpy_recur*)record;
 

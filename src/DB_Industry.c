@@ -444,6 +444,9 @@ void** industry_left(void* current){
 /*  P : Displays an algo-compatible record                  */
 /*  O : /                                                   */
 /************************************************************/
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 int Rec_industry_list(void *record, void* nullable){
     cind_recur* tmp = (cind_recur*)record;
 
@@ -497,6 +500,9 @@ int set_industry_height(void* current, int value){
 /*  O :  0 if OK                                            */
 /*      -1 if error                                         */
 /************************************************************/
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 void* free_industry(void* industry, void* nullable){
     free(industry);
     return 0;

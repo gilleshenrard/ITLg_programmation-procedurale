@@ -540,6 +540,9 @@ void** group_left(void* current){
 /*  P : Displays an algo-compatible record                  */
 /*  O : /                                                   */
 /************************************************************/
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 int Rec_group_list(void *record, void* nullable){
     cgrp_recur* tmp = (cgrp_recur*)record;
 
