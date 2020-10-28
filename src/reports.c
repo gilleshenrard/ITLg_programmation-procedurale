@@ -244,13 +244,13 @@ void* free_scr_report(void* report, void* nullable){
 /****************************************************************************************/
 int print_screen_report(dbc* db, char* nm_cpy){
     //metadata for all the lists created
-    t_algo_meta list_cpy = {NULL, 0, sizeof(ccpy_recur), compare_company_name, swap_company, assign_company, NULL, NULL, company_right, company_left};
-    t_algo_meta list_con = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, swap_contact, assign_contact, NULL, NULL, contact_right, contact_left};
-    t_algo_meta list_rep = {NULL, 0, sizeof(cscr_recur), compare_scr_report_type, swap_scr_report, assign_scr_report, NULL, NULL, scr_report_right, scr_report_left};
+    meta_t list_cpy = {NULL, 0, sizeof(ccpy_recur), compare_company_name, NULL};
+    meta_t list_con = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, NULL};
+    meta_t list_rep = {NULL, 0, sizeof(cscr_recur), compare_scr_report_type, NULL};
     //metadata for all the indexes used
-    t_algo_meta index_cpy = {0};
-    t_algo_meta index_con = {0};
-    t_algo_meta index_cam = {0};
+    meta_t index_cpy = {0};
+    meta_t index_con = {0};
+    meta_t index_cam = {0};
 
     int choix = 0;
     char buffer[6] = {0};
@@ -370,11 +370,11 @@ int export_aggregated_report(dbc* db){
 /****************************************************************************************/
 int export_detailed_report(dbc* db, char* nm_grp){
     //metadata for all the lists created
-    t_algo_meta list_grp_nm = {NULL, 0, sizeof(cgrp_recur), compare_group_nm, swap_group, assign_group, NULL, NULL, group_right, group_left};
-    t_algo_meta list_cpy_grp = {NULL, 0, sizeof(ccpy_recur), compare_company_grp, swap_company, assign_company, NULL, NULL, company_right, company_left};
+    meta_t list_grp_nm = {NULL, 0, sizeof(cgrp_recur), compare_group_nm, NULL};
+    meta_t list_cpy_grp = {NULL, 0, sizeof(ccpy_recur), compare_company_grp, NULL};
     //metadata for all the indexes used
-    t_algo_meta index_grp = {0};
-    t_algo_meta index_cpy = {0};
+    meta_t index_grp = {0};
+    meta_t index_cpy = {0};
 
     int choix = 0;
     char buffer[6] = {0};
