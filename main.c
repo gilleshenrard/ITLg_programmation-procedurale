@@ -151,7 +151,11 @@ void create_db(dbc* db){
     t_datablock index_block_job = {&db->hdr.off_i_job_name, &db->hdr.i_job_name, sizeof(i_cjob_name)};
     t_datablock table_block_job = {&db->hdr.off_job, 0, sizeof(cjob)};
 
-    Create_DB(db, DB_name);
+    //attempt creating the DB file
+    if(Create_DB(db, DB_name) < 0){
+        fprintf(stderr, "create_db() : Error while creating %s\n", DB_name);
+        return;
+    }
     Import_CSV_company(db);
     Import_CSV_contact(db);
     Import_CSV_campaign(db);
