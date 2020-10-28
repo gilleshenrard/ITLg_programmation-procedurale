@@ -136,7 +136,7 @@ long create_index_file(dbc* db, meta_t* meta, long nb, int (*setSlot)(void*, voi
 
         //read the element and copy the selected field in the index element
         fread(buffer, t_block->elem_size, 1, db->fp);
-        (*meta->doCopy)(i_iterator, buffer);
+        mempcpy(i_iterator, buffer, meta->elementsize);
 
         //reset the buffer and increment the iterator
         memset(buffer, 0, t_block->elem_size);
