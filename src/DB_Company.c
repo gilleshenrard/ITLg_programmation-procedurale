@@ -82,13 +82,13 @@ void Import_CSV_company(dbc *db)
 
     db->nr_cpy = i;
 
-    fprintf(fp_lg, "Company imported : %ld \n", db->nr_cpy);
+    fprintf(fp_lg, "Company imported : %" PRIu64 "\n", db->nr_cpy);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nCompany imported : %ld \n\n", db->nr_cpy);
+    printf("\nCompany imported : %" PRIu64 "\n\n", db->nr_cpy);
 
 	return ;
 }
@@ -98,7 +98,7 @@ void Import_CSV_company(dbc *db)
 ****************************************************************************************/
 void Export_CSV_company(dbc *db)
 {
-    int i;
+    uint64_t i;
 	ccpy cpy;
 	FILE *fpo, *fp_lg;
 
@@ -130,13 +130,13 @@ void Export_CSV_company(dbc *db)
                 cpy.dt_cre);
     }
 
-    fprintf(fp_lg, "Company exported : %ld \n", db->nr_cpy);
+    fprintf(fp_lg, "Company exported : %" PRIu64 "\n", db->nr_cpy);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCompany exported : %ld \n\n", db->nr_cpy);
+    printf("\nCompany exported : %" PRIu64 "\n\n", db->nr_cpy);
 
     return;
 }
@@ -146,7 +146,7 @@ void Export_CSV_company(dbc *db)
 ****************************************************************************************/
 void Load_company(dbc *db)
 {
-    int i;
+    uint64_t i;
 	ccpy cpy;
 	FILE *fp_lg;
 
@@ -170,12 +170,12 @@ void Load_company(dbc *db)
         db->cpy[i] = cpy;
     }
 
-    fprintf(fp_lg, "Company loaded into buffer : %ld \n", db->nr_cpy);
+    fprintf(fp_lg, "Company loaded into buffer : %" PRIu64 "\n", db->nr_cpy);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCompany loaded into buffer : %ld \n\n", db->nr_cpy);
+    printf("\nCompany loaded into buffer : %" PRIu64 "\n\n", db->nr_cpy);
 
     return;
 }
@@ -185,7 +185,7 @@ void Load_company(dbc *db)
 ****************************************************************************************/
 void Print_company(dbc *db)
 {
-    int i;
+    uint64_t i;
 
     for (i=0; i<db->nr_cpy; i++)
         Rec_company(&db->cpy[i]);

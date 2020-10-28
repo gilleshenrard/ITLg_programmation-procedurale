@@ -77,13 +77,13 @@ void Import_CSV_campaign(dbc *db){
 
     db->nr_cam = i;
 
-    fprintf(fp_lg, "campaigns imported : %ld \n", db->nr_cam);
+    fprintf(fp_lg, "campaigns imported : %" PRIu64 "\n", db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\ncampaigns imported : %ld \n\n", db->nr_cam);
+    printf("\ncampaigns imported : %" PRIu64 "\n\n", db->nr_cam);
 
 	return ;
 }
@@ -94,7 +94,7 @@ void Import_CSV_campaign(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Export_CSV_campaign(dbc *db){
-    int i;
+    uint64_t i;
 	ccam cam;
 	FILE *fpo, *fp_lg;
 
@@ -125,13 +125,13 @@ void Export_CSV_campaign(dbc *db){
                 cam.cost);
     }
 
-    fprintf(fp_lg, "campaign exported : %ld \n", db->nr_cam);
+    fprintf(fp_lg, "campaign exported : %" PRIu64 "\n", db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\ncampaign exported : %ld \n\n", db->nr_cam);
+    printf("\ncampaign exported : %" PRIu64 "\n\n", db->nr_cam);
 
     return;
 }
@@ -142,7 +142,7 @@ void Export_CSV_campaign(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Load_campaign(dbc *db){
-    int i;
+    uint64_t i;
 	ccam cam;
 	FILE *fp_lg;
 
@@ -166,12 +166,12 @@ void Load_campaign(dbc *db){
         db->cam[i] = cam;
     }
 
-    fprintf(fp_lg, "campaign loaded into buffer : %ld \n", db->nr_cam);
+    fprintf(fp_lg, "campaign loaded into buffer : %" PRIu64 "\n", db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\ncampaign loaded into buffer : %ld \n\n", db->nr_cam);
+    printf("\ncampaign loaded into buffer : %" PRIu64 "\n\n", db->nr_cam);
 
     return;
 }
@@ -182,7 +182,7 @@ void Load_campaign(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Print_campaign(dbc *db){
-    int i;
+    uint64_t i;
 
     for (i=0; i<db->nr_cam; i++)
         Rec_campaign(&db->cam[i]);

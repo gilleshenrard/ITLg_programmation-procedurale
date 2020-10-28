@@ -58,13 +58,13 @@ void Import_CSV_Group(dbc *db){
 
     db->nr_grp = i;
 
-    fprintf(fp_lg, "Groups imported : %ld \n", db->nr_grp);
+    fprintf(fp_lg, "Groups imported : %" PRIu64 "\n", db->nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nGroups imported : %ld \n\n", db->nr_grp);
+    printf("\nGroups imported : %" PRIu64 "\n\n", db->nr_grp);
 
 	return ;
 }
@@ -75,7 +75,7 @@ void Import_CSV_Group(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Export_CSV_Group(dbc *db){
-    int i;
+    uint64_t i;
 	cgrp grp;
 	FILE *fpo, *fp_lg;
 
@@ -100,13 +100,13 @@ void Export_CSV_Group(dbc *db){
                 grp.id_cty);
     }
 
-    fprintf(fp_lg, "Country exported : %ld \n", db->nr_grp);
+    fprintf(fp_lg, "Country exported : %" PRIu64 "\n", db->nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCountry exported : %ld \n\n", db->nr_grp);
+    printf("\nCountry exported : %" PRIu64 "\n\n", db->nr_grp);
 
     return;
 }
@@ -117,7 +117,7 @@ void Export_CSV_Group(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Load_Group(dbc *db){
-    int i;
+    uint64_t i;
 	cgrp grp;
 	FILE *fp_lg;
 
@@ -141,12 +141,12 @@ void Load_Group(dbc *db){
         db->grp[i] = grp;
     }
 
-    fprintf(fp_lg, "Country loaded into buffer : %ld \n", db->nr_grp);
+    fprintf(fp_lg, "Country loaded into buffer : %" PRIu64 "\n", db->nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCountry loaded into buffer : %ld \n\n", db->nr_grp);
+    printf("\nCountry loaded into buffer : %" PRIu64 "\n\n", db->nr_grp);
 
     return;
 }
@@ -157,7 +157,7 @@ void Load_Group(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Print_Group(dbc *db){
-    int i;
+    uint64_t i;
 
     for (i=0; i<db->nr_grp; i++)
         Rec_Group(&db->grp[i]);

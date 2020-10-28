@@ -111,9 +111,9 @@ int Create_DB(dbc *db, char filename[])
 /*  O :  0 if OK                                                                    */
 /*      -1 otherwise                                                                */
 /************************************************************************************/
-long create_index_file(dbc* db, meta_t* meta, long nb, int (*setSlot)(void*, void*), t_datablock* i_block, t_datablock* t_block){
+long create_index_file(dbc* db, meta_t* meta, uint64_t nb, int (*setSlot)(void*, void*), t_datablock* i_block, t_datablock* t_block){
     void *i_iterator=NULL, *buffer=NULL;
-    int i=0;
+    uint64_t i=0;
     long root=0, tmp=0;
 
     //open the files and position the pointers at the end
@@ -124,6 +124,7 @@ long create_index_file(dbc* db, meta_t* meta, long nb, int (*setSlot)(void*, voi
 
     //allocate the memory for the full size and single element buffer and set an iterator pointer to it
     meta->structure = calloc(nb, meta->elementsize);
+    meta->nbelements = nb;
     i_iterator = meta->structure;
     buffer = calloc(1, t_block->elem_size);
 

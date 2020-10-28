@@ -58,13 +58,13 @@ void Import_CSV_job(dbc *db)
 
     db->nr_job = i;
 
-    fprintf(fp_lg, "Job imported : %ld \n", db->nr_job);
+    fprintf(fp_lg, "Job imported : %" PRIu64 "\n", db->nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nJob imported : %ld \n\n", db->nr_job);
+    printf("\nJob imported : %" PRIu64 "\n\n", db->nr_job);
 
 	return ;
 }
@@ -74,7 +74,7 @@ void Import_CSV_job(dbc *db)
 ****************************************************************************************/
 void Export_CSV_job(dbc *db)
 {
-    int i;
+    uint64_t i;
 	cjob job;
 	FILE *fpo, *fp_lg;
 
@@ -99,13 +99,13 @@ void Export_CSV_job(dbc *db)
                 job.nm_job);
     }
 
-    fprintf(fp_lg, "Job exported : %ld \n", db->nr_job);
+    fprintf(fp_lg, "Job exported : %" PRIu64 "\n", db->nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nJob exported : %ld \n\n", db->nr_job);
+    printf("\nJob exported : %" PRIu64 "\n\n", db->nr_job);
 
     return;
 }
@@ -115,7 +115,7 @@ void Export_CSV_job(dbc *db)
 ****************************************************************************************/
 void Load_job(dbc *db)
 {
-    int i;
+    uint64_t i;
 	cjob job;
 	FILE *fp_lg;
 
@@ -139,12 +139,12 @@ void Load_job(dbc *db)
         db->job[i] = job;
     }
 
-    fprintf(fp_lg, "Job loaded into buffer : %ld \n", db->nr_job);
+    fprintf(fp_lg, "Job loaded into buffer : %" PRIu64 "\n", db->nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nJob loaded into buffer : %ld \n\n", db->nr_job);
+    printf("\nJob loaded into buffer : %" PRIu64 "\n\n", db->nr_job);
 
     return;
 }
@@ -154,7 +154,7 @@ void Load_job(dbc *db)
 ****************************************************************************************/
 void Print_job(dbc *db)
 {
-    int i;
+    uint64_t i;
 
     for (i=0; i<db->nr_job; i++)
         Rec_job(&db->job[i]);

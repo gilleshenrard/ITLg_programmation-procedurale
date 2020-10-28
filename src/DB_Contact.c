@@ -60,13 +60,13 @@ void Import_CSV_contact(dbc *db){
 
     db->nr_con = i;
 
-    fprintf(fp_lg, "Contacts imported : %ld \n", db->nr_con);
+    fprintf(fp_lg, "Contacts imported : %" PRIu64 "\n", db->nr_con);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nContacts imported : %ld \n\n", db->nr_con);
+    printf("\nContacts imported : %" PRIu64 "\n\n", db->nr_con);
 
 	return ;
 }
@@ -77,7 +77,7 @@ void Import_CSV_contact(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Export_CSV_contact(dbc *db){
-    int i;
+    uint64_t i;
 	ccon con;
 	FILE *fpo, *fp_lg;
 
@@ -102,13 +102,13 @@ void Export_CSV_contact(dbc *db){
                 con.nr_rep);
     }
 
-    fprintf(fp_lg, "contact exported : %ld \n", db->nr_con);
+    fprintf(fp_lg, "contact exported : %" PRIu64 "\n", db->nr_con);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\ncontact exported : %ld \n\n", db->nr_con);
+    printf("\ncontact exported : %" PRIu64 "\n\n", db->nr_con);
 
     return;
 }
@@ -119,7 +119,7 @@ void Export_CSV_contact(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Load_contact(dbc *db){
-    long i;
+    uint64_t i;
 	ccon con;
 	FILE *fp_lg;
 
@@ -143,12 +143,12 @@ void Load_contact(dbc *db){
         db->con[i] = con;
     }
 
-    fprintf(fp_lg, "Contacts loaded into buffer : %ld \n", db->nr_con);
+    fprintf(fp_lg, "Contacts loaded into buffer : %" PRIu64 "\n", db->nr_con);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nContacts loaded into buffer : %ld \n\n", db->nr_con);
+    printf("\nContacts loaded into buffer : %" PRIu64 "\n\n", db->nr_con);
 
     return;
 }
@@ -159,7 +159,7 @@ void Load_contact(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Print_contact(dbc *db){
-    int i;
+    uint64_t i;
 
     for (i=0; i<db->nr_con; i++)
         Rec_contact(&db->con[i]);

@@ -11,6 +11,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #define SZ_CTY 100
 #define SZ_JOB 200
@@ -178,22 +179,22 @@ typedef struct Company
 ****************************************************************************************/
 typedef struct	db_country
 {
-    FILE*   fp;     // File pointer to the database
-    hder    hdr;    // Header
-    ccty*   cty;    // Buffer Country
-    cgrp*   grp;    // Buffer Group
-    cjob*   job;    // Buffer Job
-    cind*   ind;    // Buffer industry
-    ccam*   cam;    // Buffer campain
-    ccon*   con;    // Buffer contacts
-    ccpy*   cpy;    // Buffer contacts
-    long    nr_cty; // Nr elements dans buffer
-    long    nr_grp; // Nr Groups in the buffer
-    long    nr_job; // Nr Jobs in the buffer
-    long    nr_ind; // Nr Industries in the buffer
-    long    nr_cam; // Nr campains in the buffer
-    long    nr_con; // Nr contacts in the buffer
-    long    nr_cpy; // Nr contacts in the buffer
+    FILE*       fp;     // File pointer to the database
+    hder        hdr;    // Header
+    ccty*       cty;    // Buffer Country
+    cgrp*       grp;    // Buffer Group
+    cjob*       job;    // Buffer Job
+    cind*       ind;    // Buffer industry
+    ccam*       cam;    // Buffer campain
+    ccon*       con;    // Buffer contacts
+    ccpy*       cpy;    // Buffer contacts
+    uint64_t    nr_cty; // Nr elements dans buffer
+    uint64_t    nr_grp; // Nr Groups in the buffer
+    uint64_t    nr_job; // Nr Jobs in the buffer
+    uint64_t    nr_ind; // Nr Industries in the buffer
+    uint64_t    nr_cam; // Nr campains in the buffer
+    uint64_t    nr_con; // Nr contacts in the buffer
+    uint64_t    nr_cpy; // Nr contacts in the buffer
 } dbc;
 
 #endif

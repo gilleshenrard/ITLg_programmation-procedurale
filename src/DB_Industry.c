@@ -54,13 +54,13 @@ void Import_CSV_industry(dbc *db){
 
     db->nr_ind = i;
 
-    fprintf(fp_lg, "industries imported : %ld \n", db->nr_ind);
+    fprintf(fp_lg, "industries imported : %" PRIu64 "\n", db->nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nindustries imported : %ld \n\n", db->nr_ind);
+    printf("\nindustries imported : %" PRIu64 "\n\n", db->nr_ind);
 
 	return ;
 }
@@ -71,7 +71,7 @@ void Import_CSV_industry(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Export_CSV_industry(dbc *db){
-    int i;
+    uint64_t i;
 	cind ind;
 	FILE *fpo, *fp_lg;
 
@@ -95,13 +95,13 @@ void Export_CSV_industry(dbc *db){
                 ind.nm_ind);
     }
 
-    fprintf(fp_lg, "Industry exported : %ld \n", db->nr_ind);
+    fprintf(fp_lg, "Industry exported : %" PRIu64 "\n", db->nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nIndustry exported : %ld \n\n", db->nr_ind);
+    printf("\nIndustry exported : %" PRIu64 "\n\n", db->nr_ind);
 
     return;
 }
@@ -112,7 +112,7 @@ void Export_CSV_industry(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Load_industry(dbc *db){
-    int i;
+    uint64_t i;
 	cind ind;
 	FILE *fp_lg;
 
@@ -136,12 +136,12 @@ void Load_industry(dbc *db){
         db->ind[i] = ind;
     }
 
-    fprintf(fp_lg, "Industry loaded into buffer : %ld \n", db->nr_ind);
+    fprintf(fp_lg, "Industry loaded into buffer : %" PRIu64 "\n", db->nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nIndustry loaded into buffer : %ld \n\n", db->nr_ind);
+    printf("\nIndustry loaded into buffer : %" PRIu64 "\n\n", db->nr_ind);
 
     return;
 }
@@ -152,7 +152,7 @@ void Load_industry(dbc *db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 void Print_industry(dbc *db){
-    int i;
+    uint64_t i;
 
     for (i=0; i<db->nr_ind; i++)
         Rec_industry(&db->ind[i]);
