@@ -1,4 +1,4 @@
-#include "../lib/reports.h"
+#include "reports.h"
 
 /****************************************************************************************
 * Imprime un record Screen Report depuis le buffer

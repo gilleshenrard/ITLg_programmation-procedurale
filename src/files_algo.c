@@ -1,4 +1,4 @@
-#include "../lib/files_algo.h"
+#include "files_algo.h"
 
 /************************************************************/
 /*  I : File pointer to the database                        */

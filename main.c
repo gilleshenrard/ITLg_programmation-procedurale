@@ -2,17 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <conio.h>
-#include "lib/DB_Main.h"
-#include "lib/DB_Country.h"
-#include "lib/algo.h"
-#include "lib/DB_File.h"
-#include "lib/DB_Group.h"
-#include "lib/DB_Job.h"
-#include "lib/DB_Industry.h"
-#include "lib/DB_campaign.h"
-#include "lib/DB_Contact.h"
-#include "lib/DB_Company.h"
-#include "lib/reports.h"
+#include "reports.h"
 
 #define PG_SIZE 32
 

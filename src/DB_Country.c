@@ -1,4 +1,4 @@
-#include "../lib/DB_Country.h"
+#include "DB_Country.h"
 
 /****************************************************************************************
 * Chargement du fichier DB_Country.csv dans la database

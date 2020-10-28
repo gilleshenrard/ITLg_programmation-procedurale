@@ -1,4 +1,4 @@
-#include "../lib/DB_Industry.h"
+#include "DB_Industry.h"
 
 /****************************************************************************************/
 /*  I : Database to which import the industries CSV file                                */
