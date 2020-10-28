@@ -264,7 +264,7 @@ char menu(int i, char sections[i][32]){
 int menu_countries(dbc* db){
     char choice=0;
     t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, NULL, NULL, country_right, country_left};
-    t_algo_meta cty_array = {NULL, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta cty_array = {NULL, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_cty[4][32]={  "Menu des Pays",
                             "Lister les pays",
                             "Exporter les pays",
@@ -310,7 +310,7 @@ int menu_companies(dbc* db){
     ccpy_recur *companies = NULL;
     void **right = NULL;
     t_algo_meta cpy_list = {NULL, 0, sizeof(ccpy_recur), compare_company_name, swap_company, assign_company, NULL, NULL, NULL, company_right, company_left};
-    t_algo_meta cpy_array = {NULL, db->nr_cpy, sizeof(ccpy), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta cpy_array = {NULL, db->nr_cpy, sizeof(ccpy), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_cpy[4][32]={  "Menu des Pays",
                             "Lister les pays",
                             "Exporter les pays",
@@ -374,7 +374,7 @@ int menu_campaigns(dbc* db){
     ccam_recur *campaign = NULL;
     void **right = NULL;
     t_algo_meta cam_list = {NULL, 0, sizeof(ccam_recur), compare_campaign_PK, swap_campaign, assign_campaign, NULL, NULL, NULL, campaign_right, campaign_left};
-    t_algo_meta cam_array = {NULL, db->nr_cam, sizeof(ccam), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta cam_array = {NULL, db->nr_cam, sizeof(ccam), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_cam[4][32]={  "Menu des Campagnes",
                             "Lister les campagnes",
                             "Exporter les campagnes",
@@ -438,7 +438,7 @@ int menu_contacts(dbc* db){
     ccon_recur *contact = NULL;
     void **right = NULL;
     t_algo_meta con_list = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, swap_contact, assign_contact, NULL, NULL, NULL, contact_right, contact_left};
-    t_algo_meta con_array = {NULL, db->nr_con, sizeof(ccon), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta con_array = {NULL, db->nr_con, sizeof(ccon), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_con[4][32]={  "Menu des Contacts",
                             "Lister les contacts",
                             "Exporter les contacts",
@@ -502,7 +502,7 @@ int menu_groups(dbc* db){
     cgrp_recur *group = NULL;
     void **right = NULL;
     t_algo_meta grp_list = {NULL, 0, sizeof(cgrp_recur), compare_group_FK, swap_group, assign_group, NULL, NULL, NULL, group_right, group_left};
-    t_algo_meta grp_array = {NULL, db->nr_grp, sizeof(cgrp), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta grp_array = {NULL, db->nr_grp, sizeof(cgrp), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_grp[4][32]={  "Menu des groupes",
                             "Lister les groupes",
                             "Exporter les groupes",
@@ -566,7 +566,7 @@ int menu_industries(dbc* db){
     cind_recur *industry = NULL;
     void **right = NULL;
     t_algo_meta ind_list = {NULL, 0, sizeof(cind_recur), compare_industry_PK, swap_industry, assign_industry, NULL, NULL, NULL, industry_right, industry_left};
-    t_algo_meta ind_array = {NULL, db->nr_ind, sizeof(cind), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta ind_array = {NULL, db->nr_ind, sizeof(cind), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_ind[4][32]={  "Menu des Industries",
                             "Lister les industries",
                             "Exporter les industries",
@@ -630,7 +630,7 @@ int menu_jobs(dbc* db){
     cjob_recur *job = NULL;
     void **right = NULL;
     t_algo_meta job_list = {NULL, 0, sizeof(cjob_recur), compare_job_name, swap_job, assign_job, NULL, NULL, NULL, job_right, job_left};
-    t_algo_meta job_array = {NULL, db->nr_job, sizeof(cjob), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    t_algo_meta job_array = {NULL, db->nr_job, sizeof(cjob), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_job[4][32]={  "Menu des Jobs",
                             "Lister les jobs",
                             "Exporter les jobs",
