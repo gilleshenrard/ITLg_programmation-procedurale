@@ -290,7 +290,7 @@ int print_screen_report(dbc* db, char* nm_cpy){
     //if more than one occurrence, make the user choose which one
     if(list_cpy.nbelements > 1){
         //display all the possibilities
-        printf("\nVeuillez choisir pour quelle compagnie afficher le rapport : (1 a %" PRIu64 ")\n\n", list_cpy.nbelements);
+        printf("\nVeuillez choisir pour quelle compagnie afficher le rapport : (1 a %lu)\n\n", (unsigned long int)list_cpy.nbelements);
         foreachList(&list_cpy, NULL, Rec_company_list);
 
         //ask the user to pick a one
@@ -409,7 +409,7 @@ int export_detailed_report(dbc* db, char* nm_grp){
     //if more than one occurrence, make the user choose which one
     if(list_grp_nm.nbelements > 1){
         //display all the possibilities
-        printf("\nVeuillez choisir pour quel groupe afficher le rapport : (1 a %" PRIu64 ")\n\n", list_grp_nm.nbelements);
+        printf("\nVeuillez choisir pour quel groupe afficher le rapport : (1 a %lu)\n\n", (unsigned long int)list_grp_nm.nbelements);
         foreachList(&list_grp_nm, NULL, Rec_group_list);
 
         //ask the user to pick a one

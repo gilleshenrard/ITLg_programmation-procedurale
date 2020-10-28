@@ -77,13 +77,13 @@ void Import_CSV_campaign(dbc *db){
 
     db->nr_cam = i;
 
-    fprintf(fp_lg, "campaigns imported : %" PRIu64 "\n", db->nr_cam);
+    fprintf(fp_lg, "campaigns imported : %lu\n", (unsigned long int)db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\ncampaigns imported : %" PRIu64 "\n\n", db->nr_cam);
+    printf("\ncampaigns imported : %lu\n\n", (unsigned long int)db->nr_cam);
 
 	return ;
 }
@@ -125,13 +125,13 @@ void Export_CSV_campaign(dbc *db){
                 cam.cost);
     }
 
-    fprintf(fp_lg, "campaign exported : %" PRIu64 "\n", db->nr_cam);
+    fprintf(fp_lg, "campaign exported : %lu\n", (unsigned long int)db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\ncampaign exported : %" PRIu64 "\n\n", db->nr_cam);
+    printf("\ncampaign exported : %lu\n\n", (unsigned long int)db->nr_cam);
 
     return;
 }
@@ -166,12 +166,12 @@ void Load_campaign(dbc *db){
         db->cam[i] = cam;
     }
 
-    fprintf(fp_lg, "campaign loaded into buffer : %" PRIu64 "\n", db->nr_cam);
+    fprintf(fp_lg, "campaign loaded into buffer : %lu\n", (unsigned long int)db->nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\ncampaign loaded into buffer : %" PRIu64 "\n\n", db->nr_cam);
+    printf("\ncampaign loaded into buffer : %lu\n\n", (unsigned long int)db->nr_cam);
 
     return;
 }

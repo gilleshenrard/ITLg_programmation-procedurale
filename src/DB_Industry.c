@@ -54,13 +54,13 @@ void Import_CSV_industry(dbc *db){
 
     db->nr_ind = i;
 
-    fprintf(fp_lg, "industries imported : %" PRIu64 "\n", db->nr_ind);
+    fprintf(fp_lg, "industries imported : %lu\n", (unsigned long int)db->nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nindustries imported : %" PRIu64 "\n\n", db->nr_ind);
+    printf("\nindustries imported : %lu\n\n", (unsigned long int)db->nr_ind);
 
 	return ;
 }
@@ -95,13 +95,13 @@ void Export_CSV_industry(dbc *db){
                 ind.nm_ind);
     }
 
-    fprintf(fp_lg, "Industry exported : %" PRIu64 "\n", db->nr_ind);
+    fprintf(fp_lg, "Industry exported : %lu\n", (unsigned long int)db->nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nIndustry exported : %" PRIu64 "\n\n", db->nr_ind);
+    printf("\nIndustry exported : %lu\n\n", (unsigned long int)db->nr_ind);
 
     return;
 }
@@ -136,12 +136,12 @@ void Load_industry(dbc *db){
         db->ind[i] = ind;
     }
 
-    fprintf(fp_lg, "Industry loaded into buffer : %" PRIu64 "\n", db->nr_ind);
+    fprintf(fp_lg, "Industry loaded into buffer : %lu\n", (unsigned long int)db->nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nIndustry loaded into buffer : %" PRIu64 "\n\n", db->nr_ind);
+    printf("\nIndustry loaded into buffer : %lu\n\n", (unsigned long int)db->nr_ind);
 
     return;
 }

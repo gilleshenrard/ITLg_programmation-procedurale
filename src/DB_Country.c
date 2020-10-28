@@ -58,13 +58,13 @@ void Import_CSV_Country(dbc *db)
 
     db->nr_cty = i;
 
-    fprintf(fp_lg, "Country imported : %" PRIu64 "\n", db->nr_cty);
+    fprintf(fp_lg, "Country imported : %lu\n", (unsigned long int)db->nr_cty);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nCountry imported : %" PRIu64 "\n\n", db->nr_cty);
+    printf("\nCountry imported : %lu\n\n", (unsigned long int)db->nr_cty);
 
 	return ;
 }
@@ -99,13 +99,13 @@ void Export_CSV_Country(dbc *db)
                 cty.cd_iso);
     }
 
-    fprintf(fp_lg, "Country exported : %" PRIu64 "\n", db->nr_cty);
+    fprintf(fp_lg, "Country exported : %lu\n", (unsigned long int)db->nr_cty);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCountry exported : %" PRIu64 "\n\n", db->nr_cty);
+    printf("\nCountry exported : %lu\n\n", (unsigned long int)db->nr_cty);
 
     return;
 }
@@ -139,12 +139,12 @@ void Load_Country(dbc *db)
         db->cty[i] = cty;
     }
 
-    fprintf(fp_lg, "Country loaded into buffer : %" PRIu64 "\n", db->nr_cty);
+    fprintf(fp_lg, "Country loaded into buffer : %lu\n", (unsigned long int)db->nr_cty);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCountry loaded into buffer : %" PRIu64 "\n\n", db->nr_cty);
+    printf("\nCountry loaded into buffer : %lu\n\n", (unsigned long int)db->nr_cty);
 
     return;
 }

@@ -58,13 +58,13 @@ void Import_CSV_Group(dbc *db){
 
     db->nr_grp = i;
 
-    fprintf(fp_lg, "Groups imported : %" PRIu64 "\n", db->nr_grp);
+    fprintf(fp_lg, "Groups imported : %lu\n", (unsigned long int)db->nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nGroups imported : %" PRIu64 "\n\n", db->nr_grp);
+    printf("\nGroups imported : %lu\n\n", (unsigned long int)db->nr_grp);
 
 	return ;
 }
@@ -100,13 +100,13 @@ void Export_CSV_Group(dbc *db){
                 grp.id_cty);
     }
 
-    fprintf(fp_lg, "Country exported : %" PRIu64 "\n", db->nr_grp);
+    fprintf(fp_lg, "Country exported : %lu\n", (unsigned long int)db->nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCountry exported : %" PRIu64 "\n\n", db->nr_grp);
+    printf("\nCountry exported : %lu\n\n", (unsigned long int)db->nr_grp);
 
     return;
 }
@@ -141,12 +141,12 @@ void Load_Group(dbc *db){
         db->grp[i] = grp;
     }
 
-    fprintf(fp_lg, "Country loaded into buffer : %" PRIu64 "\n", db->nr_grp);
+    fprintf(fp_lg, "Country loaded into buffer : %lu\n", (unsigned long int)db->nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCountry loaded into buffer : %" PRIu64 "\n\n", db->nr_grp);
+    printf("\nCountry loaded into buffer : %lu\n\n", (unsigned long int)db->nr_grp);
 
     return;
 }

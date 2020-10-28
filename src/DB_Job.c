@@ -58,13 +58,13 @@ void Import_CSV_job(dbc *db)
 
     db->nr_job = i;
 
-    fprintf(fp_lg, "Job imported : %" PRIu64 "\n", db->nr_job);
+    fprintf(fp_lg, "Job imported : %lu\n", (unsigned long int)db->nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nJob imported : %" PRIu64 "\n\n", db->nr_job);
+    printf("\nJob imported : %lu\n\n", (unsigned long int)db->nr_job);
 
 	return ;
 }
@@ -99,13 +99,13 @@ void Export_CSV_job(dbc *db)
                 job.nm_job);
     }
 
-    fprintf(fp_lg, "Job exported : %" PRIu64 "\n", db->nr_job);
+    fprintf(fp_lg, "Job exported : %lu\n", (unsigned long int)db->nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nJob exported : %" PRIu64 "\n\n", db->nr_job);
+    printf("\nJob exported : %lu\n\n", (unsigned long int)db->nr_job);
 
     return;
 }
@@ -139,12 +139,12 @@ void Load_job(dbc *db)
         db->job[i] = job;
     }
 
-    fprintf(fp_lg, "Job loaded into buffer : %" PRIu64 "\n", db->nr_job);
+    fprintf(fp_lg, "Job loaded into buffer : %lu\n", (unsigned long int)db->nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nJob loaded into buffer : %" PRIu64 "\n\n", db->nr_job);
+    printf("\nJob loaded into buffer : %lu\n\n", (unsigned long int)db->nr_job);
 
     return;
 }

@@ -60,13 +60,13 @@ void Import_CSV_contact(dbc *db){
 
     db->nr_con = i;
 
-    fprintf(fp_lg, "Contacts imported : %" PRIu64 "\n", db->nr_con);
+    fprintf(fp_lg, "Contacts imported : %lu\n", (unsigned long int)db->nr_con);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nContacts imported : %" PRIu64 "\n\n", db->nr_con);
+    printf("\nContacts imported : %lu\n\n", (unsigned long int)db->nr_con);
 
 	return ;
 }
@@ -102,13 +102,13 @@ void Export_CSV_contact(dbc *db){
                 con.nr_rep);
     }
 
-    fprintf(fp_lg, "contact exported : %" PRIu64 "\n", db->nr_con);
+    fprintf(fp_lg, "contact exported : %lu\n", (unsigned long int)db->nr_con);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\ncontact exported : %" PRIu64 "\n\n", db->nr_con);
+    printf("\ncontact exported : %lu\n\n", (unsigned long int)db->nr_con);
 
     return;
 }
@@ -143,12 +143,12 @@ void Load_contact(dbc *db){
         db->con[i] = con;
     }
 
-    fprintf(fp_lg, "Contacts loaded into buffer : %" PRIu64 "\n", db->nr_con);
+    fprintf(fp_lg, "Contacts loaded into buffer : %lu\n", (unsigned long int)db->nr_con);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nContacts loaded into buffer : %" PRIu64 "\n\n", db->nr_con);
+    printf("\nContacts loaded into buffer : %lu\n\n", (unsigned long int)db->nr_con);
 
     return;
 }

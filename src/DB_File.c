@@ -111,9 +111,9 @@ int Create_DB(dbc *db, char filename[])
 /*  O :  0 if OK                                                                    */
 /*      -1 otherwise                                                                */
 /************************************************************************************/
-long create_index_file(dbc* db, meta_t* meta, uint64_t nb, int (*setSlot)(void*, void*), t_datablock* i_block, t_datablock* t_block){
+long create_index_file(dbc* db, meta_t* meta, uint32_t nb, int (*setSlot)(void*, void*), t_datablock* i_block, t_datablock* t_block){
     void *i_iterator=NULL, *buffer=NULL;
-    uint64_t i=0;
+    uint32_t i=0;
     long root=0, tmp=0;
 
     //open the files and position the pointers at the end

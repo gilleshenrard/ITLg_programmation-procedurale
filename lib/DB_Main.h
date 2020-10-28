@@ -188,13 +188,13 @@ typedef struct	db_country
     ccam*       cam;    // Buffer campain
     ccon*       con;    // Buffer contacts
     ccpy*       cpy;    // Buffer contacts
-    uint64_t    nr_cty; // Nr elements dans buffer
-    uint64_t    nr_grp; // Nr Groups in the buffer
-    uint64_t    nr_job; // Nr Jobs in the buffer
-    uint64_t    nr_ind; // Nr Industries in the buffer
-    uint64_t    nr_cam; // Nr campains in the buffer
-    uint64_t    nr_con; // Nr contacts in the buffer
-    uint64_t    nr_cpy; // Nr contacts in the buffer
+    uint32_t    nr_cty; // Nr elements dans buffer
+    uint32_t    nr_grp; // Nr Groups in the buffer
+    uint32_t    nr_job; // Nr Jobs in the buffer
+    uint32_t    nr_ind; // Nr Industries in the buffer
+    uint32_t    nr_cam; // Nr campains in the buffer
+    uint32_t    nr_con; // Nr contacts in the buffer
+    uint32_t    nr_cpy; // Nr contacts in the buffer
 } dbc;
 
 #endif

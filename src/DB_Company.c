@@ -82,13 +82,13 @@ void Import_CSV_company(dbc *db)
 
     db->nr_cpy = i;
 
-    fprintf(fp_lg, "Company imported : %" PRIu64 "\n", db->nr_cpy);
+    fprintf(fp_lg, "Company imported : %lu\n", (unsigned long int)db->nr_cpy);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nCompany imported : %" PRIu64 "\n\n", db->nr_cpy);
+    printf("\nCompany imported : %lu\n\n", (unsigned long int)db->nr_cpy);
 
 	return ;
 }
@@ -130,13 +130,13 @@ void Export_CSV_company(dbc *db)
                 cpy.dt_cre);
     }
 
-    fprintf(fp_lg, "Company exported : %" PRIu64 "\n", db->nr_cpy);
+    fprintf(fp_lg, "Company exported : %lu\n", (unsigned long int)db->nr_cpy);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCompany exported : %" PRIu64 "\n\n", db->nr_cpy);
+    printf("\nCompany exported : %lu\n\n", (unsigned long int)db->nr_cpy);
 
     return;
 }
@@ -170,12 +170,12 @@ void Load_company(dbc *db)
         db->cpy[i] = cpy;
     }
 
-    fprintf(fp_lg, "Company loaded into buffer : %" PRIu64 "\n", db->nr_cpy);
+    fprintf(fp_lg, "Company loaded into buffer : %lu\n", (unsigned long int)db->nr_cpy);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCompany loaded into buffer : %" PRIu64 "\n\n", db->nr_cpy);
+    printf("\nCompany loaded into buffer : %lu\n\n", (unsigned long int)db->nr_cpy);
 
     return;
 }
