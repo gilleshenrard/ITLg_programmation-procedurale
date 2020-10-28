@@ -2,7 +2,6 @@
 #define DB_FILE_H_INCLUDED
 #include "DB_Main.h"
 #include "algo.h"
-#include "files_algo.h"
 
 typedef struct{
     long*   block_off;
@@ -11,6 +10,6 @@ typedef struct{
 }t_datablock;
 
 int Create_DB(dbc *db, char filename[]);
-long create_index_file(dbc* db, t_algo_meta* meta, long nb, int (*setSlot)(void*, void*), t_datablock* i_block, t_datablock* t_block);
+long create_index_file(dbc* db, meta_t* meta, long nb, int (*setSlot)(void*, void*), t_datablock* i_block, t_datablock* t_block);
 
 #endif // DB_FILE_H_INCLUDED

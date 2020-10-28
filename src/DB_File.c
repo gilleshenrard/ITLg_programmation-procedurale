@@ -111,7 +111,7 @@ int Create_DB(dbc *db, char filename[])
 /*  O :  0 if OK                                                                    */
 /*      -1 otherwise                                                                */
 /************************************************************************************/
-long create_index_file(dbc* db, t_algo_meta* meta, long nb, int (*setSlot)(void*, void*), t_datablock* i_block, t_datablock* t_block){
+long create_index_file(dbc* db, meta_t* meta, long nb, int (*setSlot)(void*, void*), t_datablock* i_block, t_datablock* t_block){
     void *i_iterator=NULL, *buffer=NULL;
     int i=0;
     long root=0, tmp=0;
@@ -144,7 +144,7 @@ long create_index_file(dbc* db, t_algo_meta* meta, long nb, int (*setSlot)(void*
     }
 
     //sort the buffer
-    quickSort(meta, 0, nb-1);
+    quickSortArray(meta, 0, nb-1);
 
     //save the index offset in the header
     fseek(db->fp, 0, SEEK_END);

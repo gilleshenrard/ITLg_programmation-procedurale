@@ -123,31 +123,31 @@ int main(int argc, char *argv[])
 /****************************************************************************************/
 void create_db(dbc* db){
     //company metadata
-    t_algo_meta index_cpy = {NULL, db->nr_cpy, sizeof(i_ccpy_name), compare_company_index_name, swap_company_index, assign_company_index_name, NULL, NULL, NULL, NULL};
+    meta_t index_cpy = {NULL, db->nr_cpy, sizeof(i_ccpy_name), compare_company_index_name, swap_company_index, assign_company_index_name, NULL, NULL, NULL, NULL};
     t_datablock index_block_cpy = {&db->hdr.off_i_cpy_name, &db->hdr.i_cpy_name, sizeof(i_ccpy_name)};
     t_datablock table_block_cpy = {&db->hdr.off_cpy, 0, sizeof(ccpy)};
     //contacts metadata
-    t_algo_meta index_con = {NULL, db->nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, swap_contact_index, assign_contact_index_cpy, NULL, NULL, NULL, NULL};
+    meta_t index_con = {NULL, db->nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, swap_contact_index, assign_contact_index_cpy, NULL, NULL, NULL, NULL};
     t_datablock index_block_con = {&db->hdr.off_i_con_cpy, &db->hdr.i_con_cpy, sizeof(i_ccon_cpy)};
     t_datablock table_block_con = {&db->hdr.off_con, 0, sizeof(ccon)};
     //campaign metadata
-    t_algo_meta index_cam = {NULL, db->nr_cam, sizeof(i_ccam_PK), compare_campaign_PK_index, swap_campaign_index, assign_campaign_index_PK, NULL, NULL, NULL, NULL};
+    meta_t index_cam = {NULL, db->nr_cam, sizeof(i_ccam_PK), compare_campaign_PK_index, swap_campaign_index, assign_campaign_index_PK, NULL, NULL, NULL, NULL};
     t_datablock index_block_cam = {&db->hdr.off_i_cam_pk, &db->hdr.i_cam_pk, sizeof(i_ccam_PK)};
     t_datablock table_block_cam = {&db->hdr.off_cam, 0, sizeof(ccam)};
     //country metadata
-    t_algo_meta index_cty = {NULL, db->nr_cty, sizeof(i_ccty_name), compare_country_index_name, swap_country_index, assign_country_index_name, NULL, NULL, NULL, NULL};
+    meta_t index_cty = {NULL, db->nr_cty, sizeof(i_ccty_name), compare_country_index_name, swap_country_index, assign_country_index_name, NULL, NULL, NULL, NULL};
     t_datablock index_block_cty = {&db->hdr.off_i_cty_name, &db->hdr.i_cty_name, sizeof(i_ccty_name)};
     t_datablock table_block_cty = {&db->hdr.off_cty, 0, sizeof(ccty)};
     //group metadata
-    t_algo_meta index_grp = {NULL, db->nr_grp, sizeof(i_cgrp_FK), compare_group_FK_index, swap_group_index, assign_group_index_FK, NULL, NULL, NULL, NULL};
+    meta_t index_grp = {NULL, db->nr_grp, sizeof(i_cgrp_FK), compare_group_FK_index, swap_group_index, assign_group_index_FK, NULL, NULL, NULL, NULL};
     t_datablock index_block_grp = {&db->hdr.off_i_grp_fk, &db->hdr.i_grp_fk, sizeof(i_cgrp_FK)};
     t_datablock table_block_grp = {&db->hdr.off_grp, 0, sizeof(cgrp)};
     //industry metadata
-    t_algo_meta index_ind = {NULL, db->nr_ind, sizeof(i_cind_PK), compare_industry_PK_index, swap_industry_index, assign_industry_index_PK, NULL, NULL, NULL, NULL};
+    meta_t index_ind = {NULL, db->nr_ind, sizeof(i_cind_PK), compare_industry_PK_index, swap_industry_index, assign_industry_index_PK, NULL, NULL, NULL, NULL};
     t_datablock index_block_ind = {&db->hdr.off_i_ind_pk, &db->hdr.i_ind_pk, sizeof(i_cind_PK)};
     t_datablock table_block_ind = {&db->hdr.off_ind, 0, sizeof(cind)};
     //job metadata
-    t_algo_meta index_job = {NULL, db->nr_job, sizeof(i_cjob_name), compare_job_index_name, swap_job_index, assign_job_index_name, NULL, NULL, NULL, NULL};
+    meta_t index_job = {NULL, db->nr_job, sizeof(i_cjob_name), compare_job_index_name, swap_job_index, assign_job_index_name, NULL, NULL, NULL, NULL};
     t_datablock index_block_job = {&db->hdr.off_i_job_name, &db->hdr.i_job_name, sizeof(i_cjob_name)};
     t_datablock table_block_job = {&db->hdr.off_job, 0, sizeof(cjob)};
 
@@ -253,8 +253,8 @@ char menu(int i, char sections[i][32]){
 /************************************************************/
 int menu_countries(dbc* db){
     char choice=0;
-    t_algo_meta cty_list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, NULL, country_right, country_left};
-    t_algo_meta cty_array = {NULL, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    meta_t cty_list = {NULL, 0, sizeof(ccty_recur), compare_country_name, swap_country, assign_country, NULL, NULL, country_right, country_left};
+    meta_t cty_array = {NULL, db->nr_cty, sizeof(ccty), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_cty[4][32]={  "Menu des Pays",
                             "Lister les pays",
                             "Exporter les pays",
@@ -299,8 +299,8 @@ int menu_companies(dbc* db){
     long j = 0;
     ccpy_recur *companies = NULL;
     void **right = NULL;
-    t_algo_meta cpy_list = {NULL, 0, sizeof(ccpy_recur), compare_company_name, swap_company, assign_company, NULL, NULL, company_right, company_left};
-    t_algo_meta cpy_array = {NULL, db->nr_cpy, sizeof(ccpy), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    meta_t cpy_list = {NULL, 0, sizeof(ccpy_recur), compare_company_name, swap_company, assign_company, NULL, NULL, company_right, company_left};
+    meta_t cpy_array = {NULL, db->nr_cpy, sizeof(ccpy), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_cpy[4][32]={  "Menu des Pays",
                             "Lister les pays",
                             "Exporter les pays",
@@ -363,8 +363,8 @@ int menu_campaigns(dbc* db){
     long j = 0;
     ccam_recur *campaign = NULL;
     void **right = NULL;
-    t_algo_meta cam_list = {NULL, 0, sizeof(ccam_recur), compare_campaign_PK, swap_campaign, assign_campaign, NULL, NULL, campaign_right, campaign_left};
-    t_algo_meta cam_array = {NULL, db->nr_cam, sizeof(ccam), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    meta_t cam_list = {NULL, 0, sizeof(ccam_recur), compare_campaign_PK, swap_campaign, assign_campaign, NULL, NULL, campaign_right, campaign_left};
+    meta_t cam_array = {NULL, db->nr_cam, sizeof(ccam), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_cam[4][32]={  "Menu des Campagnes",
                             "Lister les campagnes",
                             "Exporter les campagnes",
@@ -427,8 +427,8 @@ int menu_contacts(dbc* db){
     long j = 0;
     ccon_recur *contact = NULL;
     void **right = NULL;
-    t_algo_meta con_list = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, swap_contact, assign_contact, NULL, NULL, contact_right, contact_left};
-    t_algo_meta con_array = {NULL, db->nr_con, sizeof(ccon), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    meta_t con_list = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, swap_contact, assign_contact, NULL, NULL, contact_right, contact_left};
+    meta_t con_array = {NULL, db->nr_con, sizeof(ccon), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_con[4][32]={  "Menu des Contacts",
                             "Lister les contacts",
                             "Exporter les contacts",
@@ -491,8 +491,8 @@ int menu_groups(dbc* db){
     long j = 0;
     cgrp_recur *group = NULL;
     void **right = NULL;
-    t_algo_meta grp_list = {NULL, 0, sizeof(cgrp_recur), compare_group_FK, swap_group, assign_group, NULL, NULL, group_right, group_left};
-    t_algo_meta grp_array = {NULL, db->nr_grp, sizeof(cgrp), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    meta_t grp_list = {NULL, 0, sizeof(cgrp_recur), compare_group_FK, swap_group, assign_group, NULL, NULL, group_right, group_left};
+    meta_t grp_array = {NULL, db->nr_grp, sizeof(cgrp), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_grp[4][32]={  "Menu des groupes",
                             "Lister les groupes",
                             "Exporter les groupes",
@@ -555,8 +555,8 @@ int menu_industries(dbc* db){
     long j = 0;
     cind_recur *industry = NULL;
     void **right = NULL;
-    t_algo_meta ind_list = {NULL, 0, sizeof(cind_recur), compare_industry_PK, swap_industry, assign_industry, NULL, NULL, industry_right, industry_left};
-    t_algo_meta ind_array = {NULL, db->nr_ind, sizeof(cind), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    meta_t ind_list = {NULL, 0, sizeof(cind_recur), compare_industry_PK, swap_industry, assign_industry, NULL, NULL, industry_right, industry_left};
+    meta_t ind_array = {NULL, db->nr_ind, sizeof(cind), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_ind[4][32]={  "Menu des Industries",
                             "Lister les industries",
                             "Exporter les industries",
@@ -619,8 +619,8 @@ int menu_jobs(dbc* db){
     long j = 0;
     cjob_recur *job = NULL;
     void **right = NULL;
-    t_algo_meta job_list = {NULL, 0, sizeof(cjob_recur), compare_job_name, swap_job, assign_job, NULL, NULL, job_right, job_left};
-    t_algo_meta job_array = {NULL, db->nr_job, sizeof(cjob), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+    meta_t job_list = {NULL, 0, sizeof(cjob_recur), compare_job_name, swap_job, assign_job, NULL, NULL, job_right, job_left};
+    meta_t job_array = {NULL, db->nr_job, sizeof(cjob), NULL, NULL, NULL, NULL, NULL, NULL, NULL};
     char menu_job[4][32]={  "Menu des Jobs",
                             "Lister les jobs",
                             "Exporter les jobs",
