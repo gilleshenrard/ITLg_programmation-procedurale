@@ -2,6 +2,7 @@
 #define DB_FILE_H_INCLUDED
 #include "DB_Main.h"
 #include "algo.h"
+#include "files_algo.h"
 
 typedef struct{
     long*   block_off;
