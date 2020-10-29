@@ -25,7 +25,7 @@ void Import_CSV_campaign(dbc *db){
 
     fseek(db->fp, db->hdr.off_cam, SEEK_SET);
 
-    printf("%08lX\n",db->hdr.off_cam);
+    printf("%lu\n",(unsigned long int)db->hdr.off_cam);
 
     while (fgets(line, 200, fpi) != NULL)
     {

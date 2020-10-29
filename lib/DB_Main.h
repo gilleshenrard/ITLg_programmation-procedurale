@@ -36,41 +36,41 @@ typedef unsigned short usint;
 ****************************************************************************************/
 typedef struct Header
 {
-    uint db_size;           // Taille de la database
-    char db_name[SZ_NAME];  // Nom de la database
-    uint sz_cty;            // Taille bloc country
-    uint sz_job;            // Taille bloc job
-    uint sz_ind;            // Taille bloc industry
-    uint sz_grp;            // Taille bloc group
-    uint sz_cam;            // Taille bloc campain
-    long sz_con;            // Taille bloc contact
-    long sz_cpy;            // Taille bloc company
-    long off_cty;           // Position bloc country
-    long off_job;           // Position bloc job
-    long off_ind;           // Position bloc industry
-    long off_grp;           // Position bloc group
-    long off_cam;           // Position bloc campain
-    long off_con;           // Position bloc contact
-    long off_cpy;           // Position bloc company
-    long off_i_cty_name;    // Offset of the country index block (by name)
-    long off_i_grp_fk;      // Offset of the group index block (by fk)
-    long off_i_job_name;    // Offset of the job index block (by name)
-    long off_i_ind_pk;      // Offset of the industry index block (by pk)
-    long off_i_cam_pk;      // Offset of the campain index block (by pk)
-    long off_i_con_cpy;     // Offset of the contact index block (by campains)
-    long off_i_cpy_name;    // Offset of the company index block (by name)
-    long off_i_cpy_grp;     // Offset of the company index block (by group ID)
-    long off_i_grp_nm;      // Offset of the group index block (by name)
-    long i_cty_name;        // Address of the root for the country index (by name)
-    long i_grp_fk;          // Address of the root for the group index (by fk)
-    long i_job_name;        // Address of the root for the job index (by name)
-    long i_ind_pk;          // Address of the root for the industry index (by pk)
-    long i_cam_pk;          // Address of the root for the campain index (by pk)
-    long i_con_cpy;         // Address of the root for the contact index (by campains)
-    long i_cpy_name;        // Address of the root for the company index (by name)
-    long i_cpy_grp;         // Address of the root for the company index (by group)
-    long i_grp_nm;          // Address of the root for the group index (by name)
-    char filler[88];
+    uint        db_size;           // Taille de la database
+    char        db_name[SZ_NAME];  // Nom de la database
+    uint        sz_cty;            // Taille bloc country
+    uint        sz_job;            // Taille bloc job
+    uint        sz_ind;            // Taille bloc industry
+    uint        sz_grp;            // Taille bloc group
+    uint        sz_cam;            // Taille bloc campain
+    uint32_t    sz_con;            // Taille bloc contact
+    uint32_t    sz_cpy;            // Taille bloc company
+    uint32_t    off_cty;           // Position bloc country
+    uint32_t    off_job;           // Position bloc job
+    uint32_t    off_ind;           // Position bloc industry
+    uint32_t    off_grp;           // Position bloc group
+    uint32_t    off_cam;           // Position bloc campain
+    uint32_t    off_con;           // Position bloc contact
+    uint32_t    off_cpy;           // Position bloc company
+    uint32_t    off_i_cty_name;    // Offset of the country index block (by name)
+    uint32_t    off_i_grp_fk;      // Offset of the group index block (by fk)
+    uint32_t    off_i_job_name;    // Offset of the job index block (by name)
+    uint32_t    off_i_ind_pk;      // Offset of the industry index block (by pk)
+    uint32_t    off_i_cam_pk;      // Offset of the campain index block (by pk)
+    uint32_t    off_i_con_cpy;     // Offset of the contact index block (by campains)
+    uint32_t    off_i_cpy_name;    // Offset of the company index block (by name)
+    uint32_t    off_i_cpy_grp;     // Offset of the company index block (by group ID)
+    uint32_t    off_i_grp_nm;      // Offset of the group index block (by name)
+    uint32_t    i_cty_name;        // Address of the root for the country index (by name)
+    uint32_t    i_grp_fk;          // Address of the root for the group index (by fk)
+    uint32_t    i_job_name;        // Address of the root for the job index (by name)
+    uint32_t    i_ind_pk;          // Address of the root for the industry index (by pk)
+    uint32_t    i_cam_pk;          // Address of the root for the campain index (by pk)
+    uint32_t    i_con_cpy;         // Address of the root for the contact index (by campains)
+    uint32_t    i_cpy_name;        // Address of the root for the company index (by name)
+    uint32_t    i_cpy_grp;         // Address of the root for the company index (by group)
+    uint32_t    i_grp_nm;          // Address of the root for the group index (by name)
+    char        filler[96];        //get the size of hder to 256 bits
 } hder;
 
 /***************************************************************************************

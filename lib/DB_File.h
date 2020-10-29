@@ -4,8 +4,8 @@
 #include "algo.h"
 
 typedef struct{
-    long*   block_off;
-    long*   root_off;
+    uint32_t*   block_off;
+    uint32_t*   root_off;
     int     elem_size;
 }t_datablock;
 

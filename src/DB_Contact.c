@@ -25,7 +25,7 @@ void Import_CSV_contact(dbc *db){
 
     fseek(db->fp, db->hdr.off_con, SEEK_SET);
 
-    printf("%08lX\n",db->hdr.off_con);
+    printf("%lu\n",(unsigned long int)db->hdr.off_con);
 
     while (fgets(line, 200, fpi) != NULL)
     {

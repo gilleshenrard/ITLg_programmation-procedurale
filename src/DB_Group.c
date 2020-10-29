@@ -25,7 +25,7 @@ void Import_CSV_Group(dbc *db){
 
     fseek(db->fp, db->hdr.off_grp, SEEK_SET);
 
-    printf("%08lX\n",db->hdr.off_grp);
+    printf("%lu\n",(unsigned long int)db->hdr.off_grp);
 
     while (fgets(line, 200, fpi) != NULL)
     {

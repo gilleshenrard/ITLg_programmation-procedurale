@@ -27,7 +27,7 @@ void Import_CSV_company(dbc *db)
 
     fseek(db->fp, db->hdr.off_cpy, SEEK_SET);
 
-    printf("%08lX\n",db->hdr.off_cpy);
+    printf("%lu\n",(unsigned long int)db->hdr.off_cpy);
 
     while (fgets(line, 200, fpi) != NULL)
     {
