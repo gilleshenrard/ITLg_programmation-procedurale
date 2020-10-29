@@ -180,21 +180,6 @@ void Rec_Country(ccty *rec)
 ///////////////////////////////////// DYNAMIC ALLOCATION METHODS /////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/****************************************************************************************/
-/*  I : /                                                                               */
-/*  P : Allocates memory for a country and sets its height to 1 (leaf for AVL)          */
-/*  O : Country created if OK                                                           */
-/*      NULL if error                                                                   */
-/****************************************************************************************/
-void* allocate_country(void){
-    ccty_recur *tmp=NULL;
-
-    //memory allocation for the new element (calloc to initialize with all 0)
-    tmp = calloc(1, sizeof(ccty_recur));
-    if(tmp) tmp->height = 1;
-
-    return tmp;
-}
 
 /****************************************************************************************/
 /*  I : First country to compare                                                        */
@@ -226,165 +211,6 @@ int compare_country_index_name(void* a, void* b){
     return strcmp(tmp_a->nm_cty, tmp_b->nm_cty);
 }
 
-/****************************************************************************************/
-/*  I : First country to compare                                                        */
-/*      Name of the second  country to compare                                          */
-/*  P : Compares two countries by their names                                           */
-/*  O :  1 if A > B                                                                     */
-/*       0 if A = B                                                                     */
-/*      -1 if A < B                                                                     */
-/****************************************************************************************/
-int compare_country_name_char(void* a, void* b){
-    ccty_recur *tmp_a = (ccty_recur*)a;
-
-    return strcmp(tmp_a->cty.nm_cty, (char*)b);
-}
-
-/****************************************************************************************/
-/*  I : Country index element to compare                                                */
-/*      Name of the second  country to compare                                          */
-/*  P : Compares two countries by their names                                           */
-/*  O :  1 if A > B                                                                     */
-/*       0 if A = B                                                                     */
-/*      -1 if A < B                                                                     */
-/****************************************************************************************/
-int compare_country_index_char(void* a, void* b){
-    i_ccty_name *tmp_a = (i_ccty_name*)a;
-
-    return strcmp(tmp_a->nm_cty, (char*)b);
-}
-
-/****************************************************************************************/
-/*  I : Country to which copy data                                                      */
-/*      Country from which copy data                                                    */
-/*  P : Copies all the fields of countries from new to old                              */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_country(void* oldelem, void* newelem){
-    ccty_recur* oldTuple = (ccty_recur*)oldelem;
-    ccty_recur* newTuple = (ccty_recur*)newelem;
-    ccty_recur *saveRight = NULL, *saveLeft=NULL;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //save the pointer values of the old country
-    saveRight = oldTuple->right;
-    saveLeft = oldTuple->left;
-
-    //copy the data from the new country to the old one
-    *oldTuple = *newTuple;
-
-    //restore the pointer values
-    oldTuple->right = saveRight;
-    oldTuple->left = saveLeft;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : Country to which copy data                                                      */
-/*      Country from which copy data                                                    */
-/*  P : Copies all the fields of countries from new to old                              */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_country_index(void* oldelem, void* newelem){
-    i_ccty_name* oldTuple = (i_ccty_name*)oldelem;
-    i_ccty_name* newTuple = (i_ccty_name*)newelem;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //copy the data from the new country to the old one
-    *oldTuple = *newTuple;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : Country index buffer to which copy data                                         */
-/*      Country from which copy data                                                    */
-/*  P : Copies all the fields of a country to a country index buffer                    */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_country_index_name(void* index, void* elem){
-    ccty* element = (ccty*)elem;
-    i_ccty_name* i_element = (i_ccty_name*)index;
-
-    if(!index || !element)
-        return -1;
-
-    //copy the data from the country to the buffer
-    strcpy(i_element->nm_cty, element->nm_cty);
-    strcpy(i_element->tp_rec, "I_CTYNM");
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : index element to which assign the slot                                          */
-/*      slot (file offset) in which the base data element is                            */
-/*  P : assigns a slot (file offset) to an index element                                */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_country_index_slot(void* index, void* offset){
-    i_ccty_name* element = (i_ccty_name*)index;
-    long* slot = (long*)offset;
-
-    if(!index || !offset)
-        return -1;
-
-    element->slot = *slot;
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : Countries to swap                                   */
-/*  P : Swaps two countries                                 */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_country(void* first, void* second){
-    ccty_recur tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(ccty_recur));
-
-    assign_country((void*)&tmp, first);
-    assign_country(first, second);
-    assign_country(second, (void*)&tmp);
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : Countries to swap                                   */
-/*  P : Swaps two countries                                 */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_country_index(void* first, void* second){
-    i_ccty_name tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(i_ccty_name));
-
-    assign_country_index((void*)&tmp, first);
-    assign_country_index(first, second);
-    assign_country_index(second, (void*)&tmp);
-
-    return 0;
-}
-
 /************************************************************/
 /*  I : /                                                   */
 /*  P : Gets the element to the right of the current        */
@@ -398,21 +224,6 @@ void** country_right(void* current){
         return NULL;
 
     return (void**)&currentCty->right;
-}
-
-/************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the left of the current         */
-/*  O : Address of the element to the left                  */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** country_left(void* current){
-    ccty_recur* currentCty = (ccty_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentCty->left;
 }
 
 /************************************************************/
@@ -442,45 +253,6 @@ char* toString_Country(void* current){
     ccty_recur *tmp = (ccty_recur*)current;
 
     return tmp->cty.nm_cty;
-}
-
-/************************************************************/
-/*  I : Country AVL leaf of which to get the height         */
-/*  P : Gets the height of the current AVL leaf             */
-/*  O : Leaf height                                         */
-/************************************************************/
-int get_country_height(void* current){
-    ccty_recur *tmp = (ccty_recur*)current;
-
-
-    return (tmp == NULL ? 0 : tmp->height);
-}
-
-/************************************************************/
-/*  I : Country AVL leaf of which to set the height         */
-/*      New value for the height                            */
-/*  P : Sets the height of the current AVL leaf             */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-int set_country_height(void* current, int value){
-    ccty_recur *tmp = (ccty_recur*)current;
-
-    tmp->height = value;
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : Country AVL leaf to free                            */
-/*      /                                                   */
-/*  P : Frees the memory for the current country            */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-void* free_country(void* country, void* nullable){
-    free(country);
-    return 0;
 }
 
 

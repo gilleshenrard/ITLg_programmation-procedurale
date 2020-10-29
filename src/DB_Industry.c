@@ -180,23 +180,6 @@ void Rec_industry(cind *rec){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-/****************************************************************************************/
-/*  I : /                                                                               */
-/*  P : Allocates memory for a industry and sets its height to 1 (leaf for AVL)         */
-/*  O : industry created if OK                                                          */
-/*      NULL if error                                                                   */
-/****************************************************************************************/
-void* allocate_industry(void){
-    cind_recur *tmp=NULL;
-
-    //memory allocation for the new element (calloc to initialize with all 0)
-    tmp = calloc(1, sizeof(cind_recur));
-    if(tmp) tmp->height = 1;
-
-    return tmp;
-}
-
 /****************************************************************************************/
 /*  I : First industry to compare                                                       */
 /*      Second  industry to compare                                                     */
@@ -238,116 +221,6 @@ int compare_industry_PK_index(void* a, void* b){
 }
 
 /****************************************************************************************/
-/*  I : First industry to compare                                                       */
-/*      FK of the second industry to compare                                            */
-/*  P : Compares two industries by their FK                                             */
-/*  O :  1 if A > B                                                                     */
-/*       0 if A = B                                                                     */
-/*      -1 if A < B                                                                     */
-/****************************************************************************************/
-int compare_industry_PK_int(void* a, void* b){
-    cind_recur *tmp_a = (cind_recur*)a;
-    int* fk = (int*)b;
-
-    if(tmp_a->ind.id_ind > *fk)
-        return 1;
-    else if(tmp_a->ind.id_ind < *fk)
-        return -1;
-    else
-        return 0;
-}
-
-/****************************************************************************************/
-/*  I : industry index element to compare                                               */
-/*      FK of the second industry to compare                                            */
-/*  P : Compares two industries by their FK                                             */
-/*  O :  1 if A > B                                                                     */
-/*       0 if A = B                                                                     */
-/*      -1 if A < B                                                                     */
-/****************************************************************************************/
-int compare_industry_index_int(void* a, void* b){
-    i_cind_PK *tmp_a = (i_cind_PK*)a;
-    int* fk = (int*)b;
-
-    if(tmp_a->ind_id > *fk)
-        return 1;
-    else if(tmp_a->ind_id < *fk)
-        return -1;
-    else
-        return 0;
-}
-
-/****************************************************************************************/
-/*  I : industry to which copy data                                                     */
-/*      industry from which copy data                                                   */
-/*  P : Copies all the fields of industries from new to old                             */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_industry(void* oldelem, void* newelem){
-    cind_recur* oldTuple = (cind_recur*)oldelem;
-    cind_recur* newTuple = (cind_recur*)newelem;
-    cind_recur *saveRight = NULL, *saveLeft=NULL;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //save the pointer values of the old Industry
-    saveRight = oldTuple->right;
-    saveLeft = oldTuple->left;
-
-    //copy the data from the new Industry to the old one
-    *oldTuple = *newTuple;
-
-    //restore the pointer values
-    oldTuple->right = saveRight;
-    oldTuple->left = saveLeft;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : industry to which copy data                                                     */
-/*      industry from which copy data                                                   */
-/*  P : Copies all the fields of industries from new to old                             */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_industry_index(void* oldelem, void* newelem){
-    i_cind_PK* oldTuple = (i_cind_PK*)oldelem;
-    i_cind_PK* newTuple = (i_cind_PK*)newelem;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //copy the data from the new Industry to the old one
-    *oldTuple = *newTuple;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : industry index buffer to which copy data                                        */
-/*      industry from which copy data                                                   */
-/*  P : Copies all the fields of a industry to a industry index buffer                  */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_industry_index_PK(void* index, void* elem){
-    cind* element = (cind*)elem;
-    i_cind_PK* i_element = (i_cind_PK*)index;
-
-    if(!index || !element)
-        return -1;
-
-    //copy the data from the Industry to the buffer
-    i_element->ind_id = element->id_ind;
-    strcpy(i_element->tp_rec, "I_INDFK");
-
-    return 0;
-}
-
-/****************************************************************************************/
 /*  I : index element to which assign the slot                                          */
 /*      slot (file offset) in which the base data element is                            */
 /*  P : assigns a slot (file offset) to an index element                                */
@@ -367,48 +240,6 @@ int assign_industry_index_slot(void* index, void* offset){
 }
 
 /************************************************************/
-/*  I : industries to swap                                  */
-/*  P : Swaps two industries                                */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_industry(void* first, void* second){
-    cind_recur tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(cind_recur));
-
-    assign_industry((void*)&tmp, first);
-    assign_industry(first, second);
-    assign_industry(second, (void*)&tmp);
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : industries to swap                                  */
-/*  P : Swaps two industries                                */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_industry_index(void* first, void* second){
-    i_cind_PK tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(i_cind_PK));
-
-    assign_industry_index((void*)&tmp, first);
-    assign_industry_index(first, second);
-    assign_industry_index(second, (void*)&tmp);
-
-    return 0;
-}
-
-/************************************************************/
 /*  I : /                                                   */
 /*  P : Gets the element to the right of the current        */
 /*  O : Address of the element to the right                 */
@@ -421,21 +252,6 @@ void** industry_right(void* current){
         return NULL;
 
     return (void**)&currentind->right;
-}
-
-/************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the left of the current         */
-/*  O : Address of the element to the left                  */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** industry_left(void* current){
-    cind_recur* currentind = (cind_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentind->left;
 }
 
 /************************************************************/
@@ -465,45 +281,4 @@ char* toString_industry(void* current){
     cind_recur *tmp = (cind_recur*)current;
 
     return tmp->ind.nm_ind;
-}
-
-/************************************************************/
-/*  I : industry AVL leaf of which to get the height        */
-/*  P : Gets the height of the current AVL leaf             */
-/*  O : Leaf height                                         */
-/************************************************************/
-int get_industry_height(void* current){
-    cind_recur *tmp = (cind_recur*)current;
-
-    return (tmp == NULL ? 0 : tmp->height);
-}
-
-/************************************************************/
-/*  I : industry AVL leaf of which to set the height        */
-/*      New value for the height                            */
-/*  P : Sets the height of the current AVL leaf             */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-int set_industry_height(void* current, int value){
-    cind_recur *tmp = (cind_recur*)current;
-
-    tmp->height = value;
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : industry AVL leaf to free                           */
-/*      /                                                   */
-/*  P : Frees the memory for the current industry           */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-#ifdef __GNUC__
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-void* free_industry(void* industry, void* nullable){
-    free(industry);
-    return 0;
 }

@@ -190,22 +190,6 @@ void Rec_contact(ccon *rec){
 
 
 /****************************************************************************************/
-/*  I : /                                                                               */
-/*  P : Allocates memory for a contact and sets its height to 1 (leaf for AVL)          */
-/*  O : contact created if OK                                                           */
-/*      NULL if error                                                                   */
-/****************************************************************************************/
-void* allocate_contact(void){
-    ccon_recur *tmp=NULL;
-
-    //memory allocation for the new element (calloc to initialize with all 0)
-    tmp = calloc(1, sizeof(ccon_recur));
-    if(tmp) tmp->height = 1;
-
-    return tmp;
-}
-
-/****************************************************************************************/
 /*  I : First contact to compare                                                        */
 /*      Second  contact to compare                                                      */
 /*  P : Compares two contacts by their PK                                               */
@@ -246,26 +230,6 @@ int compare_contact_cpy_index(void* a, void* b){
 }
 
 /****************************************************************************************/
-/*  I : First contact to compare                                                        */
-/*      PK of the second contact to compare                                             */
-/*  P : Compares two contacts by their FK                                               */
-/*  O :  1 if A > B                                                                     */
-/*       0 if A = B                                                                     */
-/*      -1 if A < B                                                                     */
-/****************************************************************************************/
-int compare_contact_cpy_int(void* a, void* b){
-    ccon_recur *tmp_a = (ccon_recur*)a;
-    int* FK = (int*)b;
-
-    if(tmp_a->con.id_cpy > *FK)
-        return 1;
-    else if(tmp_a->con.id_cpy < *FK)
-        return -1;
-    else
-        return 0;
-}
-
-/****************************************************************************************/
 /*  I : contact index element to compare                                                */
 /*      FK of the second contact to compare                                             */
 /*  P : Compares two contacts by their FK                                               */
@@ -283,76 +247,6 @@ int compare_contact_index_int(void* a, void* b){
         return -1;
     else
         return 0;
-}
-
-/****************************************************************************************/
-/*  I : contact to which copy data                                                      */
-/*      contact from which copy data                                                    */
-/*  P : Copies all the fields of contacts from new to old                               */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_contact(void* oldelem, void* newelem){
-    ccon_recur* oldTuple = (ccon_recur*)oldelem;
-    ccon_recur* newTuple = (ccon_recur*)newelem;
-    ccon_recur *saveRight = NULL, *saveLeft=NULL;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //save the pointer values of the old contact
-    saveRight = oldTuple->right;
-    saveLeft = oldTuple->left;
-
-    //copy the data from the new contact to the old one
-    *oldTuple = *newTuple;
-
-    //restore the pointer values
-    oldTuple->right = saveRight;
-    oldTuple->left = saveLeft;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : contact to which copy data                                                      */
-/*      contact from which copy data                                                    */
-/*  P : Copies all the fields of contacts from new to old                               */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_contact_index(void* oldelem, void* newelem){
-    i_ccon_cpy* oldTuple = (i_ccon_cpy*)oldelem;
-    i_ccon_cpy* newTuple = (i_ccon_cpy*)newelem;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //copy the data from the new contact to the old one
-    *oldTuple = *newTuple;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : contact index buffer to which copy data                                         */
-/*      contact from which copy data                                                    */
-/*  P : Copies all the fields of a contact to a contact index buffer                    */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_contact_index_cpy(void* index, void* elem){
-    ccon* element = (ccon*)elem;
-    i_ccon_cpy* i_element = (i_ccon_cpy*)index;
-
-    if(!index || !element)
-        return -1;
-
-    //copy the data from the contact to the buffer
-    i_element->cpy_id = element->id_cpy;
-    strcpy(i_element->tp_rec, "I_CONCA");
-
-    return 0;
 }
 
 /****************************************************************************************/
@@ -375,48 +269,6 @@ int assign_contact_index_slot(void* index, void* offset){
 }
 
 /************************************************************/
-/*  I : contacts to swap                                    */
-/*  P : Swaps two contacts                                  */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_contact(void* first, void* second){
-    ccon_recur tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(ccon_recur));
-
-    assign_contact((void*)&tmp, first);
-    assign_contact(first, second);
-    assign_contact(second, (void*)&tmp);
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : contacts to swap                                    */
-/*  P : Swaps two contacts                                  */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_contact_index(void* first, void* second){
-    i_ccon_cpy tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(i_ccon_cpy));
-
-    assign_contact_index((void*)&tmp, first);
-    assign_contact_index(first, second);
-    assign_contact_index(second, (void*)&tmp);
-
-    return 0;
-}
-
-/************************************************************/
 /*  I : /                                                   */
 /*  P : Gets the element to the right of the current        */
 /*  O : Address of the element to the right                 */
@@ -429,21 +281,6 @@ void** contact_right(void* current){
         return NULL;
 
     return (void**)&currentcon->right;
-}
-
-/************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the left of the current         */
-/*  O : Address of the element to the left                  */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** contact_left(void* current){
-    ccon_recur* currentcon = (ccon_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentcon->left;
 }
 
 /************************************************************/
@@ -468,47 +305,9 @@ int Rec_contact_list(void *record, void* nullable){
 /*      /                                                   */
 /*  P : returns a string representing the contact          */
 /*  O : /                                                   */
-/************************************************************//*
-char* toString_contact(void* current){
+/************************************************************/
+/*char* toString_contact(void* current){
     ccon_recur *tmp = (ccon_recur*)current;
 
     return tmp->con.id_cpy;
-}
-*/
-/************************************************************/
-/*  I : contact AVL leaf of which to get the height        */
-/*  P : Gets the height of the current AVL leaf             */
-/*  O : Leaf height                                         */
-/************************************************************/
-int get_contact_height(void* current){
-    ccon_recur *tmp = (ccon_recur*)current;
-
-    return (tmp == NULL ? 0 : tmp->height);
-}
-
-/************************************************************/
-/*  I : contact AVL leaf of which to set the height        */
-/*      New value for the height                            */
-/*  P : Sets the height of the current AVL leaf             */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-int set_contact_height(void* current, int value){
-    ccon_recur *tmp = (ccon_recur*)current;
-
-    tmp->height = value;
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : contact AVL leaf to free                           */
-/*      /                                                   */
-/*  P : Frees the memory for the current contact           */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-void* free_contact(void* contact, void* nullable){
-    free(contact);
-    return 0;
-}
+}*/

@@ -36,23 +36,11 @@ void Print_industry(dbc *db);
 void Rec_industry(cind *rec);
 
 // dynamic structures methods
-void* allocate_industry(void);
 int compare_industry_PK(void* a, void* b);
 int compare_industry_PK_index(void* a, void* b);
-int compare_industry_PK_int(void* a, void* b);
-int compare_industry_index_int(void* a, void* b);
-int assign_industry(void* oldelem, void* newelem);
-int assign_industry_index(void* oldelem, void* newelem);
-int assign_industry_index_PK(void* index, void* elem);
 int assign_industry_index_slot(void* index, void* offset);
-int swap_industry(void* first, void* second);
-int swap_industry_index(void* first, void* second);
 void** industry_right(void* current);
-void** industry_left(void* current);
 int Rec_industry_list(void *record, void* nullable);
 char* toString_industry(void* current);
-int get_industry_height(void* current);
-int set_industry_height(void* current, int value);
-void* free_industry(void* industry, void* nullable);
 
 #endif // DB_INDUSTRY_H_INCLUDED

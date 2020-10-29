@@ -43,24 +43,10 @@ void Print_Country(dbc *db);
 void Rec_Country(ccty *rec);
 
 // dynamic structures methods
-void* allocate_country(void);
 int compare_country_name(void* a, void* b);
 int compare_country_index_name(void* a, void* b);
-int compare_country_name_char(void* a, void* b);
-int compare_country_index_char(void* a, void* b);
-int assign_country(void* oldelem, void* newelem);
-int assign_country_index(void* oldelem, void* newelem);
-int assign_country_index_name(void* index, void* elem);
-int assign_country_index_slot(void* index, void* offset);
-int swap_country(void* first, void* second);
-int swap_country_index(void* first, void* second);
-void** country_right(void* current);
-void** country_left(void* current);
 int Rec_Country_list(void *record, void* nullable);
 char* toString_Country(void* current);
-int get_country_height(void* current);
-int set_country_height(void* current, int value);
-void* free_country(void* country, void* nullable);
 
 //file structures methods
 

@@ -219,22 +219,6 @@ void Rec_campaign(ccam *rec){
 
 
 /****************************************************************************************/
-/*  I : /                                                                               */
-/*  P : Allocates memory for a campaign and sets its height to 1 (leaf for AVL)          */
-/*  O : campaign created if OK                                                           */
-/*      NULL if error                                                                   */
-/****************************************************************************************/
-void* allocate_campaign(void){
-    ccam_recur *tmp=NULL;
-
-    //memory allocation for the new element (calloc to initialize with all 0)
-    tmp = calloc(1, sizeof(ccam_recur));
-    if(tmp) tmp->height = 1;
-
-    return tmp;
-}
-
-/****************************************************************************************/
 /*  I : First campaign to compare                                                        */
 /*      Second  campaign to compare                                                      */
 /*  P : Compares two campaigns by their PK                                               */
@@ -275,26 +259,6 @@ int compare_campaign_PK_index(void* a, void* b){
 }
 
 /****************************************************************************************/
-/*  I : First campaign to compare                                                        */
-/*      PK of the second campaign to compare                                             */
-/*  P : Compares two campaigns by their PK                                               */
-/*  O :  1 if A > B                                                                     */
-/*       0 if A = B                                                                     */
-/*      -1 if A < B                                                                     */
-/****************************************************************************************/
-int compare_campaign_PK_int(void* a, void* b){
-    ccam_recur *tmp_a = (ccam_recur*)a;
-    int* PK = (int*)b;
-
-    if(tmp_a->cam.id_cam > *PK)
-        return 1;
-    else if(tmp_a->cam.id_cam < *PK)
-        return -1;
-    else
-        return 0;
-}
-
-/****************************************************************************************/
 /*  I : campaign index element to compare                                                */
 /*      PK of the second campaign to compare                                             */
 /*  P : Compares two campaigns by their PK                                               */
@@ -312,76 +276,6 @@ int compare_campaign_index_int(void* a, void* b){
         return -1;
     else
         return 0;
-}
-
-/****************************************************************************************/
-/*  I : campaign to which copy data                                                      */
-/*      campaign from which copy data                                                    */
-/*  P : Copies all the fields of campaigns from new to old                               */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_campaign(void* oldelem, void* newelem){
-    ccam_recur* oldTuple = (ccam_recur*)oldelem;
-    ccam_recur* newTuple = (ccam_recur*)newelem;
-    ccam_recur *saveRight = NULL, *saveLeft=NULL;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //save the pointer values of the old campaign
-    saveRight = oldTuple->right;
-    saveLeft = oldTuple->left;
-
-    //copy the data from the new campaign to the old one
-    *oldTuple = *newTuple;
-
-    //restore the pointer values
-    oldTuple->right = saveRight;
-    oldTuple->left = saveLeft;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : campaign to which copy data                                                      */
-/*      campaign from which copy data                                                    */
-/*  P : Copies all the fields of campaigns from new to old                               */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_campaign_index(void* oldelem, void* newelem){
-    i_ccam_PK* oldTuple = (i_ccam_PK*)oldelem;
-    i_ccam_PK* newTuple = (i_ccam_PK*)newelem;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //copy the data from the new campaign to the old one
-    *oldTuple = *newTuple;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : campaign index buffer to which copy data                                         */
-/*      campaign from which copy data                                                    */
-/*  P : Copies all the fields of a campaign to a campaign index buffer                    */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_campaign_index_PK(void* index, void* elem){
-    ccam* element = (ccam*)elem;
-    i_ccam_PK* i_element = (i_ccam_PK*)index;
-
-    if(!index || !element)
-        return -1;
-
-    //copy the data from the campaign to the buffer
-    i_element->cam_id = element->id_cam;
-    strcpy(i_element->tp_rec, "I_CAMPK");
-
-    return 0;
 }
 
 /****************************************************************************************/
@@ -404,48 +298,6 @@ int assign_campaign_index_slot(void* index, void* offset){
 }
 
 /************************************************************/
-/*  I : campaigns to swap                                    */
-/*  P : Swaps two campaigns                                  */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_campaign(void* first, void* second){
-    ccam_recur tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(ccam_recur));
-
-    assign_campaign((void*)&tmp, first);
-    assign_campaign(first, second);
-    assign_campaign(second, (void*)&tmp);
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : campaigns to swap                                    */
-/*  P : Swaps two campaigns                                  */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_campaign_index(void* first, void* second){
-    i_ccam_PK tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(i_ccam_PK));
-
-    assign_campaign_index((void*)&tmp, first);
-    assign_campaign_index(first, second);
-    assign_campaign_index(second, (void*)&tmp);
-
-    return 0;
-}
-
-/************************************************************/
 /*  I : /                                                   */
 /*  P : Gets the element to the right of the current        */
 /*  O : Address of the element to the right                 */
@@ -458,21 +310,6 @@ void** campaign_right(void* current){
         return NULL;
 
     return (void**)&currentcam->right;
-}
-
-/************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the left of the current         */
-/*  O : Address of the element to the left                  */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** campaign_left(void* current){
-    ccam_recur* currentcam = (ccam_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentcam->left;
 }
 
 /************************************************************/
@@ -502,42 +339,4 @@ char* toString_campaign(void* current){
     ccam_recur *tmp = (ccam_recur*)current;
 
     return tmp->cam.nm_cam;
-}
-
-/************************************************************/
-/*  I : campaign AVL leaf of which to get the height        */
-/*  P : Gets the height of the current AVL leaf             */
-/*  O : Leaf height                                         */
-/************************************************************/
-int get_campaign_height(void* current){
-    ccam_recur *tmp = (ccam_recur*)current;
-
-    return (tmp == NULL ? 0 : tmp->height);
-}
-
-/************************************************************/
-/*  I : campaign AVL leaf of which to set the height        */
-/*      New value for the height                            */
-/*  P : Sets the height of the current AVL leaf             */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-int set_campaign_height(void* current, int value){
-    ccam_recur *tmp = (ccam_recur*)current;
-
-    tmp->height = value;
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : campaign AVL leaf to free                           */
-/*      /                                                   */
-/*  P : Frees the memory for the current campaign           */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-void* free_campaign(void* campaign, void* nullable){
-    free(campaign);
-    return 0;
 }

@@ -180,21 +180,6 @@ void Rec_job(cjob *rec)
 ///////////////////////////////////// DYNAMIC ALLOCATION METHODS /////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/****************************************************************************************/
-/*  I : /                                                                               */
-/*  P : Allocates memory for a Job and sets its height to 1 (leaf for AVL)              */
-/*  O : Job created if OK                                                               */
-/*      NULL if error                                                                   */
-/****************************************************************************************/
-void* allocate_job(void){
-    cjob_recur *tmp=NULL;
-
-    //memory allocation for the new element (calloc to initialize with all 0)
-    tmp = calloc(1, sizeof(cjob_recur));
-    if(tmp) tmp->height = 1;
-
-    return tmp;
-}
 
 /****************************************************************************************/
 /*  I : First Job to compare                                                            */
@@ -227,104 +212,6 @@ int compare_job_index_name(void* a, void* b){
 }
 
 /****************************************************************************************/
-/*  I : First Job to compare                                                            */
-/*      Name of the second  Job to compare                                              */
-/*  P : Compares two countries by their names                                           */
-/*  O :  1 if A > B                                                                     */
-/*       0 if A = B                                                                     */
-/*      -1 if A < B                                                                     */
-/****************************************************************************************/
-int compare_job_name_char(void* a, void* b){
-    cjob_recur *tmp_a = (cjob_recur*)a;
-
-    return strcmp(tmp_a->job.nm_job, (char*)b);
-}
-
-/****************************************************************************************/
-/*  I : Job index element to compare                                                    */
-/*      Name of the second  Job to compare                                              */
-/*  P : Compares two countries by their names                                           */
-/*  O :  1 if A > B                                                                     */
-/*       0 if A = B                                                                     */
-/*      -1 if A < B                                                                     */
-/****************************************************************************************/
-int compare_job_index_char(void* a, void* b){
-    i_cjob_name *tmp_a = (i_cjob_name*)a;
-
-    return strcmp(tmp_a->nm_job, (char*)b);
-}
-
-/****************************************************************************************/
-/*  I : Job to which copy data                                                          */
-/*      Job from which copy data                                                        */
-/*  P : Copies all the fields of countries from new to old                              */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_job(void* oldelem, void* newelem){
-    cjob_recur* oldTuple = (cjob_recur*)oldelem;
-    cjob_recur* newTuple = (cjob_recur*)newelem;
-    cjob_recur *saveRight = NULL, *saveLeft=NULL;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //save the pointer values of the old job
-    saveRight = oldTuple->right;
-    saveLeft = oldTuple->left;
-
-    //copy the data from the new job to the old one
-    *oldTuple = *newTuple;
-
-    //restore the pointer values
-    oldTuple->right = saveRight;
-    oldTuple->left = saveLeft;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : Job to which copy data                                                          */
-/*      Job from which copy data                                                        */
-/*  P : Copies all the fields of countries from new to old                              */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_job_index(void* oldelem, void* newelem){
-    i_cjob_name* oldTuple = (i_cjob_name*)oldelem;
-    i_cjob_name* newTuple = (i_cjob_name*)newelem;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //copy the data from the new job to the old one
-    *oldTuple = *newTuple;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : Job index buffer to which copy data                                             */
-/*      Job from which copy data                                                        */
-/*  P : Copies all the fields of a Job to a Job index buffer                            */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_job_index_name(void* index, void* elem){
-    cjob* element = (cjob*)elem;
-    i_cjob_name* i_element = (i_cjob_name*)index;
-
-    if(!index || !element)
-        return -1;
-
-    //copy the data from the job to the buffer
-    strcpy(i_element->nm_job, element->nm_job);
-    strcpy(i_element->tp_rec, "I_JOBNM");
-
-    return 0;
-}
-
-/****************************************************************************************/
 /*  I : index element to which assign the slot                                          */
 /*      slot (file offset) in which the base data element is                            */
 /*  P : assigns a slot (file offset) to an index element                                */
@@ -344,48 +231,6 @@ int assign_job_index_slot(void* index, void* offset){
 }
 
 /************************************************************/
-/*  I : Countries to swap                                   */
-/*  P : Swaps two countries                                 */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_job(void* first, void* second){
-    cjob_recur tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(cjob_recur));
-
-    assign_job((void*)&tmp, first);
-    assign_job(first, second);
-    assign_job(second, (void*)&tmp);
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : Countries to swap                                   */
-/*  P : Swaps two countries                                 */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_job_index(void* first, void* second){
-    i_cjob_name tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(i_cjob_name));
-
-    assign_job_index((void*)&tmp, first);
-    assign_job_index(first, second);
-    assign_job_index(second, (void*)&tmp);
-
-    return 0;
-}
-
-/************************************************************/
 /*  I : /                                                   */
 /*  P : Gets the element to the right of the current        */
 /*  O : Address of the element to the right                 */
@@ -398,21 +243,6 @@ void** job_right(void* current){
         return NULL;
 
     return (void**)&currentjob->right;
-}
-
-/************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the left of the current         */
-/*  O : Address of the element to the left                  */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** job_left(void* current){
-    cjob_recur* currentjob = (cjob_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentjob->left;
 }
 
 /************************************************************/
@@ -442,43 +272,4 @@ char* toString_job(void* current){
     cjob_recur *tmp = (cjob_recur*)current;
 
     return tmp->job.nm_job;
-}
-
-/************************************************************/
-/*  I : Job AVL leaf of which to get the height             */
-/*  P : Gets the height of the current AVL leaf             */
-/*  O : Leaf height                                         */
-/************************************************************/
-int get_job_height(void* current){
-    cjob_recur *tmp = (cjob_recur*)current;
-
-
-    return (tmp == NULL ? 0 : tmp->height);
-}
-
-/************************************************************/
-/*  I : job AVL leaf of which to set the height             */
-/*      New value for the height                            */
-/*  P : Sets the height of the current AVL leaf             */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-int set_job_height(void* current, int value){
-    cjob_recur *tmp = (cjob_recur*)current;
-
-    tmp->height = value;
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : job AVL leaf to free                            */
-/*      /                                                   */
-/*  P : Frees the memory for the current job            */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-void* free_job(void* job, void* nullable){
-    free(job);
-    return 0;
 }

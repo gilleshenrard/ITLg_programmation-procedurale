@@ -36,23 +36,11 @@ void Print_job(dbc *db);
 void Rec_job(cjob *rec);
 
 // dynamic structures methods
-void* allocate_job(void);
 int compare_job_name(void* a, void* b);
 int compare_job_index_name(void* a, void* b);
-int compare_job_name_char(void* a, void* b);
-int compare_job_index_char(void* a, void* b);
-int assign_job(void* oldelem, void* newelem);
-int assign_job_index(void* oldelem, void* newelem);
-int assign_job_index_name(void* index, void* elem);
 int assign_job_index_slot(void* index, void* offset);
-int swap_job(void* first, void* second);
-int swap_job_index(void* first, void* second);
 void** job_right(void* current);
-void** job_left(void* current);
 int Rec_job_list(void *record, void* nullable);
 char* toString_job(void* current);
-int get_job_height(void* current);
-int set_job_height(void* current, int value);
-void* free_job(void* job, void* nullable);
 
 #endif // DB_JOB_H_INCLUDED

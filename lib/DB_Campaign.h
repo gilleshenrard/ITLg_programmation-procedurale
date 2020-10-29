@@ -36,23 +36,12 @@ void Print_campaign(dbc *db);
 void Rec_campaign(ccam *rec);
 
 // dynamic structures methods
-void* allocate_campaign(void);
 int compare_campaign_PK(void* a, void* b);
 int compare_campaign_PK_index(void* a, void* b);
-int compare_campaign_PK_int(void* a, void* b);
 int compare_campaign_index_int(void* a, void* b);
-int assign_campaign(void* oldelem, void* newelem);
-int assign_campaign_index(void* oldelem, void* newelem);
-int assign_campaign_index_PK(void* index, void* elem);
 int assign_campaign_index_slot(void* index, void* offset);
-int swap_campaign(void* first, void* second);
-int swap_campaign_index(void* first, void* second);
 void** campaign_right(void* current);
-void** campaign_left(void* current);
 int Rec_campaign_list(void *record, void* nullable);
 char* toString_campaign(void* current);
-int get_campaign_height(void* current);
-int set_campaign_height(void* current, int value);
-void* free_campaign(void* campaign, void* nullable);
 
 #endif // DB_CAMPAIGN_H_INCLUDED

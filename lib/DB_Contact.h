@@ -36,23 +36,12 @@ void Print_contact(dbc *db);
 void Rec_contact(ccon *rec);
 
 // dynamic structures methods
-void* allocate_contact(void);
 int compare_contact_cpy(void* a, void* b);
 int compare_contact_cpy_index(void* a, void* b);
-int compare_contact_cpy_int(void* a, void* b);
 int compare_contact_index_int(void* a, void* b);
-int assign_contact(void* oldelem, void* newelem);
-int assign_contact_index(void* oldelem, void* newelem);
-int assign_contact_index_cpy(void* index, void* elem);
 int assign_contact_index_slot(void* index, void* offset);
-int swap_contact(void* first, void* second);
-int swap_contact_index(void* first, void* second);
 void** contact_right(void* current);
-void** contact_left(void* current);
 int Rec_contact_list(void *record, void* nullable);
 char* toString_contact(void* current);
-int get_contact_height(void* current);
-int set_contact_height(void* current, int value);
-void* free_contact(void* contact, void* nullable);
 
 #endif // DB_CONTACT_H_INCLUDED
