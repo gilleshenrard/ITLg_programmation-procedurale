@@ -40,7 +40,7 @@ void Import_CSV_campaign(dbc *db){
         if (PRT) printf("\n---------------------------\n%s\n",line);
         if (PRT) printf("%s\n", line);
 
-
+        //read the campaign ID (ptr1) and the campain name (ptr2), then set the campaign ID
         ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
         ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
         memset(fld, 0, BUF_LEN);
@@ -48,7 +48,7 @@ void Import_CSV_campaign(dbc *db){
         fld[strlen(ptr1)]='\0';
         cam.id_cam = atoi(fld);                    if (PRT) printf("%d\n", cam.id_cam);
 
-        //read the campaign name (ptr1) and the campain type (ptr2), then set the campaign name
+        //set the campaign name and read the campaign type
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cam.nm_cam, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cam.nm_cam);
