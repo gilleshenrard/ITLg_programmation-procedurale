@@ -13,61 +13,95 @@ void Import_CSV_campaign(dbc *db){
 	ccam cam;
 	FILE *fpi, *fp_lg;
 
+	//open DB files
     db->fp = fopen(DB_file, "rb+");
     fp_lg = fopen(log_file, "a");
 
+    //open Import file
 	fpi = fopen(CSV_cam_imp, "r");
 	if (fpi == NULL) { printf("Erreur\n"); return; }
 
     printf("\ncampaigns : importing ...\n");
 
+    //read the first 200 characters in the import file
     fgets(line, 200, fpi);
 
+    //set the DB file pointer to the beginning of the Campains data block
     fseek(db->fp, db->hdr.off_cam, SEEK_SET);
 
     printf("%lu\n",(unsigned long int)db->hdr.off_cam);
 
     while (fgets(line, 200, fpi) != NULL)
     {
+        //clean the buffer up and set the record type to cam
         memset(&cam, 0, sizeof(ccam));
         strcpy(cam.tp_rec, "cam");
 
         if (PRT) printf("\n---------------------------\n%s\n",line);
         if (PRT) printf("%s\n", line);
 
+
         ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
         ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
         memset(fld, 0, BUF_LEN);
         strncpy(fld, ptr1, ptr2-ptr1-1);
+        fld[strlen(ptr1)]='\0';
         cam.id_cam = atoi(fld);                    if (PRT) printf("%d\n", cam.id_cam);
+
+        //read the campaign name (ptr1) and the campain type (ptr2), then set the campaign name
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cam.nm_cam, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cam.nm_cam);
+        cam.nm_cam[strlen(ptr1)]='\0';
+
+        //set the campaign type and read the campaign date
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cam.tp_cam, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cam.nm_cam);
+        cam.tp_cam[strlen(ptr1)]='\0';
+
+        //set the campaign date and read the campaign level denomination
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cam.dt_cam, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cam.nm_cam);
+        cam.dt_cam[strlen(ptr1)]='\0';
+
+        //set the campaign level denomination and read the department
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cam.nm_lev, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cam.nm_cam);
+        cam.nm_lev[strlen(ptr1)]='\0';
+
+        //set the department and read the sector
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cam.nm_dep, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cam.nm_cam);
+        cam.nm_dep[strlen(ptr1)]='\0';
+
+        //set the sector and read the zone
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cam.nm_sec, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cam.nm_cam);
+        cam.nm_sec[strlen(ptr1)]='\0';
+
+        //set the zone and read the year
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cam.nm_zon, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cam.nm_cam);
+        cam.nm_zon[strlen(ptr1)]='\0';
+
+        //set the year and read the cost
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(fld, ptr1, ptr2-ptr1-1);
+        fld[strlen(ptr1)]='\0';
         cam.nr_year = atoi(fld);                   if (PRT) printf("%d\n", cam.id_cam);
+
+        //set the cost
         ptr1 = ptr2;
         memset(fld, 0, BUF_LEN);
         strncpy(fld, ptr1, strlen(ptr1)-1);
+        fld[strlen(ptr1)]='\0';
         cam.cost = atof(fld);                      if (PRT) printf("%d\n", cam.id_cam);
 
         fwrite(&cam, 1, sizeof(ccam), db->fp);
