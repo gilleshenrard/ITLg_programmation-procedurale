@@ -15,51 +15,70 @@ void Import_CSV_Country(dbc *db)
 	ccty cty;
 	FILE *fpi, *fp_lg;
 
+	//open DB files
     db->fp = fopen(DB_file, "rb+");
     fp_lg = fopen(log_file, "a");
 
+    //open Import file
 	fpi = fopen(CSV_cty_imp, "r");
 	if (fpi == NULL) { printf("Erreur\n"); return; }
 
     printf("\nCountry : importing ...\n");
 
+    //read the first 200 characters in the import file
     fgets(line, 200, fpi);
 
+    //set the DB file pointer to the beginning of the Countries data block
     fseek(db->fp, db->hdr.off_cty, SEEK_SET);
 
     printf("%lu\n",(unsigned long int)db->hdr.off_cty);
 
     while (fgets(line, 200, fpi) != NULL)
     {
+        //clean the buffer up and set the record type to cty
         memset(&cty, 0, sizeof(ccty));
         strcpy(cty.tp_rec, "CTY");
 
         if (PRT) printf("\n---------------------------\n%s\n",line);
         if (PRT) printf("%s\n", line);
 
+        //read the country ID (ptr1) and the country name (ptr2), then set the country ID
         ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
         ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
         memset(fld, 0, BUF_LEN);
         strncpy(fld, ptr1, ptr2-ptr1-1);
+        fld[strlen(ptr1)]='\0';
         cty.id_cty = atoi(fld);                    if (PRT) printf("%d\n", cty.id_cty);
+
+        //set the country name and read the country zone
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cty.nm_cty, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cty.nm_cty);
+        cty.nm_cty[strlen(ptr1)]='\0';
+
+        //set the country zone and read the country ISO code
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cty.nm_zon, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cty.nm_zon);
+        cty.nm_zon[strlen(ptr1)]='\0';
+
+        //set the country ISO code
         ptr1 = ptr2;
         strncpy(cty.cd_iso, ptr1, strlen(ptr1)-1); if (PRT) printf("%s\n", cty.cd_iso);
+        cty.cd_iso[strlen(ptr1)]='\0';
 
+        //write the final record
         fwrite(&cty, 1, sizeof(ccty), db->fp);
 
         i++;
     }
 
+    //save the amount of countries imported
     db->nr_cty = i;
 
     fprintf(fp_lg, "Country imported : %lu\n", (unsigned long int)db->nr_cty);
 
+    //close all files
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
