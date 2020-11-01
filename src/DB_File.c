@@ -12,7 +12,6 @@
 ****************************************************************************************/
 int Create_DB(dbc *db, char filename[])
 {
-    int i;
     ccty cty = {0};
     cjob job = {0};
     cind ind = {0};
@@ -57,38 +56,31 @@ int Create_DB(dbc *db, char filename[])
 
     // Creation de la table country ----------------------------
     strcpy(cty.tp_rec, "CTY");
-    for (i=0; i<SZ_CTY; i++)
-        fwrite(&cty, 1, sizeof(ccty), db->fp);
+    fwrite(&cty, sizeof(ccty), SZ_CTY, db->fp);
 
     // Creation de la table job ----------------------------
     strcpy(job.tp_rec, "JOB");
-    for (i=0; i<SZ_JOB; i++)
-        fwrite(&job, 1, sizeof(cjob), db->fp);
+    fwrite(&job, sizeof(cjob), SZ_JOB, db->fp);
 
     // Creation de la table industry ----------------------------
     strcpy(ind.tp_rec, "IND");
-    for (i=0; i<SZ_IND; i++)
-        fwrite(&ind, 1, sizeof(cind), db->fp);
+    fwrite(&ind, sizeof(cind), SZ_IND, db->fp);
 
     // Creation de la table group ----------------------------
     strcpy(grp.tp_rec, "GRP");
-    for (i=0; i<SZ_GRP; i++)
-        fwrite(&grp, 1, sizeof(cgrp), db->fp);
+    fwrite(&grp, sizeof(cgrp), SZ_GRP, db->fp);
 
     // Creation de la table campain ----------------------------
     strcpy(cam.tp_rec, "CAM");
-    for (i=0; i<SZ_CAM; i++)
-        fwrite(&cam, 1, sizeof(ccam), db->fp);
+    fwrite(&cam, sizeof(ccam), SZ_CAM, db->fp);
 
     // Creation de la table contact ----------------------------
     strcpy(con.tp_rec, "CON");
-    for (i=0; i<SZ_CON; i++)
-        fwrite(&con, 1, sizeof(ccon), db->fp);
+    fwrite(&con, sizeof(ccon), SZ_CON, db->fp);
 
     // Creation de la table company ----------------------------
     strcpy(cpy.tp_rec, "CPY");
-    for (i=0; i<SZ_CPY; i++)
-        fwrite(&cpy, 1, sizeof(ccpy), db->fp);
+    fwrite(&cpy, sizeof(ccpy), SZ_CPY, db->fp);
 
     fprintf(fp_lg, "Database %s created\n", db->hdr.db_name);
 
