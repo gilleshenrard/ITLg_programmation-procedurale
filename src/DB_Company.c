@@ -15,75 +15,114 @@ void Import_CSV_company(dbc *db)
 	ccpy cpy;
 	FILE *fpi, *fp_lg;
 
+	//open the DB files
     db->fp = fopen(DB_file, "rb+");
     fp_lg = fopen(log_file, "a");
 
+    //open the import file
 	fpi = fopen(CSV_cpy_imp, "r");
 	if (fpi == NULL) { printf("Erreur\n"); return; }
 
     printf("\nCompany : importing ...\n");
 
+    //read the first 200 characters
     fgets(line, 200, fpi);
 
+    //place the DB file pointer at the beginning of the companies data block
     fseek(db->fp, db->hdr.off_cpy, SEEK_SET);
 
     printf("%lu\n",(unsigned long int)db->hdr.off_cpy);
 
     while (fgets(line, 200, fpi) != NULL)
     {
+        //clean the buffer up and set the record type to cpy
         memset(&cpy, 0, sizeof(ccpy));
         strcpy(cpy.tp_rec, "cpy");
 
         if (PRT) printf("\n---------------------------\n%s\n",line);
         if (PRT) printf("%s\n", line);
 
+        //read the company ID (ptr1) and the country ID (ptr2), then set the company ID
         ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
         ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
-        memset(fld, 0, BUF_LEN);
         strncpy(fld, ptr1, ptr2-ptr1-1);
+        fld[strlen(ptr1)]='\0';
         cpy.id_cpy = atoi(fld);                    if (PRT) printf("%d\n", cpy.id_cpy);
+
+        //set the country ID and read the industry ID
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(fld, ptr1, ptr2-ptr1-1);
+        fld[strlen(ptr1)]='\0';
         cpy.id_cty = atoi(fld);                    if (PRT) printf("%d\n", cpy.id_cty);
+
+        //set the industry ID and read the group ID
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(fld, ptr1, ptr2-ptr1-1);
+        fld[strlen(ptr1)]='\0';
         cpy.id_ind = atoi(fld);                    if (PRT) printf("%d\n", cpy.id_ind);
+
+        //set the group ID and read the company name
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(fld, ptr1, ptr2-ptr1-1);
+        fld[strlen(ptr1)]='\0';
         cpy.id_grp = atoi(fld);                    if (PRT) printf("%d\n", cpy.id_grp);
+
+        //set the company name and read the company address
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cpy.nm_cpy, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.nm_cpy);
+        cpy.nm_cpy[strlen(ptr1)]='\0';
+
+        //set the company address and read the company city
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cpy.nm_adr, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.nm_adr);
+        cpy.nm_adr[strlen(ptr1)]='\0';
+
+        //set the company city and read the company postal code
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cpy.nm_cit, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.nm_cit);
+        cpy.nm_cit[strlen(ptr1)]='\0';
+
+        //set the company postal code and read the company phone number
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cpy.cd_pos, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.cd_pos);
+        cpy.cd_pos[strlen(ptr1)]='\0';
+
+        //set the company postal code and read the company website
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cpy.nr_tel, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.nr_tel);
+        cpy.nr_tel[strlen(ptr1)]='\0';
+
+        //set the company website and read the company creation date
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(cpy.nm_www, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.nm_www);
+        cpy.nm_www[strlen(ptr1)]='\0';
+
+        //set the company creation date
         ptr1 = ptr2;
         strncpy(cpy.dt_cre, ptr1, strlen(ptr1)-1); if (PRT) printf("%s\n", cpy.dt_cre);
+        cpy.dt_cre[strlen(ptr1)]='\0';
 
+        //write the final record
         fwrite(&cpy, 1, sizeof(ccpy), db->fp);
 
         i++;
     }
 
+    //save the amount of countries imported
     db->nr_cpy = i;
 
     fprintf(fp_lg, "Company imported : %lu\n", (unsigned long int)db->nr_cpy);
 
+    //close all files
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
