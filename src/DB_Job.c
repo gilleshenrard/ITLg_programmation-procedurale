@@ -15,51 +15,70 @@ void Import_CSV_job(dbc *db)
 	cjob job;
 	FILE *fpi, *fp_lg;
 
+	//open DB files
     db->fp = fopen(DB_file, "rb+");
     fp_lg = fopen(log_file, "a");
 
+    //open Import file
 	fpi = fopen(CSV_job_imp, "r");
 	if (fpi == NULL) { printf("Erreur\n"); return; }
 
     printf("\nJob : importing ...\n");
 
+    //read the first 200 characters in the import file
     fgets(line, 200, fpi);
 
+    //set the DB file pointer to the beginning of the Jobs data block
     fseek(db->fp, db->hdr.off_job, SEEK_SET);
 
     printf("%lu\n",(unsigned long int)db->hdr.off_job);
 
     while (fgets(line, 200, fpi) != NULL)
     {
+        //clean the buffer up and set the record type to job
         memset(&job, 0, sizeof(cjob));
         strcpy(job.tp_rec, "JOB");
 
         if (PRT) printf("\n---------------------------\n%s\n",line);
         if (PRT) printf("%s\n", line);
 
+        //read the job ID (ptr1) and the level nomination (ptr2), then set the job ID
         ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
         ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
         memset(fld, 0, BUF_LEN);
         strncpy(fld, ptr1, ptr2-ptr1-1);
+        fld[strlen(ptr1)]='\0';
         job.id_job = atoi(fld);                    if (PRT) printf("%d\n", job.id_job);
+
+        //set the level nomination and read the department
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(job.nm_lev, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", job.nm_lev);
+        job.nm_lev[strlen(ptr1)]='\0';
+
+        //set the department and read job name
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(job.nm_dep, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", job.nm_dep);
+        job.nm_dep[strlen(ptr1)]='\0';
+
+        //set the job name
         ptr1 = ptr2;
         strncpy(job.nm_job, ptr1, strlen(ptr1)-1); if (PRT) printf("%s\n", job.nm_job);
+        job.nm_job[strlen(ptr1)]='\0';
 
+        //write the final record
         fwrite(&job, 1, sizeof(cjob), db->fp);
 
         i++;
     }
 
+    //save the amount of jobs imported
     db->nr_job = i;
 
     fprintf(fp_lg, "Job imported : %lu\n", (unsigned long int)db->nr_job);
 
+    //close all files
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
