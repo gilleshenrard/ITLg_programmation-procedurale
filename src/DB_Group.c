@@ -13,53 +13,72 @@ void Import_CSV_Group(dbc *db){
 	cgrp grp;
 	FILE *fpi, *fp_lg;
 
+	//open DB files
     db->fp = fopen(DB_file, "rb+");
     fp_lg = fopen(log_file, "a");
 
+    //open Import file
 	fpi = fopen(CSV_grp_imp, "r");
 	if (fpi == NULL) { printf("Erreur\n"); return; }
 
     printf("\nGroups : importing ...\n");
 
+    //read the first 200 characters in the import file
     fgets(line, 200, fpi);
 
+    //set the DB file pointer to the beginning of the Groups data block
     fseek(db->fp, db->hdr.off_grp, SEEK_SET);
 
     printf("%lu\n",(unsigned long int)db->hdr.off_grp);
 
     while (fgets(line, 200, fpi) != NULL)
     {
+        //clean the buffer up and set the record type to grp
         memset(&grp, 0, sizeof(cgrp));
         strcpy(grp.tp_rec, "GRP");
 
         if (PRT) printf("\n---------------------------\n%s\n",line);
         if (PRT) printf("%s\n", line);
 
+        //read the group ID (ptr1) and the group name (ptr2), then set the group ID
         ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
         ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
         memset(fld, 0, BUF_LEN);
         strncpy(fld, ptr1, ptr2-ptr1-1);
+        fld[strlen(ptr1)]='\0';
         grp.id_grp = atoi(fld);                    if (PRT) printf("%d\n", grp.id_grp);
+
+        //set the group name and read the group country
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(grp.nm_grp, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", grp.nm_grp);
+        grp.nm_grp[strlen(ptr1)]='\0';
+
+        //set the group country and read the group country ID
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
         strncpy(grp.cd_cty, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", grp.cd_cty);
+        grp.cd_cty[strlen(ptr1)]='\0';
+
+        //set the group country ID
         ptr1 = ptr2;
         memset(fld, 0, BUF_LEN);
         strncpy(fld, ptr1, strlen(ptr1)-1);
+        fld[strlen(ptr1)]='\0';
         grp.id_cty = atoi(fld);                    if (PRT) printf("%d\n", grp.id_cty);
 
+        //write the final record
         fwrite(&grp, 1, sizeof(cgrp), db->fp);
 
         i++;
     }
 
+    //save the amount of groups imported
     db->nr_grp = i;
 
     fprintf(fp_lg, "Groups imported : %lu\n", (unsigned long int)db->nr_grp);
 
+    //close all files
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
