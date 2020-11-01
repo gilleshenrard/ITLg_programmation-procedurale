@@ -313,13 +313,34 @@ int compare_campaign_index_int(void* a, void* b){
 }
 
 /****************************************************************************************/
+/*  I : campaign index buffer to which copy data                                        */
+/*      campaign from which copy data                                                   */
+/*  P : Copies all the fields of a campaign to a campaign index buffer                  */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_campaign_index_PK(void* index, void* elem){
+    ccam* element = (ccam*)elem;
+    i_ccam_PK* i_element = (i_ccam_PK*)index;
+
+    if(!index || !element)
+        return -1;
+
+    //copy the data from the campaign to the buffer
+    i_element->cam_id = element->id_cam;
+    strcpy(i_element->tp_rec, "I_CAMPK");
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : index element to which assign the slot                                          */
 /*      slot (file offset) in which the base data element is                            */
 /*  P : assigns a slot (file offset) to an index element                                */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_campaign_index_slot(void* index, void* offset){
+int assign_campaign_index_slot(void* index, uint32_t* offset){
     i_ccam_PK* element = (i_ccam_PK*)index;
     long* slot = (long*)offset;
 

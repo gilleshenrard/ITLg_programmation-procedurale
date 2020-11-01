@@ -127,32 +127,32 @@ int main(int argc, char *argv[])
 void create_db(dbc* db){
     //company metadata
     meta_t index_cpy = {NULL, db->nr_cpy, sizeof(i_ccpy_name), compare_company_index_name, NULL};
-    t_datablock index_block_cpy = {&db->hdr.off_i_cpy_name, &db->hdr.i_cpy_name, sizeof(i_ccpy_name)};
-    t_datablock table_block_cpy = {&db->hdr.off_cpy, 0, sizeof(ccpy)};
+    t_datablock index_block_cpy = {&db->hdr.off_i_cpy_name, &db->hdr.i_cpy_name, sizeof(i_ccpy_name), assign_company_index_slot, assign_company_index_name};
+    t_datablock table_block_cpy = {&db->hdr.off_cpy, 0, sizeof(ccpy), NULL, NULL};
     //contacts metadata
     meta_t index_con = {NULL, db->nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, NULL};
-    t_datablock index_block_con = {&db->hdr.off_i_con_cpy, &db->hdr.i_con_cpy, sizeof(i_ccon_cpy)};
-    t_datablock table_block_con = {&db->hdr.off_con, 0, sizeof(ccon)};
+    t_datablock index_block_con = {&db->hdr.off_i_con_cpy, &db->hdr.i_con_cpy, sizeof(i_ccon_cpy), assign_contact_index_slot, assign_contact_index_cpy};
+    t_datablock table_block_con = {&db->hdr.off_con, 0, sizeof(ccon), NULL, NULL};
     //campaign metadata
     meta_t index_cam = {NULL, db->nr_cam, sizeof(i_ccam_PK), compare_campaign_PK_index, NULL};
-    t_datablock index_block_cam = {&db->hdr.off_i_cam_pk, &db->hdr.i_cam_pk, sizeof(i_ccam_PK)};
-    t_datablock table_block_cam = {&db->hdr.off_cam, 0, sizeof(ccam)};
+    t_datablock index_block_cam = {&db->hdr.off_i_cam_pk, &db->hdr.i_cam_pk, sizeof(i_ccam_PK), assign_campaign_index_slot, assign_campaign_index_PK};
+    t_datablock table_block_cam = {&db->hdr.off_cam, 0, sizeof(ccam), NULL, NULL};
     //country metadata
     meta_t index_cty = {NULL, db->nr_cty, sizeof(i_ccty_name), compare_country_index_name, NULL};
-    t_datablock index_block_cty = {&db->hdr.off_i_cty_name, &db->hdr.i_cty_name, sizeof(i_ccty_name)};
-    t_datablock table_block_cty = {&db->hdr.off_cty, 0, sizeof(ccty)};
+    t_datablock index_block_cty = {&db->hdr.off_i_cty_name, &db->hdr.i_cty_name, sizeof(i_ccty_name), assign_contact_index_slot, assign_country_index_name};
+    t_datablock table_block_cty = {&db->hdr.off_cty, 0, sizeof(ccty), NULL, NULL};
     //group metadata
     meta_t index_grp = {NULL, db->nr_grp, sizeof(i_cgrp_FK), compare_group_FK_index, NULL};
-    t_datablock index_block_grp = {&db->hdr.off_i_grp_fk, &db->hdr.i_grp_fk, sizeof(i_cgrp_FK)};
-    t_datablock table_block_grp = {&db->hdr.off_grp, 0, sizeof(cgrp)};
+    t_datablock index_block_grp = {&db->hdr.off_i_grp_fk, &db->hdr.i_grp_fk, sizeof(i_cgrp_FK), assign_group_index_slot, assign_group_index_FK};
+    t_datablock table_block_grp = {&db->hdr.off_grp, 0, sizeof(cgrp), NULL, NULL};
     //industry metadata
     meta_t index_ind = {NULL, db->nr_ind, sizeof(i_cind_PK), compare_industry_PK_index, NULL};
-    t_datablock index_block_ind = {&db->hdr.off_i_ind_pk, &db->hdr.i_ind_pk, sizeof(i_cind_PK)};
-    t_datablock table_block_ind = {&db->hdr.off_ind, 0, sizeof(cind)};
+    t_datablock index_block_ind = {&db->hdr.off_i_ind_pk, &db->hdr.i_ind_pk, sizeof(i_cind_PK), assign_industry_index_slot, assign_industry_index_PK};
+    t_datablock table_block_ind = {&db->hdr.off_ind, 0, sizeof(cind), NULL, NULL};
     //job metadata
     meta_t index_job = {NULL, db->nr_job, sizeof(i_cjob_name), compare_job_index_name, NULL};
-    t_datablock index_block_job = {&db->hdr.off_i_job_name, &db->hdr.i_job_name, sizeof(i_cjob_name)};
-    t_datablock table_block_job = {&db->hdr.off_job, 0, sizeof(cjob)};
+    t_datablock index_block_job = {&db->hdr.off_i_job_name, &db->hdr.i_job_name, sizeof(i_cjob_name), assign_job_index_slot, assign_job_index_name};
+    t_datablock table_block_job = {&db->hdr.off_job, 0, sizeof(cjob), NULL, NULL};
 
     //attempt creating the DB file
     if(Create_DB(db, DB_name) < 0){
@@ -168,25 +168,25 @@ void create_db(dbc* db){
     Import_CSV_job(db);
 
     printf("Creating the index for Companies (by name) : ");
-    create_index_file(db, &index_cpy, db->nr_cpy, assign_company_index_slot, &index_block_cpy, &table_block_cpy);
+    create_index_file(db, &index_cpy, db->nr_cpy, &index_block_cpy, &table_block_cpy);
     printf("done\n");
     printf("Creating the index for Contacts (by company FK) : ");
-    create_index_file(db, &index_con, db->nr_con, assign_contact_index_slot, &index_block_con, &table_block_con);
+    create_index_file(db, &index_con, db->nr_con, &index_block_con, &table_block_con);
     printf("done\n");
     printf("Creating the index for Campaigns (by ID) : ");
-    create_index_file(db, &index_cam, db->nr_cam, assign_campaign_index_slot, &index_block_cam, &table_block_cam);
+    create_index_file(db, &index_cam, db->nr_cam, &index_block_cam, &table_block_cam);
     printf("done\n");
     printf("Creating the index for Countries (by name) : ");
-    create_index_file(db, &index_cty, db->nr_cty, assign_contact_index_slot, &index_block_cty, &table_block_cty);
+    create_index_file(db, &index_cty, db->nr_cty, &index_block_cty, &table_block_cty);
     printf("done\n");
     printf("Creating the index for Groups (by FK) : ");
-    create_index_file(db, &index_grp, db->nr_grp, assign_group_index_slot, &index_block_grp, &table_block_grp);
+    create_index_file(db, &index_grp, db->nr_grp, &index_block_grp, &table_block_grp);
     printf("done\n");
     printf("Creating the index for Industries (by ID) : ");
-    create_index_file(db, &index_ind, db->nr_ind, assign_industry_index_slot, &index_block_ind, &table_block_ind);
+    create_index_file(db, &index_ind, db->nr_ind, &index_block_ind, &table_block_ind);
     printf("done\n");
     printf("Creating the index for Jobs (by name) : ");
-    create_index_file(db, &index_job, db->nr_job, assign_job_index_slot, &index_block_job, &table_block_job);
+    create_index_file(db, &index_job, db->nr_job, &index_block_job, &table_block_job);
     printf("done\n");
 }
 

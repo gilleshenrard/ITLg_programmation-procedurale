@@ -269,13 +269,34 @@ int compare_contact_index_int(void* a, void* b){
 }
 
 /****************************************************************************************/
+/*  I : contact index buffer to which copy data                                         */
+/*      contact from which copy data                                                    */
+/*  P : Copies all the fields of a contact to a contact index buffer                    */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_contact_index_cpy(void* index, void* elem){
+    ccon* element = (ccon*)elem;
+    i_ccon_cpy* i_element = (i_ccon_cpy*)index;
+
+    if(!index || !element)
+        return -1;
+
+    //copy the data from the contact to the buffer
+    i_element->cpy_id = element->id_cpy;
+    strcpy(i_element->tp_rec, "I_CONCA");
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : index element to which assign the slot                                          */
 /*      slot (file offset) in which the base data element is                            */
 /*  P : assigns a slot (file offset) to an index element                                */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_contact_index_slot(void* index, void* offset){
+int assign_contact_index_slot(void* index, uint32_t* offset){
     i_ccon_cpy* element = (i_ccon_cpy*)index;
     long* slot = (long*)offset;
 

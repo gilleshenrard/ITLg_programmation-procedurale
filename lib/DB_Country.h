@@ -45,6 +45,8 @@ void Rec_Country(ccty *rec);
 // dynamic structures methods
 int compare_country_name(void* a, void* b);
 int compare_country_index_name(void* a, void* b);
+int assign_country_index_name(void* index, void* elem);
+int assign_country_index_slot(void* index, uint32_t* offset);
 int Rec_Country_list(void *record, void* nullable);
 char* toString_Country(void* current);
 

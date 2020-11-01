@@ -111,10 +111,10 @@ int Create_DB(dbc *db, char filename[])
 /*  O :  0 if OK                                                                    */
 /*      -1 otherwise                                                                */
 /************************************************************************************/
-long create_index_file(dbc* db, meta_t* meta, uint32_t nb, int (*setSlot)(void*, void*), t_datablock* i_block, t_datablock* t_block){
-    void *i_iterator=NULL, *buffer=NULL;
-    uint32_t i=0;
-    long root=0, tmp=0;
+long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block, t_datablock* t_block){
+    void *t_buffer=NULL, *i_buffer=NULL;
+    uint32_t i=0, tmp=0;
+    long root=0;
 
     //open the files and position the pointers at the end
     db->fp = fopen(DB_file, "r+b");
@@ -122,40 +122,36 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, int (*setSlot)(void*,
     if(!db->fp)
         return -1;
 
-    //allocate the memory for the full size and single element buffer and set an iterator pointer to it
+    //allocate the memory for the index array + create a data table single element buffer
     meta->structure = calloc(nb, meta->elementsize);
     meta->nbelements = nb;
-    i_iterator = meta->structure;
-    buffer = calloc(1, t_block->elem_size);
+    t_buffer = calloc(1, t_block->elem_size);
 
     //read the proper table sequentially and fill the buffer with it
     fseek(db->fp, *t_block->block_off, SEEK_SET);
     for(i=0 ; i < nb ; i++){
-        //get the offset in the actual table and save it in the corresponding index element
+        //get the current offset in the DB, read the current element
+        //  and set its slot field
         tmp = ftell(db->fp);
-        (*setSlot)(i_iterator, &tmp);
+        fread(t_buffer, t_block->elem_size, 1, db->fp);
 
-        //read the element and copy the selected field in the index element
-        fread(buffer, t_block->elem_size, 1, db->fp);
-        set_arrayelem(meta, i, buffer);
-
-        //reset the buffer and increment the iterator
-        memset(buffer, 0, t_block->elem_size);
-        i_iterator += meta->elementsize;
+        //copy the relevant info from the table elem in the index one
+        //  + inform it about the element slot
+        i_buffer = get_arrayelem(meta, i);
+        (*i_block->doCopy)(i_buffer, t_buffer);
+        (*i_block->setSlot)(i_buffer, &tmp);
     }
 
-    //sort the buffer
-    quickSortArray(meta, 0, nb-1);
+    //sort the index array
+   quickSortArray(meta, 0, nb-1);
 
     //save the index offset in the header
     fseek(db->fp, 0, SEEK_END);
     *i_block->block_off = ftell(db->fp);
 
     //sequentially write the buffer in memory (without tree chaining)
-    i_iterator = meta->structure;
     for(i=0 ; i < nb ; i++){
-        fwrite(i_iterator, meta->elementsize, 1, db->fp);
-        i_iterator += meta->elementsize;
+        fwrite(get_arrayelem(meta, i), meta->elementsize, 1, db->fp);
     }
 
     //create the binary tree chaining
@@ -167,7 +163,7 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, int (*setSlot)(void*,
     fseek(db->fp, 0, SEEK_SET);
     fwrite(&db->hdr, sizeof(hder), 1, db->fp);
 
-    free(buffer);
+    free(t_buffer);
     free(meta->structure);
     fclose(db->fp);
 

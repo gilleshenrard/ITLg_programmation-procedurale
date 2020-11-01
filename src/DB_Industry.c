@@ -237,13 +237,34 @@ int compare_industry_PK_index(void* a, void* b){
 }
 
 /****************************************************************************************/
+/*  I : industry index buffer to which copy data                                        */
+/*      industry from which copy data                                                   */
+/*  P : Copies all the fields of a industry to a industry index buffer                  */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_industry_index_PK(void* index, void* elem){
+    cind* element = (cind*)elem;
+    i_cind_PK* i_element = (i_cind_PK*)index;
+
+    if(!index || !element)
+        return -1;
+
+    //copy the data from the Industry to the buffer
+    i_element->ind_id = element->id_ind;
+    strcpy(i_element->tp_rec, "I_INDFK");
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : index element to which assign the slot                                          */
 /*      slot (file offset) in which the base data element is                            */
 /*  P : assigns a slot (file offset) to an index element                                */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_industry_index_slot(void* index, void* offset){
+int assign_industry_index_slot(void* index, uint32_t* offset){
     i_cind_PK* element = (i_cind_PK*)index;
     long* slot = (long*)offset;
 

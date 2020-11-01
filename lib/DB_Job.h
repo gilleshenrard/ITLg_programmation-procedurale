@@ -38,7 +38,8 @@ void Rec_job(cjob *rec);
 // dynamic structures methods
 int compare_job_name(void* a, void* b);
 int compare_job_index_name(void* a, void* b);
-int assign_job_index_slot(void* index, void* offset);
+int assign_job_index_name(void* index, void* elem);
+int assign_job_index_slot(void* index, uint32_t* offset);
 void** job_right(void* current);
 int Rec_job_list(void *record, void* nullable);
 char* toString_job(void* current);

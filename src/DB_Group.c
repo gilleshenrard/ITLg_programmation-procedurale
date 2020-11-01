@@ -276,13 +276,34 @@ int compare_group_nm_index(void* a, void* b){
 }
 
 /****************************************************************************************/
+/*  I : Group index buffer to which copy data                                           */
+/*      Group from which copy data                                                      */
+/*  P : Copies all the fields of a group to a group index buffer                        */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_group_index_FK(void* index, void* elem){
+    cgrp* element = (cgrp*)elem;
+    i_cgrp_FK* i_element = (i_cgrp_FK*)index;
+
+    if(!index || !element)
+        return -1;
+
+    //copy the data from the country to the buffer
+    i_element->cty_id = element->id_cty;
+    strcpy(i_element->tp_rec, "I_GRPFK");
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : index element to which assign the slot                                          */
 /*      slot (file offset) in which the base data element is                            */
 /*  P : assigns a slot (file offset) to an index element                                */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_group_index_slot(void* index, void* offset){
+int assign_group_index_slot(void* index, uint32_t* offset){
     i_cgrp_FK* element = (i_cgrp_FK*)index;
     long* slot = (long*)offset;
 

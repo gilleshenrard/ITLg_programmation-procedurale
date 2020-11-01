@@ -230,6 +230,46 @@ int compare_country_index_name(void* a, void* b){
     return strcmp(tmp_a->nm_cty, tmp_b->nm_cty);
 }
 
+/****************************************************************************************/
+/*  I : Country index buffer to which copy data                                         */
+/*      Country from which copy data                                                    */
+/*  P : Copies all the fields of a country to a country index buffer                    */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_country_index_name(void* index, void* elem){
+    ccty* element = (ccty*)elem;
+    i_ccty_name* i_element = (i_ccty_name*)index;
+
+    if(!index || !element)
+        return -1;
+
+    //copy the data from the country to the buffer
+    strcpy(i_element->nm_cty, element->nm_cty);
+    strcpy(i_element->tp_rec, "I_CTYNM");
+
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : index element to which assign the slot                                          */
+/*      slot (file offset) in which the base data element is                            */
+/*  P : assigns a slot (file offset) to an index element                                */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_country_index_slot(void* index, uint32_t* offset){
+    i_ccty_name* element = (i_ccty_name*)index;
+    long* slot = (long*)offset;
+
+    if(!index || !offset)
+        return -1;
+
+    element->slot = *slot;
+
+    return 0;
+}
+
 /************************************************************/
 /*  I : /                                                   */
 /*  P : Gets the element to the right of the current        */

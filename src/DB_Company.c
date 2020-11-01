@@ -321,7 +321,7 @@ int compare_company_index_char(void* a, void* b){
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_company_index_slot(void* index, void* offset){
+int assign_company_index_slot(void* index, uint32_t* offset){
     i_ccpy_name* element = (i_ccpy_name*)index;
     long* slot = (long*)offset;
 
@@ -329,6 +329,27 @@ int assign_company_index_slot(void* index, void* offset){
         return -1;
 
     element->slot = *slot;
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Index element to which copy the data                */
+/*      Table element from which copy the data              */
+/*  P : Fill an index element with the proper information   */
+/*  O : -1 if error                                         */
+/*      0 otherwise                                         */
+/************************************************************/
+int assign_company_index_name(void* index, void* elem){
+    ccpy* element = (ccpy*)elem;
+    i_ccpy_name* i_element = (i_ccpy_name*)index;
+
+    if(!index || !element)
+        return -1;
+
+    //copy the data from the Company to the buffer
+    strcpy(i_element->nm_cpy, element->nm_cpy);
+    strcpy(i_element->tp_rec, "I_CPYNM");
 
     return 0;
 }

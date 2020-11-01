@@ -231,13 +231,34 @@ int compare_job_index_name(void* a, void* b){
 }
 
 /****************************************************************************************/
+/*  I : Job index buffer to which copy data                                             */
+/*      Job from which copy data                                                        */
+/*  P : Copies all the fields of a Job to a Job index buffer                            */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_job_index_name(void* index, void* elem){
+    cjob* element = (cjob*)elem;
+    i_cjob_name* i_element = (i_cjob_name*)index;
+
+    if(!index || !element)
+        return -1;
+
+    //copy the data from the job to the buffer
+    strcpy(i_element->nm_job, element->nm_job);
+    strcpy(i_element->tp_rec, "I_JOBNM");
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : index element to which assign the slot                                          */
 /*      slot (file offset) in which the base data element is                            */
 /*  P : assigns a slot (file offset) to an index element                                */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_job_index_slot(void* index, void* offset){
+int assign_job_index_slot(void* index, uint32_t* offset){
     i_cjob_name* element = (i_cjob_name*)index;
     long* slot = (long*)offset;
 

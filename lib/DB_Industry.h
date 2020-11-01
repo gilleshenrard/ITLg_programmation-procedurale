@@ -38,7 +38,8 @@ void Rec_industry(cind *rec);
 // dynamic structures methods
 int compare_industry_PK(void* a, void* b);
 int compare_industry_PK_index(void* a, void* b);
-int assign_industry_index_slot(void* index, void* offset);
+int assign_industry_index_PK(void* index, void* elem);
+int assign_industry_index_slot(void* index, uint32_t* offset);
 void** industry_right(void* current);
 int Rec_industry_list(void *record, void* nullable);
 char* toString_industry(void* current);
