@@ -173,32 +173,23 @@ void Load_contact(dbc *db){
 }
 
 /****************************************************************************************/
-/*  I : Database from which print the contacts                                          */
-/*  P : Prints all the contacts in the memory buffer                                    */
-/*  O : /                                                                               */
-/****************************************************************************************/
-void Print_contact(dbc *db){
-    uint64_t i;
-
-    for (i=0; i<db->nr_con; i++)
-        Rec_contact(&db->con[i]);
-
-    return;
-}
-
-/****************************************************************************************/
 /*  I : contact record to print                                                        */
 /*  P : Prints an contact record                                                       */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void Rec_contact(ccon *rec){
-    printf("%4d  %4d  %4d  %4d\n",
-            rec->id_cam,
-            rec->id_cpy,
-            rec->id_job,
-            rec->nr_rep);
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+int Rec_contact(void *rec, void *nullable){
+    ccon* tmp = (ccon*)rec;
 
-    return;
+    printf("%4d  %4d  %4d  %4d\n",
+            tmp->id_cam,
+            tmp->id_cpy,
+            tmp->id_job,
+            tmp->nr_rep);
+
+    return 0;
 }
 
 
@@ -217,12 +208,12 @@ void Rec_contact(ccon *rec){
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_contact_cpy(void* a, void* b){
-    ccon_recur *tmp_a = (ccon_recur*)a;
-    ccon_recur *tmp_b = (ccon_recur*)b;
+    ccon *tmp_a = (ccon*)a;
+    ccon *tmp_b = (ccon*)b;
 
-    if(tmp_a->con.id_cpy > tmp_b->con.id_cpy)
+    if(tmp_a->id_cpy > tmp_b->id_cpy)
         return 1;
-    else if(tmp_a->con.id_cpy < tmp_b->con.id_cpy)
+    else if(tmp_a->id_cpy < tmp_b->id_cpy)
         return -1;
     else
         return 0;
@@ -309,45 +300,13 @@ int assign_contact_index_slot(void* index, uint32_t* offset){
 }
 
 /************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the right of the current        */
-/*  O : Address of the element to the right                 */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** contact_right(void* current){
-    ccon_recur* currentcon = (ccon_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentcon->right;
-}
-
-/************************************************************/
-/*  I : record to display                                   */
-/*      /                                                   */
-/*  P : Displays an algo-compatible record                  */
-/*  O : /                                                   */
-/************************************************************/
-#ifdef __GNUC__
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-int Rec_contact_list(void *record, void* nullable){
-    ccon_recur* tmp = (ccon_recur*)record;
-
-    Rec_contact(&tmp->con);
-
-    return 0;
-}
-
-/************************************************************/
 /*  I : record to summarise as a string                     */
 /*      /                                                   */
 /*  P : returns a string representing the contact          */
 /*  O : /                                                   */
 /************************************************************/
 /*char* toString_contact(void* current){
-    ccon_recur *tmp = (ccon_recur*)current;
+    ccon *tmp = (ccon*)current;
 
-    return tmp->con.id_cpy;
+    return tmp->id_cpy;
 }*/

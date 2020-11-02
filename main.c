@@ -428,9 +428,8 @@ int menu_campaigns(dbc* db){
 int menu_contacts(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
-    ccon_recur *contact = NULL;
-    void **right = NULL;
-    meta_t con_list = {NULL, NULL, 0, sizeof(ccon_recur), compare_contact_cpy, NULL};
+    dyndata_t *contact = NULL;
+    meta_t con_list = {NULL, NULL, 0, sizeof(ccon), compare_contact_cpy, NULL};
     meta_t con_array = {NULL, NULL, db->nr_con, sizeof(ccon), NULL, NULL};
     char menu_con[4][32]={  "Menu des Contacts",
                             "Lister les contacts",
@@ -449,9 +448,8 @@ int menu_contacts(dbc* db){
                 while(j<con_list.nbelements && choice!='q'){
                     i = 0;
                     while(i<PG_SIZE && j < con_list.nbelements){
-                        Rec_contact_list(contact, NULL);
-                        right = contact_right(contact);
-                        contact = *((ccon_recur**)right);
+                        Rec_contact(contact, NULL);
+                        contact = getright(contact);
                         i++;
                         j++;
                     }
@@ -492,9 +490,8 @@ int menu_contacts(dbc* db){
 int menu_groups(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
-    cgrp_recur *group = NULL;
-    void **right = NULL;
-    meta_t grp_list = {NULL, NULL, 0, sizeof(cgrp_recur), compare_group_FK, NULL};
+    dyndata_t *group = NULL;
+    meta_t grp_list = {NULL, NULL, 0, sizeof(cgrp), compare_group_FK, NULL};
     meta_t grp_array = {NULL, NULL, db->nr_grp, sizeof(cgrp), NULL, NULL};
     char menu_grp[4][32]={  "Menu des groupes",
                             "Lister les groupes",
@@ -513,9 +510,8 @@ int menu_groups(dbc* db){
                 while(j<grp_list.nbelements && choice!='q'){
                     i = 0;
                     while(i<PG_SIZE && j < grp_list.nbelements){
-                        Rec_group_list(group, NULL);
-                        right = group_right(group);
-                        group = *((cgrp_recur**)right);
+                        Rec_Group(group->data, NULL);
+                        group = getright(group);
                         i++;
                         j++;
                     }

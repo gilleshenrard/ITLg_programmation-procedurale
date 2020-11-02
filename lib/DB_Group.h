@@ -12,13 +12,6 @@
 typedef struct cgrp_recur cgrp_recur;
 typedef struct cgrp_file cgrp_file;
 
-struct cgrp_recur{
-    cgrp grp;
-    int height;
-    cgrp_recur *left;
-    cgrp_recur *right;
-};
-
 typedef struct i_Group_FK{
     char tp_rec[SZ_TYPE];   //record type (I_GRP)
     int cty_id;             //foreign key
@@ -41,8 +34,7 @@ typedef struct i_Group_name{
 void Import_CSV_Group(dbc *db);
 void Export_CSV_Group(dbc *db);
 void Load_Group(dbc *db);
-void Print_Group(dbc *db);
-void Rec_Group(cgrp *rec);
+int Rec_Group(void *rec, void *nullable);
 
 // dynamic structures methods
 int compare_group_FK(void* a, void* b);
@@ -51,8 +43,6 @@ int compare_group_FK_index(void* a, void* b);
 int compare_group_nm_index(void* a, void* b);
 int assign_group_index_FK(void* index, void* elem);
 int assign_group_index_slot(void* index, uint32_t* offset);
-void** group_right(void* current);
-int Rec_group_list(void *record, void* nullable);
 char* toString_group(void* current);
 
 #endif // DB_GROUP_H_INCLUDED
