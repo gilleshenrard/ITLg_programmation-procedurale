@@ -1,239 +1,36 @@
 #include "reports.h"
 
-/****************************************************************************************
-* Imprime un record Screen Report depuis le buffer
-****************************************************************************************/
-void Rec_scr_report(cscr *rec)
-{
-    printf("%6d %6d %6d %28s %28s\n",
-           rec->id_job,
-           rec->id_cam,
-           rec->nr_rep,
-           rec->cam_nm,
-           rec->cam_tp);
-
-    return;
-}
-
 /****************************************************************************************/
-/*  I : /                                                                               */
-/*  P : Allocates memory for a Screen Report and sets its height to 1 (leaf for AVL)          */
-/*  O : Screen Report created if OK                                                           */
-/*      NULL if error                                                                   */
-/****************************************************************************************/
-void* allocate_scr_report(void){
-    cscr_recur *tmp=NULL;
-
-    //memory allocation for the new element (calloc to initialize with all 0)
-    tmp = calloc(1, sizeof(cscr_recur));
-    if(tmp) tmp->height = 1;
-
-    return tmp;
-}
-
-/****************************************************************************************/
-/*  I : First Screen Report to compare                                                        */
-/*      Second  Screen Report to compare                                                      */
+/*  I : First Screen Report to compare                                                  */
+/*      Second  Screen Report to compare                                                */
 /*  P : Compares two countries by their names                                           */
 /*  O :  1 if A > B                                                                     */
 /*       0 if A = B                                                                     */
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_scr_report_type(void* a, void* b){
-    cscr_recur *tmp_a = (cscr_recur*)a;
-    cscr_recur *tmp_b = (cscr_recur*)b;
+    cscr *tmp_a = (cscr*)a;
+    cscr *tmp_b = (cscr*)b;
 
-    return strcmp(tmp_a->rep.cam_tp, tmp_b->rep.cam_tp);
+    return strcmp(tmp_a->cam_tp, tmp_b->cam_tp);
 }
 
-/****************************************************************************************/
-/*  I : First scr_report to compare                                                     */
-/*      Name of the second  Screen Report to compare                                    */
-/*  P : Compares two countries by their names                                           */
-/*  O :  1 if A > B                                                                     */
-/*       0 if A = B                                                                     */
-/*      -1 if A < B                                                                     */
-/****************************************************************************************/
-int compare_scr_report_type_char(void* a, void* b){
-    cscr_recur *tmp_a = (cscr_recur*)a;
-
-    return strcmp(tmp_a->rep.cam_tp, (char*)b);
-}
-
-/****************************************************************************************/
-/*  I : Screen Report to which copy data                                                */
-/*      Screen Report from which copy data                                              */
-/*  P : Copies all the fields of countries from new to old                              */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int copy_scr_report(void* oldelem, void* newelem){
-    cscr_recur* oldTuple = (cscr_recur*)oldelem;
-    cscr_recur* newTuple = (cscr_recur*)newelem;
-    cscr_recur *saveRight = NULL, *saveLeft=NULL;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //save the pointer values of the old Screen Report
-    saveRight = oldTuple->right;
-    saveLeft = oldTuple->left;
-
-    //copy the data from the new Screen Report to the old one
-    *oldTuple = *newTuple;
-
-    //restore the pointer values
-    oldTuple->right = saveRight;
-    oldTuple->left = saveLeft;
-
-    return 0;
-}
-
-/****************************************************************************************/
-/*  I : Screen Report to which copy data                                                */
-/*      Screen Report from which copy data                                              */
-/*  P : Copies all the fields of countries from new to old                              */
-/*  O :  0 if OK                                                                        */
-/*      -1 otherwise                                                                    */
-/****************************************************************************************/
-int assign_scr_report(void* oldelem, void* newelem){
-    cscr_recur* oldTuple = (cscr_recur*)oldelem;
-    cscr_recur* newTuple = (cscr_recur*)newelem;
-    cscr_recur *saveRight = NULL, *saveLeft=NULL;
-
-    if(!oldelem || !newelem)
-        return -1;
-
-    //save the pointer values of the old Screen Report
-    saveRight = oldTuple->right;
-    saveLeft = oldTuple->left;
-
-    //copy the data from the new Screen Report to the old one
-    *oldTuple = *newTuple;
-
-    //restore the pointer values
-    oldTuple->right = saveRight;
-    oldTuple->left = saveLeft;
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : Countries to swap                                   */
-/*  P : Swaps two countries                                 */
-/*  O : 0 -> Swapped                                        */
-/*     -1 -> Error                                          */
-/************************************************************/
-int swap_scr_report(void* first, void* second){
-    cscr_recur tmp;
-
-    if(!first || !second)
-        return -1;
-
-    memset(&tmp, 0, sizeof(cscr_recur));
-
-    copy_scr_report((void*)&tmp, first);
-    copy_scr_report(first, second);
-    copy_scr_report(second, (void*)&tmp);
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the right of the current        */
-/*  O : Address of the element to the right                 */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** scr_report_right(void* current){
-    cscr_recur* currentCty = (cscr_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentCty->right;
-}
-
-/************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the left of the current         */
-/*  O : Address of the element to the left                  */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** scr_report_left(void* current){
-    cscr_recur* currentCty = (cscr_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentCty->left;
-}
-
-/************************************************************/
-/*  I : record to display                                   */
-/*      /                                                   */
-/*  P : Displays an algo-compatible record                  */
-/*  O : /                                                   */
-/************************************************************/
+/****************************************************************************************
+* Imprime un record Screen Report depuis le buffer
+****************************************************************************************/
 #ifdef __GNUC__
 # pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
-int Rec_scr_report_list(void *record, void* nullable){
-    cscr_recur* tmp = (cscr_recur*)record;
+int Rec_scr_report(void *rec, void *nullable){
+    cscr *tmp = (cscr*)rec;
 
-    Rec_scr_report(&tmp->rep);
+    printf("%6d %6d %6d %28s %28s\n",
+           tmp->id_job,
+           tmp->id_cam,
+           tmp->nr_rep,
+           tmp->cam_nm,
+           tmp->cam_tp);
 
-    return 0;
-}
-
-/************************************************************/
-/*  I : record to summarise as a string                     */
-/*      /                                                   */
-/*  P : returns a string representing the Screen Report           */
-/*  O : /                                                   */
-/************************************************************/
-char* toString_scr_report(void* current){
-    cscr_recur *tmp = (cscr_recur*)current;
-
-    return tmp->rep.cam_nm;
-}
-
-/************************************************************/
-/*  I : Screen Report AVL leaf of which to get the height         */
-/*  P : Gets the height of the current AVL leaf             */
-/*  O : Leaf height                                         */
-/************************************************************/
-int get_scr_report_height(void* current){
-    cscr_recur *tmp = (cscr_recur*)current;
-
-
-    return (tmp == NULL ? 0 : tmp->height);
-}
-
-/************************************************************/
-/*  I : Screen Report AVL leaf of which to set the height         */
-/*      New value for the height                            */
-/*  P : Sets the height of the current AVL leaf             */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-int set_scr_report_height(void* current, int value){
-    cscr_recur *tmp = (cscr_recur*)current;
-
-    tmp->height = value;
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : Screen Report AVL leaf to free                            */
-/*      /                                                   */
-/*  P : Frees the memory for the current Screen Report            */
-/*  O :  0 if OK                                            */
-/*      -1 if error                                         */
-/************************************************************/
-void* free_scr_report(void* report, void* nullable){
-    free(report);
     return 0;
 }
 
@@ -249,7 +46,7 @@ int print_screen_report(dbc* db, char* nm_cpy){
     //metadata for all the lists created
     meta_t list_cpy = {NULL, NULL, 0, sizeof(ccpy), compare_company_name, NULL};
     meta_t list_con = {NULL, NULL, 0, sizeof(ccon), compare_contact_cpy, NULL};
-    meta_t list_rep = {NULL, NULL, 0, sizeof(cscr_recur), compare_scr_report_type, NULL};
+    meta_t list_rep = {NULL, NULL, 0, sizeof(cscr), compare_scr_report_type, NULL};
     //metadata for all the indexes used
     meta_t index_cpy = {0};
     meta_t index_con = {0};
@@ -259,7 +56,7 @@ int print_screen_report(dbc* db, char* nm_cpy){
     char buffer[6] = {0};
     dyndata_t* next = NULL;
     ccpy* cpy_buffer = NULL;
-    cscr_recur* rep_buffer = NULL;
+    cscr* rep_buffer = NULL;
     ccam cam = {0};
 
     //finish preparing the indexes metadata
@@ -277,15 +74,18 @@ int print_screen_report(dbc* db, char* nm_cpy){
         return -1;
     }
 
-    //search for all occurrences of the company name (creates a linked list)
-    searchall_index(db->fp, db->hdr.i_cpy_name, nm_cpy, &index_cpy, &list_cpy, sizeof(ccpy));
-    cpy_buffer=list_cpy.structure;
+    //search for all occurrences of the company name in the companies name index
+    //      and create a companies list
+    searchall_index(db->fp, db->hdr.i_cpy_name, nm_cpy, &index_cpy, &list_cpy);
 
     //if not found, error
     if(!list_cpy.nbelements){
         fprintf(stderr, "\n\n%s : non-trouve\n\n", nm_cpy);
         return -1;
     }
+
+    //set the buffer to the first occurence found by default
+    cpy_buffer=get_listelem(&list_cpy, 0);
 
     //if more than one occurrence, make the user choose which one
     if(list_cpy.nbelements > 1){
@@ -300,15 +100,11 @@ int print_screen_report(dbc* db, char* nm_cpy){
         choix = atoi(buffer);
 
         //save the selected one in a buffer
-        next = list_cpy.structure;
-        for(int i=1 ; i<choix ; i++){
-            next = getright(next);
-        }
-        cpy_buffer = (ccpy*)next->data;
+        cpy_buffer = get_listelem(&list_cpy, choix - 1);
     }
 
     //look for all the contacts related to the chosen company and create a linked list
-    searchall_index(db->fp, db->hdr.i_con_cpy, &cpy_buffer->id_cpy, &index_con, &list_con, sizeof(ccon));
+    searchall_index(db->fp, db->hdr.i_con_cpy, &cpy_buffer->id_cpy, &index_con, &list_con);
 
     //browse through all the contacts found
     next = list_con.structure;
@@ -317,12 +113,12 @@ int print_screen_report(dbc* db, char* nm_cpy){
         searchone_index(db->fp, db->hdr.i_cam_pk, &((ccon*)next->data)->id_cam, &index_cam, &cam, sizeof(ccam));
 
         //fill the report buffer with the campaign found
-        rep_buffer = calloc(1, sizeof(cscr_recur));
-        rep_buffer->rep.id_cam = cam.id_cam;
-        rep_buffer->rep.id_job = ((ccon*)next->data)->id_job;
-        rep_buffer->rep.nr_rep = ((ccon*)next->data)->nr_rep;
-        strcpy(rep_buffer->rep.cam_nm, cam.nm_cam);
-        strcpy(rep_buffer->rep.cam_tp, cam.tp_cam);
+        rep_buffer = calloc(1, sizeof(cscr));
+        rep_buffer->id_cam = cam.id_cam;
+        rep_buffer->id_job = ((ccon*)next->data)->id_job;
+        rep_buffer->nr_rep = ((ccon*)next->data)->nr_rep;
+        strcpy(rep_buffer->cam_nm, cam.nm_cam);
+        strcpy(rep_buffer->cam_tp, cam.tp_cam);
 
         //add it to a list
         insertListSorted(&list_rep, rep_buffer);
@@ -333,7 +129,7 @@ int print_screen_report(dbc* db, char* nm_cpy){
 
     //display all the campaigns sorted by type, according to the report requested
     printf("ID_job\tID_cam\tnr_rep\t\t\t   cam_nm\t\t      cam_type\n");
-    foreachList(&list_rep, NULL, Rec_scr_report_list);
+    foreachList(&list_rep, NULL, Rec_scr_report);
 
     //clean up all the lists and close the DB
     while(list_cpy.structure)
@@ -397,7 +193,7 @@ int export_detailed_report(dbc* db, char* nm_grp){
     }
 
     //search for all occurrences of the company name (creates a linked list)
-    searchall_index(db->fp, db->hdr.i_grp_nm, nm_grp, &index_grp, &list_grp_nm, sizeof(cgrp));
+    searchall_index(db->fp, db->hdr.i_grp_nm, nm_grp, &index_grp, &list_grp_nm);
     group=list_grp_nm.structure;
 
     //if not found, error
@@ -427,7 +223,7 @@ int export_detailed_report(dbc* db, char* nm_grp){
     }
 
     //look for all the contacts related to the chosen company and create a linked list
-    searchall_index(db->fp, db->hdr.i_cpy_grp, &((cgrp*)group->data)->id_grp, &index_cpy, &list_cpy_grp, sizeof(ccpy));
+    searchall_index(db->fp, db->hdr.i_cpy_grp, &((cgrp*)group->data)->id_grp, &index_cpy, &list_cpy_grp);
 
     return 0;
 }
