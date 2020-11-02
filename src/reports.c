@@ -86,6 +86,12 @@ int print_screen_report(dbc* db, char* nm_cpy){
         return -1;
     }
 
+
+    //
+    //  Retrieve all the companies matching the name typed by the user
+    //
+
+
     //search for all occurrences of the company name in the companies name index
     //      and create a companies list
     searchall_index(db->fp, db->hdr.i_cpy_name, nm_cpy, &index_cpy, &list_cpy);
@@ -115,6 +121,12 @@ int print_screen_report(dbc* db, char* nm_cpy){
         cpy_buffer = get_listelem(&list_cpy, choix - 1);
     }
 
+    //
+    // Retrieve all the contacts associated to the company chosen
+    //     (sorted by campaign type)
+    //
+
+
     //look for all the contacts related to the chosen company and create a linked list
     searchall_index(db->fp, db->hdr.i_con_cpy, &cpy_buffer->id_cpy, &index_con, &list_con);
 
@@ -139,9 +151,21 @@ int print_screen_report(dbc* db, char* nm_cpy){
         next = getright(next);
     }
 
+
+    //
+    // Display the list of final occurrences mathing the research
+    //
+
+
     //display all the campaigns sorted by type, according to the report requested
     printf("ID_job\tID_cam\tnr_rep\t\t\t   cam_nm\t\t      cam_type\n");
     foreachList(&list_rep, NULL, Rec_scr_report);
+
+
+    //
+    // Ressources cleanup
+    //
+
 
     //clean up all the lists and close the DB
     while(list_cpy.structure)
@@ -204,6 +228,12 @@ int export_detailed_report(dbc* db, char* nm_grp){
         return -1;
     }
 
+
+    //
+    // Retrieve all the groups matching the name entered by the user
+    //
+
+
     //search for all occurrences of the group name (creates a linked list)
     searchall_index(db->fp, db->hdr.i_grp_nm, nm_grp, &index_grp, &list_grp_nm);
 
@@ -231,6 +261,12 @@ int export_detailed_report(dbc* db, char* nm_grp){
         //save the selected one in a buffer
         group = get_listelem(&list_grp_nm, choix - 1);
     }
+
+
+    //
+    // Retrieve all the companies with a Group ID mathing the one chosen
+    //
+
 
     //look for all the contacts related to the chosen company and create a linked list
     searchall_index(db->fp, db->hdr.i_cpy_grp, &((cgrp*)group->data)->id_grp, &index_cpy, &list_cpy_grp);
