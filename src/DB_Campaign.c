@@ -211,38 +211,29 @@ void Load_campaign(dbc *db){
 }
 
 /****************************************************************************************/
-/*  I : Database from which print the campaigns                                          */
-/*  P : Prints all the campaigns in the memory buffer                                    */
-/*  O : /                                                                               */
-/****************************************************************************************/
-void Print_campaign(dbc *db){
-    uint64_t i;
-
-    for (i=0; i<db->nr_cam; i++)
-        Rec_campaign(&db->cam[i]);
-
-    return;
-}
-
-/****************************************************************************************/
 /*  I : campaign record to print                                                        */
 /*  P : Prints an campaign record                                                       */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void Rec_campaign(ccam *rec){
-    printf("%4d %40s %16s %10s %16s %10s %16s %16s %3d %f\n",
-            rec->id_cam,
-            rec->nm_cam,
-            rec->tp_cam,
-            rec->dt_cam,
-            rec->nm_lev,
-            rec->nm_dep,
-            rec->nm_sec,
-            rec->nm_zon,
-            rec->nr_year,
-            rec->cost);
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+int Rec_campaign(void *rec, void* nullable){
+    ccam* tmp = (ccam*)rec;
 
-    return;
+    printf("%4d %40s %16s %10s %16s %10s %16s %16s %3d %f\n",
+            tmp->id_cam,
+            tmp->nm_cam,
+            tmp->tp_cam,
+            tmp->dt_cam,
+            tmp->nm_lev,
+            tmp->nm_dep,
+            tmp->nm_sec,
+            tmp->nm_zon,
+            tmp->nr_year,
+            tmp->cost);
+
+    return 0;
 }
 
 
@@ -261,12 +252,12 @@ void Rec_campaign(ccam *rec){
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_campaign_PK(void* a, void* b){
-    ccam_recur *tmp_a = (ccam_recur*)a;
-    ccam_recur *tmp_b = (ccam_recur*)b;
+    ccam *tmp_a = (ccam*)a;
+    ccam *tmp_b = (ccam*)b;
 
-    if(tmp_a->cam.id_cam > tmp_b->cam.id_cam)
+    if(tmp_a->id_cam > tmp_b->id_cam)
         return 1;
-    else if(tmp_a->cam.id_cam < tmp_b->cam.id_cam)
+    else if(tmp_a->id_cam < tmp_b->id_cam)
         return -1;
     else
         return 0;
@@ -353,45 +344,13 @@ int assign_campaign_index_slot(void* index, uint32_t* offset){
 }
 
 /************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the right of the current        */
-/*  O : Address of the element to the right                 */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** campaign_right(void* current){
-    ccam_recur* currentcam = (ccam_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentcam->right;
-}
-
-/************************************************************/
-/*  I : record to display                                   */
-/*      /                                                   */
-/*  P : Displays an algo-compatible record                  */
-/*  O : /                                                   */
-/************************************************************/
-#ifdef __GNUC__
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-int Rec_campaign_list(void *record, void* nullable){
-    ccam_recur* tmp = (ccam_recur*)record;
-
-    Rec_campaign(&tmp->cam);
-
-    return 0;
-}
-
-/************************************************************/
 /*  I : record to summarise as a string                     */
 /*      /                                                   */
 /*  P : returns a string representing the campaign          */
 /*  O : /                                                   */
 /************************************************************/
 char* toString_campaign(void* current){
-    ccam_recur *tmp = (ccam_recur*)current;
+    ccam *tmp = (ccam*)current;
 
-    return tmp->cam.nm_cam;
+    return tmp->nm_cam;
 }

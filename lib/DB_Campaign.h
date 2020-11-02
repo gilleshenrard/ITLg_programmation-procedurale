@@ -12,13 +12,6 @@
 typedef struct ccam_recur ccam_recur;
 typedef struct ccam_file ccam_file;
 
-struct ccam_recur{
-    ccam cam;
-    int height;
-    ccam_recur *left;
-    ccam_recur *right;
-};
-
 typedef struct i_campaign_PK{
     char tp_rec[SZ_TYPE];   //record type (I_CAM)
     int cam_id;             //primary key
@@ -32,8 +25,7 @@ typedef struct i_campaign_PK{
 void Import_CSV_campaign(dbc *db);
 void Export_CSV_campaign(dbc *db);
 void Load_campaign(dbc *db);
-void Print_campaign(dbc *db);
-void Rec_campaign(ccam *rec);
+int Rec_campaign(void *rec, void* nullable);
 
 // dynamic structures methods
 int compare_campaign_PK(void* a, void* b);
@@ -41,8 +33,6 @@ int compare_campaign_PK_index(void* a, void* b);
 int compare_campaign_index_int(void* a, void* b);
 int assign_campaign_index_PK(void* index, void* elem);
 int assign_campaign_index_slot(void* index, uint32_t* offset);
-void** campaign_right(void* current);
-int Rec_campaign_list(void *record, void* nullable);
 char* toString_campaign(void* current);
 
 #endif // DB_CAMPAIGN_H_INCLUDED

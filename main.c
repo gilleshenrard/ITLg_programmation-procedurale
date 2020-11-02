@@ -366,9 +366,8 @@ int menu_companies(dbc* db){
 int menu_campaigns(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
-    ccam_recur *campaign = NULL;
-    void **right = NULL;
-    meta_t cam_list = {NULL, NULL, 0, sizeof(ccam_recur), compare_campaign_PK, NULL};
+    dyndata_t *campaign = NULL;
+    meta_t cam_list = {NULL, NULL, 0, sizeof(ccam), compare_campaign_PK, NULL};
     meta_t cam_array = {NULL, NULL, db->nr_cam, sizeof(ccam), NULL, NULL};
     char menu_cam[4][32]={  "Menu des Campagnes",
                             "Lister les campagnes",
@@ -387,9 +386,8 @@ int menu_campaigns(dbc* db){
                 while(j<cam_list.nbelements && choice!='q'){
                     i = 0;
                     while(i<PG_SIZE && j < cam_list.nbelements){
-                        Rec_campaign_list(campaign, NULL);
-                        right = campaign_right(campaign);
-                        campaign = *((ccam_recur**)right);
+                        Rec_campaign(campaign->data, NULL);
+                        campaign = getright(campaign);
                         i++;
                         j++;
                     }
