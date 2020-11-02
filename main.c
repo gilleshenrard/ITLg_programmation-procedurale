@@ -320,9 +320,9 @@ int menu_companies(dbc* db){
     dyndata_t *companies = NULL;
     meta_t cpy_list = {NULL, NULL, 0, sizeof(ccpy), compare_company_name, NULL};
     meta_t cpy_array = {NULL, NULL, db->hdr.nr_cpy, sizeof(ccpy), NULL, NULL};
-    char menu_cpy[4][32]={  "Menu des Pays",
-                            "Lister les pays",
-                            "Exporter les pays",
+    char menu_cpy[4][32]={  "Menu des Compagnies",
+                            "Lister les Compagnies",
+                            "Exporter les Compagnies",
                             "Menu principal"};
 
     cpy_array.structure = db->cpy;
