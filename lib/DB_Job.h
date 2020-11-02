@@ -12,13 +12,6 @@
 typedef struct cjob_recur cjob_recur;
 typedef struct cjob_file cjob_file;
 
-struct cjob_recur{
-    cjob job;
-    int height;
-    cjob_recur *left;
-    cjob_recur *right;
-};
-
 typedef struct i_job_Name{
     char tp_rec[SZ_TYPE];   //record type (I_JOBNM)
     char nm_job[SZ_NAME];   //job name
@@ -32,16 +25,13 @@ typedef struct i_job_Name{
 void Import_CSV_job(dbc *db);
 void Export_CSV_job(dbc *db);
 void Load_job(dbc *db);
-void Print_job(dbc *db);
-void Rec_job(cjob *rec);
+int Rec_job(void *rec, void *nullable);
 
 // dynamic structures methods
 int compare_job_name(void* a, void* b);
 int compare_job_index_name(void* a, void* b);
 int assign_job_index_name(void* index, void* elem);
 int assign_job_index_slot(void* index, uint32_t* offset);
-void** job_right(void* current);
-int Rec_job_list(void *record, void* nullable);
 char* toString_job(void* current);
 
 #endif // DB_JOB_H_INCLUDED

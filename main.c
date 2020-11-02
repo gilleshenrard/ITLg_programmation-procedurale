@@ -614,9 +614,8 @@ int menu_industries(dbc* db){
 int menu_jobs(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
-    cjob_recur *job = NULL;
-    void **right = NULL;
-    meta_t job_list = {NULL, NULL, 0, sizeof(cjob_recur), compare_job_name, NULL};
+    dyndata_t *job = NULL;
+    meta_t job_list = {NULL, NULL, 0, sizeof(cjob), compare_job_name, NULL};
     meta_t job_array = {NULL, NULL, db->nr_job, sizeof(cjob), NULL, NULL};
     char menu_job[4][32]={  "Menu des Jobs",
                             "Lister les jobs",
@@ -635,9 +634,8 @@ int menu_jobs(dbc* db){
                 while(j<job_list.nbelements && choice!='q'){
                     i = 0;
                     while(i<PG_SIZE && j < job_list.nbelements){
-                        Rec_job_list(job, NULL);
-                        right = job_right(job);
-                        job = *((cjob_recur**)right);
+                        Rec_job(job->data, NULL);
+                        job = getright(job);
                         i++;
                         j++;
                     }

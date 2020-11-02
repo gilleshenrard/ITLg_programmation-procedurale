@@ -169,30 +169,22 @@ void Load_job(dbc *db)
 }
 
 /****************************************************************************************
-* Liste la table Job depuis le buffer
-****************************************************************************************/
-void Print_job(dbc *db)
-{
-    uint64_t i;
-
-    for (i=0; i<db->nr_job; i++)
-        Rec_job(&db->job[i]);
-
-    return;
-}
-
-/****************************************************************************************
 * Imprime un record Job depuis le buffer
 ****************************************************************************************/
-void Rec_job(cjob *rec)
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+int Rec_job(void *rec, void *nullable)
 {
-    printf("%3d %28s %28s %36s \n",
-           rec->id_job,
-           rec->nm_lev,
-           rec->nm_dep,
-           rec->nm_job );
+    cjob *tmp = (cjob*)rec;
 
-    return;
+    printf("%3d %28s %28s %36s \n",
+           tmp->id_job,
+           tmp->nm_lev,
+           tmp->nm_dep,
+           tmp->nm_job );
+
+    return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,10 +201,10 @@ void Rec_job(cjob *rec)
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_job_name(void* a, void* b){
-    cjob_recur *tmp_a = (cjob_recur*)a;
-    cjob_recur *tmp_b = (cjob_recur*)b;
+    cjob *tmp_a = (cjob*)a;
+    cjob *tmp_b = (cjob*)b;
 
-    return strcmp(tmp_a->job.nm_job, tmp_b->job.nm_job);
+    return strcmp(tmp_a->nm_job, tmp_b->nm_job);
 }
 
 /****************************************************************************************/
@@ -271,45 +263,13 @@ int assign_job_index_slot(void* index, uint32_t* offset){
 }
 
 /************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the right of the current        */
-/*  O : Address of the element to the right                 */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** job_right(void* current){
-    cjob_recur* currentjob = (cjob_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentjob->right;
-}
-
-/************************************************************/
-/*  I : record to display                                   */
-/*      /                                                   */
-/*  P : Displays an algo-compatible record                  */
-/*  O : /                                                   */
-/************************************************************/
-#ifdef __GNUC__
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-int Rec_job_list(void *record, void* nullable){
-    cjob_recur* tmp = (cjob_recur*)record;
-
-    Rec_job(&tmp->job);
-
-    return 0;
-}
-
-/************************************************************/
 /*  I : record to summarise as a string                     */
 /*      /                                                   */
 /*  P : returns a string representing the Job               */
 /*  O : /                                                   */
 /************************************************************/
 char* toString_job(void* current){
-    cjob_recur *tmp = (cjob_recur*)current;
+    cjob *tmp = (cjob*)current;
 
-    return tmp->job.nm_job;
+    return tmp->nm_job;
 }
