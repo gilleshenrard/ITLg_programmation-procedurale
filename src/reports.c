@@ -247,9 +247,9 @@ void* free_scr_report(void* report, void* nullable){
 /****************************************************************************************/
 int print_screen_report(dbc* db, char* nm_cpy){
     //metadata for all the lists created
-    meta_t list_cpy = {NULL, 0, sizeof(ccpy_recur), compare_company_name, NULL};
-    meta_t list_con = {NULL, 0, sizeof(ccon_recur), compare_contact_cpy, NULL};
-    meta_t list_rep = {NULL, 0, sizeof(cscr_recur), compare_scr_report_type, NULL};
+    meta_t list_cpy = {NULL, NULL, 0, sizeof(ccpy_recur), compare_company_name, NULL};
+    meta_t list_con = {NULL, NULL, 0, sizeof(ccon_recur), compare_contact_cpy, NULL};
+    meta_t list_rep = {NULL, NULL, 0, sizeof(cscr_recur), compare_scr_report_type, NULL};
     //metadata for all the indexes used
     meta_t index_cpy = {0};
     meta_t index_con = {0};
@@ -373,8 +373,8 @@ int export_aggregated_report(dbc* db){
 /****************************************************************************************/
 int export_detailed_report(dbc* db, char* nm_grp){
     //metadata for all the lists created
-    meta_t list_grp_nm = {NULL, 0, sizeof(cgrp_recur), compare_group_nm, NULL};
-    meta_t list_cpy_grp = {NULL, 0, sizeof(ccpy_recur), compare_company_grp, NULL};
+    meta_t list_grp_nm = {NULL, NULL, 0, sizeof(cgrp_recur), compare_group_nm, NULL};
+    meta_t list_cpy_grp = {NULL, NULL, 0, sizeof(ccpy_recur), compare_company_grp, NULL};
     //metadata for all the indexes used
     meta_t index_grp = {0};
     meta_t index_cpy = {0};
