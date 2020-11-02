@@ -195,7 +195,7 @@ int export_detailed_report(dbc* db, char* nm_grp){
     index_grp.elementsize = sizeof(i_cgrp_nm);
     index_grp.doCompare = compare_group_nm_index_char;
     index_cpy.elementsize = sizeof(i_ccpy_grp);
-    index_cpy.doCompare = compare_company_grp;
+    index_cpy.doCompare = compare_company_index_int;
 
     // open the DB
     db->fp = fopen(DB_file, "rb");
@@ -204,7 +204,7 @@ int export_detailed_report(dbc* db, char* nm_grp){
         return -1;
     }
 
-    //search for all occurrences of the company name (creates a linked list)
+    //search for all occurrences of the group name (creates a linked list)
     searchall_index(db->fp, db->hdr.i_grp_nm, nm_grp, &index_grp, &list_grp_nm);
 
     //if not found, error
@@ -213,7 +213,7 @@ int export_detailed_report(dbc* db, char* nm_grp){
         return -1;
     }
 
-    //select the first occurence by default
+    //select the first occurrence by default
     group=list_grp_nm.structure;
 
     //if more than one occurrence, make the user choose which one

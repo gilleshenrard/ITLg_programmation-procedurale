@@ -125,10 +125,13 @@ int main(int argc, char *argv[])
 /*  O : /                                                                               */
 /****************************************************************************************/
 void create_db(dbc* db){
-    //company metadata
-    meta_t index_cpy = {NULL, NULL, db->hdr.nr_cpy, sizeof(i_ccpy_name), compare_company_index_name, NULL};
-    t_datablock index_block_cpy = {&db->hdr.off_i_cpy_name, &db->hdr.i_cpy_name, sizeof(i_ccpy_name), assign_company_index_slot, assign_company_index_name};
+    //company name metadata
+    meta_t index_cpy_nm = {NULL, NULL, db->hdr.nr_cpy, sizeof(i_ccpy_name), compare_company_index_name, NULL};
+    t_datablock index_block_cpy_nm = {&db->hdr.off_i_cpy_name, &db->hdr.i_cpy_name, sizeof(i_ccpy_name), assign_company_index_nm_slot, assign_company_index_name};
     t_datablock table_block_cpy = {&db->hdr.off_cpy, 0, sizeof(ccpy), NULL, NULL};
+    //company group ID metadata
+    meta_t index_cpy_grp = {NULL, NULL, db->hdr.nr_cpy, sizeof(i_ccpy_grp), compare_company_index_grp, NULL};
+    t_datablock index_block_cpy_grp = {&db->hdr.off_i_cpy_grp, &db->hdr.i_cpy_grp, sizeof(i_ccpy_grp), assign_company_index_grp_slot, assign_company_index_grp};
     //contacts metadata
     meta_t index_con = {NULL, NULL, db->hdr.nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, NULL};
     t_datablock index_block_con = {&db->hdr.off_i_con_cpy, &db->hdr.i_con_cpy, sizeof(i_ccon_cpy), assign_contact_index_slot, assign_contact_index_cpy};
@@ -171,7 +174,10 @@ void create_db(dbc* db){
     Import_CSV_job(db);
 
     printf("Creating the index for Companies (by name) : ");
-    create_index_file(db, &index_cpy, db->hdr.nr_cpy, &index_block_cpy, &table_block_cpy);
+    create_index_file(db, &index_cpy_nm, db->hdr.nr_cpy, &index_block_cpy_nm, &table_block_cpy);
+    printf("done\n");
+    printf("Creating the index for Companies (by group ID) : ");
+    create_index_file(db, &index_cpy_grp, db->hdr.nr_cpy, &index_block_cpy_grp, &table_block_cpy);
     printf("done\n");
     printf("Creating the index for Contacts (by company FK) : ");
     create_index_file(db, &index_con, db->hdr.nr_con, &index_block_con, &table_block_con);

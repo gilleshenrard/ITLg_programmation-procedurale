@@ -48,8 +48,12 @@ int compare_company_name(void* a, void* b);
 int compare_company_grp(void* a, void* b);
 int compare_company_index_name(void* a, void* b);
 int compare_company_index_char(void* a, void* b);
-int assign_company_index_slot(void* index, uint32_t* offset);
+int compare_company_index_grp(void* a, void* b);
+int compare_company_index_int(void* a, void* b);
+int assign_company_index_nm_slot(void* index, uint32_t* offset);
+int assign_company_index_grp_slot(void* index, uint32_t* offset);
 int assign_company_index_name(void* index, void* elem);
+int assign_company_index_grp(void* index, void* elem);
 char* toString_company(void* current);
 
 //file structures methods

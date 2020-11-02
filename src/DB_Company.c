@@ -307,14 +307,73 @@ int compare_company_index_char(void* a, void* b){
 }
 
 /****************************************************************************************/
+/*  I : First Company to compare                                                        */
+/*      Second  Company to compare                                                      */
+/*  P : Compares two countries by their names                                           */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_company_index_grp(void* a, void* b){
+    i_ccpy_grp *tmp_a = (i_ccpy_grp*)a;
+    i_ccpy_grp *tmp_b = (i_ccpy_grp*)b;
+
+    if(tmp_a->grp_id > tmp_b->grp_id)
+        return 1;
+    else if(tmp_a->grp_id < tmp_b->grp_id)
+        return -1;
+    else
+        return 0;
+}
+
+/****************************************************************************************/
+/*  I : Company index element to compare                                                */
+/*      Name of the second  Company to compare                                          */
+/*  P : Compares two countries by their names                                           */
+/*  O :  1 if A > B                                                                     */
+/*       0 if A = B                                                                     */
+/*      -1 if A < B                                                                     */
+/****************************************************************************************/
+int compare_company_index_int(void* a, void* b){
+    i_ccpy_grp *tmp_a = (i_ccpy_grp*)a;
+    int * tmp_b = (int*)b;
+
+    if(tmp_a->grp_id > *tmp_b)
+        return 1;
+    else if(tmp_a->grp_id < *tmp_b)
+        return -1;
+    else
+        return 0;
+}
+
+/****************************************************************************************/
 /*  I : index element to which assign the slot                                          */
 /*      slot (file offset) in which the base data element is                            */
 /*  P : assigns a slot (file offset) to an index element                                */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_company_index_slot(void* index, uint32_t* offset){
+int assign_company_index_nm_slot(void* index, uint32_t* offset){
     i_ccpy_name* element = (i_ccpy_name*)index;
+    long* slot = (long*)offset;
+
+    if(!index || !offset)
+        return -1;
+
+    element->slot = *slot;
+
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : index element to which assign the slot                                          */
+/*      slot (file offset) in which the base data element is                            */
+/*  P : assigns a slot (file offset) to an index element                                */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_company_index_grp_slot(void* index, uint32_t* offset){
+    i_ccpy_grp* element = (i_ccpy_grp*)index;
     long* slot = (long*)offset;
 
     if(!index || !offset)
@@ -342,6 +401,27 @@ int assign_company_index_name(void* index, void* elem){
     //copy the data from the Company to the buffer
     strcpy(i_element->nm_cpy, element->nm_cpy);
     strcpy(i_element->tp_rec, "I_CPYNM");
+
+    return 0;
+}
+
+/************************************************************/
+/*  I : Index element to which copy the data                */
+/*      Table element from which copy the data              */
+/*  P : Fill an index element with the proper information   */
+/*  O : -1 if error                                         */
+/*      0 otherwise                                         */
+/************************************************************/
+int assign_company_index_grp(void* index, void* elem){
+    ccpy* element = (ccpy*)elem;
+    i_ccpy_grp* i_element = (i_ccpy_grp*)index;
+
+    if(!index || !element)
+        return -1;
+
+    //copy the data from the Company to the buffer
+    i_element->grp_id = element->id_grp;
+    strcpy(i_element->tp_rec, "I_CPYGR");
 
     return 0;
 }
