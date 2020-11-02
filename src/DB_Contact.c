@@ -76,16 +76,16 @@ void Import_CSV_contact(dbc *db){
     }
 
     //save the amount of contacts imported
-    db->nr_con = i;
+    db->hdr.nr_con = i;
 
-    fprintf(fp_lg, "Contacts imported : %lu\n", (unsigned long int)db->nr_con);
+    fprintf(fp_lg, "Contacts imported : %lu\n", (unsigned long int)db->hdr.nr_con);
 
     //close all files
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nContacts imported : %lu\n\n", (unsigned long int)db->nr_con);
+    printf("\nContacts imported : %lu\n\n", (unsigned long int)db->hdr.nr_con);
 
 	return ;
 }
@@ -109,7 +109,7 @@ void Export_CSV_contact(dbc *db){
 
     fseek(db->fp, db->hdr.off_con, SEEK_SET);
 
-    for (i=0; i<db->nr_con; i++)
+    for (i=0; i<db->hdr.nr_con; i++)
     {
         memset(&con, 0, sizeof(ccon));
         fread(&con, 1, sizeof(ccon), db->fp);
@@ -121,13 +121,13 @@ void Export_CSV_contact(dbc *db){
                 con.nr_rep);
     }
 
-    fprintf(fp_lg, "contact exported : %lu\n", (unsigned long int)db->nr_con);
+    fprintf(fp_lg, "contact exported : %lu\n", (unsigned long int)db->hdr.nr_con);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\ncontact exported : %lu\n\n", (unsigned long int)db->nr_con);
+    printf("\ncontact exported : %lu\n\n", (unsigned long int)db->hdr.nr_con);
 
     return;
 }
@@ -148,13 +148,13 @@ void Load_contact(dbc *db){
     if(db->con)
         free(db->con);
 
-    db->con = (ccon*)calloc(db->nr_con, sizeof(ccon));
+    db->con = (ccon*)calloc(db->hdr.nr_con, sizeof(ccon));
 
     printf("\nContact : loading ...\n");
 
     fseek(db->fp, db->hdr.off_con, SEEK_SET);
 
-    for (i=0; i<db->nr_con; i++)
+    for (i=0; i<db->hdr.nr_con; i++)
     {
         memset(&con, 0, sizeof(ccon));
         fread(&con, 1, sizeof(ccon), db->fp);
@@ -162,12 +162,12 @@ void Load_contact(dbc *db){
         db->con[i] = con;
     }
 
-    fprintf(fp_lg, "Contacts loaded into buffer : %lu\n", (unsigned long int)db->nr_con);
+    fprintf(fp_lg, "Contacts loaded into buffer : %lu\n", (unsigned long int)db->hdr.nr_con);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nContacts loaded into buffer : %lu\n\n", (unsigned long int)db->nr_con);
+    printf("\nContacts loaded into buffer : %lu\n\n", (unsigned long int)db->hdr.nr_con);
 
     return;
 }

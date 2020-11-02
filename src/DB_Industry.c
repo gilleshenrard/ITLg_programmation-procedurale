@@ -67,16 +67,16 @@ void Import_CSV_industry(dbc *db){
     }
 
     //save the amount of industries imported
-    db->nr_ind = i;
+    db->hdr.nr_ind = i;
 
-    fprintf(fp_lg, "industries imported : %lu\n", (unsigned long int)db->nr_ind);
+    fprintf(fp_lg, "industries imported : %lu\n", (unsigned long int)db->hdr.nr_ind);
 
     //close all files
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nindustries imported : %lu\n\n", (unsigned long int)db->nr_ind);
+    printf("\nindustries imported : %lu\n\n", (unsigned long int)db->hdr.nr_ind);
 
 	return ;
 }
@@ -100,7 +100,7 @@ void Export_CSV_industry(dbc *db){
 
     fseek(db->fp, db->hdr.off_ind, SEEK_SET);
 
-    for (i=0; i<db->nr_ind; i++)
+    for (i=0; i<db->hdr.nr_ind; i++)
     {
         memset(&ind, 0, sizeof(cind));
         fread(&ind, 1, sizeof(cind), db->fp);
@@ -111,13 +111,13 @@ void Export_CSV_industry(dbc *db){
                 ind.nm_ind);
     }
 
-    fprintf(fp_lg, "Industry exported : %lu\n", (unsigned long int)db->nr_ind);
+    fprintf(fp_lg, "Industry exported : %lu\n", (unsigned long int)db->hdr.nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nIndustry exported : %lu\n\n", (unsigned long int)db->nr_ind);
+    printf("\nIndustry exported : %lu\n\n", (unsigned long int)db->hdr.nr_ind);
 
     return;
 }
@@ -138,13 +138,13 @@ void Load_industry(dbc *db){
     if(db->ind)
         free(db->ind);
 
-    db->ind = (cind*)calloc(db->nr_ind, sizeof(cind));
+    db->ind = (cind*)calloc(db->hdr.nr_ind, sizeof(cind));
 
     printf("\nIndustry : loading ...\n");
 
     fseek(db->fp, db->hdr.off_ind, SEEK_SET);
 
-    for (i=0; i<db->nr_ind; i++)
+    for (i=0; i<db->hdr.nr_ind; i++)
     {
         memset(&ind, 0, sizeof(cind));
         fread(&ind, 1, sizeof(cind), db->fp);
@@ -152,12 +152,12 @@ void Load_industry(dbc *db){
         db->ind[i] = ind;
     }
 
-    fprintf(fp_lg, "Industry loaded into buffer : %lu\n", (unsigned long int)db->nr_ind);
+    fprintf(fp_lg, "Industry loaded into buffer : %lu\n", (unsigned long int)db->hdr.nr_ind);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nIndustry loaded into buffer : %lu\n\n", (unsigned long int)db->nr_ind);
+    printf("\nIndustry loaded into buffer : %lu\n\n", (unsigned long int)db->hdr.nr_ind);
 
     return;
 }

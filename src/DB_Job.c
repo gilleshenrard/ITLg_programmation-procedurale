@@ -74,16 +74,16 @@ void Import_CSV_job(dbc *db)
     }
 
     //save the amount of jobs imported
-    db->nr_job = i;
+    db->hdr.nr_job = i;
 
-    fprintf(fp_lg, "Job imported : %lu\n", (unsigned long int)db->nr_job);
+    fprintf(fp_lg, "Job imported : %lu\n", (unsigned long int)db->hdr.nr_job);
 
     //close all files
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nJob imported : %lu\n\n", (unsigned long int)db->nr_job);
+    printf("\nJob imported : %lu\n\n", (unsigned long int)db->hdr.nr_job);
 
 	return ;
 }
@@ -106,7 +106,7 @@ void Export_CSV_job(dbc *db)
 
     fseek(db->fp, db->hdr.off_job, SEEK_SET);
 
-    for (i=0; i<db->nr_job; i++)
+    for (i=0; i<db->hdr.nr_job; i++)
     {
         memset(&job, 0, sizeof(cjob));
         fread(&job, 1, sizeof(cjob), db->fp);
@@ -118,13 +118,13 @@ void Export_CSV_job(dbc *db)
                 job.nm_job);
     }
 
-    fprintf(fp_lg, "Job exported : %lu\n", (unsigned long int)db->nr_job);
+    fprintf(fp_lg, "Job exported : %lu\n", (unsigned long int)db->hdr.nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nJob exported : %lu\n\n", (unsigned long int)db->nr_job);
+    printf("\nJob exported : %lu\n\n", (unsigned long int)db->hdr.nr_job);
 
     return;
 }
@@ -144,13 +144,13 @@ void Load_job(dbc *db)
     if(db->job)
         free(db->job);
 
-    db->job = (cjob*)calloc(db->nr_job, sizeof(cjob));
+    db->job = (cjob*)calloc(db->hdr.nr_job, sizeof(cjob));
 
     printf("\nJob : loading ...\n");
 
     fseek(db->fp, db->hdr.off_job, SEEK_SET);
 
-    for (i=0; i<db->nr_job; i++)
+    for (i=0; i<db->hdr.nr_job; i++)
     {
         memset(&job, 0, sizeof(cjob));
         fread(&job, 1, sizeof(cjob), db->fp);
@@ -158,12 +158,12 @@ void Load_job(dbc *db)
         db->job[i] = job;
     }
 
-    fprintf(fp_lg, "Job loaded into buffer : %lu\n", (unsigned long int)db->nr_job);
+    fprintf(fp_lg, "Job loaded into buffer : %lu\n", (unsigned long int)db->hdr.nr_job);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nJob loaded into buffer : %lu\n\n", (unsigned long int)db->nr_job);
+    printf("\nJob loaded into buffer : %lu\n\n", (unsigned long int)db->hdr.nr_job);
 
     return;
 }

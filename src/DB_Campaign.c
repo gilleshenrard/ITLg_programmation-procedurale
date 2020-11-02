@@ -109,15 +109,15 @@ void Import_CSV_campaign(dbc *db){
         i++;
     }
 
-    db->nr_cam = i;
+    db->hdr.nr_cam = i;
 
-    fprintf(fp_lg, "campaigns imported : %lu\n", (unsigned long int)db->nr_cam);
+    fprintf(fp_lg, "campaigns imported : %lu\n", (unsigned long int)db->hdr.nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\ncampaigns imported : %lu\n\n", (unsigned long int)db->nr_cam);
+    printf("\ncampaigns imported : %lu\n\n", (unsigned long int)db->hdr.nr_cam);
 
 	return ;
 }
@@ -141,7 +141,7 @@ void Export_CSV_campaign(dbc *db){
 
     fseek(db->fp, db->hdr.off_cam, SEEK_SET);
 
-    for (i=0; i<db->nr_cam; i++)
+    for (i=0; i<db->hdr.nr_cam; i++)
     {
         memset(&cam, 0, sizeof(ccam));
         fread(&cam, 1, sizeof(ccam), db->fp);
@@ -159,13 +159,13 @@ void Export_CSV_campaign(dbc *db){
                 cam.cost);
     }
 
-    fprintf(fp_lg, "campaign exported : %lu\n", (unsigned long int)db->nr_cam);
+    fprintf(fp_lg, "campaign exported : %lu\n", (unsigned long int)db->hdr.nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\ncampaign exported : %lu\n\n", (unsigned long int)db->nr_cam);
+    printf("\ncampaign exported : %lu\n\n", (unsigned long int)db->hdr.nr_cam);
 
     return;
 }
@@ -186,13 +186,13 @@ void Load_campaign(dbc *db){
     if(db->cam)
         free(db->cam);
 
-    db->cam = (ccam*)calloc(db->nr_cam, sizeof(ccam));
+    db->cam = (ccam*)calloc(db->hdr.nr_cam, sizeof(ccam));
 
     printf("\ncampaign : loading ...\n");
 
     fseek(db->fp, db->hdr.off_cam, SEEK_SET);
 
-    for (i=0; i<db->nr_cam; i++)
+    for (i=0; i<db->hdr.nr_cam; i++)
     {
         memset(&cam, 0, sizeof(ccam));
         fread(&cam, 1, sizeof(ccam), db->fp);
@@ -200,12 +200,12 @@ void Load_campaign(dbc *db){
         db->cam[i] = cam;
     }
 
-    fprintf(fp_lg, "campaign loaded into buffer : %lu\n", (unsigned long int)db->nr_cam);
+    fprintf(fp_lg, "campaign loaded into buffer : %lu\n", (unsigned long int)db->hdr.nr_cam);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\ncampaign loaded into buffer : %lu\n\n", (unsigned long int)db->nr_cam);
+    printf("\ncampaign loaded into buffer : %lu\n\n", (unsigned long int)db->hdr.nr_cam);
 
     return;
 }

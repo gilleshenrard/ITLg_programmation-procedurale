@@ -74,16 +74,16 @@ void Import_CSV_Country(dbc *db)
     }
 
     //save the amount of countries imported
-    db->nr_cty = i;
+    db->hdr.nr_cty = i;
 
-    fprintf(fp_lg, "Country imported : %lu\n", (unsigned long int)db->nr_cty);
+    fprintf(fp_lg, "Country imported : %lu\n", (unsigned long int)db->hdr.nr_cty);
 
     //close all files
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nCountry imported : %lu\n\n", (unsigned long int)db->nr_cty);
+    printf("\nCountry imported : %lu\n\n", (unsigned long int)db->hdr.nr_cty);
 
 	return ;
 }
@@ -106,7 +106,7 @@ void Export_CSV_Country(dbc *db)
 
     fseek(db->fp, db->hdr.off_cty, SEEK_SET);
 
-    for (i=0; i<db->nr_cty; i++)
+    for (i=0; i<db->hdr.nr_cty; i++)
     {
         memset(&cty, 0, sizeof(ccty));
         fread(&cty, 1, sizeof(ccty), db->fp);
@@ -118,13 +118,13 @@ void Export_CSV_Country(dbc *db)
                 cty.cd_iso);
     }
 
-    fprintf(fp_lg, "Country exported : %lu\n", (unsigned long int)db->nr_cty);
+    fprintf(fp_lg, "Country exported : %lu\n", (unsigned long int)db->hdr.nr_cty);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCountry exported : %lu\n\n", (unsigned long int)db->nr_cty);
+    printf("\nCountry exported : %lu\n\n", (unsigned long int)db->hdr.nr_cty);
 
     return;
 }
@@ -144,13 +144,13 @@ void Load_Country(dbc *db)
     if(db->cty)
         free(db->cty);
 
-    db->cty = (ccty*)calloc(db->nr_cty, sizeof(ccty));
+    db->cty = (ccty*)calloc(db->hdr.nr_cty, sizeof(ccty));
 
     printf("\nCountry : loading ...\n");
 
     fseek(db->fp, db->hdr.off_cty, SEEK_SET);
 
-    for (i=0; i<db->nr_cty; i++)
+    for (i=0; i<db->hdr.nr_cty; i++)
     {
         memset(&cty, 0, sizeof(ccty));
         fread(&cty, 1, sizeof(ccty), db->fp);
@@ -158,12 +158,12 @@ void Load_Country(dbc *db)
         db->cty[i] = cty;
     }
 
-    fprintf(fp_lg, "Country loaded into buffer : %lu\n", (unsigned long int)db->nr_cty);
+    fprintf(fp_lg, "Country loaded into buffer : %lu\n", (unsigned long int)db->hdr.nr_cty);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCountry loaded into buffer : %lu\n\n", (unsigned long int)db->nr_cty);
+    printf("\nCountry loaded into buffer : %lu\n\n", (unsigned long int)db->hdr.nr_cty);
 
     return;
 }
@@ -175,7 +175,7 @@ void Print_Country(dbc *db)
 {
     uint64_t i;
 
-    for (i=0; i<db->nr_cty; i++)
+    for (i=0; i<db->hdr.nr_cty; i++)
         Rec_Country(&db->cty[i]);
 
     return;

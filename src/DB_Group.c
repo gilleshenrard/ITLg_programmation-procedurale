@@ -74,16 +74,16 @@ void Import_CSV_Group(dbc *db){
     }
 
     //save the amount of groups imported
-    db->nr_grp = i;
+    db->hdr.nr_grp = i;
 
-    fprintf(fp_lg, "Groups imported : %lu\n", (unsigned long int)db->nr_grp);
+    fprintf(fp_lg, "Groups imported : %lu\n", (unsigned long int)db->hdr.nr_grp);
 
     //close all files
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nGroups imported : %lu\n\n", (unsigned long int)db->nr_grp);
+    printf("\nGroups imported : %lu\n\n", (unsigned long int)db->hdr.nr_grp);
 
 	return ;
 }
@@ -107,7 +107,7 @@ void Export_CSV_Group(dbc *db){
 
     fseek(db->fp, db->hdr.off_grp, SEEK_SET);
 
-    for (i=0; i<db->nr_grp; i++)
+    for (i=0; i<db->hdr.nr_grp; i++)
     {
         memset(&grp, 0, sizeof(cgrp));
         fread(&grp, 1, sizeof(cgrp), db->fp);
@@ -119,13 +119,13 @@ void Export_CSV_Group(dbc *db){
                 grp.id_cty);
     }
 
-    fprintf(fp_lg, "Country exported : %lu\n", (unsigned long int)db->nr_grp);
+    fprintf(fp_lg, "Country exported : %lu\n", (unsigned long int)db->hdr.nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCountry exported : %lu\n\n", (unsigned long int)db->nr_grp);
+    printf("\nCountry exported : %lu\n\n", (unsigned long int)db->hdr.nr_grp);
 
     return;
 }
@@ -146,13 +146,13 @@ void Load_Group(dbc *db){
     if(db->grp)
         free(db->grp);
 
-    db->grp = (cgrp*)calloc(db->nr_grp, sizeof(cgrp));
+    db->grp = (cgrp*)calloc(db->hdr.nr_grp, sizeof(cgrp));
 
     printf("\nGroup : loading ...\n");
 
     fseek(db->fp, db->hdr.off_grp, SEEK_SET);
 
-    for (i=0; i<db->nr_grp; i++)
+    for (i=0; i<db->hdr.nr_grp; i++)
     {
         memset(&grp, 0, sizeof(cgrp));
         fread(&grp, 1, sizeof(cgrp), db->fp);
@@ -160,12 +160,12 @@ void Load_Group(dbc *db){
         db->grp[i] = grp;
     }
 
-    fprintf(fp_lg, "Country loaded into buffer : %lu\n", (unsigned long int)db->nr_grp);
+    fprintf(fp_lg, "Country loaded into buffer : %lu\n", (unsigned long int)db->hdr.nr_grp);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCountry loaded into buffer : %lu\n\n", (unsigned long int)db->nr_grp);
+    printf("\nCountry loaded into buffer : %lu\n\n", (unsigned long int)db->hdr.nr_grp);
 
     return;
 }

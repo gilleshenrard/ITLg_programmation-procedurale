@@ -38,13 +38,20 @@ typedef struct Header
 {
     uint        db_size;           // Taille de la database
     char        db_name[SZ_NAME];  // Nom de la database
-    uint        sz_cty;            // Taille bloc country
-    uint        sz_job;            // Taille bloc job
-    uint        sz_ind;            // Taille bloc industry
-    uint        sz_grp;            // Taille bloc group
-    uint        sz_cam;            // Taille bloc campain
+    uint32_t    sz_cty;            // Taille bloc country
+    uint32_t    sz_job;            // Taille bloc job
+    uint32_t    sz_ind;            // Taille bloc industry
+    uint32_t    sz_grp;            // Taille bloc group
+    uint32_t    sz_cam;            // Taille bloc campain
     uint32_t    sz_con;            // Taille bloc contact
     uint32_t    sz_cpy;            // Taille bloc company
+    uint32_t    nr_cty;            // Nr elements dans buffer
+    uint32_t    nr_grp;            // Nr Groups in the buffer
+    uint32_t    nr_job;            // Nr Jobs in the buffer
+    uint32_t    nr_ind;            // Nr Industries in the buffer
+    uint32_t    nr_cam;            // Nr campains in the buffer
+    uint32_t    nr_con;            // Nr contacts in the buffer
+    uint32_t    nr_cpy;            // Nr contacts in the buffer
     uint32_t    off_cty;           // Position bloc country
     uint32_t    off_job;           // Position bloc job
     uint32_t    off_ind;           // Position bloc industry
@@ -188,13 +195,6 @@ typedef struct	db_country
     ccam*       cam;    // Buffer campain
     ccon*       con;    // Buffer contacts
     ccpy*       cpy;    // Buffer contacts
-    uint32_t    nr_cty; // Nr elements dans buffer
-    uint32_t    nr_grp; // Nr Groups in the buffer
-    uint32_t    nr_job; // Nr Jobs in the buffer
-    uint32_t    nr_ind; // Nr Industries in the buffer
-    uint32_t    nr_cam; // Nr campains in the buffer
-    uint32_t    nr_con; // Nr contacts in the buffer
-    uint32_t    nr_cpy; // Nr contacts in the buffer
 } dbc;
 
 #endif

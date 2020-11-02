@@ -118,16 +118,16 @@ void Import_CSV_company(dbc *db)
     }
 
     //save the amount of countries imported
-    db->nr_cpy = i;
+    db->hdr.nr_cpy = i;
 
-    fprintf(fp_lg, "Company imported : %lu\n", (unsigned long int)db->nr_cpy);
+    fprintf(fp_lg, "Company imported : %lu\n", (unsigned long int)db->hdr.nr_cpy);
 
     //close all files
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpi);
 
-    printf("\nCompany imported : %lu\n\n", (unsigned long int)db->nr_cpy);
+    printf("\nCompany imported : %lu\n\n", (unsigned long int)db->hdr.nr_cpy);
 
 	return ;
 }
@@ -150,7 +150,7 @@ void Export_CSV_company(dbc *db)
 
     fseek(db->fp, db->hdr.off_cpy, SEEK_SET);
 
-    for (i=0; i<db->nr_cpy; i++)
+    for (i=0; i<db->hdr.nr_cpy; i++)
     {
         memset(&cpy, 0, sizeof(ccpy));
         fread(&cpy, 1, sizeof(ccpy), db->fp);
@@ -169,13 +169,13 @@ void Export_CSV_company(dbc *db)
                 cpy.dt_cre);
     }
 
-    fprintf(fp_lg, "Company exported : %lu\n", (unsigned long int)db->nr_cpy);
+    fprintf(fp_lg, "Company exported : %lu\n", (unsigned long int)db->hdr.nr_cpy);
 
     fclose(db->fp);
     fclose(fp_lg);
 	fclose(fpo);
 
-    printf("\nCompany exported : %lu\n\n", (unsigned long int)db->nr_cpy);
+    printf("\nCompany exported : %lu\n\n", (unsigned long int)db->hdr.nr_cpy);
 
     return;
 }
@@ -195,13 +195,13 @@ void Load_company(dbc *db)
     if(db->cpy)
         free(db->cpy);
 
-    db->cpy = (ccpy*)calloc(db->nr_cpy, sizeof(ccpy));
+    db->cpy = (ccpy*)calloc(db->hdr.nr_cpy, sizeof(ccpy));
 
     printf("\nCompany : loading ...\n");
 
     fseek(db->fp, db->hdr.off_cpy, SEEK_SET);
 
-    for (i=0; i<db->nr_cpy; i++)
+    for (i=0; i<db->hdr.nr_cpy; i++)
     {
         memset(&cpy, 0, sizeof(ccpy));
         fread(&cpy, 1, sizeof(ccpy), db->fp);
@@ -209,12 +209,12 @@ void Load_company(dbc *db)
         db->cpy[i] = cpy;
     }
 
-    fprintf(fp_lg, "Company loaded into buffer : %lu\n", (unsigned long int)db->nr_cpy);
+    fprintf(fp_lg, "Company loaded into buffer : %lu\n", (unsigned long int)db->hdr.nr_cpy);
 
     fclose(db->fp);
     fclose(fp_lg);
 
-    printf("\nCompany loaded into buffer : %lu\n\n", (unsigned long int)db->nr_cpy);
+    printf("\nCompany loaded into buffer : %lu\n\n", (unsigned long int)db->hdr.nr_cpy);
 
     return;
 }
