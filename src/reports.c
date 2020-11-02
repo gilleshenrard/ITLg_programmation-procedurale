@@ -3,7 +3,7 @@
 /****************************************************************************************/
 /*  I : First Screen Report to compare                                                  */
 /*      Second  Screen Report to compare                                                */
-/*  P : Compares two countries by their names                                           */
+/*  P : Compares two reports by their campaign types, then by job ID                    */
 /*  O :  1 if A > B                                                                     */
 /*       0 if A = B                                                                     */
 /*      -1 if A < B                                                                     */
@@ -11,8 +11,20 @@
 int compare_scr_report_type(void* a, void* b){
     cscr *tmp_a = (cscr*)a;
     cscr *tmp_b = (cscr*)b;
+    int cam_comp = 0;
 
-    return strcmp(tmp_a->cam_tp, tmp_b->cam_tp);
+
+    cam_comp = strcmp(tmp_a->cam_tp, tmp_b->cam_tp);
+    if(!cam_comp){
+        if(tmp_a->id_job > tmp_b->id_job)
+            return 1;
+        else if (tmp_a->id_job < tmp_b->id_job)
+            return -1;
+        else
+            return 0;
+    }
+    else
+        return cam_comp;
 }
 
 /****************************************************************************************
