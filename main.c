@@ -461,7 +461,7 @@ int menu_contacts(dbc* db){
                 while(j<con_list.nbelements && choice!='q'){
                     i = 0;
                     while(i<PG_SIZE && j < con_list.nbelements){
-                        Rec_contact(contact, NULL);
+                        Rec_contact(contact->data, NULL);
                         contact = getright(contact);
                         i++;
                         j++;
