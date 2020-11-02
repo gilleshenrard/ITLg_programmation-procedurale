@@ -163,31 +163,22 @@ void Load_industry(dbc *db){
 }
 
 /****************************************************************************************/
-/*  I : Database from which print the industries                                        */
-/*  P : Prints all the industries in the memory buffer                                  */
-/*  O : /                                                                               */
-/****************************************************************************************/
-void Print_industry(dbc *db){
-    uint64_t i;
-
-    for (i=0; i<db->nr_ind; i++)
-        Rec_industry(&db->ind[i]);
-
-    return;
-}
-
-/****************************************************************************************/
 /*  I : industry record to print                                                        */
 /*  P : Prints an industry record                                                       */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void Rec_industry(cind *rec){
-    printf("%4d %32s %4s\n",
-           rec->id_ind,
-           rec->nm_sec,
-           rec->nm_ind );
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+int Rec_industry(void *rec, void *nullable){
+    cind* tmp = (cind*)rec;
 
-    return;
+    printf("%4d %32s %4s\n",
+           tmp->id_ind,
+           tmp->nm_sec,
+           tmp->nm_ind );
+
+    return 0;
 }
 
 
@@ -205,12 +196,12 @@ void Rec_industry(cind *rec){
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_industry_PK(void* a, void* b){
-    cind_recur *tmp_a = (cind_recur*)a;
-    cind_recur *tmp_b = (cind_recur*)b;
+    cind *tmp_a = (cind*)a;
+    cind *tmp_b = (cind*)b;
 
-    if(tmp_a->ind.id_ind > tmp_b->ind.id_ind)
+    if(tmp_a->id_ind > tmp_b->id_ind)
         return 1;
-    else if(tmp_a->ind.id_ind < tmp_b->ind.id_ind)
+    else if(tmp_a->id_ind < tmp_b->id_ind)
         return -1;
     else
         return 0;
@@ -277,45 +268,13 @@ int assign_industry_index_slot(void* index, uint32_t* offset){
 }
 
 /************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the right of the current        */
-/*  O : Address of the element to the right                 */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** industry_right(void* current){
-    cind_recur* currentind = (cind_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentind->right;
-}
-
-/************************************************************/
-/*  I : record to display                                   */
-/*      /                                                   */
-/*  P : Displays an algo-compatible record                  */
-/*  O : /                                                   */
-/************************************************************/
-#ifdef __GNUC__
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-int Rec_industry_list(void *record, void* nullable){
-    cind_recur* tmp = (cind_recur*)record;
-
-    Rec_industry(&tmp->ind);
-
-    return 0;
-}
-
-/************************************************************/
 /*  I : record to summarise as a string                     */
 /*      /                                                   */
 /*  P : returns a string representing the industry          */
 /*  O : /                                                   */
 /************************************************************/
 char* toString_industry(void* current){
-    cind_recur *tmp = (cind_recur*)current;
+    cind *tmp = (cind*)current;
 
-    return tmp->ind.nm_ind;
+    return tmp->nm_ind;
 }

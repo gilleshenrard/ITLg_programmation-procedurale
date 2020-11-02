@@ -552,9 +552,8 @@ int menu_groups(dbc* db){
 int menu_industries(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
-    cind_recur *industry = NULL;
-    void **right = NULL;
-    meta_t ind_list = {NULL, NULL, 0, sizeof(cind_recur), compare_industry_PK, NULL};
+    dyndata_t *industry = NULL;
+    meta_t ind_list = {NULL, NULL, 0, sizeof(cind), compare_industry_PK, NULL};
     meta_t ind_array = {NULL, NULL, db->nr_ind, sizeof(cind), NULL, NULL};
     char menu_ind[4][32]={  "Menu des Industries",
                             "Lister les industries",
@@ -573,9 +572,8 @@ int menu_industries(dbc* db){
                 while(j<ind_list.nbelements && choice!='q'){
                     i = 0;
                     while(i<PG_SIZE && j < ind_list.nbelements){
-                        Rec_industry_list(industry, NULL);
-                        right = industry_right(industry);
-                        industry = *((cind_recur**)right);
+                        Rec_industry(industry->data, NULL);
+                        industry = getright(industry);
                         i++;
                         j++;
                     }
