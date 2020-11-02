@@ -41,8 +41,7 @@ typedef struct i_company_Group{
 void Import_CSV_company(dbc *db);
 void Export_CSV_company(dbc *db);
 void Load_company(dbc *db);
-void Print_company(dbc *db);
-void Rec_company(ccpy *rec);
+int Rec_company(void *rec, void *nullable);
 
 // dynamic structures methods
 int compare_company_name(void* a, void* b);
@@ -51,7 +50,6 @@ int compare_company_index_name(void* a, void* b);
 int compare_company_index_char(void* a, void* b);
 int assign_company_index_slot(void* index, uint32_t* offset);
 int assign_company_index_name(void* index, void* elem);
-int Rec_company_list(void *record, void* nullable);
 char* toString_company(void* current);
 
 //file structures methods

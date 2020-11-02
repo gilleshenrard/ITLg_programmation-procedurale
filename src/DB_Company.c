@@ -220,30 +220,22 @@ void Load_company(dbc *db)
 }
 
 /****************************************************************************************
-* Liste la table Company depuis le buffer
-****************************************************************************************/
-void Print_company(dbc *db)
-{
-    uint64_t i;
-
-    for (i=0; i<db->nr_cpy; i++)
-        Rec_company(&db->cpy[i]);
-
-    return;
-}
-
-/****************************************************************************************
 * Imprime un record Company depuis le buffer
 ****************************************************************************************/
-void Rec_company(ccpy *rec)
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+int Rec_company(void *rec, void *nullable)
 {
-    printf("%6d %30s %40s %16s \n",
-           rec->id_cpy,
-           rec->nm_cpy,
-           rec->nm_www,
-           rec->cd_pos);
+    ccpy *tmp = (ccpy*)rec;
 
-    return;
+    printf("%6d %30s %40s %16s \n",
+           tmp->id_cpy,
+           tmp->nm_cpy,
+           tmp->nm_www,
+           tmp->cd_pos);
+
+    return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -350,23 +342,6 @@ int assign_company_index_name(void* index, void* elem){
     //copy the data from the Company to the buffer
     strcpy(i_element->nm_cpy, element->nm_cpy);
     strcpy(i_element->tp_rec, "I_CPYNM");
-
-    return 0;
-}
-
-/************************************************************/
-/*  I : record to display                                   */
-/*      /                                                   */
-/*  P : Displays an algo-compatible record                  */
-/*  O : /                                                   */
-/************************************************************/
-#ifdef __GNUC__
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-int Rec_company_list(void *record, void* nullable){
-    dyndata_t* tmp = (dyndata_t*)record;
-
-    Rec_company(tmp->data);
 
     return 0;
 }

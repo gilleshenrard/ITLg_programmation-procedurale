@@ -305,7 +305,6 @@ int menu_companies(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
     dyndata_t *companies = NULL;
-    void **right = NULL;
     meta_t cpy_list = {NULL, NULL, 0, sizeof(ccpy), compare_company_name, NULL};
     meta_t cpy_array = {NULL, NULL, db->nr_cpy, sizeof(ccpy), NULL, NULL};
     char menu_cpy[4][32]={  "Menu des Pays",
@@ -326,7 +325,7 @@ int menu_companies(dbc* db){
                     i = 0;
                     while(i<PG_SIZE && j < cpy_list.nbelements){
                         Rec_company(companies->data, NULL);
-                        right = getright(companies);
+                        companies = getright(companies);
                         i++;
                         j++;
                     }

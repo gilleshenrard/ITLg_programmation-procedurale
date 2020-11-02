@@ -247,7 +247,7 @@ void* free_scr_report(void* report, void* nullable){
 /****************************************************************************************/
 int print_screen_report(dbc* db, char* nm_cpy){
     //metadata for all the lists created
-    meta_t list_cpy = {NULL, NULL, 0, sizeof(ccpy_recur), compare_company_name, NULL};
+    meta_t list_cpy = {NULL, NULL, 0, sizeof(ccpy), compare_company_name, NULL};
     meta_t list_con = {NULL, NULL, 0, sizeof(ccon_recur), compare_contact_cpy, NULL};
     meta_t list_rep = {NULL, NULL, 0, sizeof(cscr_recur), compare_scr_report_type, NULL};
     //metadata for all the indexes used
@@ -257,7 +257,8 @@ int print_screen_report(dbc* db, char* nm_cpy){
 
     int choix = 0;
     char buffer[6] = {0};
-    ccpy_recur* cpy_buffer = NULL, *cpy_next=NULL;
+    dyndata_t* next = NULL;
+    ccpy* cpy_buffer = NULL;
     ccon_recur* con_buffer = NULL;
     cscr_recur* rep_buffer = NULL;
     ccam cam = {0};
@@ -291,7 +292,7 @@ int print_screen_report(dbc* db, char* nm_cpy){
     if(list_cpy.nbelements > 1){
         //display all the possibilities
         printf("\nVeuillez choisir pour quelle compagnie afficher le rapport : (1 a %lu)\n\n", (unsigned long int)list_cpy.nbelements);
-        foreachList(&list_cpy, NULL, Rec_company_list);
+        foreachList(&list_cpy, NULL, Rec_company);
 
         //ask the user to pick a one
         printf("\nChoix : ");
@@ -300,15 +301,15 @@ int print_screen_report(dbc* db, char* nm_cpy){
         choix = atoi(buffer);
 
         //save the selected one in a buffer
-        cpy_next = list_cpy.structure;
+        next = list_cpy.structure;
         for(int i=1 ; i<choix ; i++){
-            cpy_next = *company_right(cpy_next);
+            next = getright(next);
         }
-        cpy_buffer = (ccpy_recur*)cpy_next;
+        cpy_buffer = (ccpy*)next->data;
     }
 
     //look for all the contacts related to the chosen company and create a linked list
-    searchall_index(db->fp, db->hdr.i_con_cpy, &cpy_buffer->cpy.id_cpy, &index_con, &list_con, sizeof(ccon));
+    searchall_index(db->fp, db->hdr.i_con_cpy, &cpy_buffer->id_cpy, &index_con, &list_con, sizeof(ccon));
 
     //browse through all the contacts found
     con_buffer = list_con.structure;
@@ -374,7 +375,7 @@ int export_aggregated_report(dbc* db){
 int export_detailed_report(dbc* db, char* nm_grp){
     //metadata for all the lists created
     meta_t list_grp_nm = {NULL, NULL, 0, sizeof(cgrp_recur), compare_group_nm, NULL};
-    meta_t list_cpy_grp = {NULL, NULL, 0, sizeof(ccpy_recur), compare_company_grp, NULL};
+    meta_t list_cpy_grp = {NULL, NULL, 0, sizeof(ccpy), compare_company_grp, NULL};
     //metadata for all the indexes used
     meta_t index_grp = {0};
     meta_t index_cpy = {0};
