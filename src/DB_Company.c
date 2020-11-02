@@ -259,10 +259,10 @@ void Rec_company(ccpy *rec)
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_company_name(void* a, void* b){
-    ccpy_recur *tmp_a = (ccpy_recur*)a;
-    ccpy_recur *tmp_b = (ccpy_recur*)b;
+    ccpy *tmp_a = (ccpy*)a;
+    ccpy *tmp_b = (ccpy*)b;
 
-    return strcmp(tmp_a->cpy.nm_cpy, tmp_b->cpy.nm_cpy);
+    return strcmp(tmp_a->nm_cpy, tmp_b->nm_cpy);
 }
 
 /****************************************************************************************/
@@ -274,12 +274,12 @@ int compare_company_name(void* a, void* b){
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_company_grp(void* a, void* b){
-    ccpy_recur *tmp_a = (ccpy_recur*)a;
-    ccpy_recur *tmp_b = (ccpy_recur*)b;
+    ccpy *tmp_a = (ccpy*)a;
+    ccpy *tmp_b = (ccpy*)b;
 
-    if(tmp_a->cpy.id_grp > tmp_b->cpy.id_grp)
+    if(tmp_a->id_grp > tmp_b->id_grp)
         return 1;
-    else if(tmp_a->cpy.id_grp < tmp_b->cpy.id_grp)
+    else if(tmp_a->id_grp < tmp_b->id_grp)
         return -1;
     else
         return 0;
@@ -355,21 +355,6 @@ int assign_company_index_name(void* index, void* elem){
 }
 
 /************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the right of the current        */
-/*  O : Address of the element to the right                 */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** company_right(void* current){
-    ccpy_recur* currentcpy = (ccpy_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentcpy->right;
-}
-
-/************************************************************/
 /*  I : record to display                                   */
 /*      /                                                   */
 /*  P : Displays an algo-compatible record                  */
@@ -379,9 +364,9 @@ void** company_right(void* current){
 # pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 int Rec_company_list(void *record, void* nullable){
-    ccpy_recur* tmp = (ccpy_recur*)record;
+    dyndata_t* tmp = (dyndata_t*)record;
 
-    Rec_company(&tmp->cpy);
+    Rec_company(tmp->data);
 
     return 0;
 }
@@ -393,9 +378,9 @@ int Rec_company_list(void *record, void* nullable){
 /*  O : /                                                   */
 /************************************************************/
 char* toString_company(void* current){
-    ccpy_recur *tmp = (ccpy_recur*)current;
+    ccpy *tmp = (ccpy*)current;
 
-    return tmp->cpy.nm_cpy;
+    return tmp->nm_cpy;
 }
 
 

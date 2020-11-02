@@ -19,13 +19,6 @@
 typedef struct ccpy_recur ccpy_recur;
 typedef struct ccpy_file ccpy_file;
 
-struct ccpy_recur{
-    ccpy cpy;
-    int height;
-    ccpy_recur *left;
-    ccpy_recur *right;
-};
-
 typedef struct i_company_Name{
     char tp_rec[SZ_TYPE];   //record type (I_CPY)
     char nm_cpy[SZ_NAME];   //Company name
@@ -58,7 +51,6 @@ int compare_company_index_name(void* a, void* b);
 int compare_company_index_char(void* a, void* b);
 int assign_company_index_slot(void* index, uint32_t* offset);
 int assign_company_index_name(void* index, void* elem);
-void** company_right(void* current);
 int Rec_company_list(void *record, void* nullable);
 char* toString_company(void* current);
 
