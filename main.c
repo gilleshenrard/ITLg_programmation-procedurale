@@ -141,10 +141,13 @@ void create_db(dbc* db){
     meta_t index_cty = {NULL, NULL, db->hdr.nr_cty, sizeof(i_ccty_name), compare_country_index_name, NULL};
     t_datablock index_block_cty = {&db->hdr.off_i_cty_name, &db->hdr.i_cty_name, sizeof(i_ccty_name), assign_contact_index_slot, assign_country_index_name};
     t_datablock table_block_cty = {&db->hdr.off_cty, 0, sizeof(ccty), NULL, NULL};
-    //group metadata
-    meta_t index_grp = {NULL, NULL, db->hdr.nr_grp, sizeof(i_cgrp_FK), compare_group_FK_index, NULL};
-    t_datablock index_block_grp = {&db->hdr.off_i_grp_fk, &db->hdr.i_grp_fk, sizeof(i_cgrp_FK), assign_group_index_slot, assign_group_index_FK};
+    //group FK metadata
+    meta_t index_grp_fk = {NULL, NULL, db->hdr.nr_grp, sizeof(i_cgrp_FK), compare_group_FK_index, NULL};
+    t_datablock index_block_grp_fk = {&db->hdr.off_i_grp_fk, &db->hdr.i_grp_fk, sizeof(i_cgrp_FK), assign_group_FK_index_slot, assign_group_index_FK};
     t_datablock table_block_grp = {&db->hdr.off_grp, 0, sizeof(cgrp), NULL, NULL};
+    //group name metadata
+    meta_t index_grp_nm = {NULL, NULL, db->hdr.nr_grp, sizeof(i_cgrp_nm), compare_group_nm_index_char, NULL};
+    t_datablock index_block_grp_nm = {&db->hdr.off_i_grp_nm, &db->hdr.i_grp_nm, sizeof(i_cgrp_nm), assign_group_nm_index_slot, assign_group_index_nm};
     //industry metadata
     meta_t index_ind = {NULL, NULL, db->hdr.nr_ind, sizeof(i_cind_PK), compare_industry_PK_index, NULL};
     t_datablock index_block_ind = {&db->hdr.off_i_ind_pk, &db->hdr.i_ind_pk, sizeof(i_cind_PK), assign_industry_index_slot, assign_industry_index_PK};
@@ -180,7 +183,10 @@ void create_db(dbc* db){
     create_index_file(db, &index_cty, db->hdr.nr_cty, &index_block_cty, &table_block_cty);
     printf("done\n");
     printf("Creating the index for Groups (by FK) : ");
-    create_index_file(db, &index_grp, db->hdr.nr_grp, &index_block_grp, &table_block_grp);
+    create_index_file(db, &index_grp_fk, db->hdr.nr_grp, &index_block_grp_fk, &table_block_grp);
+    printf("done\n");
+    printf("Creating the index for Groups (by name) : ");
+    create_index_file(db, &index_grp_nm, db->hdr.nr_grp, &index_block_grp_nm, &table_block_grp);
     printf("done\n");
     printf("Creating the index for Industries (by ID) : ");
     create_index_file(db, &index_ind, db->hdr.nr_ind, &index_block_ind, &table_block_ind);

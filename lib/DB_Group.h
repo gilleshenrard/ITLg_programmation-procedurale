@@ -40,9 +40,11 @@ int Rec_Group(void *rec, void *nullable);
 int compare_group_FK(void* a, void* b);
 int compare_group_nm(void* a, void* b);
 int compare_group_FK_index(void* a, void* b);
-int compare_group_nm_index(void* a, void* b);
+int compare_group_nm_index_char(void* a, void* b);
 int assign_group_index_FK(void* index, void* elem);
-int assign_group_index_slot(void* index, uint32_t* offset);
+int assign_group_index_nm(void* index, void* elem);
+int assign_group_FK_index_slot(void* index, uint32_t* offset);
+int assign_group_nm_index_slot(void* index, uint32_t* offset);
 char* toString_group(void* current);
 
 #endif // DB_GROUP_H_INCLUDED

@@ -189,11 +189,11 @@ int export_detailed_report(dbc* db, char* nm_grp){
 
     int choix = 0;
     char buffer[6] = {0};
-    dyndata_t* group = NULL, *next=NULL;
+    dyndata_t* group = NULL;
 
     //finish preparing the indexes metadata
     index_grp.elementsize = sizeof(i_cgrp_nm);
-    index_grp.doCompare = compare_group_nm_index;
+    index_grp.doCompare = compare_group_nm_index_char;
     index_cpy.elementsize = sizeof(i_ccpy_grp);
     index_cpy.doCompare = compare_company_grp;
 
@@ -206,13 +206,15 @@ int export_detailed_report(dbc* db, char* nm_grp){
 
     //search for all occurrences of the company name (creates a linked list)
     searchall_index(db->fp, db->hdr.i_grp_nm, nm_grp, &index_grp, &list_grp_nm);
-    group=list_grp_nm.structure;
 
     //if not found, error
     if(!list_grp_nm.nbelements){
         fprintf(stderr, "\n\n%s : non-trouve\n\n", nm_grp);
         return -1;
     }
+
+    //select the first occurence by default
+    group=list_grp_nm.structure;
 
     //if more than one occurrence, make the user choose which one
     if(list_grp_nm.nbelements > 1){
@@ -227,15 +229,15 @@ int export_detailed_report(dbc* db, char* nm_grp){
         choix = atoi(buffer);
 
         //save the selected one in a buffer
-        next = list_grp_nm.structure;
-        for(int i=1 ; i<choix ; i++){
-            next = getright(next);
-        }
-        group = next;
+        group = get_listelem(&list_grp_nm, choix - 1);
     }
 
     //look for all the contacts related to the chosen company and create a linked list
     searchall_index(db->fp, db->hdr.i_cpy_grp, &((cgrp*)group->data)->id_grp, &index_cpy, &list_cpy_grp);
+
+    fclose(db->fp);
+
+    printf("\nList retrieved, but report creation not implemented...\n");
 
     return 0;
 }

@@ -259,11 +259,11 @@ int compare_group_FK_index(void* a, void* b){
 /*       0 if A = B                                                                     */
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
-int compare_group_nm_index(void* a, void* b){
+int compare_group_nm_index_char(void* a, void* b){
     i_cgrp_nm *tmp_a = (i_cgrp_nm*)a;
-    i_cgrp_nm *tmp_b = (i_cgrp_nm*)b;
+    char *tmp_b = (char*)b;
 
-    return strcmp(tmp_a->nm_grp, tmp_b->nm_grp);
+    return strcmp(tmp_a->nm_grp, tmp_b);
 }
 
 /****************************************************************************************/
@@ -288,14 +288,54 @@ int assign_group_index_FK(void* index, void* elem){
 }
 
 /****************************************************************************************/
+/*  I : Group index buffer to which copy data                                           */
+/*      Group from which copy data                                                      */
+/*  P : Copies all the fields of a group to a group index buffer                        */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_group_index_nm(void* index, void* elem){
+    cgrp* element = (cgrp*)elem;
+    i_cgrp_nm* i_element = (i_cgrp_nm*)index;
+
+    if(!index || !element)
+        return -1;
+
+    //copy the data from the country to the buffer
+    strcpy(i_element->nm_grp, element->nm_grp);
+    strcpy(i_element->tp_rec, "I_GRPNM");
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : index element to which assign the slot                                          */
 /*      slot (file offset) in which the base data element is                            */
 /*  P : assigns a slot (file offset) to an index element                                */
 /*  O :  0 if OK                                                                        */
 /*      -1 otherwise                                                                    */
 /****************************************************************************************/
-int assign_group_index_slot(void* index, uint32_t* offset){
+int assign_group_FK_index_slot(void* index, uint32_t* offset){
     i_cgrp_FK* element = (i_cgrp_FK*)index;
+    long* slot = (long*)offset;
+
+    if(!index || !offset)
+        return -1;
+
+    element->slot = *slot;
+
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : index element to which assign the slot                                          */
+/*      slot (file offset) in which the base data element is                            */
+/*  P : assigns a slot (file offset) to an index element                                */
+/*  O :  0 if OK                                                                        */
+/*      -1 otherwise                                                                    */
+/****************************************************************************************/
+int assign_group_nm_index_slot(void* index, uint32_t* offset){
+    i_cgrp_nm* element = (i_cgrp_nm*)index;
     long* slot = (long*)offset;
 
     if(!index || !offset)
