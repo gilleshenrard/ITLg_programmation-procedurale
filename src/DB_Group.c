@@ -171,32 +171,23 @@ void Load_Group(dbc *db){
 }
 
 /****************************************************************************************/
-/*  I : Database from which print the groups                                            */
-/*  P : Prints all the groups in the memory buffer                                      */
-/*  O : /                                                                               */
-/****************************************************************************************/
-void Print_Group(dbc *db){
-    uint64_t i;
-
-    for (i=0; i<db->nr_grp; i++)
-        Rec_Group(&db->grp[i]);
-
-    return;
-}
-
-/****************************************************************************************/
 /*  I : Group record to print                                                           */
 /*  P : Prints a group record                                                           */
 /*  O : /                                                                               */
 /****************************************************************************************/
-void Rec_Group(cgrp *rec){
-    printf("%4d %32s %4s %3d \n",
-           rec->id_grp,
-           rec->nm_grp,
-           rec->cd_cty,
-           rec->id_cty );
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+int Rec_Group(void *rec, void *nullable){
+    cgrp* tmp = (cgrp*)rec;
 
-    return;
+    printf("%4d %32s %4s %3d \n",
+           tmp->id_grp,
+           tmp->nm_grp,
+           tmp->cd_cty,
+           tmp->id_cty );
+
+    return 0;
 }
 
 
@@ -214,12 +205,12 @@ void Rec_Group(cgrp *rec){
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_group_FK(void* a, void* b){
-    cgrp_recur *tmp_a = (cgrp_recur*)a;
-    cgrp_recur *tmp_b = (cgrp_recur*)b;
+    cgrp *tmp_a = (cgrp*)a;
+    cgrp *tmp_b = (cgrp*)b;
 
-    if(tmp_a->grp.id_cty > tmp_b->grp.id_cty)
+    if(tmp_a->id_cty > tmp_b->id_cty)
         return 1;
-    else if(tmp_a->grp.id_cty < tmp_b->grp.id_cty)
+    else if(tmp_a->id_cty < tmp_b->id_cty)
         return -1;
     else
         return 0;
@@ -234,10 +225,10 @@ int compare_group_FK(void* a, void* b){
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_group_nm(void* a, void* b){
-    cgrp_recur *tmp_a = (cgrp_recur*)a;
-    cgrp_recur *tmp_b = (cgrp_recur*)b;
+    cgrp *tmp_a = (cgrp*)a;
+    cgrp *tmp_b = (cgrp*)b;
 
-    return strcmp(tmp_a->grp.nm_grp, tmp_b->grp.nm_grp);
+    return strcmp(tmp_a->nm_grp, tmp_b->nm_grp);
 }
 
 /****************************************************************************************/
@@ -316,45 +307,13 @@ int assign_group_index_slot(void* index, uint32_t* offset){
 }
 
 /************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the right of the current        */
-/*  O : Address of the element to the right                 */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** group_right(void* current){
-    cgrp_recur* currentGrp = (cgrp_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentGrp->right;
-}
-
-/************************************************************/
-/*  I : record to display                                   */
-/*      /                                                   */
-/*  P : Displays an algo-compatible record                  */
-/*  O : /                                                   */
-/************************************************************/
-#ifdef __GNUC__
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-int Rec_group_list(void *record, void* nullable){
-    cgrp_recur* tmp = (cgrp_recur*)record;
-
-    Rec_Group(&tmp->grp);
-
-    return 0;
-}
-
-/************************************************************/
 /*  I : record to summarise as a string                     */
 /*      /                                                   */
 /*  P : returns a string representing the group             */
 /*  O : /                                                   */
 /************************************************************/
 char* toString_group(void* current){
-    cgrp_recur *tmp = (cgrp_recur*)current;
+    cgrp *tmp = (cgrp*)current;
 
-    return tmp->grp.nm_grp;
+    return tmp->nm_grp;
 }

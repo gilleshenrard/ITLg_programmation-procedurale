@@ -248,7 +248,7 @@ void* free_scr_report(void* report, void* nullable){
 int print_screen_report(dbc* db, char* nm_cpy){
     //metadata for all the lists created
     meta_t list_cpy = {NULL, NULL, 0, sizeof(ccpy), compare_company_name, NULL};
-    meta_t list_con = {NULL, NULL, 0, sizeof(ccon_recur), compare_contact_cpy, NULL};
+    meta_t list_con = {NULL, NULL, 0, sizeof(ccon), compare_contact_cpy, NULL};
     meta_t list_rep = {NULL, NULL, 0, sizeof(cscr_recur), compare_scr_report_type, NULL};
     //metadata for all the indexes used
     meta_t index_cpy = {0};
@@ -259,7 +259,6 @@ int print_screen_report(dbc* db, char* nm_cpy){
     char buffer[6] = {0};
     dyndata_t* next = NULL;
     ccpy* cpy_buffer = NULL;
-    ccon_recur* con_buffer = NULL;
     cscr_recur* rep_buffer = NULL;
     ccam cam = {0};
 
@@ -312,16 +311,16 @@ int print_screen_report(dbc* db, char* nm_cpy){
     searchall_index(db->fp, db->hdr.i_con_cpy, &cpy_buffer->id_cpy, &index_con, &list_con, sizeof(ccon));
 
     //browse through all the contacts found
-    con_buffer = list_con.structure;
+    next = list_con.structure;
     for(uint64_t i=0 ; i<list_con.nbelements ; i++){
         //search for the related campaign
-        searchone_index(db->fp, db->hdr.i_cam_pk, &con_buffer->con.id_cam, &index_cam, &cam, sizeof(ccam));
+        searchone_index(db->fp, db->hdr.i_cam_pk, &((ccon*)next->data)->id_cam, &index_cam, &cam, sizeof(ccam));
 
         //fill the report buffer with the campaign found
         rep_buffer = calloc(1, sizeof(cscr_recur));
         rep_buffer->rep.id_cam = cam.id_cam;
-        rep_buffer->rep.id_job = con_buffer->con.id_job;
-        rep_buffer->rep.nr_rep = con_buffer->con.nr_rep;
+        rep_buffer->rep.id_job = ((ccon*)next->data)->id_job;
+        rep_buffer->rep.nr_rep = ((ccon*)next->data)->nr_rep;
         strcpy(rep_buffer->rep.cam_nm, cam.nm_cam);
         strcpy(rep_buffer->rep.cam_tp, cam.tp_cam);
 
@@ -329,7 +328,7 @@ int print_screen_report(dbc* db, char* nm_cpy){
         insertListSorted(&list_rep, rep_buffer);
 
         //go to the next contact
-        con_buffer = *contact_right(con_buffer);
+        next = getright(next);
     }
 
     //display all the campaigns sorted by type, according to the report requested
@@ -374,7 +373,7 @@ int export_aggregated_report(dbc* db){
 /****************************************************************************************/
 int export_detailed_report(dbc* db, char* nm_grp){
     //metadata for all the lists created
-    meta_t list_grp_nm = {NULL, NULL, 0, sizeof(cgrp_recur), compare_group_nm, NULL};
+    meta_t list_grp_nm = {NULL, NULL, 0, sizeof(cgrp), compare_group_nm, NULL};
     meta_t list_cpy_grp = {NULL, NULL, 0, sizeof(ccpy), compare_company_grp, NULL};
     //metadata for all the indexes used
     meta_t index_grp = {0};
@@ -382,7 +381,7 @@ int export_detailed_report(dbc* db, char* nm_grp){
 
     int choix = 0;
     char buffer[6] = {0};
-    cgrp_recur* grp_buffer = NULL, *grp_next=NULL;
+    dyndata_t* group = NULL, *next=NULL;
 
     //finish preparing the indexes metadata
     index_grp.elementsize = sizeof(i_cgrp_nm);
@@ -399,7 +398,7 @@ int export_detailed_report(dbc* db, char* nm_grp){
 
     //search for all occurrences of the company name (creates a linked list)
     searchall_index(db->fp, db->hdr.i_grp_nm, nm_grp, &index_grp, &list_grp_nm, sizeof(cgrp));
-    grp_buffer=list_grp_nm.structure;
+    group=list_grp_nm.structure;
 
     //if not found, error
     if(!list_grp_nm.nbelements){
@@ -411,7 +410,7 @@ int export_detailed_report(dbc* db, char* nm_grp){
     if(list_grp_nm.nbelements > 1){
         //display all the possibilities
         printf("\nVeuillez choisir pour quel groupe afficher le rapport : (1 a %lu)\n\n", (unsigned long int)list_grp_nm.nbelements);
-        foreachList(&list_grp_nm, NULL, Rec_group_list);
+        foreachList(&list_grp_nm, NULL, Rec_Group);
 
         //ask the user to pick a one
         printf("\nChoix : ");
@@ -420,15 +419,15 @@ int export_detailed_report(dbc* db, char* nm_grp){
         choix = atoi(buffer);
 
         //save the selected one in a buffer
-        grp_next = list_grp_nm.structure;
+        next = list_grp_nm.structure;
         for(int i=1 ; i<choix ; i++){
-            grp_next = *group_right(grp_next);
+            next = getright(next);
         }
-        grp_buffer = (cgrp_recur*)grp_next;
+        group = next;
     }
 
     //look for all the contacts related to the chosen company and create a linked list
-    searchall_index(db->fp, db->hdr.i_cpy_grp, &grp_buffer->grp.id_grp, &index_cpy, &list_cpy_grp, sizeof(ccpy));
+    searchall_index(db->fp, db->hdr.i_cpy_grp, &((cgrp*)group->data)->id_grp, &index_cpy, &list_cpy_grp, sizeof(ccpy));
 
     return 0;
 }
