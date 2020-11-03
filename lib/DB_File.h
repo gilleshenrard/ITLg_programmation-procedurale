@@ -14,4 +14,8 @@ typedef struct{
 int Create_DB(dbc *db, char filename[]);
 long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block, t_datablock* t_block);
 
+long index_tree(FILE* fp, long offset_start, long nb, meta_t* meta);
+int searchall_index(FILE* fp, long offset_root, void* key, meta_t* index, meta_t* lis);
+int searchone_index(FILE* fp, long offset_root, void* key, meta_t* index, void* element, int elem_size);
+
 #endif // DB_FILE_H_INCLUDED
