@@ -77,7 +77,7 @@ typedef struct Header
     uint32_t    i_cpy_name;        // Address of the root for the company index (by name)
     uint32_t    i_cpy_grp;         // Address of the root for the company index (by group)
     uint32_t    i_grp_nm;          // Address of the root for the group index (by name)
-    char        filler[96];        //get the size of hder to 256 bits
+    char        filler[68];        //get the size of hder to 256 bits
 } hder;
 
 /***************************************************************************************
