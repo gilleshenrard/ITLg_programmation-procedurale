@@ -142,6 +142,8 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block,
         (*i_block->setSlot)(i_buffer, &tmp);
     }
 
+    free(t_buffer);
+
     //sort the index array
    quickSortArray(meta, 0, nb-1);
 
@@ -163,7 +165,6 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block,
     fseek(db->fp, 0, SEEK_SET);
     fwrite(&db->hdr, sizeof(hder), 1, db->fp);
 
-    free(t_buffer);
     free(meta->structure);
     fclose(db->fp);
 
