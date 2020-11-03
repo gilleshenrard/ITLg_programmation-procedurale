@@ -153,7 +153,8 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block,
 
     //sequentially write the buffer in memory (without tree chaining)
     for(i=0 ; i < nb ; i++){
-        fwrite(get_arrayelem(meta, i), meta->elementsize, 1, db->fp);
+        if(fwrite(get_arrayelem(meta, i), meta->elementsize, 1, db->fp) != 1)
+            print_error("create_index_file() : error while writing element %d of the index\n", i);
     }
 
     //create the binary tree chaining

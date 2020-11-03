@@ -2,6 +2,7 @@
 #define DB_FILE_H_INCLUDED
 #include "DB_Main.h"
 #include "algo.h"
+#include "screen.h"
 
 typedef struct{
     uint32_t*   block_off;
