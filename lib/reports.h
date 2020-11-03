@@ -13,6 +13,7 @@
 #include "DB_campaign.h"
 #include "DB_Contact.h"
 #include "DB_Company.h"
+#include "screen.h"
 
 typedef struct cscr_recur cscr_recur;
 typedef struct cdtl_recur cdtl_recur;

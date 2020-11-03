@@ -1,8 +1,8 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <conio.h>
 #include "reports.h"
+#include "screen.h"
 
 #define PG_SIZE 32
 
@@ -126,37 +126,37 @@ int main(int argc, char *argv[])
 /****************************************************************************************/
 void create_db(dbc* db){
     //company name metadata
-    meta_t index_cpy_nm = {NULL, NULL, db->hdr.nr_cpy, sizeof(i_ccpy_name), compare_company_index_name, NULL};
+    meta_t index_cpy_nm = {NULL, NULL, db->hdr.nr_cpy, sizeof(i_ccpy_name), compare_company_index_name, print_error};
     t_datablock index_block_cpy_nm = {&db->hdr.off_i_cpy_name, &db->hdr.i_cpy_name, sizeof(i_ccpy_name), assign_company_index_nm_slot, assign_company_index_name};
     t_datablock table_block_cpy = {&db->hdr.off_cpy, 0, sizeof(ccpy), NULL, NULL};
     //company group ID metadata
-    meta_t index_cpy_grp = {NULL, NULL, db->hdr.nr_cpy, sizeof(i_ccpy_grp), compare_company_index_grp, NULL};
+    meta_t index_cpy_grp = {NULL, NULL, db->hdr.nr_cpy, sizeof(i_ccpy_grp), compare_company_index_grp, print_error};
     t_datablock index_block_cpy_grp = {&db->hdr.off_i_cpy_grp, &db->hdr.i_cpy_grp, sizeof(i_ccpy_grp), assign_company_index_grp_slot, assign_company_index_grp};
     //contacts metadata
-    meta_t index_con = {NULL, NULL, db->hdr.nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, NULL};
+    meta_t index_con = {NULL, NULL, db->hdr.nr_con, sizeof(i_ccon_cpy), compare_contact_cpy_index, print_error};
     t_datablock index_block_con = {&db->hdr.off_i_con_cpy, &db->hdr.i_con_cpy, sizeof(i_ccon_cpy), assign_contact_index_slot, assign_contact_index_cpy};
     t_datablock table_block_con = {&db->hdr.off_con, 0, sizeof(ccon), NULL, NULL};
     //campaign metadata
-    meta_t index_cam = {NULL, NULL, db->hdr.nr_cam, sizeof(i_ccam_PK), compare_campaign_PK_index, NULL};
+    meta_t index_cam = {NULL, NULL, db->hdr.nr_cam, sizeof(i_ccam_PK), compare_campaign_PK_index, print_error};
     t_datablock index_block_cam = {&db->hdr.off_i_cam_pk, &db->hdr.i_cam_pk, sizeof(i_ccam_PK), assign_campaign_index_slot, assign_campaign_index_PK};
     t_datablock table_block_cam = {&db->hdr.off_cam, 0, sizeof(ccam), NULL, NULL};
     //country metadata
-    meta_t index_cty = {NULL, NULL, db->hdr.nr_cty, sizeof(i_ccty_name), compare_country_index_name, NULL};
+    meta_t index_cty = {NULL, NULL, db->hdr.nr_cty, sizeof(i_ccty_name), compare_country_index_name, print_error};
     t_datablock index_block_cty = {&db->hdr.off_i_cty_name, &db->hdr.i_cty_name, sizeof(i_ccty_name), assign_contact_index_slot, assign_country_index_name};
     t_datablock table_block_cty = {&db->hdr.off_cty, 0, sizeof(ccty), NULL, NULL};
     //group FK metadata
-    meta_t index_grp_fk = {NULL, NULL, db->hdr.nr_grp, sizeof(i_cgrp_FK), compare_group_FK_index, NULL};
+    meta_t index_grp_fk = {NULL, NULL, db->hdr.nr_grp, sizeof(i_cgrp_FK), compare_group_FK_index, print_error};
     t_datablock index_block_grp_fk = {&db->hdr.off_i_grp_fk, &db->hdr.i_grp_fk, sizeof(i_cgrp_FK), assign_group_FK_index_slot, assign_group_index_FK};
     t_datablock table_block_grp = {&db->hdr.off_grp, 0, sizeof(cgrp), NULL, NULL};
     //group name metadata
-    meta_t index_grp_nm = {NULL, NULL, db->hdr.nr_grp, sizeof(i_cgrp_nm), compare_group_nm_index_char, NULL};
+    meta_t index_grp_nm = {NULL, NULL, db->hdr.nr_grp, sizeof(i_cgrp_nm), compare_group_nm_index_char, print_error};
     t_datablock index_block_grp_nm = {&db->hdr.off_i_grp_nm, &db->hdr.i_grp_nm, sizeof(i_cgrp_nm), assign_group_nm_index_slot, assign_group_index_nm};
     //industry metadata
-    meta_t index_ind = {NULL, NULL, db->hdr.nr_ind, sizeof(i_cind_PK), compare_industry_PK_index, NULL};
+    meta_t index_ind = {NULL, NULL, db->hdr.nr_ind, sizeof(i_cind_PK), compare_industry_PK_index, print_error};
     t_datablock index_block_ind = {&db->hdr.off_i_ind_pk, &db->hdr.i_ind_pk, sizeof(i_cind_PK), assign_industry_index_slot, assign_industry_index_PK};
     t_datablock table_block_ind = {&db->hdr.off_ind, 0, sizeof(cind), NULL, NULL};
     //job metadata
-    meta_t index_job = {NULL, NULL, db->hdr.nr_job, sizeof(i_cjob_name), compare_job_index_name, NULL};
+    meta_t index_job = {NULL, NULL, db->hdr.nr_job, sizeof(i_cjob_name), compare_job_index_name, print_error};
     t_datablock index_block_job = {&db->hdr.off_i_job_name, &db->hdr.i_job_name, sizeof(i_cjob_name), assign_job_index_slot, assign_job_index_name};
     t_datablock table_block_job = {&db->hdr.off_job, 0, sizeof(cjob), NULL, NULL};
 
@@ -285,8 +285,8 @@ char menu(int i, char sections[i][32]){
 /************************************************************/
 int menu_countries(dbc* db){
     char choice=0;
-    meta_t cty_list = {NULL, NULL, 0, sizeof(ccty_recur), compare_country_name, NULL};
-    meta_t cty_array = {NULL, NULL, db->hdr.nr_cty, sizeof(ccty), NULL, NULL};
+    meta_t cty_list = {NULL, NULL, 0, sizeof(ccty_recur), compare_country_name, print_error};
+    meta_t cty_array = {NULL, NULL, db->hdr.nr_cty, sizeof(ccty), NULL, print_error};
     char menu_cty[4][32]={  "Menu des Pays",
                             "Lister les pays",
                             "Exporter les pays",
@@ -330,8 +330,8 @@ int menu_companies(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
     dyndata_t *companies = NULL;
-    meta_t cpy_list = {NULL, NULL, 0, sizeof(ccpy), compare_company_name, NULL};
-    meta_t cpy_array = {NULL, NULL, db->hdr.nr_cpy, sizeof(ccpy), NULL, NULL};
+    meta_t cpy_list = {NULL, NULL, 0, sizeof(ccpy), compare_company_name, print_error};
+    meta_t cpy_array = {NULL, NULL, db->hdr.nr_cpy, sizeof(ccpy), NULL, print_error};
     char menu_cpy[4][32]={  "Menu des Compagnies",
                             "Lister les Compagnies",
                             "Exporter les Compagnies",
@@ -392,8 +392,8 @@ int menu_campaigns(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
     dyndata_t *campaign = NULL;
-    meta_t cam_list = {NULL, NULL, 0, sizeof(ccam), compare_campaign_PK, NULL};
-    meta_t cam_array = {NULL, NULL, db->hdr.nr_cam, sizeof(ccam), NULL, NULL};
+    meta_t cam_list = {NULL, NULL, 0, sizeof(ccam), compare_campaign_PK, print_error};
+    meta_t cam_array = {NULL, NULL, db->hdr.nr_cam, sizeof(ccam), NULL, print_error};
     char menu_cam[4][32]={  "Menu des Campagnes",
                             "Lister les campagnes",
                             "Exporter les campagnes",
@@ -454,8 +454,8 @@ int menu_contacts(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
     dyndata_t *contact = NULL;
-    meta_t con_list = {NULL, NULL, 0, sizeof(ccon), compare_contact_cpy, NULL};
-    meta_t con_array = {NULL, NULL, db->hdr.nr_con, sizeof(ccon), NULL, NULL};
+    meta_t con_list = {NULL, NULL, 0, sizeof(ccon), compare_contact_cpy, print_error};
+    meta_t con_array = {NULL, NULL, db->hdr.nr_con, sizeof(ccon), NULL, print_error};
     char menu_con[4][32]={  "Menu des Contacts",
                             "Lister les contacts",
                             "Exporter les contacts",
@@ -516,8 +516,8 @@ int menu_groups(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
     dyndata_t *group = NULL;
-    meta_t grp_list = {NULL, NULL, 0, sizeof(cgrp), compare_group_FK, NULL};
-    meta_t grp_array = {NULL, NULL, db->hdr.nr_grp, sizeof(cgrp), NULL, NULL};
+    meta_t grp_list = {NULL, NULL, 0, sizeof(cgrp), compare_group_FK, print_error};
+    meta_t grp_array = {NULL, NULL, db->hdr.nr_grp, sizeof(cgrp), NULL, print_error};
     char menu_grp[4][32]={  "Menu des groupes",
                             "Lister les groupes",
                             "Exporter les groupes",
@@ -578,8 +578,8 @@ int menu_industries(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
     dyndata_t *industry = NULL;
-    meta_t ind_list = {NULL, NULL, 0, sizeof(cind), compare_industry_PK, NULL};
-    meta_t ind_array = {NULL, NULL, db->hdr.nr_ind, sizeof(cind), NULL, NULL};
+    meta_t ind_list = {NULL, NULL, 0, sizeof(cind), compare_industry_PK, print_error};
+    meta_t ind_array = {NULL, NULL, db->hdr.nr_ind, sizeof(cind), NULL, print_error};
     char menu_ind[4][32]={  "Menu des Industries",
                             "Lister les industries",
                             "Exporter les industries",
@@ -640,8 +640,8 @@ int menu_jobs(dbc* db){
     char choice=0, i;
     uint64_t j = 0;
     dyndata_t *job = NULL;
-    meta_t job_list = {NULL, NULL, 0, sizeof(cjob), compare_job_name, NULL};
-    meta_t job_array = {NULL, NULL, db->hdr.nr_job, sizeof(cjob), NULL, NULL};
+    meta_t job_list = {NULL, NULL, 0, sizeof(cjob), compare_job_name, print_error};
+    meta_t job_array = {NULL, NULL, db->hdr.nr_job, sizeof(cjob), NULL, print_error};
     char menu_job[4][32]={  "Menu des Jobs",
                             "Lister les jobs",
                             "Exporter les jobs",

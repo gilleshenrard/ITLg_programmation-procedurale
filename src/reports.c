@@ -56,9 +56,9 @@ int Rec_scr_report(void *rec, void *nullable){
 /****************************************************************************************/
 int print_screen_report(dbc* db, char* nm_cpy){
     //metadata for all the lists created
-    meta_t list_cpy = {NULL, NULL, 0, sizeof(ccpy), compare_company_name, NULL};
-    meta_t list_con = {NULL, NULL, 0, sizeof(ccon), compare_contact_cpy, NULL};
-    meta_t list_rep = {NULL, NULL, 0, sizeof(cscr), compare_scr_report_type, NULL};
+    meta_t list_cpy = {NULL, NULL, 0, sizeof(ccpy), compare_company_name, print_error};
+    meta_t list_con = {NULL, NULL, 0, sizeof(ccon), compare_contact_cpy, print_error};
+    meta_t list_rep = {NULL, NULL, 0, sizeof(cscr), compare_scr_report_type, print_error};
     //metadata for all the indexes used
     meta_t index_cpy = {0};
     meta_t index_con = {0};
@@ -74,10 +74,13 @@ int print_screen_report(dbc* db, char* nm_cpy){
     //finish preparing the indexes metadata
     index_cpy.elementsize = sizeof(i_ccpy_name);
     index_cpy.doCompare = compare_company_index_char;
+    index_cpy.doPError = print_error;
     index_con.elementsize = sizeof(i_ccon_cpy);
     index_con.doCompare = compare_contact_index_int;
+    index_con.doPError = print_error;
     index_cam.elementsize = sizeof(i_ccam_PK);
     index_cam.doCompare = compare_campaign_index_int;
+    index_cam.doPError = print_error;
 
     // open the DB
     db->fp = fopen(DB_file, "rb");
@@ -205,8 +208,8 @@ int export_aggregated_report(dbc* db){
 /****************************************************************************************/
 int export_detailed_report(dbc* db, char* nm_grp){
     //metadata for all the lists created
-    meta_t list_grp_nm = {NULL, NULL, 0, sizeof(cgrp), compare_group_nm, NULL};
-    meta_t list_cpy_grp = {NULL, NULL, 0, sizeof(ccpy), compare_company_grp, NULL};
+    meta_t list_grp_nm = {NULL, NULL, 0, sizeof(cgrp), compare_group_nm, print_error};
+    meta_t list_cpy_grp = {NULL, NULL, 0, sizeof(ccpy), compare_company_grp, print_error};
     //metadata for all the indexes used
     meta_t index_grp = {0};
     meta_t index_cpy = {0};
@@ -218,8 +221,10 @@ int export_detailed_report(dbc* db, char* nm_grp){
     //finish preparing the indexes metadata
     index_grp.elementsize = sizeof(i_cgrp_nm);
     index_grp.doCompare = compare_group_nm_index_char;
+    index_grp.doPError = print_error;
     index_cpy.elementsize = sizeof(i_ccpy_grp);
     index_cpy.doCompare = compare_company_index_int;
+    index_cpy.doPError = print_error;
 
     // open the DB
     db->fp = fopen(DB_file, "rb");
