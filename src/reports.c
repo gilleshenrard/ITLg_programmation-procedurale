@@ -273,8 +273,14 @@ int export_detailed_report(dbc* db, char* nm_grp){
     //
 
 
-    //look for all the contacts related to the chosen company and create a linked list
+    //look for all the companies related to the chosen group and create a linked list
     searchall_index(db->fp, db->hdr.i_cpy_grp, &((cgrp*)group->data)->id_grp, &index_cpy, &list_cpy_grp);
+
+    //if not found, error
+    if(!list_cpy_grp.nbelements){
+        fprintf(stderr, "\n\nNo company matching the group ID found\n\n");
+        return -1;
+    }
 
     fclose(db->fp);
 
