@@ -14,7 +14,7 @@
 #define BUF_LEN 200
 
 #define CSV_cty_imp "Data_Import/DB_Country.csv"
-#define CSV_cty_exp "Data_Export/DB_Coutry.csv"
+#define CSV_cty_exp "Data_Export/DB_Country.csv"
 #define CSV_cty_header "Id;Nm_Cty;Nm_Zon;Cd_Iso\n"
 
 typedef struct ccty_recur ccty_recur;
