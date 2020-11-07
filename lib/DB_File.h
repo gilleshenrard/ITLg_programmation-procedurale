@@ -1,7 +1,7 @@
 #ifndef DB_FILE_H_INCLUDED
 #define DB_FILE_H_INCLUDED
 #include "DB_Main.h"
-#include "algo.h"
+#include "cstructures.h"
 #include "screen.h"
 
 typedef struct{

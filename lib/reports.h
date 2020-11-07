@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "DB_Main.h"
 #include "DB_Country.h"
-#include "algo.h"
+#include "cstructures.h"
 #include "DB_File.h"
 #include "DB_Group.h"
 #include "DB_Job.h"
