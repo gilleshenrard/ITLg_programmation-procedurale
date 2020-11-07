@@ -288,6 +288,7 @@ int menu_countries(dbc* db){
     char choice=0;
     meta_t cty_list = {NULL, NULL, 0, sizeof(ccty_recur), compare_country_name, print_error};
     meta_t cty_array = {NULL, NULL, db->hdr.nr_cty, sizeof(ccty), NULL, print_error};
+    t_datablock cty_data = {&db->hdr.off_cty, NULL, sizeof(ccty), NULL, NULL};
     char menu_cty[4][32]={  "Menu des Pays",
                             "Lister les pays",
                             "Exporter les pays",
@@ -304,7 +305,7 @@ int menu_countries(dbc* db){
                 break;
 
             case '1':
-                Export_CSV_Country(db);
+                Export_CSV(db, CSV_cty_exp, CSV_cty_header, &cty_data, cty_array.nbelements, CSVFormatCountry);
                 break;
 
             default:

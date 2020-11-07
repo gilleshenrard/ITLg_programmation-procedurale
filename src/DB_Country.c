@@ -88,6 +88,25 @@ void Import_CSV_Country(dbc *db)
 	return ;
 }
 
+/****************************************************************************************/
+/*  I : Country to format to CSV                                                        */
+/*      Buffer in which the final CSV line will be stored                               */
+/*  P : Formats a Country to a CSV file line                                            */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
+/****************************************************************************************/
+int CSVFormatCountry(void* elem, char* finalLine){
+    ccty* cty = (ccty*)elem;
+
+        sprintf(finalLine,"%d;%s;%s;%s\n",
+                cty->id_cty,
+                cty->nm_cty,
+                cty->nm_zon,
+                cty->cd_iso);
+
+    return 0;
+}
+
 /****************************************************************************************
 * Exporte table Country dans un fichier .csv
 ****************************************************************************************/

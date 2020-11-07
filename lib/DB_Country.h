@@ -14,6 +14,8 @@
 #define BUF_LEN 200
 
 #define CSV_cty_imp "Data_Import/DB_Country.csv"
+#define CSV_cty_exp "Data_Export/DB_Coutry.csv"
+#define CSV_cty_header "Id;Nm_Cty;Nm_Zon;Cd_Iso\n"
 
 typedef struct ccty_recur ccty_recur;
 typedef struct ccty_file ccty_file;
@@ -36,7 +38,7 @@ typedef struct i_Country_Name{
 
 //database methods
 void Import_CSV_Country(dbc *db);
-void Export_CSV_Country(dbc *db);
+int CSVFormatCountry(void* elem, char* finalLine);
 void Load_Country(dbc *db);
 void Print_Country(dbc *db);
 void Rec_Country(ccty *rec);
