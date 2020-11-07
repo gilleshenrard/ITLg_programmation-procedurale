@@ -8,7 +8,7 @@
 
 #define CSV_grp_imp "Data_Import/DB_Group.csv"
 #define CSV_grp_exp "Data_Export/DB_Group.csv"
-#define CSV_grp_header "Id;Nm_grp;Nm_Zon;Cd_Iso\n"
+#define CSV_grp_header "Id;Nm_Grp;Cd_Cty;Id_Cty\n"
 
 typedef struct cgrp_recur cgrp_recur;
 typedef struct cgrp_file cgrp_file;
