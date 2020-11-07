@@ -22,7 +22,7 @@
 #define SZ_CPY 100000
 
 #define SZ_TYPE 8
-#define SZ_NAME 28
+#define SZ_NAME 64
 #define SZ_NAME_SM 20
 
 #define DB_file "Data_DB_Comp\\DB_Comp.dat"
