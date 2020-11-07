@@ -7,7 +7,7 @@
 #define BUF_LEN 200
 
 #define CSV_con_imp "Data_Import/DB_Contact.csv"
-#define CSV_con_exp "Data_Export/DB_Company.csv"
+#define CSV_con_exp "Data_Export/DB_Contact.csv"
 #define CSV_con_header "Id_Cam;Id_Cpy;Id_Job;Nr_Rep\n"
 
 typedef struct ccon_recur ccon_recur;
