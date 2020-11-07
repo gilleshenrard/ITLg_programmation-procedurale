@@ -523,6 +523,7 @@ int menu_groups(dbc* db){
     dyndata_t *group = NULL;
     meta_t grp_list = {NULL, NULL, 0, sizeof(cgrp), compare_group_FK, print_error};
     meta_t grp_array = {NULL, NULL, db->hdr.nr_grp, sizeof(cgrp), NULL, print_error};
+    t_datablock grp_data = {&db->hdr.off_grp, NULL, sizeof(cgrp), NULL, NULL};
     char menu_grp[4][32]={  "Menu des groupes",
                             "Lister les groupes",
                             "Exporter les groupes",
@@ -556,7 +557,7 @@ int menu_groups(dbc* db){
                 break;
 
             case '1': //export the countries to a CSV file
-                Export_CSV_Group(db);
+                Export_CSV(db, CSV_grp_exp, CSV_grp_header, &grp_data, grp_array.nbelements, CSVFormatGroup);
                 break;
 
             default:

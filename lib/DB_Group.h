@@ -7,6 +7,8 @@
 #define BUF_LEN 200
 
 #define CSV_grp_imp "Data_Import/DB_Group.csv"
+#define CSV_grp_exp "Data_Export/DB_Group.csv"
+#define CSV_grp_header "Id;Nm_grp;Nm_Zon;Cd_Iso\n"
 
 typedef struct cgrp_recur cgrp_recur;
 typedef struct cgrp_file cgrp_file;
@@ -31,7 +33,7 @@ typedef struct i_Group_name{
 
 //database methods
 void Import_CSV_Group(dbc *db);
-void Export_CSV_Group(dbc *db);
+int CSVFormatGroup(void* elem, char* finalLine);
 void Load_Group(dbc *db);
 int Rec_Group(void *rec, void *nullable);
 

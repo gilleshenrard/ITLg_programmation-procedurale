@@ -89,6 +89,25 @@ void Import_CSV_Group(dbc *db){
 }
 
 /****************************************************************************************/
+/*  I : Group to format to CSV                                                          */
+/*      Buffer in which the final CSV line will be stored                               */
+/*  P : Formats a Group to a CSV file line                                              */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
+/****************************************************************************************/
+int CSVFormatGroup(void* elem, char* finalLine){
+    cgrp* grp = (cgrp*)elem;
+
+    sprintf(finalLine,"%d;%s;%s;%d\n",
+            grp->id_grp,
+            grp->nm_grp,
+            grp->cd_cty,
+            grp->id_cty);
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : Database from which export the groups CSV file                                  */
 /*  P : Reads the whole groups database and exports it in a CSV file                    */
 /*  O : /                                                                               */
