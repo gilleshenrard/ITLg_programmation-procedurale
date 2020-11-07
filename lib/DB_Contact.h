@@ -10,9 +10,6 @@
 #define CSV_con_exp "Data_Export/DB_Contact.csv"
 #define CSV_con_header "Id_Cam;Id_Cpy;Id_Job;Nr_Rep\n"
 
-typedef struct ccon_recur ccon_recur;
-typedef struct ccon_file ccon_file;
-
 typedef struct i_Contact_cpy{
     char tp_rec[SZ_TYPE];   //record type (I_CON)
     int cpy_id;             //foreign key company

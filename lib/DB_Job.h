@@ -10,9 +10,6 @@
 #define CSV_job_exp "Data_Export/DB_Job.csv"
 #define CSV_job_header "Id;Nm_Lev;Nm_Dep;Nm_Job\n"
 
-typedef struct cjob_recur cjob_recur;
-typedef struct cjob_file cjob_file;
-
 typedef struct i_job_Name{
     char tp_rec[SZ_TYPE];   //record type (I_JOBNM)
     char nm_job[SZ_NAME];   //job name

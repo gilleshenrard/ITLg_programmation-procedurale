@@ -17,9 +17,6 @@
 #define CSV_cpy_exp "Data_Export/DB_Company.csv"
 #define CSV_cpy_header "id;id_grp;id_cty;id_ind;nm_cpy;nm_adr;cd_pos;nm_cit;nr_tel;nm_www;dt_cre\n"
 
-typedef struct ccpy_recur ccpy_recur;
-typedef struct ccpy_file ccpy_file;
-
 typedef struct i_company_Name{
     char tp_rec[SZ_TYPE];   //record type (I_CPY)
     char nm_cpy[SZ_NAME];   //Company name

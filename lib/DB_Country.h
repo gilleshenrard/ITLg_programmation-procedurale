@@ -17,16 +17,6 @@
 #define CSV_cty_exp "Data_Export/DB_Country.csv"
 #define CSV_cty_header "Id;Nm_Cty;Nm_Zon;Cd_Iso\n"
 
-typedef struct ccty_recur ccty_recur;
-typedef struct ccty_file ccty_file;
-
-struct ccty_recur{
-    ccty cty;
-    int height;
-    ccty_recur *left;
-    ccty_recur *right;
-};
-
 typedef struct i_Country_Name{
     char tp_rec[SZ_TYPE];   //record type (I_CTY)
     char nm_cty[SZ_NAME];   //Country name
@@ -41,14 +31,13 @@ void Import_CSV_Country(dbc *db);
 int CSVFormatCountry(void* elem, char* finalLine);
 void Load_Country(dbc *db);
 void Print_Country(dbc *db);
-void Rec_Country(ccty *rec);
+int Rec_Country(void *rec, void* nullable);
 
 // dynamic structures methods
 int compare_country_name(void* a, void* b);
 int compare_country_index_name(void* a, void* b);
 int assign_country_index_name(void* index, void* elem);
 int assign_country_index_slot(void* index, uint32_t* offset);
-int Rec_Country_list(void *record, void* nullable);
 char* toString_Country(void* current);
 
 //file structures methods

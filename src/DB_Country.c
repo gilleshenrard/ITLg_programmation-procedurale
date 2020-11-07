@@ -195,7 +195,7 @@ void Print_Country(dbc *db)
     uint64_t i;
 
     for (i=0; i<db->hdr.nr_cty; i++)
-        Rec_Country(&db->cty[i]);
+        Rec_Country(&db->cty[i], NULL);
 
     return;
 }
@@ -203,15 +203,19 @@ void Print_Country(dbc *db)
 /****************************************************************************************
 * Imprime un record Country depuis le buffer
 ****************************************************************************************/
-void Rec_Country(ccty *rec)
-{
-    printf("%3d %20s %20s %2s \n",
-           rec->id_cty,
-           rec->nm_zon,
-           rec->nm_cty,
-           rec->cd_iso );
+#ifdef __GNUC__
+# pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+int Rec_Country(void *rec, void* nullable){
+    ccty* tmp = (ccty*)rec;
 
-    return;
+    printf("%3d %20s %20s %2s \n",
+           tmp->id_cty,
+           tmp->nm_zon,
+           tmp->nm_cty,
+           tmp->cd_iso );
+
+    return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,10 +232,10 @@ void Rec_Country(ccty *rec)
 /*      -1 if A < B                                                                     */
 /****************************************************************************************/
 int compare_country_name(void* a, void* b){
-    ccty_recur *tmp_a = (ccty_recur*)a;
-    ccty_recur *tmp_b = (ccty_recur*)b;
+    ccty *tmp_a = (ccty*)a;
+    ccty *tmp_b = (ccty*)b;
 
-    return strcmp(tmp_a->cty.nm_cty, tmp_b->cty.nm_cty);
+    return strcmp(tmp_a->nm_cty, tmp_b->nm_cty);
 }
 
 /****************************************************************************************/
@@ -290,47 +294,15 @@ int assign_country_index_slot(void* index, uint32_t* offset){
 }
 
 /************************************************************/
-/*  I : /                                                   */
-/*  P : Gets the element to the right of the current        */
-/*  O : Address of the element to the right                 */
-/*          (NULL if current is null)                       */
-/************************************************************/
-void** country_right(void* current){
-    ccty_recur* currentCty = (ccty_recur*)current;
-
-    if(!current)
-        return NULL;
-
-    return (void**)&currentCty->right;
-}
-
-/************************************************************/
-/*  I : record to display                                   */
-/*      /                                                   */
-/*  P : Displays an algo-compatible record                  */
-/*  O : /                                                   */
-/************************************************************/
-#ifdef __GNUC__
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-int Rec_Country_list(void *record, void* nullable){
-    ccty_recur* tmp = (ccty_recur*)record;
-
-    Rec_Country(&tmp->cty);
-
-    return 0;
-}
-
-/************************************************************/
 /*  I : record to summarise as a string                     */
 /*      /                                                   */
 /*  P : returns a string representing the country           */
 /*  O : /                                                   */
 /************************************************************/
 char* toString_Country(void* current){
-    ccty_recur *tmp = (ccty_recur*)current;
+    ccty *tmp = (ccty*)current;
 
-    return tmp->cty.nm_cty;
+    return tmp->nm_cty;
 }
 
 

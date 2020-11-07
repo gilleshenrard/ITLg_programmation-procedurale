@@ -10,9 +10,6 @@
 #define CSV_grp_exp "Data_Export/DB_Group.csv"
 #define CSV_grp_header "Id;Nm_Grp;Cd_Cty;Id_Cty\n"
 
-typedef struct cgrp_recur cgrp_recur;
-typedef struct cgrp_file cgrp_file;
-
 typedef struct i_Group_FK{
     char tp_rec[SZ_TYPE];   //record type (I_GRP)
     int cty_id;             //foreign key

@@ -286,7 +286,7 @@ char menu(int i, char sections[i][32]){
 /************************************************************/
 int menu_countries(dbc* db){
     char choice=0;
-    meta_t cty_list = {NULL, NULL, 0, sizeof(ccty_recur), compare_country_name, print_error};
+    meta_t cty_list = {NULL, NULL, 0, sizeof(ccty), compare_country_name, print_error};
     meta_t cty_array = {NULL, NULL, db->hdr.nr_cty, sizeof(ccty), NULL, print_error};
     t_datablock cty_data = {&db->hdr.off_cty, NULL, sizeof(ccty), NULL, NULL};
     char menu_cty[4][32]={  "Menu des Pays",
@@ -301,7 +301,7 @@ int menu_countries(dbc* db){
         choice = menu(sizeof(menu_cty)/32, menu_cty);
         switch(choice){
             case '0':
-                foreachList(&cty_list, NULL, Rec_Country_list);
+                foreachList(&cty_list, NULL, Rec_Country);
                 break;
 
             case '1':

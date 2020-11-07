@@ -10,9 +10,6 @@
 #define CSV_ind_exp "Data_Export/DB_Industry.csv"
 #define CSV_ind_header "Id;Nm_sec;Nm_Ind\n"
 
-typedef struct cind_recur cind_recur;
-typedef struct cind_file cind_file;
-
 typedef struct i_industry_PK{
     char tp_rec[SZ_TYPE];   //record type (I_IND)
     int ind_id;             //primary key

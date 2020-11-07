@@ -15,9 +15,6 @@
 #include "DB_Company.h"
 #include "screen.h"
 
-typedef struct cscr_recur cscr_recur;
-typedef struct cdtl_recur cdtl_recur;
-
 typedef struct scr_report{
     int id_job;
     int id_cam;
@@ -25,18 +22,6 @@ typedef struct scr_report{
     char cam_tp[SZ_NAME];
     int nr_rep;
 }cscr;
-
-typedef struct dtl_report{
-    char nm_zone[SZ_NAME_SM];
-    ccpy_recur* companies;
-}cdtl;
-
-struct cdtl_recur{
-    cdtl rep;
-    int height;
-    cdtl_recur *left;
-    cdtl_recur *right;
-};
 
 // SCREEN REPORT METHODS
 
