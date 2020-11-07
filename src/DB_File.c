@@ -166,7 +166,7 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block,
     fseek(db->fp, 0, SEEK_SET);
     fwrite(&db->hdr, sizeof(hder), 1, db->fp);
 
-    free(meta->structure);
+    empty_array(meta);
     fclose(db->fp);
 
     return 0;
