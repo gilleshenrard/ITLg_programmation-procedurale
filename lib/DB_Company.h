@@ -15,7 +15,7 @@
 
 #define CSV_cpy_imp "Data_Import/DB_Company.csv"
 #define CSV_cpy_exp "Data_Export/DB_Company.csv"
-#define CSV_cpy_header "Id;Nm_cpy;Nm_Zon;Cd_Iso\n"
+#define CSV_cpy_header "id;id_grp;id_cty;id_ind;nm_cpy;nm_adr;cd_pos;nm_cit;nr_tel;nm_www;dt_cre\n"
 
 typedef struct ccpy_recur ccpy_recur;
 typedef struct ccpy_file ccpy_file;

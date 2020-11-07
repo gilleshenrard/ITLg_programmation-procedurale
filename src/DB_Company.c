@@ -82,17 +82,17 @@ void Import_CSV_company(dbc *db)
         strncpy(cpy.nm_adr, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.nm_adr);
         cpy.nm_adr[strlen(ptr1)]='\0';
 
-        //set the company city and read the company postal code
+        //set the company postal code and read the company city name
         ptr1 = ptr2;
         ptr2 = strtok(NULL,";");
-        strncpy(cpy.nm_cit, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.nm_cit);
-        cpy.nm_cit[strlen(ptr1)]='\0';
-
-        //set the company postal code and read the company phone number
-        ptr1 = ptr2;
-        ptr2 = strtok(NULL,";");
-        strncpy(cpy.cd_pos, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.cd_pos);
+        strncpy(cpy.cd_pos, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.nm_cit);
         cpy.cd_pos[strlen(ptr1)]='\0';
+
+        //set the company city name and read the phone number
+        ptr1 = ptr2;
+        ptr2 = strtok(NULL,";");
+        strncpy(cpy.nm_cit, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cpy.cd_pos);
+        cpy.nm_cit[strlen(ptr1)]='\0';
 
         //set the company postal code and read the company website
         ptr1 = ptr2;
@@ -142,15 +142,15 @@ void Import_CSV_company(dbc *db)
 int CSVFormatCompany(void* elem, char* finalLine){
     ccpy* cpy = (ccpy*)elem;
 
-            sprintf(finalLine,"%d;%d;%d;%d;%s;%s;%s%s;%s;%s;%s\n",
+            sprintf(finalLine,"%d;%d;%d;%d;%s;%s;%s;%s;%s;%s;%s\n",
                 cpy->id_cpy,
                 cpy->id_cty,
                 cpy->id_ind,
                 cpy->id_grp,
                 cpy->nm_cpy,
                 cpy->nm_adr,
-                cpy->nm_cit,
                 cpy->cd_pos,
+                cpy->nm_cit,
                 cpy->nr_tel,
                 cpy->nm_www,
                 cpy->dt_cre);
