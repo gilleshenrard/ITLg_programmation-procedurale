@@ -177,7 +177,7 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block,
 /*      Header to add to the CSV                                                        */
 /*      Metadata of the DB block to export                                              */
 /*      Amount of elements to export                                                    */
-/*      Function allowing a table element to be formatted in a CSV line (w/o "\n")      */
+/*      Function allowing a table element to be formatted in a CSV line                 */
 /*  P : Exports all the elements from a DB file block to a CSV file                     */
 /*  O : -1 if error                                                                     */
 /*      0 otherwise                                                                     */
@@ -202,7 +202,6 @@ int Export_CSV(dbc *db, char* filename, char* CSVheader, t_datablock* blockInfo,
     printf("\nExporting to %s\n", filename);
     fpo = fopen(filename, "w");
     fprintf(fpo,CSVheader);
-    fprintf(fpo, "\n");
 
     //get to the beginning of the block to export
     fseek(db->fp, *blockInfo->block_off, SEEK_SET);
@@ -224,7 +223,6 @@ int Export_CSV(dbc *db, char* filename, char* CSVheader, t_datablock* blockInfo,
         fread(buf, 1, blockInfo->elem_size, db->fp);
 
         (*doCSVFormat)(buf, line);
-        strcat(line, "\n");
         fprintf(fpo,line);
     }
 

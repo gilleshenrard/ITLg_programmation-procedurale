@@ -124,7 +124,7 @@ void Import_CSV_campaign(dbc *db){
 
 /****************************************************************************************/
 /*  I : Campaign to format to CSV                                                       */
-/*      Buffer in which the final CSV line will be stored (without "\n")                */
+/*      Buffer in which the final CSV line will be stored                               */
 /*  P : Formats a Campaign to a CSV file line                                           */
 /*  O : -1 if error                                                                     */
 /*      0 otherwise                                                                     */
@@ -132,7 +132,7 @@ void Import_CSV_campaign(dbc *db){
 int CSVFormatCampaign(void* elem, char* finalLine){
     ccam* cam = (ccam*)elem;
 
-    sprintf(finalLine,"%d;%s;%s;%s;%s;%s;%s;%s;%d;%f",
+    sprintf(finalLine,"%d;%s;%s;%s;%s;%s;%s;%s;%d;%f\n",
                 cam->id_cam,
                 cam->nm_cam,
                 cam->tp_cam,

@@ -8,7 +8,7 @@
 
 #define CSV_cam_imp "Data_Import/DB_Campaign.csv"
 #define CSV_cam_exp "Data_Export/DB_Campaign.csv"
-#define CSV_cam_header "Id;Nm_Cam;Tp_Cam;Dt_Cam;Nm_Lev;Nm_Dep;Nm_Sec;Nm_Zon;Nr_Yr;Cost"
+#define CSV_cam_header "Id;Nm_Cam;Tp_Cam;Dt_Cam;Nm_Lev;Nm_Dep;Nm_Sec;Nm_Zon;Nr_Yr;Cost\n"
 
 typedef struct ccam_recur ccam_recur;
 typedef struct ccam_file ccam_file;

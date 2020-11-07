@@ -134,7 +134,7 @@ void Import_CSV_company(dbc *db)
 
 /****************************************************************************************/
 /*  I : Company to format to CSV                                                        */
-/*      Buffer in which the final CSV line will be stored (without "\n")                */
+/*      Buffer in which the final CSV line will be stored                               */
 /*  P : Formats a Company to a CSV file line                                            */
 /*  O : -1 if error                                                                     */
 /*      0 otherwise                                                                     */
@@ -142,7 +142,7 @@ void Import_CSV_company(dbc *db)
 int CSVFormatCompany(void* elem, char* finalLine){
     ccpy* cpy = (ccpy*)elem;
 
-            sprintf(finalLine,"%d;%d;%d;%d;%s;%s;%s%s;%s;%s;%s",
+            sprintf(finalLine,"%d;%d;%d;%d;%s;%s;%s%s;%s;%s;%s\n",
                 cpy->id_cpy,
                 cpy->id_cty,
                 cpy->id_ind,
