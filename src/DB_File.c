@@ -185,7 +185,7 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block,
 int Export_CSV(dbc *db, char* filename, char* CSVheader, t_datablock* blockInfo, uint32_t nbElements, int (*doCSVFormat)(void* elem, char* finalLine)){
     uint32_t i;
 	void* buf = NULL;
-	char line[128] = "0";
+	char line[256] = "0";
 	FILE *fpo, *fp_lg;
 
 	//check if all info provided
