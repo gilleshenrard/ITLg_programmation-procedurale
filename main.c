@@ -459,6 +459,7 @@ int menu_contacts(dbc* db){
     dyndata_t *contact = NULL;
     meta_t con_list = {NULL, NULL, 0, sizeof(ccon), compare_contact_cpy, print_error};
     meta_t con_array = {NULL, NULL, db->hdr.nr_con, sizeof(ccon), NULL, print_error};
+    t_datablock con_data = {&db->hdr.off_con, NULL, sizeof(ccon), NULL, NULL};
     char menu_con[4][32]={  "Menu des Contacts",
                             "Lister les contacts",
                             "Exporter les contacts",
@@ -492,7 +493,7 @@ int menu_contacts(dbc* db){
                 break;
 
             case '1': //export the countries to a CSV file
-                Export_CSV_contact(db);
+                Export_CSV(db, CSV_con_exp, CSV_con_header, &con_data, con_array.nbelements, CSVFormatContact);
                 break;
 
             default:

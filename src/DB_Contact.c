@@ -91,45 +91,22 @@ void Import_CSV_contact(dbc *db){
 }
 
 /****************************************************************************************/
-/*  I : Database from which export the contacts CSV file                                */
-/*  P : Reads the whole contacts database and exports it in a CSV file                  */
-/*  O : /                                                                               */
+/*  I : Contact to format to CSV                                                        */
+/*      Buffer in which the final CSV line will be stored                               */
+/*  P : Formats a Contact to a CSV file line                                            */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
 /****************************************************************************************/
-void Export_CSV_contact(dbc *db){
-    uint64_t i;
-	ccon con;
-	FILE *fpo, *fp_lg;
+int CSVFormatContact(void* elem, char* finalLine){
+    ccon* con = (ccon*)elem;
 
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
+    sprintf(finalLine,"%d;%d;%d;%d\n",
+            con->id_cam,
+            con->id_cpy,
+            con->id_job,
+            con->nr_rep);
 
-    printf("\nContact : exporting ...\n");
-    fpo = fopen("Data_Export/Exp_contact.csv", "w");
-    fprintf(fpo,"Id_Cam;Id_Cpy;Id_Job;Nr_Rep\n");
-
-    fseek(db->fp, db->hdr.off_con, SEEK_SET);
-
-    for (i=0; i<db->hdr.nr_con; i++)
-    {
-        memset(&con, 0, sizeof(ccon));
-        fread(&con, 1, sizeof(ccon), db->fp);
-
-        fprintf(fpo,"%d;%d;%d;%d\n",
-                con.id_cam,
-                con.id_cpy,
-                con.id_job,
-                con.nr_rep);
-    }
-
-    fprintf(fp_lg, "contact exported : %lu\n", (unsigned long int)db->hdr.nr_con);
-
-    fclose(db->fp);
-    fclose(fp_lg);
-	fclose(fpo);
-
-    printf("\ncontact exported : %lu\n\n", (unsigned long int)db->hdr.nr_con);
-
-    return;
+    return 0;
 }
 
 /****************************************************************************************/

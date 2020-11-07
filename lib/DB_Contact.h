@@ -7,6 +7,8 @@
 #define BUF_LEN 200
 
 #define CSV_con_imp "Data_Import/DB_Contact.csv"
+#define CSV_con_exp "Data_Export/DB_Company.csv"
+#define CSV_con_header "Id_Cam;Id_Cpy;Id_Job;Nr_Rep\n"
 
 typedef struct ccon_recur ccon_recur;
 typedef struct ccon_file ccon_file;
@@ -22,7 +24,7 @@ typedef struct i_Contact_cpy{
 
 //database methods
 void Import_CSV_contact(dbc *db);
-void Export_CSV_contact(dbc *db);
+int CSVFormatContact(void* elem, char* finalLine);
 void Load_contact(dbc *db);
 int Rec_contact(void *rec, void *nullable);
 
