@@ -8,7 +8,7 @@
 
 #define CSV_job_imp "Data_Import/DB_Job.csv"
 #define CSV_job_exp "Data_Export/DB_Job.csv"
-#define CSV_job_header "Id;Nm_lev;Nm_dep;Nm_job\n"
+#define CSV_job_header "Id;Nm_Lev;Nm_Dep;Nm_Job\n"
 
 typedef struct cjob_recur cjob_recur;
 typedef struct cjob_file cjob_file;
