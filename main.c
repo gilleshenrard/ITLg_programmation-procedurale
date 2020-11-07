@@ -649,6 +649,7 @@ int menu_jobs(dbc* db){
     dyndata_t *job = NULL;
     meta_t job_list = {NULL, NULL, 0, sizeof(cjob), compare_job_name, print_error};
     meta_t job_array = {NULL, NULL, db->hdr.nr_job, sizeof(cjob), NULL, print_error};
+    t_datablock job_data = {&db->hdr.off_job, NULL, sizeof(cjob), NULL, NULL};
     char menu_job[4][32]={  "Menu des Jobs",
                             "Lister les jobs",
                             "Exporter les jobs",
@@ -682,7 +683,7 @@ int menu_jobs(dbc* db){
                 break;
 
             case '1': //export the countries to a CSV file
-                Export_CSV_job(db);
+                Export_CSV(db, CSV_job_exp, CSV_job_header, &job_data, job_array.nbelements, CSVFormatJob);
                 break;
 
             default:

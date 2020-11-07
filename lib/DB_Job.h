@@ -7,6 +7,8 @@
 #define BUF_LEN 200
 
 #define CSV_job_imp "Data_Import/DB_Job.csv"
+#define CSV_job_exp "Data_Export/DB_Job.csv"
+#define CSV_job_header "Id;Nm_lev;Nm_dep;Nm_job\n"
 
 typedef struct cjob_recur cjob_recur;
 typedef struct cjob_file cjob_file;
@@ -22,7 +24,7 @@ typedef struct i_job_Name{
 
 //database methods
 void Import_CSV_job(dbc *db);
-void Export_CSV_job(dbc *db);
+int CSVFormatJob(void* elem, char* finalLine);
 void Load_job(dbc *db);
 int Rec_job(void *rec, void *nullable);
 

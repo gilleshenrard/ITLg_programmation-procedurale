@@ -88,6 +88,25 @@ void Import_CSV_job(dbc *db)
 	return ;
 }
 
+/****************************************************************************************/
+/*  I : Job to format to CSV                                                            */
+/*      Buffer in which the final CSV line will be stored                               */
+/*  P : Formats a Job to a CSV file line                                                */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
+/****************************************************************************************/
+int CSVFormatJob(void* elem, char* finalLine){
+    cjob* job = (cjob*)elem;
+
+    sprintf(finalLine,"%d;%s;%s;%s\n",
+            job->id_job,
+            job->nm_lev,
+            job->nm_dep,
+            job->nm_job);
+
+    return 0;
+}
+
 /****************************************************************************************
 * Exporte table Job dans un fichier .csv
 ****************************************************************************************/
