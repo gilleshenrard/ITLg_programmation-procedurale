@@ -9,7 +9,6 @@
 #define DB_COUNTRY_H_INCLUDED
 #include "DB_Main.h"
 #include "DB_File.h"
-#include "algo.h"
 
 #define PRT 0
 #define BUF_LEN 200

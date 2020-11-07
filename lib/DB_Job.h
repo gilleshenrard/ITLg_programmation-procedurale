@@ -2,7 +2,6 @@
 #define DB_JOB_H_INCLUDED
 #include "DB_Main.h"
 #include "DB_File.h"
-#include "algo.h"
 
 #define PRT 0
 #define BUF_LEN 200
