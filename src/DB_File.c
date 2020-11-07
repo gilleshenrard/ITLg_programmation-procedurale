@@ -10,8 +10,7 @@
 /****************************************************************************************
 * Creation de la database sur base des constantes SZ_*
 ****************************************************************************************/
-int Create_DB(dbc *db, char filename[])
-{
+int Create_DB(dbc *db, char filename[]){
     int i;
     ccty cty = {0};
     cjob job = {0};
@@ -168,6 +167,75 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block,
 
     empty_array(meta);
     fclose(db->fp);
+
+    return 0;
+}
+
+/****************************************************************************************/
+/*  I : Database from which export the block to a CSV file                              */
+/*      Name of the export CSV file                                                     */
+/*      Header to add to the CSV                                                        */
+/*      Metadata of the DB block to export                                              */
+/*      Amount of elements to export                                                    */
+/*      Function allowing a table element to be formatted in a CSV line (w/o "\n")      */
+/*  P : Exports all the elements from a DB file block to a CSV file                     */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
+/****************************************************************************************/
+int Export_CSV(dbc *db, char* filename, char* CSVheader, t_datablock* blockInfo, uint32_t nbElements, int (*doCSVFormat)(void* elem, char* finalLine)){
+    uint32_t i;
+	void* buf = NULL;
+	char line[128] = "0";
+	FILE *fpo, *fp_lg;
+
+	//check if all info provided
+	if(!db || !filename || !CSVheader || !blockInfo || !doCSVFormat){
+        print_error("Export_CSV(): at least one information needed for the export is NULL");
+        return -1;
+	}
+
+	//open the DB and log files
+    db->fp = fopen(DB_file, "rb+");
+    fp_lg = fopen(log_file, "a");
+
+    //open the CSV export file
+    printf("\nExporting to %s\n", filename);
+    fpo = fopen(filename, "w");
+    fprintf(fpo,CSVheader);
+    fprintf(fpo, "\n");
+
+    //get to the beginning of the block to export
+    fseek(db->fp, *blockInfo->block_off, SEEK_SET);
+
+    //allocate memory for the buffer
+    buf = calloc(1, blockInfo->elem_size);
+    if(!buf){
+        print_error("Export_CSV() : temporary element allocation error");
+        fclose(fpo);
+        fclose(db->fp);
+        fclose(fp_lg);
+        return -1;
+    }
+
+    //write all elements from the block in the CSV file
+    for (i=0; i<nbElements; i++)
+    {
+        memset(buf, 0, blockInfo->elem_size);
+        fread(buf, 1, blockInfo->elem_size, db->fp);
+
+        (*doCSVFormat)(buf, line);
+        strcat(line, "\n");
+        fprintf(fpo,line);
+    }
+
+    //write log and inform user
+    fprintf(fp_lg, "Successfully exported : %u lines\n", nbElements);
+    printf("\nSuccessfully exported : %u\n\n lines", nbElements);
+
+    free(buf);
+    fclose(db->fp);
+    fclose(fp_lg);
+	fclose(fpo);
 
     return 0;
 }
