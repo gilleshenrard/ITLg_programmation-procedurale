@@ -132,7 +132,7 @@ void Import_CSV_campaign(dbc *db){
 int CSVFormatCampaign(void* elem, char* finalLine){
     ccam* cam = (ccam*)elem;
 
-    sprintf(finalLine,"%d;%s;%s;%s;%s;%s;%s;%s;%d;%f\n",
+    sprintf(finalLine,"%d;%s;%s;%s;%s;%s;%s;%s;%d; %.3f\n",
                 cam->id_cam,
                 cam->nm_cam,
                 cam->tp_cam,
