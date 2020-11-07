@@ -132,52 +132,30 @@ void Import_CSV_company(dbc *db)
 	return ;
 }
 
-/****************************************************************************************
-* Exporte table Company dans un fichier .csv
-****************************************************************************************/
-void Export_CSV_company(dbc *db)
-{
-    uint64_t i;
-	ccpy cpy;
-	FILE *fpo, *fp_lg;
+/****************************************************************************************/
+/*  I : Company to format to CSV                                                        */
+/*      Buffer in which the final CSV line will be stored (without "\n")                */
+/*  P : Formats a Company to a CSV file line                                            */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
+/****************************************************************************************/
+int CSVFormatCompany(void* elem, char* finalLine){
+    ccpy* cpy = (ccpy*)elem;
 
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
+            sprintf(finalLine,"%d;%d;%d;%d;%s;%s;%s%s;%s;%s;%s",
+                cpy->id_cpy,
+                cpy->id_cty,
+                cpy->id_ind,
+                cpy->id_grp,
+                cpy->nm_cpy,
+                cpy->nm_adr,
+                cpy->nm_cit,
+                cpy->cd_pos,
+                cpy->nr_tel,
+                cpy->nm_www,
+                cpy->dt_cre);
 
-    printf("\nCompany : exporting ...\n");
-    fpo = fopen("Data_Export/Exp_Company.csv", "w");
-    fprintf(fpo,"Id;Nm_cpy;Nm_Zon;Cd_Iso\n");
-
-    fseek(db->fp, db->hdr.off_cpy, SEEK_SET);
-
-    for (i=0; i<db->hdr.nr_cpy; i++)
-    {
-        memset(&cpy, 0, sizeof(ccpy));
-        fread(&cpy, 1, sizeof(ccpy), db->fp);
-
-        fprintf(fpo,"%d;%d;%d;%d;%s;%s;%s%s;%s;%s;%s\n",
-                cpy.id_cpy,
-                cpy.id_cty,
-                cpy.id_ind,
-                cpy.id_grp,
-                cpy.nm_cpy,
-                cpy.nm_adr,
-                cpy.nm_cit,
-                cpy.cd_pos,
-                cpy.nr_tel,
-                cpy.nm_www,
-                cpy.dt_cre);
-    }
-
-    fprintf(fp_lg, "Company exported : %lu\n", (unsigned long int)db->hdr.nr_cpy);
-
-    fclose(db->fp);
-    fclose(fp_lg);
-	fclose(fpo);
-
-    printf("\nCompany exported : %lu\n\n", (unsigned long int)db->hdr.nr_cpy);
-
-    return;
+    return 0;
 }
 
 /****************************************************************************************

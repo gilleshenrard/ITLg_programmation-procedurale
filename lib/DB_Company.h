@@ -14,6 +14,8 @@
 #define BUF_LEN 200
 
 #define CSV_cpy_imp "Data_Import/DB_Company.csv"
+#define CSV_cpy_exp "Data_Export/DB_Company.csv"
+#define CSV_cpy_header "Id;Nm_cpy;Nm_Zon;Cd_Iso"
 
 typedef struct ccpy_recur ccpy_recur;
 typedef struct ccpy_file ccpy_file;
@@ -38,7 +40,7 @@ typedef struct i_company_Group{
 
 //database methods
 void Import_CSV_company(dbc *db);
-void Export_CSV_company(dbc *db);
+int CSVFormatCompany(void* elem, char* finalLine);
 void Load_company(dbc *db);
 int Rec_company(void *rec, void *nullable);
 

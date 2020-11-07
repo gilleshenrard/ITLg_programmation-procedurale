@@ -333,6 +333,7 @@ int menu_companies(dbc* db){
     dyndata_t *companies = NULL;
     meta_t cpy_list = {NULL, NULL, 0, sizeof(ccpy), compare_company_name, print_error};
     meta_t cpy_array = {NULL, NULL, db->hdr.nr_cpy, sizeof(ccpy), NULL, print_error};
+    t_datablock cpy_data = {&db->hdr.off_cpy, NULL, sizeof(ccpy), NULL, NULL};
     char menu_cpy[4][32]={  "Menu des Compagnies",
                             "Lister les Compagnies",
                             "Exporter les Compagnies",
@@ -366,7 +367,7 @@ int menu_companies(dbc* db){
                 break;
 
             case '1': //export the countries to a CSV file
-                Export_CSV_company(db);
+                Export_CSV(db, CSV_cpy_exp, CSV_cpy_header, &cpy_data, cpy_array.nbelements, CSVFormatCompany);
                 break;
 
             default:
@@ -429,7 +430,6 @@ int menu_campaigns(dbc* db){
                 break;
 
             case '1': //export the countries to a CSV file
-
                 Export_CSV(db, CSV_cam_exp, CSV_cam_header, &cam_data, cam_array.nbelements, CSVFormatCampaign);
                 break;
 
