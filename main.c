@@ -586,6 +586,7 @@ int menu_industries(dbc* db){
     dyndata_t *industry = NULL;
     meta_t ind_list = {NULL, NULL, 0, sizeof(cind), compare_industry_PK, print_error};
     meta_t ind_array = {NULL, NULL, db->hdr.nr_ind, sizeof(cind), NULL, print_error};
+    t_datablock ind_data = {&db->hdr.off_ind, NULL, sizeof(cind), NULL, NULL};
     char menu_ind[4][32]={  "Menu des Industries",
                             "Lister les industries",
                             "Exporter les industries",
@@ -619,7 +620,7 @@ int menu_industries(dbc* db){
                 break;
 
             case '1': //export the countries to a CSV file
-                Export_CSV_industry(db);
+                Export_CSV(db, CSV_ind_exp, CSV_ind_header, &ind_data, ind_array.nbelements, CSVFormatIndustry);
                 break;
 
             default:

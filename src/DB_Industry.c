@@ -82,6 +82,24 @@ void Import_CSV_industry(dbc *db){
 }
 
 /****************************************************************************************/
+/*  I : Industry to format to CSV                                                       */
+/*      Buffer in which the final CSV line will be stored                               */
+/*  P : Formats a Industry to a CSV file line                                           */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
+/****************************************************************************************/
+int CSVFormatIndustry(void* elem, char* finalLine){
+    cind* ind = (cind*)elem;
+
+    sprintf(finalLine,"%d;%s;%s\n",
+            ind->id_ind,
+            ind->nm_sec,
+            ind->nm_ind);
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : Database from which export the industries CSV file                              */
 /*  P : Reads the whole industries database and exports it in a CSV file                */
 /*  O : /                                                                               */
