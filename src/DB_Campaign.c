@@ -123,51 +123,28 @@ void Import_CSV_campaign(dbc *db){
 }
 
 /****************************************************************************************/
-/*  I : Database from which export the campaigns CSV file                                */
-/*  P : Reads the whole campaigns database and exports it in a CSV file                  */
-/*  O : /                                                                               */
+/*  I : Campaign to format to CSV                                                       */
+/*      Buffer in which the final CSV line will be stored (without "\n")                */
+/*  P : Formats a Campaign to a CSV file line                                           */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
 /****************************************************************************************/
-void Export_CSV_campaign(dbc *db){
-    uint64_t i;
-	ccam cam;
-	FILE *fpo, *fp_lg;
+int CSVFormatCampaign(void* elem, char* finalLine){
+    ccam* cam = (ccam*)elem;
 
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
+    sprintf(finalLine,"%d;%s;%s;%s;%s;%s;%s;%s;%d;%f",
+                cam->id_cam,
+                cam->nm_cam,
+                cam->tp_cam,
+                cam->dt_cam,
+                cam->nm_lev,
+                cam->nm_dep,
+                cam->nm_sec,
+                cam->nm_zon,
+                cam->nr_year,
+                cam->cost);
 
-    printf("\ncampaign : exporting ...\n");
-    fpo = fopen("Data_Export/Exp_campaign.csv", "w");
-    fprintf(fpo,"Id;Nm_Cam;Tp_Cam;Dt_Cam;Nm_Lev;Nm_Dep;Nm_Sec;Nm_Zon;Nr_Yr;Cost\n");
-
-    fseek(db->fp, db->hdr.off_cam, SEEK_SET);
-
-    for (i=0; i<db->hdr.nr_cam; i++)
-    {
-        memset(&cam, 0, sizeof(ccam));
-        fread(&cam, 1, sizeof(ccam), db->fp);
-
-        fprintf(fpo,"%d;%s;%s;%s;%s;%s;%s;%s;%d;%f\n",
-                cam.id_cam,
-                cam.nm_cam,
-                cam.tp_cam,
-                cam.dt_cam,
-                cam.nm_lev,
-                cam.nm_dep,
-                cam.nm_sec,
-                cam.nm_zon,
-                cam.nr_year,
-                cam.cost);
-    }
-
-    fprintf(fp_lg, "campaign exported : %lu\n", (unsigned long int)db->hdr.nr_cam);
-
-    fclose(db->fp);
-    fclose(fp_lg);
-	fclose(fpo);
-
-    printf("\ncampaign exported : %lu\n\n", (unsigned long int)db->hdr.nr_cam);
-
-    return;
+    return 0;
 }
 
 /****************************************************************************************/

@@ -3,6 +3,7 @@
 #include <conio.h>
 #include "reports.h"
 #include "screen.h"
+#include "DB_Campaign.h"
 
 #define PG_SIZE 32
 
@@ -394,6 +395,7 @@ int menu_campaigns(dbc* db){
     dyndata_t *campaign = NULL;
     meta_t cam_list = {NULL, NULL, 0, sizeof(ccam), compare_campaign_PK, print_error};
     meta_t cam_array = {NULL, NULL, db->hdr.nr_cam, sizeof(ccam), NULL, print_error};
+    t_datablock cam_data = {&db->hdr.off_cam, NULL, sizeof(ccam), NULL, NULL};
     char menu_cam[4][32]={  "Menu des Campagnes",
                             "Lister les campagnes",
                             "Exporter les campagnes",
@@ -427,7 +429,8 @@ int menu_campaigns(dbc* db){
                 break;
 
             case '1': //export the countries to a CSV file
-                Export_CSV_campaign(db);
+
+                Export_CSV(db, CSV_cam_exp, CSV_cam_header, &cam_data, cam_array.nbelements, CSVFormatCampaign);
                 break;
 
             default:
