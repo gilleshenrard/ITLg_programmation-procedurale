@@ -173,37 +173,49 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block,
 
 /****************************************************************************************/
 /*  I : Database from which import the records in memory                                */
-/*  P : Reads the whole campaigns database and loads them in memory                      */
-/*  O : /                                                                               */
+/*      Metadata of the array in which load the table                                   */
+/*      Offset of the data block to load                                                */
+/*  P : Read the datablock of a DB table and load it in memory                          */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
 /****************************************************************************************/
 int Load_table(dbc *db, meta_t* dArray, long blockOffset){
     uint64_t i;
     void* buf = NULL;
 	FILE *fp_lg;
 
+	//open the DB and log files
     db->fp = fopen(DB_file, "rb+");
     fp_lg = fopen(log_file, "a");
 
+    //make sure the array is empty beforehand
     if(dArray->structure)
         empty_array(dArray);
 
+    //allocate memory for the new array
     dArray->structure = calloc(dArray->nbelements, dArray->elementsize);
 
+    //get to the offset of the data block to load
     fseek(db->fp, blockOffset, SEEK_SET);
 
+    //read every record and save it in the array
     buf = calloc(1, dArray->elementsize);
     for (i=0; i < dArray->nbelements; i++)
     {
+        //read a record
         memset(buf, 0, dArray->elementsize);
         fread(buf, 1, dArray->elementsize, db->fp);
 
+        //save it at the proper array slot
         set_arrayelem(dArray, i, buf);
     }
     free(buf);
 
+    //confirm the table loading success
     fprintf(fp_lg, "table loaded into buffer : %lu\n", (unsigned long int)dArray->nbelements);
     printf("\nloaded into buffer : %lu\n\n", (unsigned long int)dArray->nbelements);
 
+    //close the files
     fclose(db->fp);
     fclose(fp_lg);
 
