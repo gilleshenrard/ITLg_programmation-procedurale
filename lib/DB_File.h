@@ -13,6 +13,7 @@ typedef struct{
 }t_datablock;
 
 int Create_DB(dbc *db, char filename[]);
+int Load_table(dbc *db, meta_t* dArray, long blockOffset);
 long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block, t_datablock* t_block);
 int Export_CSV(dbc *db, char* filename, char* CSVheader, t_datablock* blockInfo, uint32_t nbElements, int (*doCSVFormat)(void* elem, char* finalLine));
 

@@ -172,6 +172,45 @@ long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block,
 }
 
 /****************************************************************************************/
+/*  I : Database from which import the records in memory                                */
+/*  P : Reads the whole campaigns database and loads them in memory                      */
+/*  O : /                                                                               */
+/****************************************************************************************/
+int Load_table(dbc *db, meta_t* dArray, long blockOffset){
+    uint64_t i;
+    void* buf = NULL;
+	FILE *fp_lg;
+
+    db->fp = fopen(DB_file, "rb+");
+    fp_lg = fopen(log_file, "a");
+
+    if(dArray->structure)
+        empty_array(dArray);
+
+    dArray->structure = calloc(dArray->nbelements, dArray->elementsize);
+
+    fseek(db->fp, blockOffset, SEEK_SET);
+
+    buf = calloc(1, dArray->elementsize);
+    for (i=0; i < dArray->nbelements; i++)
+    {
+        memset(buf, 0, dArray->elementsize);
+        fread(buf, 1, dArray->elementsize, db->fp);
+
+        set_arrayelem(dArray, i, buf);
+    }
+    free(buf);
+
+    fprintf(fp_lg, "table loaded into buffer : %lu\n", (unsigned long int)dArray->nbelements);
+    printf("\nloaded into buffer : %lu\n\n", (unsigned long int)dArray->nbelements);
+
+    fclose(db->fp);
+    fclose(fp_lg);
+
+    return 0;
+}
+
+/****************************************************************************************/
 /*  I : Database from which export the block to a CSV file                              */
 /*      Name of the export CSV file                                                     */
 /*      Header to add to the CSV                                                        */
