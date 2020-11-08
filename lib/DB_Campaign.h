@@ -22,7 +22,6 @@ typedef struct i_campaign_PK{
 //database methods
 void Import_CSV_campaign(dbc *db);
 int CSVFormatCampaign(void* elem, char* finalLine);
-void Load_campaign(dbc *db);
 int Rec_campaign(void *rec, void* nullable);
 
 // dynamic structures methods

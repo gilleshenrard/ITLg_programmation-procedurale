@@ -209,6 +209,7 @@ void create_db(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 int load_db(dbc* db){
+    meta_t table_cam = {NULL, NULL, db->hdr.nr_cam, sizeof(ccam), NULL, NULL};
     //open the files and position the pointers at the end
     db->fp = fopen(DB_file, "rb");
 
@@ -220,6 +221,8 @@ int load_db(dbc* db){
 
     fclose(db->fp);
 
+    table_cam.nbelements = db->hdr.nr_cam;
+
     system("cls");
     printf("Loading countries : ");
     Load_Country(db);
@@ -228,7 +231,7 @@ int load_db(dbc* db){
     Load_company(db);
     printf("done\n");
     printf("Loading campaigns : ");
-    Load_campaign(db);
+    Load_table(db, &table_cam, db->hdr.off_cam);
     printf("done\n");
     printf("Loading contacts : ");
     Load_contact(db);

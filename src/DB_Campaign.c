@@ -148,46 +148,6 @@ int CSVFormatCampaign(void* elem, char* finalLine){
 }
 
 /****************************************************************************************/
-/*  I : Database from which import the records in memory                                */
-/*  P : Reads the whole campaigns database and loads them in memory                      */
-/*  O : /                                                                               */
-/****************************************************************************************/
-void Load_campaign(dbc *db){
-    uint64_t i;
-	ccam cam;
-	FILE *fp_lg;
-
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
-
-    if(db->cam)
-        free(db->cam);
-
-    db->cam = (ccam*)calloc(db->hdr.nr_cam, sizeof(ccam));
-
-    printf("\ncampaign : loading ...\n");
-
-    fseek(db->fp, db->hdr.off_cam, SEEK_SET);
-
-    for (i=0; i<db->hdr.nr_cam; i++)
-    {
-        memset(&cam, 0, sizeof(ccam));
-        fread(&cam, 1, sizeof(ccam), db->fp);
-
-        db->cam[i] = cam;
-    }
-
-    fprintf(fp_lg, "campaign loaded into buffer : %lu\n", (unsigned long int)db->hdr.nr_cam);
-
-    fclose(db->fp);
-    fclose(fp_lg);
-
-    printf("\ncampaign loaded into buffer : %lu\n\n", (unsigned long int)db->hdr.nr_cam);
-
-    return;
-}
-
-/****************************************************************************************/
 /*  I : campaign record to print                                                        */
 /*  P : Prints an campaign record                                                       */
 /*  O : /                                                                               */
