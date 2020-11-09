@@ -10,9 +10,6 @@
 #include "DB_Main.h"
 #include "DB_File.h"
 
-#define PRT 0
-#define BUF_LEN 200
-
 #define CSV_cty_imp "Data_Import/DB_Country.csv"
 #define CSV_cty_exp "Data_Export/DB_Country.csv"
 #define CSV_cty_header "Id;Nm_Cty;Nm_Zon;Cd_Iso\n"
@@ -27,7 +24,7 @@ typedef struct i_Country_Name{
 }i_ccty_name;
 
 //database methods
-void Import_CSV_Country(dbc *db);
+int CSVDeserialiseCountry(char *line, void *record);
 int CSVFormatCountry(void* elem, char* finalLine);
 int Rec_Country(void *rec, void* nullable);
 
@@ -36,7 +33,6 @@ int compare_country_name(void* a, void* b);
 int compare_country_index_name(void* a, void* b);
 int assign_country_index_name(void* index, void* elem);
 int assign_country_index_slot(void* index, uint32_t* offset);
-char* toString_Country(void* current);
 
 //file structures methods
 

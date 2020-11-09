@@ -1,91 +1,43 @@
 #include "DB_Country.h"
 
-/****************************************************************************************
-* Chargement du fichier DB_Country.csv dans la database
-*
-* PRT controle l'affichage de test (a enlever)
-*
-****************************************************************************************/
-void Import_CSV_Country(dbc *db)
-{
-    int i=0;
-    char line[BUF_LEN];
+/****************************************************************************************/
+/*  I : CSV line to transform to a Country                                              */
+/*      Buffer in which store the deserialised information                              */
+/*  P : Transfrom a CSV line to a Country                                               */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
+/****************************************************************************************/
+int CSVDeserialiseCountry(char *line, void *record){
     char fld[BUF_LEN];
     char *ptr1, *ptr2;
-	ccty cty;
-	FILE *fpi, *fp_lg;
+	ccty *cty = (ccty*)record;
 
-	//open DB files
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
+    //read the country ID (ptr1) and the country name (ptr2), then set the country ID
+    ptr1 = strtok(line,";");
+    ptr2 = strtok(NULL,";");
+    memset(fld, 0, BUF_LEN);
+    strncpy(fld, ptr1, ptr2-ptr1-1);
+    fld[strlen(ptr1)]='\0';
+    cty->id_cty = atoi(fld);
 
-    //open Import file
-	fpi = fopen(CSV_cty_imp, "r");
-	if (fpi == NULL) { printf("Erreur\n"); return; }
+    //set the country name and read the country zone
+    ptr1 = ptr2;
+    ptr2 = strtok(NULL,";");
+    strncpy(cty->nm_cty, ptr1, ptr2-ptr1-1);
+    cty->nm_cty[strlen(ptr1)]='\0';
 
-    printf("\nCountry : importing ...\n");
+    //set the country zone and read the country ISO code
+    ptr1 = ptr2;
+    ptr2 = strtok(NULL,";");
+    strncpy(cty->nm_zon, ptr1, ptr2-ptr1-1);
+    cty->nm_zon[strlen(ptr1)]='\0';
 
-    //read the first 200 characters in the import file
-    fgets(line, 200, fpi);
+    //set the country ISO code
+    ptr1 = ptr2;
+    strncpy(cty->cd_iso, ptr1, strlen(ptr1));
+    cty->cd_iso[strlen(ptr1)]='\0';
 
-    //set the DB file pointer to the beginning of the Countries data block
-    fseek(db->fp, db->hdr.off_cty, SEEK_SET);
-
-    printf("%lu\n",(unsigned long int)db->hdr.off_cty);
-
-    while (fgets(line, 200, fpi) != NULL)
-    {
-        //clean the buffer up and set the record type to cty
-        memset(&cty, 0, sizeof(ccty));
-        strcpy(cty.tp_rec, "CTY");
-
-        if (PRT) printf("\n---------------------------\n%s\n",line);
-        if (PRT) printf("%s\n", line);
-
-        //read the country ID (ptr1) and the country name (ptr2), then set the country ID
-        ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
-        ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
-        memset(fld, 0, BUF_LEN);
-        strncpy(fld, ptr1, ptr2-ptr1-1);
-        fld[strlen(ptr1)]='\0';
-        cty.id_cty = atoi(fld);                    if (PRT) printf("%d\n", cty.id_cty);
-
-        //set the country name and read the country zone
-        ptr1 = ptr2;
-        ptr2 = strtok(NULL,";");
-        strncpy(cty.nm_cty, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cty.nm_cty);
-        cty.nm_cty[strlen(ptr1)]='\0';
-
-        //set the country zone and read the country ISO code
-        ptr1 = ptr2;
-        ptr2 = strtok(NULL,";");
-        strncpy(cty.nm_zon, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", cty.nm_zon);
-        cty.nm_zon[strlen(ptr1)]='\0';
-
-        //set the country ISO code
-        ptr1 = ptr2;
-        strncpy(cty.cd_iso, ptr1, strlen(ptr1)-1); if (PRT) printf("%s\n", cty.cd_iso);
-        cty.cd_iso[strlen(ptr1)]='\0';
-
-        //write the final record
-        fwrite(&cty, 1, sizeof(ccty), db->fp);
-
-        i++;
-    }
-
-    //save the amount of countries imported
-    db->hdr.nr_cty = i;
-
-    fprintf(fp_lg, "Country imported : %lu\n", (unsigned long int)db->hdr.nr_cty);
-
-    //close all files
-    fclose(db->fp);
-    fclose(fp_lg);
-	fclose(fpi);
-
-    printf("\nCountry imported : %lu\n\n", (unsigned long int)db->hdr.nr_cty);
-
-	return ;
+	return 0;
 }
 
 /****************************************************************************************/
@@ -199,20 +151,3 @@ int assign_country_index_slot(void* index, uint32_t* offset){
 
     return 0;
 }
-
-/************************************************************/
-/*  I : record to summarise as a string                     */
-/*      /                                                   */
-/*  P : returns a string representing the country           */
-/*  O : /                                                   */
-/************************************************************/
-char* toString_Country(void* current){
-    ccty *tmp = (ccty*)current;
-
-    return tmp->nm_cty;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////// FILES METHODS /////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
