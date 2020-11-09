@@ -1,91 +1,43 @@
 #include "DB_Job.h"
 
-/****************************************************************************************
-* Chargement du fichier DB_Job.csv dans la database
-*
-* PRT controle l'affichage de test (a enlever)
-*
-****************************************************************************************/
-void Import_CSV_job(dbc *db)
-{
-    int i=0;
-    char line[BUF_LEN];
+/****************************************************************************************/
+/*  I : CSV line to transform to a Job                                                  */
+/*      Buffer in which store the deserialised information                              */
+/*  P : Transfrom a CSV line to a Job                                                   */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
+/****************************************************************************************/
+int CSVDeserialiseJob(char *line, void *record){
     char fld[BUF_LEN];
     char *ptr1, *ptr2;
-	cjob job;
-	FILE *fpi, *fp_lg;
+	cjob *job = (cjob*)record;
 
-	//open DB files
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
+    //read the job ID (ptr1) and the level nomination (ptr2), then set the job ID
+    ptr1 = strtok(line,";");
+    ptr2 = strtok(NULL,";");
+    memset(fld, 0, BUF_LEN);
+    strncpy(fld, ptr1, ptr2-ptr1-1);
+    fld[strlen(ptr1)]='\0';
+    job->id_job = atoi(fld);
 
-    //open Import file
-	fpi = fopen(CSV_job_imp, "r");
-	if (fpi == NULL) { printf("Erreur\n"); return; }
+    //set the level nomination and read the department
+    ptr1 = ptr2;
+    ptr2 = strtok(NULL,";");
+    strncpy(job->nm_lev, ptr1, ptr2-ptr1-1);
+    job->nm_lev[strlen(ptr1)]='\0';
 
-    printf("\nJob : importing ...\n");
+    //set the department and read job name
+    ptr1 = ptr2;
+    ptr2 = strtok(NULL,";");
+    strncpy(job->nm_dep, ptr1, ptr2-ptr1-1);
+    job->nm_dep[strlen(ptr1)]='\0';
 
-    //read the first 200 characters in the import file
-    fgets(line, 200, fpi);
+    //set the job name
+    ptr1 = ptr2;
+    strncpy(job->nm_job, ptr1, strlen(ptr1));
+    job->nm_job[strlen(ptr1)]='\0';
 
-    //set the DB file pointer to the beginning of the Jobs data block
-    fseek(db->fp, db->hdr.off_job, SEEK_SET);
-
-    printf("%lu\n",(unsigned long int)db->hdr.off_job);
-
-    while (fgets(line, 200, fpi) != NULL)
-    {
-        //clean the buffer up and set the record type to job
-        memset(&job, 0, sizeof(cjob));
-        strcpy(job.tp_rec, "JOB");
-
-        if (PRT) printf("\n---------------------------\n%s\n",line);
-        if (PRT) printf("%s\n", line);
-
-        //read the job ID (ptr1) and the level nomination (ptr2), then set the job ID
-        ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
-        ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
-        memset(fld, 0, BUF_LEN);
-        strncpy(fld, ptr1, ptr2-ptr1-1);
-        fld[strlen(ptr1)]='\0';
-        job.id_job = atoi(fld);                    if (PRT) printf("%d\n", job.id_job);
-
-        //set the level nomination and read the department
-        ptr1 = ptr2;
-        ptr2 = strtok(NULL,";");
-        strncpy(job.nm_lev, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", job.nm_lev);
-        job.nm_lev[strlen(ptr1)]='\0';
-
-        //set the department and read job name
-        ptr1 = ptr2;
-        ptr2 = strtok(NULL,";");
-        strncpy(job.nm_dep, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", job.nm_dep);
-        job.nm_dep[strlen(ptr1)]='\0';
-
-        //set the job name
-        ptr1 = ptr2;
-        strncpy(job.nm_job, ptr1, strlen(ptr1)-1); if (PRT) printf("%s\n", job.nm_job);
-        job.nm_job[strlen(ptr1)]='\0';
-
-        //write the final record
-        fwrite(&job, 1, sizeof(cjob), db->fp);
-
-        i++;
-    }
-
-    //save the amount of jobs imported
-    db->hdr.nr_job = i;
-
-    fprintf(fp_lg, "Job imported : %lu\n", (unsigned long int)db->hdr.nr_job);
-
-    //close all files
-    fclose(db->fp);
-    fclose(fp_lg);
-	fclose(fpi);
-
-    printf("\nJob imported : %lu\n\n", (unsigned long int)db->hdr.nr_job);
-
-	return ;
+	return 0;
 }
 
 /****************************************************************************************/
@@ -199,16 +151,4 @@ int assign_job_index_slot(void* index, uint32_t* offset){
     element->slot = *slot;
 
     return 0;
-}
-
-/************************************************************/
-/*  I : record to summarise as a string                     */
-/*      /                                                   */
-/*  P : returns a string representing the Job               */
-/*  O : /                                                   */
-/************************************************************/
-char* toString_job(void* current){
-    cjob *tmp = (cjob*)current;
-
-    return tmp->nm_job;
 }

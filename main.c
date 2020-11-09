@@ -167,39 +167,47 @@ void create_db(dbc* db){
         return;
     }
 
+    //populate the data blocks by import all CSV files
     db->hdr.nr_cpy = Import_CSV(db, CSV_cpy_imp, db->hdr.off_cpy, sizeof(ccpy), CSVDeserialiseCompany);
     db->hdr.nr_cam = Import_CSV(db, CSV_cam_imp, db->hdr.off_cam, sizeof(ccam), CSVDeserialiseCampaign);
     db->hdr.nr_con = Import_CSV(db, CSV_con_imp, db->hdr.off_con, sizeof(ccon), CSVDeserialiseContact);
     db->hdr.nr_cpy = Import_CSV(db, CSV_cpy_imp, db->hdr.off_cpy, sizeof(ccpy), CSVDeserialiseCountry);
     db->hdr.nr_grp = Import_CSV(db, CSV_grp_imp, db->hdr.off_grp, sizeof(cgrp), CSVDeserialiseGroup);
     db->hdr.nr_ind = Import_CSV(db, CSV_ind_imp, db->hdr.off_ind, sizeof(cind), CSVDeserialiseIndustry);
-
-    Import_CSV_job(db);
+    db->hdr.nr_job = Import_CSV(db, CSV_job_imp, db->hdr.off_job, sizeof(cjob), CSVDeserialiseJob);
 
     printf("Creating the index for Companies (by name) : ");
     create_index_file(db, &index_cpy_nm, db->hdr.nr_cpy, &index_block_cpy_nm, &table_block_cpy);
     printf("done\n");
+
     printf("Creating the index for Companies (by group ID) : ");
     create_index_file(db, &index_cpy_grp, db->hdr.nr_cpy, &index_block_cpy_grp, &table_block_cpy);
     printf("done\n");
+
     printf("Creating the index for Contacts (by company FK) : ");
     create_index_file(db, &index_con, db->hdr.nr_con, &index_block_con, &table_block_con);
     printf("done\n");
+
     printf("Creating the index for Campaigns (by ID) : ");
     create_index_file(db, &index_cam, db->hdr.nr_cam, &index_block_cam, &table_block_cam);
     printf("done\n");
+
     printf("Creating the index for Countries (by name) : ");
     create_index_file(db, &index_cty, db->hdr.nr_cty, &index_block_cty, &table_block_cty);
     printf("done\n");
+
     printf("Creating the index for Groups (by FK) : ");
     create_index_file(db, &index_grp_fk, db->hdr.nr_grp, &index_block_grp_fk, &table_block_grp);
     printf("done\n");
+
     printf("Creating the index for Groups (by name) : ");
     create_index_file(db, &index_grp_nm, db->hdr.nr_grp, &index_block_grp_nm, &table_block_grp);
     printf("done\n");
+
     printf("Creating the index for Industries (by ID) : ");
     create_index_file(db, &index_ind, db->hdr.nr_ind, &index_block_ind, &table_block_ind);
     printf("done\n");
+
     printf("Creating the index for Jobs (by name) : ");
     create_index_file(db, &index_job, db->hdr.nr_job, &index_block_job, &table_block_job);
     printf("done\n");
