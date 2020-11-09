@@ -3,9 +3,6 @@
 #include "DB_Main.h"
 #include "DB_File.h"
 
-#define PRT 0
-#define BUF_LEN 200
-
 #define CSV_cam_imp "Data_Import/DB_Campaign.csv"
 #define CSV_cam_exp "Data_Export/DB_Campaign.csv"
 #define CSV_cam_header "Id;Nm_Cam;Tp_Cam;Dt_Cam;Nm_Lev;Nm_Dep;Nm_Sec;Nm_Zon;Nr_Yr;Cost\n"
@@ -20,7 +17,7 @@ typedef struct i_campaign_PK{
 }i_ccam_PK;
 
 //database methods
-void Import_CSV_campaign(dbc *db);
+int CSVDeserialiseCampaign(char *line, void *record);
 int CSVFormatCampaign(void* elem, char* finalLine);
 int Rec_campaign(void *rec, void* nullable);
 
