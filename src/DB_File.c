@@ -327,6 +327,8 @@ uint32_t Import_CSV(dbc *db, char* CSVfilename, uint32_t blockOffset, uint32_t e
     //  will be imported
     fseek(db->fp, blockOffset, SEEK_SET);
 
+    printf("Importing %s\n", CSVfilename);
+
     //read the whole CSV file, 200 characters at a time
     tmp = calloc(1, elementSize);
     while (fgets(line, BUF_LEN, fpi) != NULL)
