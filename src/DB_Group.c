@@ -1,91 +1,45 @@
 #include "DB_Group.h"
 
 /****************************************************************************************/
-/*  I : Database to which import the groups CSV file                                    */
-/*  P : Reads the whole groups CSV file and writes it in the Database file              */
-/*  O : /                                                                               */
+/*  I : CSV line to transform to a Group                                                */
+/*      Buffer in which store the deserialised information                              */
+/*  P : Transfrom a CSV line to a Group                                                 */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
 /****************************************************************************************/
-void Import_CSV_Group(dbc *db){
-    int i=0;
-    char line[BUF_LEN];
+int CSVDeserialiseGroup(char *line, void *record){
     char fld[BUF_LEN];
     char *ptr1, *ptr2;
-	cgrp grp;
-	FILE *fpi, *fp_lg;
+	cgrp *grp = (cgrp*)record;
 
-	//open DB files
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
+    //read the group ID (ptr1) and the group name (ptr2), then set the group ID
+    ptr1 = strtok(line,";");
+    ptr2 = strtok(NULL,";");
+    memset(fld, 0, BUF_LEN);
+    strncpy(fld, ptr1, ptr2-ptr1-1);
+    fld[strlen(ptr1)]='\0';
+    grp->id_grp = atoi(fld);
 
-    //open Import file
-	fpi = fopen(CSV_grp_imp, "r");
-	if (fpi == NULL) { printf("Erreur\n"); return; }
+    //set the group name and read the group country
+    ptr1 = ptr2;
+    ptr2 = strtok(NULL,";");
+    strncpy(grp->nm_grp, ptr1, ptr2-ptr1-1);
+    grp->nm_grp[strlen(ptr1)]='\0';
 
-    printf("\nGroups : importing ...\n");
+    //set the group country and read the group country ID
+    ptr1 = ptr2;
+    ptr2 = strtok(NULL,";");
+    strncpy(grp->cd_cty, ptr1, ptr2-ptr1-1);
+    grp->cd_cty[strlen(ptr1)]='\0';
 
-    //read the first 200 characters in the import file
-    fgets(line, 200, fpi);
+    //set the group country ID
+    ptr1 = ptr2;
+    memset(fld, 0, BUF_LEN);
+    strncpy(fld, ptr1, strlen(ptr1));
+    fld[strlen(ptr1)]='\0';
+    grp->id_cty = atoi(fld);
 
-    //set the DB file pointer to the beginning of the Groups data block
-    fseek(db->fp, db->hdr.off_grp, SEEK_SET);
-
-    printf("%lu\n",(unsigned long int)db->hdr.off_grp);
-
-    while (fgets(line, 200, fpi) != NULL)
-    {
-        //clean the buffer up and set the record type to grp
-        memset(&grp, 0, sizeof(cgrp));
-        strcpy(grp.tp_rec, "GRP");
-
-        if (PRT) printf("\n---------------------------\n%s\n",line);
-        if (PRT) printf("%s\n", line);
-
-        //read the group ID (ptr1) and the group name (ptr2), then set the group ID
-        ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
-        ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
-        memset(fld, 0, BUF_LEN);
-        strncpy(fld, ptr1, ptr2-ptr1-1);
-        fld[strlen(ptr1)]='\0';
-        grp.id_grp = atoi(fld);                    if (PRT) printf("%d\n", grp.id_grp);
-
-        //set the group name and read the group country
-        ptr1 = ptr2;
-        ptr2 = strtok(NULL,";");
-        strncpy(grp.nm_grp, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", grp.nm_grp);
-        grp.nm_grp[strlen(ptr1)]='\0';
-
-        //set the group country and read the group country ID
-        ptr1 = ptr2;
-        ptr2 = strtok(NULL,";");
-        strncpy(grp.cd_cty, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", grp.cd_cty);
-        grp.cd_cty[strlen(ptr1)]='\0';
-
-        //set the group country ID
-        ptr1 = ptr2;
-        memset(fld, 0, BUF_LEN);
-        strncpy(fld, ptr1, strlen(ptr1)-1);
-        fld[strlen(ptr1)]='\0';
-        grp.id_cty = atoi(fld);                    if (PRT) printf("%d\n", grp.id_cty);
-
-        //write the final record
-        fwrite(&grp, 1, sizeof(cgrp), db->fp);
-
-        i++;
-    }
-
-    //save the amount of groups imported
-    db->hdr.nr_grp = i;
-
-    fprintf(fp_lg, "Groups imported : %lu\n", (unsigned long int)db->hdr.nr_grp);
-
-    //close all files
-    fclose(db->fp);
-    fclose(fp_lg);
-	fclose(fpi);
-
-    printf("\nGroups imported : %lu\n\n", (unsigned long int)db->hdr.nr_grp);
-
-	return ;
+	return 0;
 }
 
 /****************************************************************************************/
@@ -281,16 +235,4 @@ int assign_group_nm_index_slot(void* index, uint32_t* offset){
     element->slot = *slot;
 
     return 0;
-}
-
-/************************************************************/
-/*  I : record to summarise as a string                     */
-/*      /                                                   */
-/*  P : returns a string representing the group             */
-/*  O : /                                                   */
-/************************************************************/
-char* toString_group(void* current){
-    cgrp *tmp = (cgrp*)current;
-
-    return tmp->nm_grp;
 }

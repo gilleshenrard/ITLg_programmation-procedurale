@@ -3,9 +3,6 @@
 #include "DB_Main.h"
 #include "DB_File.h"
 
-#define PRT 0
-#define BUF_LEN 200
-
 #define CSV_grp_imp "Data_Import/DB_Group.csv"
 #define CSV_grp_exp "Data_Export/DB_Group.csv"
 #define CSV_grp_header "Id;Nm_Grp;Cd_Cty;Id_Cty\n"
@@ -29,7 +26,7 @@ typedef struct i_Group_name{
 }i_cgrp_nm;
 
 //database methods
-void Import_CSV_Group(dbc *db);
+int CSVDeserialiseGroup(char *line, void *record);
 int CSVFormatGroup(void* elem, char* finalLine);
 int Rec_Group(void *rec, void *nullable);
 
@@ -42,6 +39,5 @@ int assign_group_index_FK(void* index, void* elem);
 int assign_group_index_nm(void* index, void* elem);
 int assign_group_FK_index_slot(void* index, uint32_t* offset);
 int assign_group_nm_index_slot(void* index, uint32_t* offset);
-char* toString_group(void* current);
 
 #endif // DB_GROUP_H_INCLUDED

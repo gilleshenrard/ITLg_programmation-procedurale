@@ -171,8 +171,8 @@ void create_db(dbc* db){
     db->hdr.nr_cam = Import_CSV(db, CSV_cam_imp, db->hdr.off_cam, sizeof(ccam), CSVDeserialiseCampaign);
     db->hdr.nr_con = Import_CSV(db, CSV_con_imp, db->hdr.off_con, sizeof(ccon), CSVDeserialiseContact);
     db->hdr.nr_cpy = Import_CSV(db, CSV_cpy_imp, db->hdr.off_cpy, sizeof(ccpy), CSVDeserialiseCountry);
+    db->hdr.nr_grp = Import_CSV(db, CSV_grp_imp, db->hdr.off_grp, sizeof(cgrp), CSVDeserialiseGroup);
 
-    Import_CSV_Group(db);
     Import_CSV_industry(db);
     Import_CSV_job(db);
 
