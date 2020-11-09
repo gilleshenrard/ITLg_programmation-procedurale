@@ -1,93 +1,47 @@
 #include "DB_Contact.h"
 
 /****************************************************************************************/
-/*  I : Database to which import the contacts CSV file                                  */
-/*  P : Reads the whole contacts CSV file and writes it in the Database file            */
-/*  O : /                                                                               */
+/*  I : CSV line to transform to a Contact                                              */
+/*      Buffer in which store the deserialised information                              */
+/*  P : Transfrom a CSV line to a Contact                                               */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
 /****************************************************************************************/
-void Import_CSV_contact(dbc *db){
-    int i=0;
-    char line[BUF_LEN];
+int CSVDeserialiseContact(char *line, void *record){
     char fld[BUF_LEN];
     char *ptr1, *ptr2;
-	ccon con;
-	FILE *fpi, *fp_lg;
+	ccon *con = (ccon*)record;
 
-	//open DB files
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
+    //read the campain ID (ptr1) and the company ID (ptr2), then set the campaign ID
+    ptr1 = strtok(line,";");
+    ptr2 = strtok(NULL,";");
+    memset(fld, 0, BUF_LEN);
+    strncpy(fld, ptr1, ptr2-ptr1-1);
+    fld[strlen(ptr1)]='\0';
+    con->id_cam = atoi(fld);
 
-    //open Import file
-	fpi = fopen(CSV_con_imp, "r");
-	if (fpi == NULL) { printf("Erreur\n"); return; }
+    //set the company ID and read the job ID
+    ptr1 = ptr2;
+    ptr2 = strtok(NULL,";");
+    strncpy(fld, ptr1, ptr2-ptr1-1);
+    fld[strlen(ptr1)]='\0';
+    con->id_cpy = atoi(fld);
 
-    printf("\nContacts : importing ...\n");
+    //set the job ID and read the amount of replies
+    ptr1 = ptr2;
+    ptr2 = strtok(NULL,";");
+    strncpy(fld, ptr1, ptr2-ptr1-1);
+    fld[strlen(ptr1)]='\0';
+    con->id_job = atoi(fld);
 
-    //read the first 200 characters in the import file
-    fgets(line, 200, fpi);
+    //set the amount of replies
+    ptr1 = ptr2;
+    memset(fld, 0, BUF_LEN);
+    strncpy(fld, ptr1, strlen(ptr1)-1);
+    fld[strlen(ptr1)]='\0';
+    con->nr_rep = atof(fld);
 
-    //set the DB file pointer to the beginning of the Contacts data block
-    fseek(db->fp, db->hdr.off_con, SEEK_SET);
-
-    printf("%lu\n",(unsigned long int)db->hdr.off_con);
-
-    while (fgets(line, 200, fpi) != NULL)
-    {
-        //clean the buffer up and set the record type to con
-        memset(&con, 0, sizeof(ccon));
-        strcpy(con.tp_rec, "CON");
-
-        if (PRT) printf("\n---------------------------\n%s\n",line);
-        if (PRT) printf("%s\n", line);
-
-        //read the campain ID (ptr1) and the company ID (ptr2), then set the campain ID
-        ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
-        ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
-        memset(fld, 0, BUF_LEN);
-        strncpy(fld, ptr1, ptr2-ptr1-1);
-        fld[strlen(ptr1)]='\0';
-        con.id_cam = atoi(fld);                    if (PRT) printf("%d\n", con.id_cam);
-
-        //set the company ID and read the job ID
-        ptr1 = ptr2;
-        ptr2 = strtok(NULL,";");
-        strncpy(fld, ptr1, ptr2-ptr1-1);
-        fld[strlen(ptr1)]='\0';
-        con.id_cpy = atoi(fld);                    if (PRT) printf("%d\n", con.id_cpy);
-
-        //set the job ID and read the amount of replies
-        ptr1 = ptr2;
-        ptr2 = strtok(NULL,";");
-        strncpy(fld, ptr1, ptr2-ptr1-1);
-        fld[strlen(ptr1)]='\0';
-        con.id_job = atoi(fld);                    if (PRT) printf("%d\n", con.id_job);
-
-        //set the amount of replies
-        ptr1 = ptr2;
-        memset(fld, 0, BUF_LEN);
-        strncpy(fld, ptr1, strlen(ptr1)-1);
-        fld[strlen(ptr1)]='\0';
-        con.nr_rep = atof(fld);                      if (PRT) printf("%d\n", con.nr_rep);
-
-        //write the final record
-        fwrite(&con, 1, sizeof(ccon), db->fp);
-
-        i++;
-    }
-
-    //save the amount of contacts imported
-    db->hdr.nr_con = i;
-
-    fprintf(fp_lg, "Contacts imported : %lu\n", (unsigned long int)db->hdr.nr_con);
-
-    //close all files
-    fclose(db->fp);
-    fclose(fp_lg);
-	fclose(fpi);
-
-    printf("\nContacts imported : %lu\n\n", (unsigned long int)db->hdr.nr_con);
-
-	return ;
+	return 0;
 }
 
 /****************************************************************************************/
@@ -235,15 +189,3 @@ int assign_contact_index_slot(void* index, uint32_t* offset){
 
     return 0;
 }
-
-/************************************************************/
-/*  I : record to summarise as a string                     */
-/*      /                                                   */
-/*  P : returns a string representing the contact          */
-/*  O : /                                                   */
-/************************************************************/
-/*char* toString_contact(void* current){
-    ccon *tmp = (ccon*)current;
-
-    return tmp->id_cpy;
-}*/
