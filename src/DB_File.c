@@ -21,6 +21,7 @@ int Create_DB(dbc *db, char filename[]){
     ccpy cpy = {0};
     FILE *fp_lg = NULL;
 
+    //open the DB and log files
     memset(db, 0, sizeof(dbc));
     db->fp = fopen(DB_file, "wb");
     if(!db->fp)
@@ -32,62 +33,62 @@ int Create_DB(dbc *db, char filename[]){
         return -1;
     }
 
-    // Creation du header ----------------------------
-    strcpy(db->hdr.db_name, filename);
-
-    db->hdr.sz_cty = SZ_CTY;
-    db->hdr.sz_job = SZ_JOB;
-    db->hdr.sz_ind = SZ_IND;
-    db->hdr.sz_grp = SZ_GRP;
-    db->hdr.sz_cam = SZ_CAM;
-    db->hdr.sz_con = SZ_CON;
-    db->hdr.sz_cpy = SZ_CPY;
-
-    db->hdr.off_cty = sizeof(hder);
-    db->hdr.off_job = db->hdr.off_cty + SZ_CTY * sizeof(ccty);
-    db->hdr.off_ind = db->hdr.off_job + SZ_JOB * sizeof(cjob);
-    db->hdr.off_grp = db->hdr.off_ind + SZ_IND * sizeof(cind);
-    db->hdr.off_cam = db->hdr.off_grp + SZ_GRP * sizeof(cgrp);
-    db->hdr.off_con = db->hdr.off_cam + SZ_CAM * sizeof(ccam);
-    db->hdr.off_cpy = db->hdr.off_con + SZ_CON * sizeof(ccon);
-    db->hdr.db_size = db->hdr.off_cpy + SZ_CPY * sizeof(ccpy);
-
-    fwrite(&db->hdr, 1, sizeof(db->hdr), db->fp);
+    //get the file pointer to after the header
+    fseek(db->fp, sizeof(db->hdr), SEEK_SET);
 
     // Creation de la table country ----------------------------
+    db->hdr.off_cty = ftell(db->fp);
+    db->hdr.sz_cty = SZ_CTY;
     strcpy(cty.tp_rec, "CTY");
     for (i=0; i<SZ_CTY; i++)
         fwrite(&cty, 1, sizeof(ccty), db->fp);
 
     // Creation de la table job ----------------------------
+    db->hdr.off_job = ftell(db->fp);
+    db->hdr.sz_job = SZ_JOB;
     strcpy(job.tp_rec, "JOB");
     for (i=0; i<SZ_JOB; i++)
         fwrite(&job, 1, sizeof(cjob), db->fp);
 
     // Creation de la table industry ----------------------------
+    db->hdr.off_ind = ftell(db->fp);
+    db->hdr.sz_ind = SZ_IND;
     strcpy(ind.tp_rec, "IND");
     for (i=0; i<SZ_IND; i++)
         fwrite(&ind, 1, sizeof(cind), db->fp);
 
     // Creation de la table group ----------------------------
+    db->hdr.off_grp = ftell(db->fp);
+    db->hdr.sz_grp = SZ_GRP;
     strcpy(grp.tp_rec, "GRP");
     for (i=0; i<SZ_GRP; i++)
         fwrite(&grp, 1, sizeof(cgrp), db->fp);
 
     // Creation de la table campain ----------------------------
+    db->hdr.off_cam = ftell(db->fp);
+    db->hdr.sz_cam = SZ_CAM;
     strcpy(cam.tp_rec, "CAM");
     for (i=0; i<SZ_CAM; i++)
         fwrite(&cam, 1, sizeof(ccam), db->fp);
 
     // Creation de la table contact ----------------------------
+    db->hdr.off_con = ftell(db->fp);
+    db->hdr.sz_con = SZ_CON;
     strcpy(con.tp_rec, "CON");
     for (i=0; i<SZ_CON; i++)
         fwrite(&con, 1, sizeof(ccon), db->fp);
 
     // Creation de la table company ----------------------------
+    db->hdr.off_cpy = ftell(db->fp);
+    db->hdr.sz_cpy = SZ_CPY;
     strcpy(cpy.tp_rec, "CPY");
     for (i=0; i<SZ_CPY; i++)
         fwrite(&cpy, 1, sizeof(ccpy), db->fp);
+
+    // write the header
+    db->hdr.db_size = ftell(db->fp);
+    fseek(db->fp, 0, SEEK_SET);
+    fwrite(&db->hdr, 1, sizeof(db->hdr), db->fp);
 
     fprintf(fp_lg, "Database %s created\n", db->hdr.db_name);
 
@@ -333,9 +334,6 @@ uint32_t Import_CSV(dbc *db, char* CSVfilename, uint32_t blockOffset, uint32_t e
     tmp = calloc(1, elementSize);
     while (fgets(line, BUF_LEN, fpi) != NULL)
     {
-        //clean the buffer up and set the record type
-        memset(tmp, 0, elementSize);
-
         //isolate the CSV line (until '\n') and deserialise it
         ptr1 = strtok(line,"\n");
         (*doDeserialise)(ptr1, tmp);
@@ -348,7 +346,7 @@ uint32_t Import_CSV(dbc *db, char* CSVfilename, uint32_t blockOffset, uint32_t e
     free(tmp);
 
     fprintf(fp_lg, "Imported : %lu\n", (unsigned long int)i);
-    printf("\nImported : %lu\n\n", (unsigned long int)i);
+    printf("Imported : %lu\n\n", (unsigned long int)i);
 
     //close all files
     fclose(db->fp);
