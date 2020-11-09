@@ -108,19 +108,6 @@ int CSVFormatCountry(void* elem, char* finalLine){
 }
 
 /****************************************************************************************
-* Liste la table Country depuis le buffer
-****************************************************************************************/
-void Print_Country(dbc *db)
-{
-    uint64_t i;
-
-    for (i=0; i<db->hdr.nr_cty; i++)
-        Rec_Country(&db->cty[i], NULL);
-
-    return;
-}
-
-/****************************************************************************************
 * Imprime un record Country depuis le buffer
 ****************************************************************************************/
 #ifdef __GNUC__

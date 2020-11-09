@@ -29,7 +29,6 @@ typedef struct i_Country_Name{
 //database methods
 void Import_CSV_Country(dbc *db);
 int CSVFormatCountry(void* elem, char* finalLine);
-void Print_Country(dbc *db);
 int Rec_Country(void *rec, void* nullable);
 
 // dynamic structures methods
