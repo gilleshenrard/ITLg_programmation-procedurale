@@ -23,7 +23,7 @@ int Create_DB(dbc *db, char filename[]){
 
     //open the DB and log files
     memset(db, 0, sizeof(dbc));
-    db->fp = fopen(DB_file, "wb");
+    db->fp = fopen(filename, "wb");
     if(!db->fp)
         return -1;
 
