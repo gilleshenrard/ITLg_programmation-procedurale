@@ -12,6 +12,8 @@ int CSVDeserialiseContact(char *line, void *record){
     char *ptr1, *ptr2;
 	ccon *con = (ccon*)record;
 
+	strcpy(con->tp_rec, "CON");
+
     //read the campain ID (ptr1) and the company ID (ptr2), then set the campaign ID
     ptr1 = strtok(line,";");
     ptr2 = strtok(NULL,";");

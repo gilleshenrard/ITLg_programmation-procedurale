@@ -13,6 +13,8 @@ int CSVDeserialiseCompany(char *line, void *record)
     char *ptr1=NULL, *ptr2=NULL;
     char fld[BUF_LEN];
 
+    strcpy(cpy->tp_rec, "CPY");
+
     //read the company ID (ptr1) and the country ID (ptr2), then set the company ID
     ptr1 = strtok(line,";");
     ptr2 = strtok(NULL,";");

@@ -12,6 +12,8 @@ int CSVDeserialiseIndustry(char *line, void *record){
     char *ptr1, *ptr2;
 	cind *ind = (cind*)record;
 
+	strcpy(ind->tp_rec, "IND");
+
     //read the industry ID (ptr1) and the sector name (ptr2), then set the industry ID
     ptr1 = strtok(line,";");
     ptr2 = strtok(NULL,";");

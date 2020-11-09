@@ -12,6 +12,8 @@ int CSVDeserialiseCountry(char *line, void *record){
     char *ptr1, *ptr2;
 	ccty *cty = (ccty*)record;
 
+	strcpy(cty->tp_rec, "CTY");
+
     //read the country ID (ptr1) and the country name (ptr2), then set the country ID
     ptr1 = strtok(line,";");
     ptr2 = strtok(NULL,";");

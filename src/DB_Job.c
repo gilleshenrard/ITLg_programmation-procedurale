@@ -12,6 +12,8 @@ int CSVDeserialiseJob(char *line, void *record){
     char *ptr1, *ptr2;
 	cjob *job = (cjob*)record;
 
+	strcpy(job->tp_rec, "JOB");
+
     //read the job ID (ptr1) and the level nomination (ptr2), then set the job ID
     ptr1 = strtok(line,";");
     ptr2 = strtok(NULL,";");

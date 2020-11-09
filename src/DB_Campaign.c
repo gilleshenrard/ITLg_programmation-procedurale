@@ -12,6 +12,8 @@ int CSVDeserialiseCampaign(char *line, void *record){
     char *ptr1, *ptr2;
 	ccam *cam = (ccam*)record;
 
+	strcpy(cam->tp_rec, "CAM");
+
     //read the campaign ID (ptr1) and the campain name (ptr2), then set the campaign ID
     ptr1 = strtok(line,";");
     ptr2 = strtok(NULL,";");

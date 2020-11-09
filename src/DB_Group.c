@@ -12,6 +12,8 @@ int CSVDeserialiseGroup(char *line, void *record){
     char *ptr1, *ptr2;
 	cgrp *grp = (cgrp*)record;
 
+	strcpy(grp->tp_rec, "GRP");
+
     //read the group ID (ptr1) and the group name (ptr2), then set the group ID
     ptr1 = strtok(line,";");
     ptr2 = strtok(NULL,";");
