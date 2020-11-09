@@ -22,7 +22,6 @@ typedef struct i_job_Name{
 //database methods
 void Import_CSV_job(dbc *db);
 int CSVFormatJob(void* elem, char* finalLine);
-void Load_job(dbc *db);
 int Rec_job(void *rec, void *nullable);
 
 // dynamic structures methods

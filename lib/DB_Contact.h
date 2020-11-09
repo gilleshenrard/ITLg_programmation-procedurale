@@ -22,7 +22,6 @@ typedef struct i_Contact_cpy{
 //database methods
 void Import_CSV_contact(dbc *db);
 int CSVFormatContact(void* elem, char* finalLine);
-void Load_contact(dbc *db);
 int Rec_contact(void *rec, void *nullable);
 
 // dynamic structures methods

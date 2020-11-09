@@ -110,46 +110,6 @@ int CSVFormatContact(void* elem, char* finalLine){
 }
 
 /****************************************************************************************/
-/*  I : Database from which import the records in memory                                */
-/*  P : Reads the whole contacts database and loads them in memory                      */
-/*  O : /                                                                               */
-/****************************************************************************************/
-void Load_contact(dbc *db){
-    uint64_t i;
-	ccon con;
-	FILE *fp_lg;
-
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
-
-    if(db->con)
-        free(db->con);
-
-    db->con = (ccon*)calloc(db->hdr.nr_con, sizeof(ccon));
-
-    printf("\nContact : loading ...\n");
-
-    fseek(db->fp, db->hdr.off_con, SEEK_SET);
-
-    for (i=0; i<db->hdr.nr_con; i++)
-    {
-        memset(&con, 0, sizeof(ccon));
-        fread(&con, 1, sizeof(ccon), db->fp);
-
-        db->con[i] = con;
-    }
-
-    fprintf(fp_lg, "Contacts loaded into buffer : %lu\n", (unsigned long int)db->hdr.nr_con);
-
-    fclose(db->fp);
-    fclose(fp_lg);
-
-    printf("\nContacts loaded into buffer : %lu\n\n", (unsigned long int)db->hdr.nr_con);
-
-    return;
-}
-
-/****************************************************************************************/
 /*  I : contact record to print                                                        */
 /*  P : Prints an contact record                                                       */
 /*  O : /                                                                               */

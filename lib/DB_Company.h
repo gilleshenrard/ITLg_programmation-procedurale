@@ -38,7 +38,6 @@ typedef struct i_company_Group{
 //database methods
 void Import_CSV_company(dbc *db);
 int CSVFormatCompany(void* elem, char* finalLine);
-void Load_company(dbc *db);
 int Rec_company(void *rec, void *nullable);
 
 // dynamic structures methods

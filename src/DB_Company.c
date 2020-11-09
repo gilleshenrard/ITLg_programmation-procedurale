@@ -159,45 +159,6 @@ int CSVFormatCompany(void* elem, char* finalLine){
 }
 
 /****************************************************************************************
-* Charge table Company dans le buffer
-****************************************************************************************/
-void Load_company(dbc *db)
-{
-    uint64_t i;
-	ccpy cpy;
-	FILE *fp_lg;
-
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
-
-    if(db->cpy)
-        free(db->cpy);
-
-    db->cpy = (ccpy*)calloc(db->hdr.nr_cpy, sizeof(ccpy));
-
-    printf("\nCompany : loading ...\n");
-
-    fseek(db->fp, db->hdr.off_cpy, SEEK_SET);
-
-    for (i=0; i<db->hdr.nr_cpy; i++)
-    {
-        memset(&cpy, 0, sizeof(ccpy));
-        fread(&cpy, 1, sizeof(ccpy), db->fp);
-
-        db->cpy[i] = cpy;
-    }
-
-    fprintf(fp_lg, "Company loaded into buffer : %lu\n", (unsigned long int)db->hdr.nr_cpy);
-
-    fclose(db->fp);
-    fclose(fp_lg);
-
-    printf("\nCompany loaded into buffer : %lu\n\n", (unsigned long int)db->hdr.nr_cpy);
-
-    return;
-}
-
-/****************************************************************************************
 * Imprime un record Company depuis le buffer
 ****************************************************************************************/
 #ifdef __GNUC__

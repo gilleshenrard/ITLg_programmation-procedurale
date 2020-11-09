@@ -209,42 +209,68 @@ void create_db(dbc* db){
 /*  O : /                                                                               */
 /****************************************************************************************/
 int load_db(dbc* db){
-    meta_t table_cam = {NULL, NULL, db->hdr.nr_cam, sizeof(ccam), NULL, NULL};
+    meta_t table_cty = {NULL, NULL, 0, sizeof(ccty), NULL, NULL};
+    meta_t table_cpy = {NULL, NULL, 0, sizeof(ccpy), NULL, NULL};
+    meta_t table_cam = {NULL, NULL, 0, sizeof(ccam), NULL, NULL};
+    meta_t table_con = {NULL, NULL, 0, sizeof(ccon), NULL, NULL};
+    meta_t table_grp = {NULL, NULL, 0, sizeof(cgrp), NULL, NULL};
+    meta_t table_ind = {NULL, NULL, 0, sizeof(cind), NULL, NULL};
+    meta_t table_job = {NULL, NULL, 0, sizeof(cjob), NULL, NULL};
+
+
     //open the files and position the pointers at the end
     db->fp = fopen(DB_file, "rb");
-
     if(!db->fp)
         return -1;
 
     fseek(db->fp, 0, SEEK_SET);
     fread(&db->hdr, sizeof(db->hdr), 1, db->fp);
-
     fclose(db->fp);
 
-    table_cam.nbelements = db->hdr.nr_cam;
-
     system("cls");
+
     printf("Loading countries : ");
-    Load_Country(db);
+    table_cty.nbelements = db->hdr.nr_cty;
+    Load_table(db, &table_cty, db->hdr.off_cty);
+    db->cty = (ccty*)table_cty.structure;
     printf("done\n");
+
     printf("Loading companies : ");
-    Load_company(db);
+    table_cpy.nbelements = db->hdr.nr_cpy;
+    Load_table(db, &table_cpy, db->hdr.off_cpy);
+    db->cpy = (ccpy*)table_cpy.structure;
     printf("done\n");
+
     printf("Loading campaigns : ");
+    table_cam.nbelements = db->hdr.nr_cam;
     Load_table(db, &table_cam, db->hdr.off_cam);
+    db->cam = (ccam*)table_cam.structure;
     printf("done\n");
+
     printf("Loading contacts : ");
-    Load_contact(db);
+    table_con.nbelements = db->hdr.nr_con;
+    Load_table(db, &table_con, db->hdr.off_con);
+    db->con = (ccon*)table_con.structure;
     printf("done\n");
+
     printf("Loading groups : ");
-    Load_Group(db);
+    table_grp.nbelements = db->hdr.nr_grp;
+    Load_table(db, &table_grp, db->hdr.off_grp);
+    db->grp = (cgrp*)table_grp.structure;
     printf("done\n");
+
     printf("Loading industries: ");
-    Load_industry(db);
+    table_ind.nbelements = db->hdr.nr_ind;
+    Load_table(db, &table_ind, db->hdr.off_ind);
+    db->ind = (cind*)table_ind.structure;
     printf("done\n");
+
     printf("Loading jobs : ");
-    Load_job(db);
+    table_job.nbelements = db->hdr.nr_job;
+    Load_table(db, &table_job, db->hdr.off_job);
+    db->job = (cjob*)table_job.structure;
     printf("done\n\n");
+
     system("pause");
 
     return 0;

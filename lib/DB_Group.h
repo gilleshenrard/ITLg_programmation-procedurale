@@ -31,7 +31,6 @@ typedef struct i_Group_name{
 //database methods
 void Import_CSV_Group(dbc *db);
 int CSVFormatGroup(void* elem, char* finalLine);
-void Load_Group(dbc *db);
 int Rec_Group(void *rec, void *nullable);
 
 // dynamic structures methods

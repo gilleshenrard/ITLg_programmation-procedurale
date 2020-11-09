@@ -22,7 +22,6 @@ typedef struct i_industry_PK{
 //database methods
 void Import_CSV_industry(dbc *db);
 int CSVFormatIndustry(void* elem, char* finalLine);
-void Load_industry(dbc *db);
 int Rec_industry(void *rec, void *nullable);
 
 // dynamic structures methods
