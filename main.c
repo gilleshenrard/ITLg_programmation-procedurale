@@ -172,8 +172,8 @@ void create_db(dbc* db){
     db->hdr.nr_con = Import_CSV(db, CSV_con_imp, db->hdr.off_con, sizeof(ccon), CSVDeserialiseContact);
     db->hdr.nr_cpy = Import_CSV(db, CSV_cpy_imp, db->hdr.off_cpy, sizeof(ccpy), CSVDeserialiseCountry);
     db->hdr.nr_grp = Import_CSV(db, CSV_grp_imp, db->hdr.off_grp, sizeof(cgrp), CSVDeserialiseGroup);
+    db->hdr.nr_ind = Import_CSV(db, CSV_ind_imp, db->hdr.off_ind, sizeof(cind), CSVDeserialiseIndustry);
 
-    Import_CSV_industry(db);
     Import_CSV_job(db);
 
     printf("Creating the index for Companies (by name) : ");

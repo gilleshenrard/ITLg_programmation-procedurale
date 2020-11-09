@@ -3,9 +3,6 @@
 #include "DB_Main.h"
 #include "DB_File.h"
 
-#define PRT 0
-#define BUF_LEN 200
-
 #define CSV_ind_imp "Data_Import/DB_Industry.csv"
 #define CSV_ind_exp "Data_Export/DB_Industry.csv"
 #define CSV_ind_header "Id;Nm_sec;Nm_Ind\n"
@@ -20,7 +17,7 @@ typedef struct i_industry_PK{
 }i_cind_PK;
 
 //database methods
-void Import_CSV_industry(dbc *db);
+int CSVDeserialiseIndustry(char *line, void *record);
 int CSVFormatIndustry(void* elem, char* finalLine);
 int Rec_industry(void *rec, void *nullable);
 

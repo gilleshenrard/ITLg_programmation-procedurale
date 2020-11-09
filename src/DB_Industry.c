@@ -1,84 +1,38 @@
 #include "DB_Industry.h"
 
 /****************************************************************************************/
-/*  I : Database to which import the industries CSV file                                */
-/*  P : Reads the whole industries CSV file and writes it in the Database file          */
-/*  O : /                                                                               */
+/*  I : CSV line to transform to an Industry                                            */
+/*      Buffer in which store the deserialised information                              */
+/*  P : Transfrom a CSV line to an Industry                                             */
+/*  O : -1 if error                                                                     */
+/*      0 otherwise                                                                     */
 /****************************************************************************************/
-void Import_CSV_industry(dbc *db){
-    int i=0;
-    char line[BUF_LEN];
+int CSVDeserialiseIndustry(char *line, void *record){
     char fld[BUF_LEN];
     char *ptr1, *ptr2;
-	cind ind;
-	FILE *fpi, *fp_lg;
+	cind *ind = (cind*)record;
 
-	//open DB files
-    db->fp = fopen(DB_file, "rb+");
-    fp_lg = fopen(log_file, "a");
+    //read the industry ID (ptr1) and the sector name (ptr2), then set the industry ID
+    ptr1 = strtok(line,";");
+    ptr2 = strtok(NULL,";");
+    memset(fld, 0, BUF_LEN);
+    strncpy(fld, ptr1, ptr2-ptr1-1);
+    fld[strlen(ptr1)]='\0';
+    ind->id_ind = atoi(fld);
 
-    //open Import file
-	fpi = fopen(CSV_ind_imp, "r");
-	if (fpi == NULL) { printf("Erreur\n"); return; }
+    //set the sector name and read the industry name
+    ptr1 = ptr2;
+    ptr2 = strtok(NULL,";");
+    strncpy(ind->nm_sec, ptr1, ptr2-ptr1-1);
+    ind->nm_sec[strlen(ptr1)]='\0';
 
-    printf("\nIndustries : importing ...\n");
+    //set the industry name
+    ptr1 = ptr2;
+    memset(fld, 0, BUF_LEN);
+    strncpy(ind->nm_ind, ptr1, strlen(ptr1));
+    ind->nm_ind[strlen(ptr1)]='\0';
 
-    //read the first 200 characters in the import file
-    fgets(line, 200, fpi);
-
-    //set the DB file pointer to the beginning of the Industries data block
-    fseek(db->fp, db->hdr.off_ind, SEEK_SET);
-
-    printf("%lu\n",(unsigned long int)db->hdr.off_ind);
-
-    while (fgets(line, 200, fpi) != NULL)
-    {
-        //clean the buffer up and set the record type to con
-        memset(&ind, 0, sizeof(cind));
-        strcpy(ind.tp_rec, "IND");
-
-        if (PRT) printf("\n---------------------------\n%s\n",line);
-        if (PRT) printf("%s\n", line);
-
-        //read the industry ID (ptr1) and the sector name (ptr2), then set the industry ID
-        ptr1 = strtok(line,";");                   if (PRT) printf("%s\n", ptr1);
-        ptr2 = strtok(NULL,";");                   if (PRT) printf("%s\n", ptr2);
-        memset(fld, 0, BUF_LEN);
-        strncpy(fld, ptr1, ptr2-ptr1-1);
-        fld[strlen(ptr1)]='\0';
-        ind.id_ind = atoi(fld);                    if (PRT) printf("%d\n", ind.id_ind);
-
-        //set the sector name and read the industry name
-        ptr1 = ptr2;
-        ptr2 = strtok(NULL,";");
-        strncpy(ind.nm_sec, ptr1, ptr2-ptr1-1);    if (PRT) printf("%s\n", ind.nm_ind);
-        ind.nm_sec[strlen(ptr1)]='\0';
-
-        //set the industry name
-        ptr1 = ptr2;
-        memset(fld, 0, BUF_LEN);
-        strncpy(ind.nm_ind, ptr1, strlen(ptr1)-1);        if (PRT) printf("%d\n", ind.id_ind);
-        ind.nm_ind[strlen(ptr1)]='\0';
-
-        //write the final record
-        fwrite(&ind, 1, sizeof(cind), db->fp);
-
-        i++;
-    }
-
-    //save the amount of industries imported
-    db->hdr.nr_ind = i;
-
-    fprintf(fp_lg, "industries imported : %lu\n", (unsigned long int)db->hdr.nr_ind);
-
-    //close all files
-    fclose(db->fp);
-    fclose(fp_lg);
-	fclose(fpi);
-
-    printf("\nindustries imported : %lu\n\n", (unsigned long int)db->hdr.nr_ind);
-
-	return ;
+	return 0;
 }
 
 /****************************************************************************************/
