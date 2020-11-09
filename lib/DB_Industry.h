@@ -26,6 +26,5 @@ int compare_industry_PK(void* a, void* b);
 int compare_industry_PK_index(void* a, void* b);
 int assign_industry_index_PK(void* index, void* elem);
 int assign_industry_index_slot(void* index, uint32_t* offset);
-char* toString_industry(void* current);
 
 #endif // DB_INDUSTRY_H_INCLUDED

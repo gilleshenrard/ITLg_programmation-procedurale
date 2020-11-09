@@ -157,15 +157,3 @@ int assign_industry_index_slot(void* index, uint32_t* offset){
 
     return 0;
 }
-
-/************************************************************/
-/*  I : record to summarise as a string                     */
-/*      /                                                   */
-/*  P : returns a string representing the industry          */
-/*  O : /                                                   */
-/************************************************************/
-char* toString_industry(void* current){
-    cind *tmp = (cind*)current;
-
-    return tmp->nm_ind;
-}
