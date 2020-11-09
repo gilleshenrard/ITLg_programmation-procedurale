@@ -10,9 +10,6 @@
 #include "DB_Main.h"
 #include "DB_File.h"
 
-#define PRT 0
-#define BUF_LEN 200
-
 #define CSV_cpy_imp "Data_Import/DB_Company.csv"
 #define CSV_cpy_exp "Data_Export/DB_Company.csv"
 #define CSV_cpy_header "id;id_grp;id_cty;id_ind;nm_cpy;nm_adr;cd_pos;nm_cit;nr_tel;nm_www;dt_cre\n"
@@ -36,7 +33,7 @@ typedef struct i_company_Group{
 }i_ccpy_grp;
 
 //database methods
-void Import_CSV_company(dbc *db);
+int CSVDeserialiseCompany(char *line, void *record);
 int CSVFormatCompany(void* elem, char* finalLine);
 int Rec_company(void *rec, void *nullable);
 

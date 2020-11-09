@@ -166,7 +166,9 @@ void create_db(dbc* db){
         fprintf(stderr, "create_db() : Error while creating %s\n", DB_name);
         return;
     }
-    Import_CSV_company(db);
+
+    db->hdr.nr_cpy = Import_CSV(db, CSV_cpy_imp, db->hdr.off_cpy, sizeof(ccpy), CSVDeserialiseCompany);
+
     Import_CSV_contact(db);
     Import_CSV_campaign(db);
     Import_CSV_Country(db);
