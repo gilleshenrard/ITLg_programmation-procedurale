@@ -162,7 +162,7 @@ void create_db(dbc* db){
     t_datablock table_block_job = {&db->hdr.off_job, 0, sizeof(cjob), NULL, NULL};
 
     //attempt creating the DB file
-    if(Create_DB(db, DB_name) < 0){
+    if(Create_DB(db, DB_file) < 0){
         fprintf(stderr, "create_db() : Error while creating %s\n", DB_name);
         return;
     }
@@ -171,7 +171,7 @@ void create_db(dbc* db){
     db->hdr.nr_cpy = Import_CSV(db, CSV_cpy_imp, db->hdr.off_cpy, sizeof(ccpy), CSVDeserialiseCompany);
     db->hdr.nr_cam = Import_CSV(db, CSV_cam_imp, db->hdr.off_cam, sizeof(ccam), CSVDeserialiseCampaign);
     db->hdr.nr_con = Import_CSV(db, CSV_con_imp, db->hdr.off_con, sizeof(ccon), CSVDeserialiseContact);
-    db->hdr.nr_cpy = Import_CSV(db, CSV_cpy_imp, db->hdr.off_cpy, sizeof(ccpy), CSVDeserialiseCountry);
+    db->hdr.nr_cty = Import_CSV(db, CSV_cty_imp, db->hdr.off_cty, sizeof(ccty), CSVDeserialiseCountry);
     db->hdr.nr_grp = Import_CSV(db, CSV_grp_imp, db->hdr.off_grp, sizeof(cgrp), CSVDeserialiseGroup);
     db->hdr.nr_ind = Import_CSV(db, CSV_ind_imp, db->hdr.off_ind, sizeof(cind), CSVDeserialiseIndustry);
     db->hdr.nr_job = Import_CSV(db, CSV_job_imp, db->hdr.off_job, sizeof(cjob), CSVDeserialiseJob);
