@@ -85,11 +85,12 @@ typedef struct Header
 ****************************************************************************************/
 typedef struct Country
 {
-    char tp_rec[SZ_TYPE];   // Type de record CTY
-    int  id_cty;            // Cle primaire
-    char nm_zon[SZ_NAME_SM];        // Nom de la zone geographique
-    char nm_cty[SZ_NAME];   // Nom du pays
-    char cd_iso[4];         // Code Iso du pays
+    char tp_rec[SZ_TYPE];       // Type de record CTY
+    int  id_cty;                // Cle primaire
+    char nm_zon[SZ_NAME_SM];    // Nom de la zone geographique
+    char nm_cty[SZ_NAME];       // Nom du pays
+    char cd_iso[4];             // Code Iso du pays
+    char filler[28];            // filler to get the size to 128
 } ccty;
 
 /***************************************************************************************
@@ -102,7 +103,7 @@ typedef struct Job
     char nm_lev[SZ_NAME];
     char nm_dep[SZ_NAME];
     char nm_job[SZ_NAME];
-    char filler[32];
+    char filler[52];
 } cjob;
 
 /***************************************************************************************
@@ -127,7 +128,7 @@ typedef struct Group
     char nm_grp[SZ_NAME];
     char cd_cty[4];         // Group country tag
     int  id_cty;             // Foreign Key
-    char filler[16];        // Filler to bring the group record size to 64 bytes
+    char filler[44];        // Filler to bring the group record size to 128 bytes
 } cgrp;
 
 /***************************************************************************************
@@ -146,7 +147,7 @@ typedef struct Campain
     char  nm_zon[SZ_NAME];   // Campain targeted zone
     int   nr_year;           // Amount of years the campain lasts
     float cost;              // Cost per year ?
-    char  filler[56];        // Filler to bring the group record size to 64 bytes
+    char  filler[96];        // Filler to bring the group record size to 64 bytes
 } ccam;
 
 /***************************************************************************************
@@ -179,6 +180,7 @@ typedef struct Company
     char  nr_tel[SZ_NAME];   // company phone number
     char  nm_www[SZ_NAME];   // company website
     char  dt_cre[11];        // company foundation date
+    char  filler[148];       // filler to get the size to 512
 } ccpy;
 
 /***************************************************************************************
