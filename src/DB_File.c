@@ -289,6 +289,73 @@ int Export_CSV(dbc *db, char* filename, char* CSVheader, t_datablock* blockInfo,
     return 0;
 }
 
+/****************************************************************************************/
+/*  I : Database to which import the CSV file to a data block                           */
+/*      Name of the import CSV file                                                     */
+/*      Offset of the block in the DB                                                   */
+/*      Size of an record                                                               */
+/*      Function allowing a CSV line to be transformed to a record                      */
+/*  P : Imports all the lines from a CSV file to a DB data block                        */
+/*  O : -1 if error                                                                     */
+/*      Amount of records imported otherwise                                            */
+/****************************************************************************************/
+uint32_t Import_CSV(dbc *db, char* CSVfilename, uint32_t blockOffset, uint32_t elementSize, int (*doDeserialise)(char* line, void* record))
+{
+    uint32_t i=0;
+    char line[BUF_LEN];
+    char *ptr1;
+	void* tmp = NULL;
+	FILE *fpi, *fp_lg;
+
+	//open the DB and log files
+    db->fp = fopen(DB_file, "rb+");
+    fp_lg = fopen(log_file, "a");
+
+    //open the import file
+	fpi = fopen(CSVfilename, "r");
+
+    //if error while opening files
+	if (!fpi || !db->fp || !fp_lg) {
+        print_error("Import_CSV() : Error while opening the requested files");
+        return -1;
+    }
+
+    //read the first 200 characters
+    fgets(line, BUF_LEN, fpi);
+
+    //place the DB file pointer at the beginning of the data block to which the CSV
+    //  will be imported
+    fseek(db->fp, blockOffset, SEEK_SET);
+
+    //read the whole CSV file, 200 characters at a time
+    tmp = calloc(1, elementSize);
+    while (fgets(line, BUF_LEN, fpi) != NULL)
+    {
+        //clean the buffer up and set the record type
+        memset(tmp, 0, elementSize);
+
+        //isolate the CSV line (until '\n') and deserialise it
+        ptr1 = strtok(line,"\n");
+        (*doDeserialise)(ptr1, tmp);
+
+        //write the final record
+        fwrite(tmp, 1, elementSize, db->fp);
+
+        i++;
+    }
+    free(tmp);
+
+    fprintf(fp_lg, "Imported : %lu\n", (unsigned long int)i);
+    printf("\nImported : %lu\n\n", (unsigned long int)i);
+
+    //close all files
+    fclose(db->fp);
+    fclose(fp_lg);
+	fclose(fpi);
+
+	return i;
+}
+
 /************************************************************/
 /*  I : File pointer to the database                        */
 /*      Offset of the first element of the data block       */

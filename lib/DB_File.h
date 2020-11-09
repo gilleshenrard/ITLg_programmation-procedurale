@@ -4,6 +4,8 @@
 #include "cstructures.h"
 #include "screen.h"
 
+#define BUF_LEN 200
+
 typedef struct{
     uint32_t*   block_off;
     uint32_t*   root_off;
@@ -16,6 +18,7 @@ int Create_DB(dbc *db, char filename[]);
 int Load_table(dbc *db, meta_t* dArray, long blockOffset);
 long create_index_file(dbc* db, meta_t* meta, uint32_t nb, t_datablock* i_block, t_datablock* t_block);
 int Export_CSV(dbc *db, char* filename, char* CSVheader, t_datablock* blockInfo, uint32_t nbElements, int (*doCSVFormat)(void* elem, char* finalLine));
+uint32_t Import_CSV(dbc *db, char* CSVfilename, uint32_t blockOffset, uint32_t elementSize, int (*doDeserialise)(char* line, void* record));
 
 long index_tree(FILE* fp, long offset_start, long nb, meta_t* meta);
 int searchall_index(FILE* fp, long offset_root, void* key, meta_t* index, meta_t* lis);
